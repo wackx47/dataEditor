@@ -106,7 +106,7 @@ namespace dataEditor
             optionsGrid.SelectedObject = PropGrid;
             PropGrid.sqlNames = "Name;Dat8;Type;Is_fact;OAO;GTP_Kod;GTP;Nomer_Dog;Kontragent;K_GTP_Kod;K_GTP;Dog_V;V;S;S_NDS";
             TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["ExtraColCnt"].SetReadOnlyAttribute(true);
-            Console.WriteLine("Soft powered by 47 5'9 (ver. " + PropGrid.AppVersion + ") (openformat for research)");
+            Console.WriteLine("Soft powered by 47 5'9 (ver. " + PropGrid.AppVersion + ") //.build for GitHub");
             AvailableXML();
             ReadINI();
             AutoFillList();
