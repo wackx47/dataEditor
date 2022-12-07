@@ -20,12 +20,14 @@ using System.Data.Common;
 using System.Reflection.Metadata;
 using System.Drawing.Imaging;
 using System.Linq;
+using Microsoft.Win32;
 
 namespace dataEditor
 {
 
     public partial class MainForm : Form
     {
+        Version OsMinVersion = new Version(10, 0, 15063, 0);
 
         iniFile INI = new iniFile("config.ini");
         Form TreeView = new Form();
@@ -89,7 +91,6 @@ namespace dataEditor
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool FreeConsole();
 
-
         public MainForm()
         {
             InitializeComponent();
@@ -99,6 +100,29 @@ namespace dataEditor
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
         }
 
+        public static void ScaleControlElements(DataGridView ScaleSource, SizeF ScaleFactor)
+        {
+            foreach (DataGridViewColumn Column in ScaleSource.Columns)
+            {
+                Column.Width = (int)Math.Round(Column.Width * ScaleFactor.Width);
+            }
+        }
+
+        public static void ScaleControlElements(ListView ScaleSource, SizeF ScaleFactor)
+        {
+            foreach (ColumnHeader Column in ScaleSource.Columns)
+            {
+                Column.Width = (int)Math.Round(Column.Width * ScaleFactor.Width);
+            }
+        }
+
+        protected override void ScaleControl(SizeF ScalingFactor, BoundsSpecified Bounds)
+        {
+            base.ScaleControl(ScalingFactor, Bounds);
+            ScaleControlElements(dataViewer, ScalingFactor);
+            Console.WriteLine("DPI scaling enabled");
+        }
+
         private void MainForm_Load(object sender, EventArgs e)
         {
             SettingsNewForm();
@@ -106,11 +130,14 @@ namespace dataEditor
             optionsGrid.SelectedObject = PropGrid;
             PropGrid.sqlNames = "Name;Dat8;Type;Is_fact;OAO;GTP_Kod;GTP;Nomer_Dog;Kontragent;K_GTP_Kod;K_GTP;Dog_V;V;S;S_NDS";
             TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["ExtraColCnt"].SetReadOnlyAttribute(true);
+            Console.WriteLine(Environment.OSVersion.Platform.ToString());
+            Console.WriteLine(Environment.OSVersion.VersionString + " (" + AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName + ") " + Environment.OSVersion.Version.CompareTo(OsMinVersion));
             Console.WriteLine("Soft powered by 47 5'9 (ver. " + PropGrid.AppVersion + ") //.build for GitHub");
             AvailableXML();
             ReadINI();
             AutoFillList();
         }
+
         private void AutoFillList()
         {
             SQLdata.Clear();
@@ -122,7 +149,7 @@ namespace dataEditor
             {
                 if (sub != "")
                 {
-                    Console.WriteLine($"Find SQL link: {sub}");
+                    //Console.WriteLine($"Find SQL link: {sub}");
                     SQLdata.Add(sub);
                 }
             }
@@ -889,6 +916,7 @@ namespace dataEditor
                 if (c>=0)
                 {
                     FormName.Text = "presset_" + FormName.Items[i].ToString();
+                    PropGrid.pressetName = FormName.Text;
                 }
             }
 
@@ -1347,6 +1375,59 @@ namespace dataEditor
             {
                 ShowWindow(GetConsoleWindow(), SHOW);
             }
+        }
+
+        private void RigesterCOMfix()
+        {
+            RegistryKey root = Registry.ClassesRoot;
+            RegistryKey TypeLib = root.OpenSubKey("TypeLib", true);
+
+            RegistryKey OleDB = TypeLib.OpenSubKey("{00020813-0000-0000-C000-000000000046}", true);
+            try
+            {
+                Console.WriteLine("Open sub: {0}.", OleDB.Name);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.GetType());
+
+                TypeLib.CreateSubKey("{00020813-0000-0000-C000-000000000046}");
+                OleDB = TypeLib.OpenSubKey("{00020813-0000-0000-C000-000000000046}", true);
+
+                Console.WriteLine("SubKey: " + OleDB.Name + " was created.");
+            }
+
+            RegistryKey lastKey = OleDB.OpenSubKey("1.9", true);
+            try
+            {
+                Console.WriteLine("Open sub: {0}.", lastKey.Name);
+                lastKey.Close();
+                OleDB.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.GetType());
+
+                OleDB = TypeLib.OpenSubKey("{00020813-0000-0000-C000-000000000046}", true);
+                OleDB.CreateSubKey("1.9");
+                lastKey = OleDB.OpenSubKey("1.9", true);
+                lastKey.SetValue(default, "Microsoft Excel 16.0 Object Library");
+                lastKey.SetValue("PrimaryInteropAssemblyName", "Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71E9BCE111E9429C");
+
+                Console.WriteLine("SubKey: " + lastKey.Name + " was created.");
+
+                lastKey.Close();
+                OleDB.Close();
+            }
+            TypeLib.Close();
+            root.Close();
+        }
+
+        private void RegistryFix_Click(object sender, EventArgs e)
+        {
+            RigesterCOMfix();
         }
     }
 }

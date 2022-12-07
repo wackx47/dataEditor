@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Configuration;
 using System.Drawing.Design;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -19,14 +20,14 @@ namespace dataEditor
     class PropertySet
         {
 
-        string appVersion = "0.801a";
+        string appVersion = "0.811a";
         [CategoryAttribute("App"), ReadOnlyAttribute(true)]
         public string AppVersion
         {
             get { return appVersion; }
             set { appVersion = value; }
         }
-        string appBuild = "301122";
+        string appBuild = "1222";
         [CategoryAttribute("App"), ReadOnlyAttribute(true)]
         public string AppBuild
         {
@@ -34,6 +35,17 @@ namespace dataEditor
             set { appBuild = value; }
         }
 
+        string m_pressetName;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("Type your name for new presset")]
+        [DisplayName("PressetName*")]
+        [Category("Extract Options")]
+        public string pressetName
+        {
+            get { return m_pressetName; }
+            set { m_pressetName = value; }
+        }
 
         bool m_DRow = true;
             [Browsable(true)]
@@ -52,7 +64,6 @@ namespace dataEditor
         [Description("Count of rows takes header")]
         [DisplayName("CountHeadresRow*")]
         [Category("Extract Options")]
-        //[TypeConverter(typeof(NumericList))]
         public int cntHeadsRows
         {
             get { return m_cntHeadsRows; }
@@ -217,6 +228,18 @@ namespace dataEditor
             set { m_ColorStaticDat = value; }
         }
 
+        string m_AvailableXML;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("Available presset for Universal Reader")]
+        [DisplayName("AvailableXML")]
+        [Category("Other")]
+        [TypeConverter(typeof(ListBox))]
+        public string AvailablePresset
+        {
+            get { return m_AvailableXML; }
+            set { m_AvailableXML = value; }
+        }
 
         bool m_extdEdit;
         [Browsable(false)]
@@ -241,7 +264,7 @@ namespace dataEditor
         }
 
     }
-    public class NumericList : TypeConverter
+    public class ListBox : TypeConverter
     {
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
         {
@@ -250,13 +273,15 @@ namespace dataEditor
 
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
+            string path = Environment.CurrentDirectory + "\\";
+            var dir = new DirectoryInfo(path);
+            List<string> files = new List<string>();
+            foreach (FileInfo file in dir.GetFiles("*.xml"))
+            {
+                files.Add(Path.GetFileName(file.FullName));
+            }
 
-            List<int> list = new List<int>();
-
-            for (int i=2; i<=10; i++)
-                    list.Add(i);
-
-                return new StandardValuesCollection(list);
+            return new StandardValuesCollection(files);
             return base.GetStandardValues(context);
         }
 

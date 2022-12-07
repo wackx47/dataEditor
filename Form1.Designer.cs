@@ -40,6 +40,7 @@ namespace dataEditor
             this.closeAllExcelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.universalReaderToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RowContext = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.RightClick_HeadsRow = new System.Windows.Forms.ToolStripMenuItem();
             this.RightClick_FirstRowData = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,14 +53,13 @@ namespace dataEditor
             this.setAsColumn4CheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.usedXML = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.settingsBackground = new System.Windows.Forms.PictureBox();
+            this.RegistryFix = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataViewer)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.RowContext.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BackUserMessanger)).BeginInit();
             this.CellContext.SuspendLayout();
             this.ColumnContext.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.settingsBackground)).BeginInit();
             this.SuspendLayout();
             // 
             // dataViewer
@@ -80,7 +80,7 @@ namespace dataEditor
             this.dataViewer.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataViewer.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataViewer.GridColor = System.Drawing.SystemColors.ControlLight;
-            this.dataViewer.Location = new System.Drawing.Point(7, 59);
+            this.dataViewer.Location = new System.Drawing.Point(113, 59);
             this.dataViewer.Name = "dataViewer";
             this.dataViewer.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ScrollBar;
@@ -93,7 +93,7 @@ namespace dataEditor
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             this.dataViewer.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dataViewer.RowTemplate.Height = 25;
-            this.dataViewer.Size = new System.Drawing.Size(724, 399);
+            this.dataViewer.Size = new System.Drawing.Size(618, 461);
             this.dataViewer.TabIndex = 1;
             // 
             // ExportXML
@@ -101,9 +101,9 @@ namespace dataEditor
             this.ExportXML.Cursor = System.Windows.Forms.Cursors.Hand;
             this.ExportXML.Enabled = false;
             this.ExportXML.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ExportXML.Location = new System.Drawing.Point(237, 30);
+            this.ExportXML.Location = new System.Drawing.Point(7, 59);
             this.ExportXML.Name = "ExportXML";
-            this.ExportXML.Size = new System.Drawing.Size(92, 23);
+            this.ExportXML.Size = new System.Drawing.Size(100, 40);
             this.ExportXML.TabIndex = 11;
             this.ExportXML.Text = "Export to XML";
             this.ExportXML.UseCompatibleTextRendering = true;
@@ -114,9 +114,9 @@ namespace dataEditor
             // 
             this.Convert2Tree.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Convert2Tree.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.Convert2Tree.Location = new System.Drawing.Point(335, 30);
+            this.Convert2Tree.Location = new System.Drawing.Point(7, 107);
             this.Convert2Tree.Name = "Convert2Tree";
-            this.Convert2Tree.Size = new System.Drawing.Size(92, 23);
+            this.Convert2Tree.Size = new System.Drawing.Size(101, 40);
             this.Convert2Tree.TabIndex = 15;
             this.Convert2Tree.Text = "Transfer2Tree";
             this.Convert2Tree.UseCompatibleTextRendering = true;
@@ -136,10 +136,12 @@ namespace dataEditor
             // menuStrip1
             // 
             this.menuStrip1.BackColor = System.Drawing.SystemColors.MenuBar;
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileMenu,
             this.MenuOptions,
-            this.universalReaderToolStripMenuItem1});
+            this.universalReaderToolStripMenuItem1,
+            this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1072, 24);
@@ -207,8 +209,15 @@ namespace dataEditor
             this.openFileToolStripMenuItem.Text = "Open File";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.FileWriter);
             // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Text = "About";
+            // 
             // RowContext
             // 
+            this.RowContext.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.RowContext.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.RightClick_HeadsRow,
             this.RightClick_FirstRowData});
@@ -266,6 +275,7 @@ namespace dataEditor
             // 
             // CellContext
             // 
+            this.CellContext.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.CellContext.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setAsStaticValueToolStripMenuItem});
             this.CellContext.Name = "RowContext";
@@ -279,6 +289,7 @@ namespace dataEditor
             // 
             // ColumnContext
             // 
+            this.ColumnContext.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.ColumnContext.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setAsColumn4CheckToolStripMenuItem});
             this.ColumnContext.Name = "ColumnContext";
@@ -294,7 +305,7 @@ namespace dataEditor
             // 
             this.usedXML.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.usedXML.FormattingEnabled = true;
-            this.usedXML.Location = new System.Drawing.Point(12, 486);
+            this.usedXML.Location = new System.Drawing.Point(559, 30);
             this.usedXML.MaxDropDownItems = 10;
             this.usedXML.Name = "usedXML";
             this.usedXML.Size = new System.Drawing.Size(172, 23);
@@ -304,27 +315,31 @@ namespace dataEditor
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.label1.Location = new System.Drawing.Point(11, 468);
+            this.label1.Location = new System.Drawing.Point(452, 33);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(101, 15);
             this.label1.TabIndex = 68;
             this.label1.Text = "Used file presset";
             // 
-            // settingsBackground
+            // RegistryFix
             // 
-            this.settingsBackground.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.settingsBackground.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.settingsBackground.Location = new System.Drawing.Point(7, 461);
-            this.settingsBackground.Name = "settingsBackground";
-            this.settingsBackground.Size = new System.Drawing.Size(724, 59);
-            this.settingsBackground.TabIndex = 69;
-            this.settingsBackground.TabStop = false;
+            this.RegistryFix.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.RegistryFix.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.RegistryFix.Location = new System.Drawing.Point(7, 153);
+            this.RegistryFix.Name = "RegistryFix";
+            this.RegistryFix.Size = new System.Drawing.Size(100, 40);
+            this.RegistryFix.TabIndex = 69;
+            this.RegistryFix.Text = "RegLib";
+            this.RegistryFix.UseCompatibleTextRendering = true;
+            this.RegistryFix.UseVisualStyleBackColor = true;
+            this.RegistryFix.Click += new System.EventHandler(this.RegistryFix_Click);
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(1072, 550);
+            this.Controls.Add(this.RegistryFix);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.usedXML);
             this.Controls.Add(this.Convert2Tree);
@@ -335,7 +350,6 @@ namespace dataEditor
             this.Controls.Add(this.ExportXML);
             this.Controls.Add(this.dataViewer);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.settingsBackground);
             this.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
@@ -350,7 +364,6 @@ namespace dataEditor
             ((System.ComponentModel.ISupportInitialize)(this.BackUserMessanger)).EndInit();
             this.CellContext.ResumeLayout(false);
             this.ColumnContext.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.settingsBackground)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -382,6 +395,7 @@ namespace dataEditor
         private Label label1;
         private ToolStripMenuItem closeAllExcelsToolStripMenuItem;
         private ToolStripMenuItem setAsStaticValueToolStripMenuItem;
-        private PictureBox settingsBackground;
+        private ToolStripMenuItem aboutToolStripMenuItem;
+        private Button RegistryFix;
     }
 }
