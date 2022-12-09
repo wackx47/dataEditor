@@ -133,9 +133,15 @@ namespace dataEditor
             Console.WriteLine(Environment.OSVersion.Platform.ToString());
             Console.WriteLine(Environment.OSVersion.VersionString + " (" + AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName + ") " + Environment.OSVersion.Version.CompareTo(OsMinVersion));
             Console.WriteLine("Soft powered by 47 5'9 (ver. " + PropGrid.AppVersion + ") //.build for GitHub");
-            AvailableXML();
             ReadINI();
             AutoFillList();
+            CheckRegLib();
+
+
+
+            statusGridView.Rows.Add();
+            statusGridView.Rows[0].Cells[0].Value = "ColumnsCounts";
+            statusGridView.Rows[0].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(0,10);
         }
 
         private void AutoFillList()
@@ -669,8 +675,6 @@ namespace dataEditor
             optionsGrid.Refresh();
 
             BackUserMessanger.BackColor = Color.LightGreen;
-            UserMessanger.BackColor = Color.LightGreen;
-            UserMessanger.Text = "Extracted columns confirmed";
             ExportXML.Enabled = true;
         }
 
@@ -827,14 +831,10 @@ namespace dataEditor
                         //string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\";
                         UniversalDataSet.WriteXml(xlFileName.ToString());
                         BackUserMessanger.BackColor = Color.LightGreen;
-                        UserMessanger.BackColor = Color.LightGreen;
-                        UserMessanger.Text = "XML file presset was successfully saved.";
                     }
                     catch
                     {
                         BackUserMessanger.BackColor = Color.IndianRed;
-                        UserMessanger.BackColor = Color.IndianRed;
-                        UserMessanger.Text = "XML file was not saved.";
                     }
                 }
             }
@@ -1035,21 +1035,6 @@ namespace dataEditor
             FormName.Items.AddRange(ListName);
         }
 
-        private void AvailableXML()
-        {
-            string path = Environment.CurrentDirectory + "\\";
-            var dir = new DirectoryInfo(path);
-            var files = new List<string>();
-            foreach (FileInfo file in dir.GetFiles("*.xml"))
-            {
-                files.Add(Path.GetFileName(file.FullName));
-            }
-            foreach (string str in files)
-            {
-                usedXML.Items.Add(str);
-            }
-        }
-
         private void StripMenuHeaderRow_Click(object sender, EventArgs e)
         {
 
@@ -1080,8 +1065,6 @@ namespace dataEditor
             }
             dataViewer.ClearSelection();
             optionsGrid.Refresh();
-
-            UserMessanger.Text = "Selected ROW(s) which contains Heads";
         }
 
         private void StripMenuFirstData_Click(object sender, EventArgs e)
@@ -1108,8 +1091,6 @@ namespace dataEditor
                 }
                 dataViewer.ClearSelection();
                 optionsGrid.Refresh();
-
-                UserMessanger.Text = "Selected First ROW which contains data " + HFR.ToString() + ActiveCell.RowIndex.ToString(); 
             }
         }
 
@@ -1355,26 +1336,42 @@ namespace dataEditor
                 fntTreeCl = Color.Black;
         }
 
-        class Magician
+        private void CheckRegLib()
         {
-            [DllImport("kernel32.dll")]
-            static extern IntPtr GetConsoleWindow();
+            RegistryKey root = Registry.ClassesRoot;
+            RegistryKey TypeLib = root.OpenSubKey("TypeLib");
 
-            [DllImport("user32.dll")]
-            static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-            const int HIDE = 0;
-            const int SHOW = 5;
-
-            public static void DisappearConsole()
+            RegistryKey OleDB = TypeLib.OpenSubKey("{00020813-0000-0000-C000-000000000046}");
+            try
             {
-                ShowWindow(GetConsoleWindow(), HIDE);
+                Console.WriteLine("Cheked sub: {0}.", OleDB.Name + " check status — ok.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.GetType());
+
+                Console.WriteLine("Sub with ID {00020813-0000-0000-C000-000000000046} not registred, check status — failed.");
             }
 
-            public static void AppearConsole()
+            RegistryKey lastKey = OleDB.OpenSubKey("1.9");
+            try
             {
-                ShowWindow(GetConsoleWindow(), SHOW);
+                Console.WriteLine("Cheked sub: {0}.", lastKey.Name + " check status — ok.");
+
+                lastKey.Close();
+                OleDB.Close();
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.GetType());
+
+                Console.WriteLine("Lib ver.1.9 not registred, check status — failed.");
+                OleDB.Close();
+            }
+            TypeLib.Close();
+            root.Close();
         }
 
         private void RigesterCOMfix()
@@ -1429,5 +1426,28 @@ namespace dataEditor
         {
             RigesterCOMfix();
         }
+
+        class Magician
+        {
+            [DllImport("kernel32.dll")]
+            static extern IntPtr GetConsoleWindow();
+
+            [DllImport("user32.dll")]
+            static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+            const int HIDE = 0;
+            const int SHOW = 5;
+
+            public static void DisappearConsole()
+            {
+                ShowWindow(GetConsoleWindow(), HIDE);
+            }
+
+            public static void AppearConsole()
+            {
+                ShowWindow(GetConsoleWindow(), SHOW);
+            }
+        }
+
     }
 }
