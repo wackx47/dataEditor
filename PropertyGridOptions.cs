@@ -20,7 +20,7 @@ namespace dataEditor
     class PropertySet
         {
 
-        string appVersion = "0.811a";
+        string appVersion = "0.821a";
         [CategoryAttribute("App"), ReadOnlyAttribute(true)]
         public string AppVersion
         {
@@ -35,23 +35,25 @@ namespace dataEditor
             set { appBuild = value; }
         }
 
-        string m_pressetName;
-        [Browsable(true)]
-        [ReadOnly(false)]
-        [Description("Type your name for new presset")]
-        [DisplayName("PressetName*")]
-        [Category("Extract Options")]
-        public string pressetName
-        {
-            get { return m_pressetName; }
-            set { m_pressetName = value; }
-        }
+
+        //string m_pressetName;
+        //[Browsable(true)]
+        //[ReadOnly(false)]
+        //[Description("Type your name for new presset")]
+        //[DisplayName("PressetName*")]
+        //[Category("Extract Options")]
+        //public string pressetName
+        //{
+        //    get { return m_pressetName; }
+        //    set { m_pressetName = value; }
+        //}
 
         bool m_DRow = true;
             [Browsable(true)]
+            [ReadOnly(true)]
             [Description("Headers takes over 2 rows in table")]
             [DisplayName("MultiRowHeaders")]
-            [Category("Extract Options")]
+            [Category("Explore Mode")]
             public bool DRow
                 {
                 get { return m_DRow; }
@@ -60,30 +62,31 @@ namespace dataEditor
 
         int m_cntHeadsRows=2;
         [Browsable(true)]
-        [ReadOnly(false)]
+        [ReadOnly(true)]
         [Description("Count of rows takes header")]
-        [DisplayName("CountHeadresRow*")]
-        [Category("Extract Options")]
+        [DisplayName("CountHeadresRow")]
+        [Category("Explore Mode")]
         public int cntHeadsRows
         {
             get { return m_cntHeadsRows; }
             set { m_cntHeadsRows = value; }
         }
 
-        int m_HeadFirstRow;
-        [Browsable(true)]
-        [ReadOnly(false)]
-        [Description("Rows which contains headers columns")]
-        [DisplayName("HeadresRow*")]
-        [Category("Extract Options")]
-        public int HeadFirstRow
-        {
-            get { return m_HeadFirstRow; }
-            set { m_HeadFirstRow = value; }
-        }
+        //int m_HeadFirstRow;
+        //[Browsable(true)]
+        //[ReadOnly(false)]
+        //[Description("Rows which contains headers columns")]
+        //[DisplayName("HeadresRow*")]
+        //[Category("Extract Options")]
+        //public int HeadFirstRow
+       // {
+       //     get { return m_HeadFirstRow; }
+       //     set { m_HeadFirstRow = value; }
+       // }
 
         bool m_useExtraCol=false;
             [Browsable(true)]
+            [ReadOnly(true)]
             [Description("Enable extra columns")]
             [DisplayName("UseExtraColumns")]
             [Category("Extra Columns")]
@@ -106,66 +109,66 @@ namespace dataEditor
 
 
 
-        int m_FirstRowNum;
-            [Browsable(true)]
-            [ReadOnly(false)]
-            [Description("First row contains data")]
-            [DisplayName("FirstDataRow*")]
-            [Category("Extract Options")]
-            public int FirstRow
-            {
-                get { return m_FirstRowNum; }
-                set { m_FirstRowNum = value; }
-            }
+        //int m_FirstRowNum;
+        //    [Browsable(true)]
+        //    [ReadOnly(false)]
+        //    [Description("First row contains data")]
+        //    [DisplayName("FirstDataRow*")]
+        //    [Category("Extract Options")]
+        //    public int FirstRow
+        //    {
+        //        get { return m_FirstRowNum; }
+        //        set { m_FirstRowNum = value; }
+        //    }
 
-        int m_loop = 0;
-        [Browsable(true)]
-        [ReadOnly(false)]
-        [Description("The cycle of repeating filled lines")]
-        [DisplayName("Steps*")]
-        [Category("Extract Options")]
-        public int propLoop
-        {
-            get { return m_loop; }
-            set { m_loop = value; }
-        }
+        //int m_loop = 0;
+        //[Browsable(true)]
+        //[ReadOnly(false)]
+        //[Description("The cycle of repeating filled lines")]
+        //[DisplayName("Steps*")]
+        //[Category("Extract Options")]
+        //public int propLoop
+        //{
+        //    get { return m_loop; }
+        //    set { m_loop = value; }
+        //}
 
-        int m_ColumnsNum;
-            [Browsable(true)]
-            [ReadOnly(false)]
-            [Description("Columns count in table")]
-            [DisplayName("ColumnsCount*")]
-            [Category("Extract Options")]
-            public int ColumnsCounts
-            {
-                get { return m_ColumnsNum; }
-                set { m_ColumnsNum = value; }
-            }
+        //int m_ColumnsNum;
+        //    [Browsable(true)]
+        //    [ReadOnly(false)]
+        //    [Description("Columns count in table")]
+        //    [DisplayName("ColumnsCount*")]
+        //    [Category("Extract Options")]
+        //    public int ColumnsCounts
+        //    {
+        //        get { return m_ColumnsNum; }
+        //        set { m_ColumnsNum = value; }
+        //    }
 
-        string m_colChecks;
-        [Browsable(true)]
-        [ReadOnly(false)]
-        [Description("Select columns which using for checks files")]
-        [DisplayName("ColumnsChecks*")]
-        [Category("Extract Options")]
-        public string colChecks
-        {
-            get { return m_colChecks; }
-            set { m_colChecks = value; }
-        }
+        //string m_colChecks;
+        //[Browsable(true)]
+        //[ReadOnly(false)]
+        //[Description("Select columns which using for checks files")]
+        //[DisplayName("ColumnsChecks*")]
+        //[Category("Extract Options")]
+        //public string colChecks
+        //{
+        //    get { return m_colChecks; }
+        //    set { m_colChecks = value; }
+        //}
 
 
-        string m_TextExportColumns;
-        [Browsable(true)]
-        [ReadOnly(true)]
-        [Description("Returns columns which contains 'obj1'")]
-        [DisplayName("ExportColumns*")]
-        [Category("Extract Options")]
-        public string TextExportColumns
-        {
-            get { return m_TextExportColumns; }
-            set { m_TextExportColumns = value; }
-        }
+        //string m_TextExportColumns;
+        //[Browsable(true)]
+        //[ReadOnly(true)]
+        //[Description("Returns columns which contains 'obj1'")]
+        //[DisplayName("ExportColumns*")]
+        //[Category("Extract Options")]
+        //public string TextExportColumns
+        //{
+        //    get { return m_TextExportColumns; }
+        //    set { m_TextExportColumns = value; }
+        //}
 
 
         string m_sqlNames;

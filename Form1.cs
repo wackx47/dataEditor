@@ -21,6 +21,7 @@ using System.Reflection.Metadata;
 using System.Drawing.Imaging;
 using System.Linq;
 using Microsoft.Win32;
+using System.Text.RegularExpressions;
 
 namespace dataEditor
 {
@@ -40,7 +41,9 @@ namespace dataEditor
         int cntShows = 0;
         int HFR = 0;
         int prvCntHedRw = 2;
+        int RowsCnt = 0;
         bool allowVoid = false;
+        bool lockVoid = false;
 
 
         CheckBox headerCheckBox = new CheckBox();
@@ -56,6 +59,8 @@ namespace dataEditor
         int[] obj1 = new int[] { };
         string xmlFileName = "";
         string ExlFileName = null;
+        List<int> tempPropVal = new List<int>() { };
+        List<Color> tempPropColors = new List<Color>() { };
         List<String> SQLdata = new List<string>() { };
         String[] SQLdbTemp = { };
         String[] SQLdbTempB = { };
@@ -67,6 +72,7 @@ namespace dataEditor
         Color fntCl = Color.Black;
         Color fntClDat = Color.Black;
         Color fntTreeCl = Color.Black;
+        Color fntClStaticDat = Color.Black;
 
 
 
@@ -90,6 +96,25 @@ namespace dataEditor
         [DllImport("kernel32.dll", SetLastError = false)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool FreeConsole();
+
+        public class StatusGridViewEditMode : DataGridView
+        {
+            protected override bool ProcessDialogKey(Keys keyData)
+            {
+                if (keyData == Keys.Enter)
+                    return base.ProcessDialogKey(Keys.Tab);
+                else
+                    return base.ProcessDialogKey(keyData);
+            }
+            protected override bool ProcessDataGridViewKey(KeyEventArgs e)
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    return this.ProcessRightKey(e.KeyData);
+                }
+                return base.ProcessDataGridViewKey(e);
+            }
+        }
 
         public MainForm()
         {
@@ -137,11 +162,114 @@ namespace dataEditor
             AutoFillList();
             CheckRegLib();
 
+            tempPropColors.Add(PropGrid.ColorHeads);
+            tempPropColors.Add(PropGrid.ColorDataRows);
+            tempPropColors.Add(PropGrid.ColorStaticDat);
+            tempPropColors.Add(PropGrid.SecondColorHeads);
+        }
 
+        private void statusGridView_CellCmbxValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            foreach (DataGridViewRow row in statusGridView.Rows)
+            {
+                if (row.Cells[1].Value != null)
+                {
+                    row.Cells[2].Value = "ok";
+                    row.DefaultCellStyle.BackColor = Color.PaleGreen;
+                }
+                else
+                {
+                    row.Cells[2].Value = "";
+                    row.DefaultCellStyle.BackColor = Color.Empty;
+                    statusGridView.DefaultCellStyle.SelectionBackColor = Color.LightGray;
+                }
+            }
+        }
 
-            statusGridView.Rows.Add();
-            statusGridView.Rows[0].Cells[0].Value = "ColumnsCounts";
-            statusGridView.Rows[0].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(0,10);
+        private void statusGridView_MouseClick(Object sender, MouseEventArgs e)
+        {
+            DataGridView.HitTestInfo hittestinfo = statusGridView.HitTest(e.X, e.Y);
+                if (hittestinfo != null && hittestinfo.Type == DataGridViewHitTestType.Cell)
+                {
+                    if (statusGridView.Rows[hittestinfo.RowIndex].Cells[2].Value == "ok")
+                        {
+                            statusGridView.DefaultCellStyle.SelectionBackColor = Color.FromArgb(255, 91, 201, 91);
+                        }
+                    else
+                        {
+                            statusGridView.DefaultCellStyle.SelectionBackColor = Color.LightGray;
+                        }
+                }
+        }
+
+        private void statusGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (statusGridView.Rows[statusGridView.CurrentCellAddress.Y].Cells[statusGridView.CurrentCellAddress.X].Value != null)
+            {
+                statusGridView.DefaultCellStyle.SelectionBackColor = Color.PaleGreen;
+            }
+        }
+
+        private void statusGridView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (dataViewer.DataSource != null && statusGridView.Rows[2].Cells[1].Value != null && statusGridView.CurrentCellAddress.X == 1 && statusGridView.CurrentCellAddress.Y == 2)
+            {
+                foreach (DataGridViewRow rws in dataViewer.Rows)
+                {
+                    if (rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads | rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads)
+                    {
+                        rws.DefaultCellStyle.BackColor = Color.Empty;
+                        rws.DefaultCellStyle.ForeColor = Color.Black;
+                    }
+                }
+                if (Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) > 0)
+                {
+                    HFR = Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value);
+                    dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - 1].DefaultCellStyle.BackColor = PropGrid.ColorHeads;
+                    dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - 1].DefaultCellStyle.ForeColor = fntCl;
+
+                    if (PropGrid.DRow == true)
+                    {
+                        for (int i = 1; i < Convert.ToInt32(PropGrid.cntHeadsRows); i++)
+                        {
+                            dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - 1 + i].DefaultCellStyle.BackColor = PropGrid.ColorHeads;
+                            dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - 1 + i].DefaultCellStyle.ForeColor = fntCl;
+                        }
+                    }
+                }
+                TreeFormDestroyer();
+                dataViewer.ClearSelection();
+                optionsGrid.Refresh();
+            }
+
+            if (dataViewer.DataSource != null && statusGridView.Rows[3].Cells[1].Value != null && statusGridView.CurrentCellAddress.X == 1 && statusGridView.CurrentCellAddress.Y == 3 || statusGridView.CurrentCellAddress.Y == 4)
+            {
+                foreach (DataGridViewRow row in dataViewer.Rows)
+                {
+                    if (row.DefaultCellStyle.BackColor == PropGrid.ColorDataRows | row.DefaultCellStyle.BackColor == PropGrid.ColorDataRows)
+                    {
+                        row.DefaultCellStyle.BackColor = Color.Empty;
+                        row.DefaultCellStyle.ForeColor = Color.Black;
+                    }
+                }
+
+                if (Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value) > 0)
+                {
+                    dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-1].DefaultCellStyle.BackColor = PropGrid.ColorDataRows;
+                    dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-1].DefaultCellStyle.ForeColor = fntClDat;
+
+                    for (int i = (Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-1 + Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1); i < RowsCnt; i += Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1)
+                    {
+                        if (dataViewer.Rows[i].Cells[1].Value != DBNull.Value)
+                        {
+                            dataViewer.Rows[i].DefaultCellStyle.BackColor = PropGrid.ColorDataRows;
+                            dataViewer.Rows[i].DefaultCellStyle.ForeColor = fntClDat;
+                        }
+                    }
+                }
+                dataViewer.ClearSelection();
+                optionsGrid.Refresh();
+            }
         }
 
         private void AutoFillList()
@@ -166,6 +294,7 @@ namespace dataEditor
             if (File.Exists(Environment.CurrentDirectory + "\\config.ini"))
             {
                 Console.WriteLine("Config.ini found, all settings loaded successfully.");
+
                 if (INI.KeyExists("SQLNamesList", "SQL"))
                 {
                     PropGrid.sqlNames = INI.ReadINI("SQL", "SQLNamesList");
@@ -199,7 +328,7 @@ namespace dataEditor
             }
         }
 
-        private void ConfigUpdater()
+        private void ConfigUpdater_handle()
         {
             INI.Write("SQL", "SQLNamesList", PropGrid.sqlNames.ToString());
             INI.Write("Visuals", "ColorHeaders", PropGrid.ColorHeads.Name.ToString());
@@ -207,6 +336,39 @@ namespace dataEditor
             INI.Write("Visuals", "ColorDataRows", PropGrid.ColorDataRows.Name.ToString());
             INI.Write("Visuals", "ColorStaticCell", PropGrid.ColorStaticDat.Name.ToString());
             INI.Write("Other", "ForceCloseAllExcel", PropGrid.ForceCloseExl.ToString());
+        }
+
+        public void ConfigUpdater()
+        {
+            GridItemCollection categories;
+            if (optionsGrid.SelectedGridItem.GridItemType == GridItemType.Category)
+            {
+                categories = optionsGrid.SelectedGridItem.Parent.GridItems;
+            }
+            else
+            {
+                categories = optionsGrid.SelectedGridItem.Parent.Parent.GridItems;
+            }
+
+            foreach (var category in categories)
+            {
+                if (((GridItem)category).GridItemType == GridItemType.Category)
+                {
+                    foreach (GridItem gi in ((GridItem)category).GridItems)
+                    {
+                        if (gi.Label.ToString() != "AvailableXML" && gi.Parent.Label.ToString() != "App" && gi.Parent.Label.ToString() != "Visuals")
+                        {
+                            INI.Write(gi.Parent.Label.ToString(), gi.Label.ToString(), gi.Value.ToString());
+                        }
+                        if(gi.Parent.Label.ToString() == "Visuals")
+                        {
+                            var str1 = gi.Value.ToString();
+                            string[] strs = str1.Split(new[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+                            INI.Write(gi.Parent.Label.ToString(), gi.Label.ToString(), strs[1].ToString());
+                        }
+                    }
+                }
+            }
         }
 
         private void OnProcessExit(object sender, EventArgs e)
@@ -266,7 +428,7 @@ namespace dataEditor
             if (e.RowIndex >= 0 && e.ColumnIndex == 0)
             {
                 HFR = e.RowIndex + 1;
-                PropGrid.HeadFirstRow = Convert.ToInt32(dataViewer.Rows[e.RowIndex].HeaderCell.Value.ToString().Split(' ').Last());
+                statusGridView.Rows[2].Cells[1].Value = Convert.ToInt32(dataViewer.Rows[e.RowIndex].HeaderCell.Value.ToString().Split(' ').Last());
                 dataViewer.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.SkyBlue;
                 RightClick_HeadsRow.Enabled = true;
                 Convert2Tree.Visible = true;
@@ -291,7 +453,7 @@ namespace dataEditor
                     //dataViewer.SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect;
                     //dataViewer.Columns[e.ColumnIndex].Selected = true;
                     ColumnContext.Show(Cursor.Position);
-                    PropGrid.colChecks += dataViewer.Columns[e.ColumnIndex].Name.ToString() + ";";
+                    statusGridView.Rows[6].Cells[1].Value += dataViewer.Columns[e.ColumnIndex].Name.ToString() + ";";
                     optionsGrid.Refresh();
                 }
             }
@@ -399,6 +561,7 @@ namespace dataEditor
 
                 dataViewer.Rows[ActiveCell.RowIndex].Cells[ActiveCell.ColumnIndex].Value += " [" + clickedMenuItem.Text + "]";
                 dataViewer.Rows[ActiveCell.RowIndex].Cells[ActiveCell.ColumnIndex].Style.BackColor = PropGrid.ColorStaticDat;
+                dataViewer.Rows[ActiveCell.RowIndex].Cells[ActiveCell.ColumnIndex].Style.ForeColor = fntClStaticDat;
 
                 SQLdbTempB = Array.FindAll(SQLdbTemp, i => i != clickedMenuItem.Text.ToString()).ToArray();
                 SQLdbTempC = SQLdbTempC.Append(clickedMenuItem.Text.ToString()).ToArray();
@@ -528,6 +691,10 @@ namespace dataEditor
                 TreeWidth += 18;
                 TreeColViewer.ScrollBars = ScrollBars.Vertical;
             }
+            else
+            {
+                TreeColViewer.ScrollBars = ScrollBars.None;
+            }
 
             TreeColViewer.Size = new Size(TreeWidth, TreeHeight);
             TextExtractColumns.Size = new Size(TreeWidth, 23);
@@ -623,7 +790,7 @@ namespace dataEditor
             DataTable dte = new DataTable();
 
 
-            if (PropGrid.TextExportColumns == null)
+            if (statusGridView.Rows[5].Cells[1].Value == null)
             {
                 dt.TableName = "usedColumns";
                 dte.TableName = "commonSettings";
@@ -647,7 +814,7 @@ namespace dataEditor
 
             int TagCounts = 0;
 
-            PropGrid.TextExportColumns = "";
+            statusGridView.Rows[5].Cells[1].Value = "";
 
             foreach (DataGridViewRow r in TreeColViewer.Rows)
             {
@@ -658,23 +825,22 @@ namespace dataEditor
                     row["name"] = r.Cells[1].Value;
                     row["link2SQL"] = r.Cells[2].Value;
                     UniversalDataSet.Tables["usedColumns"].Rows.Add(row);
-                    PropGrid.TextExportColumns += r.HeaderCell.Value.ToString().Split('F').Last() + ";";
+                    statusGridView.Rows[5].Cells[1].Value += r.HeaderCell.Value.ToString().Split('F').Last() + ";";
                     TagCounts++;
                 }
             }
 
             DataRow rwe = dte.NewRow();
             rwe["extraColumns"] = PropGrid.ExtraColCnt;
-            rwe["headsRow"] = PropGrid.HeadFirstRow;
-            rwe["firstData"] = PropGrid.FirstRow;
-            rwe["columnsCount"] = PropGrid.ColumnsCounts;
-            rwe["columnsCheck"] = PropGrid.colChecks;
+            rwe["headsRow"] = statusGridView.Rows[2].Cells[1].Value;
+            rwe["firstData"] = statusGridView.Rows[3].Cells[1].Value;
+            rwe["columnsCount"] = statusGridView.Rows[1].Cells[1].Value;
+            rwe["columnsCheck"] = statusGridView.Rows[6].Cells[1].Value;
             dte.Rows.Add(rwe);
 
             TreeView.Hide();
             optionsGrid.Refresh();
 
-            BackUserMessanger.BackColor = Color.LightGreen;
             ExportXML.Enabled = true;
         }
 
@@ -819,7 +985,7 @@ namespace dataEditor
             sfd.FileName = FormName.Text.ToString() + ".xml";
 
 
-            if (PropGrid.ColumnsCounts != 0 && PropGrid.TextExportColumns != null && PropGrid.FirstRow != 0 && PropGrid.ColumnsCounts != null && PropGrid.FirstRow != null)
+            if (statusGridView.Rows[1].Cells[1].Value != null && statusGridView.Rows[5].Cells[1].Value != null)
             {
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
@@ -851,7 +1017,6 @@ namespace dataEditor
                 Magician.AppearConsole();
                 DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_BYCOMMAND);
                 showConsoleToolStripMenuItem.Checked = true;
-                
             }
                 else 
             {
@@ -891,7 +1056,6 @@ namespace dataEditor
             Excel.Application xlApp = new Excel.Application();
             Excel.Workbook xlWB;
             Excel.Worksheet xlSht;
-            //xlApp.Visible = false;
             xlWB = xlApp.Workbooks.Add(xlFileName);         
             xlSht = xlWB.Worksheets[1];
 
@@ -907,16 +1071,6 @@ namespace dataEditor
                 {
                     FirstUsedRow = i;
                     break;
-                }
-            }
-
-            for (int i = 0; i < FormName.Items.Count; i++)
-            {
-                int c = FormName.Items[i].ToString().IndexOf(Path.GetFileNameWithoutExtension(xlFileName).Substring(Path.GetFileNameWithoutExtension(xlFileName).LastIndexOf("_") + 1));
-                if (c>=0)
-                {
-                    FormName.Text = "presset_" + FormName.Items[i].ToString();
-                    PropGrid.pressetName = FormName.Text;
                 }
             }
 
@@ -958,8 +1112,6 @@ namespace dataEditor
             //DataGridViewCheckBoxColumn checkBoxColumn = new DataGridViewCheckBoxColumn();
             //dataViewer.Columns.Insert(0, checkBoxColumn);
 
-            PropGrid.ColumnsCounts = colCount;
-
             Point headerCellLocation = dataViewer.GetCellDisplayRectangle(-1, -1, true).Location;
 
             foreach (DataGridViewColumn column in dataViewer.Columns)
@@ -968,7 +1120,6 @@ namespace dataEditor
                 column.Width = 120;
             }
 
-
             foreach (DataGridViewRow row in dataViewer.Rows)
             {
                 {
@@ -976,7 +1127,6 @@ namespace dataEditor
                     FirstUsedRow++;
                 }
             }
-
 
             //dataViewer.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
             dataViewer.EnableHeadersVisualStyles = false;
@@ -987,8 +1137,24 @@ namespace dataEditor
             dataViewer.RowHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_RowSelected);
             dataViewer.ColumnHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_ColumnsSelected);
 
-            optionsGrid.Refresh();
+            RowsCnt = dataViewer.RowCount;
 
+            FillStatusGrid(RowsCnt, colCount);
+            statusGridView.Rows[1].Cells[1].Value = colCount;
+            statusGridView.Rows[4].Cells[1].Value = 0;
+
+            for (int i = 0; i < FormName.Items.Count; i++)
+            {
+                int c = FormName.Items[i].ToString().IndexOf(Path.GetFileNameWithoutExtension(xlFileName).Substring(Path.GetFileNameWithoutExtension(xlFileName).LastIndexOf("_") + 1));
+                if (c >= 0)
+                {
+                    FormName.Text = "presset_" + FormName.Items[i].ToString();
+                    statusGridView.Rows[0].Cells[1].Value = FormName.Text;
+                }
+            }
+
+            tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
+            optionsGrid.Refresh();
 
             xlWB.Close(false, false, false);
             xlApp.Quit();
@@ -996,6 +1162,49 @@ namespace dataEditor
             xlWB = null;
             xlSht = null;
             GC.Collect();
+        }
+
+        private void FillStatusGrid(int maxRows, int maxCols)
+        {
+            statusGridView.Rows.Add();
+            statusGridView.Rows[0].HeaderCell.Value = "PressetName";
+            statusGridView.Rows[0].Cells[0].Value = "PressetName";
+
+            statusGridView.Rows.Add();
+            statusGridView.Rows[1].HeaderCell.Value = "ColumnsCounts";
+            statusGridView.Rows[1].Cells[0].Value = "ColumnsCounts";
+            statusGridView.Rows[1].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(0, 999);
+
+            statusGridView.Rows.Add();
+            statusGridView.Rows[2].HeaderCell.Value = "FirstHeaderRow";
+            statusGridView.Rows[2].Cells[0].Value = "FirstHeaderRow";
+            statusGridView.Rows[2].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(0, (maxRows-PropGrid.cntHeadsRows)+1);
+
+            statusGridView.Rows.Add();
+            statusGridView.Rows[3].HeaderCell.Value = "FirstDataRow";
+            statusGridView.Rows[3].Cells[0].Value = "FirstDataRow";
+            statusGridView.Rows[3].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(0, maxRows);
+
+            statusGridView.Rows.Add();
+            statusGridView.Rows[4].HeaderCell.Value = "Steps";
+            statusGridView.Rows[4].Cells[0].Value = "Steps";
+            statusGridView.Rows[4].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(0, 10);
+
+            statusGridView.Rows.Add();
+            statusGridView.Rows[5].HeaderCell.Value = "ExportColumns";
+            statusGridView.Rows[5].Cells[0].Value = "ExportColumns";
+
+            statusGridView.Rows.Add();
+            statusGridView.Rows[6].HeaderCell.Value = "ColumnsChecks";
+            statusGridView.Rows[6].Cells[0].Value = "ColumnsChecks";
+
+            statusGridView.EditMode = DataGridViewEditMode.EditOnEnter;
+            statusGridView.CellEndEdit += statusGridView_CellEndEdit;
+            statusGridView.MouseDown += new MouseEventHandler(statusGridView_MouseClick);
+
+            statusGridView.ClearSelection();
+            TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["DRow"].SetReadOnlyAttribute(false);
+            TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["cntHeadsRows"].SetReadOnlyAttribute(false);
         }
 
         private void SettingsNewForm()
@@ -1037,6 +1246,7 @@ namespace dataEditor
 
         private void StripMenuHeaderRow_Click(object sender, EventArgs e)
         {
+            TreeFormDestroyer();
 
             foreach (DataGridViewRow rws in dataViewer.Rows)
             {
@@ -1047,10 +1257,10 @@ namespace dataEditor
                 }
             }
 
-            if (ActiveCell.RowIndex >= 0 && ActiveCell.ColumnIndex == 0)
+            if (ActiveCell.RowIndex >= 0 && ActiveCell.ColumnIndex == 0 && ActiveCell.RowIndex+ Convert.ToInt32(PropGrid.cntHeadsRows) <= RowsCnt)
             {
                 HFR = ActiveCell.RowIndex + 1;
-                PropGrid.HeadFirstRow = Convert.ToInt32(dataViewer.Rows[ActiveCell.RowIndex].HeaderCell.Value.ToString().Split(' ').Last());
+                statusGridView.Rows[2].Cells[1].Value = Convert.ToInt32(dataViewer.Rows[ActiveCell.RowIndex].HeaderCell.Value.ToString().Split(' ').Last());
                 dataViewer.Rows[ActiveCell.RowIndex].DefaultCellStyle.BackColor = PropGrid.ColorHeads;
                 dataViewer.Rows[ActiveCell.RowIndex].DefaultCellStyle.ForeColor = fntCl;
 
@@ -1063,7 +1273,9 @@ namespace dataEditor
                     }
                 }
             }
+            tempPropVal.Add(Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value)); //[1] - Rows counts take Header
             dataViewer.ClearSelection();
+            statusGridView.ClearSelection();
             optionsGrid.Refresh();
         }
 
@@ -1078,16 +1290,19 @@ namespace dataEditor
                 }
             }
 
-            if (ActiveCell != null)
+            if (ActiveCell != null && ActiveCell.RowIndex <= RowsCnt)
             {
-                PropGrid.FirstRow = Convert.ToInt32(dataViewer.Rows[(ActiveCell.RowIndex)].HeaderCell.Value.ToString().Split(' ').Last());
+                statusGridView.Rows[3].Cells[1].Value = Convert.ToInt32(dataViewer.Rows[(ActiveCell.RowIndex)].HeaderCell.Value.ToString().Split(' ').Last());
                 dataViewer.Rows[(ActiveCell.RowIndex)].DefaultCellStyle.BackColor = PropGrid.ColorDataRows;
                 dataViewer.Rows[(ActiveCell.RowIndex)].DefaultCellStyle.ForeColor = fntClDat;
 
-                for (int i = (ActiveCell.RowIndex + PropGrid.propLoop + 1); dataViewer.Rows[i].Cells[1].Value != DBNull.Value; i += PropGrid.propLoop + 1)
+                for (int i = (ActiveCell.RowIndex + Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1); i < RowsCnt; i += Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1)
                 {
-                    dataViewer.Rows[i].DefaultCellStyle.BackColor = PropGrid.ColorDataRows;
-                    dataViewer.Rows[i].DefaultCellStyle.ForeColor = fntClDat;
+                    if (dataViewer.Rows[i].Cells[1].Value != DBNull.Value)
+                    {
+                        dataViewer.Rows[i].DefaultCellStyle.BackColor = PropGrid.ColorDataRows;
+                        dataViewer.Rows[i].DefaultCellStyle.ForeColor = fntClDat;
+                    }
                 }
                 dataViewer.ClearSelection();
                 optionsGrid.Refresh();
@@ -1269,10 +1484,16 @@ namespace dataEditor
 
         private void ColsChecker()
         {
-            string clck = PropGrid.colChecks.ToString();
+            string clck = statusGridView.Rows[6].Cells[1].Value.ToString();
             string[] spclck = clck.Split(';');
             foreach(string sp in spclck)
             Console.WriteLine(sp + " | ");
+        }
+
+        private void propGrid_stripHelp(object sender, EventArgs e)
+        {
+                optionsGrid.HelpVisible = !optionsGrid.HelpVisible;
+                helpToolStripMenuItem.Checked = !helpToolStripMenuItem.Checked;
         }
 
         private void optionsGrid_PropertyValueChanged(Object sender, PropertyValueChangedEventArgs e)
@@ -1293,29 +1514,86 @@ namespace dataEditor
             {
                 TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["cntHeadsRows"].SetReadOnlyAttribute(false);
                 PropGrid.cntHeadsRows = 2;
-                //prvCntHedRw = PropGrid.cntHeadsRows;
-                //TreeFormDestroyer();
             }
-
 
             if (PropGrid.DRow == false)
             {
                 TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["cntHeadsRows"].SetReadOnlyAttribute(true);
                 PropGrid.cntHeadsRows = 1;
-                //TreeFormDestroyer();
             }
 
             if (PropGrid.ExtraColCnt > 10)
                 PropGrid.ExtraColCnt = 10;
+
+            
 
             if (PropGrid.cntHeadsRows != prvCntHedRw)
             {
                 prvCntHedRw = PropGrid.cntHeadsRows;
                 TreeFormDestroyer();
             }
+
             AutoFillList();
             autoFontColor();
             ConfigUpdater();
+            updateDataGridColors();
+
+            if (dataViewer.DataSource != null)
+            {
+                if (PropGrid.cntHeadsRows > RowsCnt)
+                { PropGrid.cntHeadsRows = RowsCnt; }
+                updateStatusGrid(PropGrid.cntHeadsRows);
+            }
+                
+        }
+
+        private void updateDataGridColors()
+        {
+            foreach (DataGridViewRow row in dataViewer.Rows)
+            {
+                if (row.DefaultCellStyle.BackColor == Color.FromName(tempPropColors[0].Name))
+                {
+                    row.DefaultCellStyle.BackColor = PropGrid.ColorHeads;
+                    row.DefaultCellStyle.ForeColor = fntCl;
+                }
+                if (row.DefaultCellStyle.BackColor == Color.FromName(tempPropColors[1].Name))
+                {
+                    row.DefaultCellStyle.BackColor = PropGrid.ColorDataRows;
+                    row.DefaultCellStyle.ForeColor = fntClDat;
+                }
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    if (cell.Style.BackColor == Color.FromName(tempPropColors[2].Name))
+                    {
+                        cell.Style.BackColor = PropGrid.ColorStaticDat;
+                        cell.Style.ForeColor = fntClStaticDat;
+                    }
+                }
+            }
+            tempPropColors[0] = PropGrid.ColorHeads;
+            tempPropColors[1] = PropGrid.ColorDataRows;
+            tempPropColors[2] = PropGrid.ColorStaticDat;
+            tempPropColors[3] = PropGrid.SecondColorHeads;
+        }
+
+        private void updateStatusGrid(int lastVal)
+        {
+            if (tempPropVal[0] != lastVal && TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["cntHeadsRows"].IsReadOnly == false)
+            {
+                statusGridView.Rows[2].Cells[1].Value = null;
+                statusGridView.Rows[2].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(0, (RowsCnt - PropGrid.cntHeadsRows) + 1);
+
+                foreach (DataGridViewRow rws in dataViewer.Rows)
+                {
+                    if (rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads | rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads)
+                    {
+                        rws.DefaultCellStyle.BackColor = Color.Empty;
+                        rws.DefaultCellStyle.ForeColor = Color.Black;
+                    }
+                }
+                tempPropVal[0] = lastVal;
+                TreeFormDestroyer();
+            }
         }
 
         private void autoFontColor()
@@ -1334,6 +1612,11 @@ namespace dataEditor
                 fntTreeCl = Color.White;
             else
                 fntTreeCl = Color.Black;
+
+            if (PropGrid.ColorStaticDat.R < 100 | PropGrid.ColorStaticDat.G < 100 | PropGrid.ColorStaticDat.B < 120)
+                fntClStaticDat = Color.White;
+            else
+                fntClStaticDat = Color.Black;
         }
 
         private void CheckRegLib()
@@ -1344,7 +1627,7 @@ namespace dataEditor
             RegistryKey OleDB = TypeLib.OpenSubKey("{00020813-0000-0000-C000-000000000046}");
             try
             {
-                Console.WriteLine("Cheked sub: {0}.", OleDB.Name + " check status — ok.");
+                //Console.WriteLine("Cheked sub: {0}.", OleDB.Name + " check status — ok.");
             }
             catch (Exception e)
             {
@@ -1374,7 +1657,7 @@ namespace dataEditor
             root.Close();
         }
 
-        private void RigesterCOMfix()
+        private void RigesterCOMfix(object sender, EventArgs e)
         {
             RegistryKey root = Registry.ClassesRoot;
             RegistryKey TypeLib = root.OpenSubKey("TypeLib", true);
@@ -1384,10 +1667,10 @@ namespace dataEditor
             {
                 Console.WriteLine("Open sub: {0}.", OleDB.Name);
             }
-            catch (Exception e)
+            catch (Exception d)
             {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.GetType());
+                Console.WriteLine(d.Message);
+                Console.WriteLine(d.GetType());
 
                 TypeLib.CreateSubKey("{00020813-0000-0000-C000-000000000046}");
                 OleDB = TypeLib.OpenSubKey("{00020813-0000-0000-C000-000000000046}", true);
@@ -1402,16 +1685,17 @@ namespace dataEditor
                 lastKey.Close();
                 OleDB.Close();
             }
-            catch (Exception e)
+            catch (Exception d)
             {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.GetType());
+                Console.WriteLine(d.Message);
+                Console.WriteLine(d.GetType());
 
                 OleDB = TypeLib.OpenSubKey("{00020813-0000-0000-C000-000000000046}", true);
                 OleDB.CreateSubKey("1.9");
                 lastKey = OleDB.OpenSubKey("1.9", true);
                 lastKey.SetValue(default, "Microsoft Excel 16.0 Object Library");
                 lastKey.SetValue("PrimaryInteropAssemblyName", "Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71E9BCE111E9429C");
+
 
                 Console.WriteLine("SubKey: " + lastKey.Name + " was created.");
 
@@ -1420,11 +1704,6 @@ namespace dataEditor
             }
             TypeLib.Close();
             root.Close();
-        }
-
-        private void RegistryFix_Click(object sender, EventArgs e)
-        {
-            RigesterCOMfix();
         }
 
         class Magician
@@ -1448,6 +1727,5 @@ namespace dataEditor
                 ShowWindow(GetConsoleWindow(), SHOW);
             }
         }
-
     }
 }

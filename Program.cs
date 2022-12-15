@@ -45,8 +45,8 @@ namespace dataEditor
             [System.Runtime.InteropServices.DllImportAttribute("kernel32.dll", EntryPoint = "AllocConsole")]
             [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.Bool)]
             public static extern bool AllocConsole();
-        }
 
+        }
 
     }
 }

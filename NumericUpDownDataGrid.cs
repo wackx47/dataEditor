@@ -68,7 +68,7 @@ namespace dataEditor
 
             public override object DefaultNewRowValue
             {
-                get { return null; } //未編集の新規行に余計な初期値が出ないようにする
+                get { return null; }
             }
         }
 
@@ -128,7 +128,7 @@ namespace dataEditor
                 return (keyData == Keys.Left || keyData == Keys.Right ||
                     keyData == Keys.Up || keyData == Keys.Down ||
                     keyData == Keys.Home || keyData == Keys.End ||
-                    keyData == Keys.PageDown || keyData == Keys.PageUp);
+                    keyData == Keys.PageDown || keyData == Keys.PageUp || keyData == Keys.Escape);
             }
 
             public object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
