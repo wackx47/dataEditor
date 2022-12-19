@@ -21,7 +21,6 @@ using System.Reflection.Metadata;
 using System.Drawing.Imaging;
 using System.Linq;
 using Microsoft.Win32;
-using System.Text.RegularExpressions;
 
 namespace dataEditor
 {
@@ -40,6 +39,7 @@ namespace dataEditor
 
         int cntShows = 0;
         int HFR = 0;
+        int FirstUsedRow = 1;
         int prvCntHedRw = 2;
         int RowsCnt = 0;
         bool allowVoid = false;
@@ -161,6 +161,7 @@ namespace dataEditor
             ReadINI();
             AutoFillList();
             CheckRegLib();
+            Information();
 
             tempPropColors.Add(PropGrid.ColorHeads);
             tempPropColors.Add(PropGrid.ColorDataRows);
@@ -224,16 +225,23 @@ namespace dataEditor
                 }
                 if (Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) > 0)
                 {
-                    HFR = Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value);
-                    dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - 1].DefaultCellStyle.BackColor = PropGrid.ColorHeads;
-                    dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - 1].DefaultCellStyle.ForeColor = fntCl;
+                    HFR = Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value)- (FirstUsedRow-1);
+
+                    statusGridView.Rows[3].Cells[1].Value = null;
+                    statusGridView.Rows[3].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value)+PropGrid.cntHeadsRows, RowsCnt);
+
+                    dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - (FirstUsedRow)].DefaultCellStyle.BackColor = PropGrid.ColorHeads;
+                    dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - (FirstUsedRow)].DefaultCellStyle.ForeColor = fntCl;
 
                     if (PropGrid.DRow == true)
                     {
                         for (int i = 1; i < Convert.ToInt32(PropGrid.cntHeadsRows); i++)
                         {
-                            dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - 1 + i].DefaultCellStyle.BackColor = PropGrid.ColorHeads;
-                            dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - 1 + i].DefaultCellStyle.ForeColor = fntCl;
+                            if (Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - (FirstUsedRow) + i < dataViewer.RowCount)
+                            {
+                                dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - (FirstUsedRow) + i].DefaultCellStyle.BackColor = PropGrid.ColorHeads;
+                                dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - (FirstUsedRow) + i].DefaultCellStyle.ForeColor = fntCl;
+                            }
                         }
                     }
                 }
@@ -255,10 +263,10 @@ namespace dataEditor
 
                 if (Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value) > 0)
                 {
-                    dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-1].DefaultCellStyle.BackColor = PropGrid.ColorDataRows;
-                    dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-1].DefaultCellStyle.ForeColor = fntClDat;
+                    dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-(FirstUsedRow)].DefaultCellStyle.BackColor = PropGrid.ColorDataRows;
+                    dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-(FirstUsedRow)].DefaultCellStyle.ForeColor = fntClDat;
 
-                    for (int i = (Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-1 + Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1); i < RowsCnt; i += Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1)
+                    for (int i = (Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-(FirstUsedRow) + Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1); i <= RowsCnt-(FirstUsedRow); i += Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1)
                     {
                         if (dataViewer.Rows[i].Cells[1].Value != DBNull.Value)
                         {
@@ -1025,6 +1033,19 @@ namespace dataEditor
             }
         }
 
+        public void Information()
+        {
+            DataTable table = new OleDbEnumerator().GetElements();
+            foreach (DataRow row in table.Rows)
+            {
+                if (row["SOURCES_NAME"].ToString() == "Microsoft.ACE.OLEDB.12.0")
+                {
+                    Console.WriteLine("Elements: " + row["SOURCES_NAME"]);
+                    return;
+                }
+            }
+        }
+
         private void ImportEXCL_Click(object sender, EventArgs e)
         {
 
@@ -1058,14 +1079,11 @@ namespace dataEditor
             Excel.Worksheet xlSht;
             xlWB = xlApp.Workbooks.Add(xlFileName);         
             xlSht = xlWB.Worksheets[1];
-
             Excel.Range ExcelRange = xlSht.UsedRange;
-            Excel.Range rng = xlSht.Cells[11, ExcelRange.Columns.Count + 1];
-            rng = rng.Columns.End[Excel.XlDirection.xlToLeft];
-            long lastCol = rng.Column;
-            long FirstUsedRow = 1;
+            int xlRowCount = ExcelRange.Rows.Count;
+            int xlColCount = ExcelRange.Columns.Count;
 
-            for (int i = 1; i<=10; i++)
+            for (int i = 1; i<= xlRowCount; i++)
             {
                 if (xlSht.Cells[i,1].Value != null)
                 {
@@ -1078,9 +1096,13 @@ namespace dataEditor
 
             OleDbConnection con = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + xlFileName + ";Extended Properties='Excel 12.0;HDR=NO;IMEX=1;'");
             OleDbDataAdapter sda = new OleDbDataAdapter("Select * From [" + SheetName + "$]", con);
+
             con.Open();
             DataTable data = new DataTable();
             sda.Fill(data);
+
+            DataTable dataVariantB = new DataTable();
+            AlternativeMethodImportExcel(dataVariantB, xlRowCount, xlColCount, ExcelRange);
 
             dataViewer.DataSource = data;
             dataViewer.AllowUserToAddRows = false;
@@ -1109,26 +1131,21 @@ namespace dataEditor
                 Console.WriteLine("Deleted last Column");
             }
 
-            //DataGridViewCheckBoxColumn checkBoxColumn = new DataGridViewCheckBoxColumn();
-            //dataViewer.Columns.Insert(0, checkBoxColumn);
-
-            Point headerCellLocation = dataViewer.GetCellDisplayRectangle(-1, -1, true).Location;
-
             foreach (DataGridViewColumn column in dataViewer.Columns)
             {
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
                 column.Width = 120;
             }
 
+            int RowIndex = Convert.ToInt32(FirstUsedRow);
             foreach (DataGridViewRow row in dataViewer.Rows)
             {
                 {
-                    row.HeaderCell.Value = "ROW " + FirstUsedRow.ToString();
-                    FirstUsedRow++;
+                    row.HeaderCell.Value = "ROW " + RowIndex.ToString();
+                    RowIndex++;
                 }
             }
 
-            //dataViewer.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
             dataViewer.EnableHeadersVisualStyles = false;
 
             //dataViewer.CellContentClick += new DataGridViewCellEventHandler(DataViewer_SwitchCheckRow);
@@ -1137,7 +1154,7 @@ namespace dataEditor
             dataViewer.RowHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_RowSelected);
             dataViewer.ColumnHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_ColumnsSelected);
 
-            RowsCnt = dataViewer.RowCount;
+            RowsCnt = RowIndex-1;
 
             FillStatusGrid(RowsCnt, colCount);
             statusGridView.Rows[1].Cells[1].Value = colCount;
@@ -1164,6 +1181,29 @@ namespace dataEditor
             GC.Collect();
         }
 
+        private void AlternativeMethodImportExcel(DataTable dataVariantB, int xlRowCount , int xlColCount, Excel.Range ExcelRange)
+        {
+            DataRow xlrow = null;
+
+            for (int j = 1; j <= xlColCount; j++)
+            {
+                dataVariantB.Columns.Add();
+            }
+
+            for (int i = 1; i <= xlRowCount; i++)
+            {
+                xlrow = dataVariantB.NewRow();
+
+                for (int j = 1; j <= xlColCount; j++)
+                {
+                    xlrow[j - 1] = ExcelRange.Cells[i, j].Value;
+                    Console.WriteLine("Colum: " + j + "    Value: " + ExcelRange.Cells[i, j].Value);
+                }
+                Console.WriteLine();
+                dataVariantB.Rows.Add(xlrow);
+            }
+        }
+
         private void FillStatusGrid(int maxRows, int maxCols)
         {
             statusGridView.Rows.Add();
@@ -1173,17 +1213,17 @@ namespace dataEditor
             statusGridView.Rows.Add();
             statusGridView.Rows[1].HeaderCell.Value = "ColumnsCounts";
             statusGridView.Rows[1].Cells[0].Value = "ColumnsCounts";
-            statusGridView.Rows[1].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(0, 999);
+            statusGridView.Rows[1].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(0, maxCols);
 
             statusGridView.Rows.Add();
             statusGridView.Rows[2].HeaderCell.Value = "FirstHeaderRow";
             statusGridView.Rows[2].Cells[0].Value = "FirstHeaderRow";
-            statusGridView.Rows[2].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(0, (maxRows-PropGrid.cntHeadsRows)+1);
+            statusGridView.Rows[2].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(FirstUsedRow, (maxRows-PropGrid.cntHeadsRows)+1);
 
             statusGridView.Rows.Add();
             statusGridView.Rows[3].HeaderCell.Value = "FirstDataRow";
             statusGridView.Rows[3].Cells[0].Value = "FirstDataRow";
-            statusGridView.Rows[3].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(0, maxRows);
+            statusGridView.Rows[3].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(FirstUsedRow, maxRows);
 
             statusGridView.Rows.Add();
             statusGridView.Rows[4].HeaderCell.Value = "Steps";
@@ -1261,6 +1301,10 @@ namespace dataEditor
             {
                 HFR = ActiveCell.RowIndex + 1;
                 statusGridView.Rows[2].Cells[1].Value = Convert.ToInt32(dataViewer.Rows[ActiveCell.RowIndex].HeaderCell.Value.ToString().Split(' ').Last());
+
+                statusGridView.Rows[3].Cells[1].Value = null;
+                statusGridView.Rows[3].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) + PropGrid.cntHeadsRows, RowsCnt);
+
                 dataViewer.Rows[ActiveCell.RowIndex].DefaultCellStyle.BackColor = PropGrid.ColorHeads;
                 dataViewer.Rows[ActiveCell.RowIndex].DefaultCellStyle.ForeColor = fntCl;
 
@@ -1581,7 +1625,7 @@ namespace dataEditor
             if (tempPropVal[0] != lastVal && TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["cntHeadsRows"].IsReadOnly == false)
             {
                 statusGridView.Rows[2].Cells[1].Value = null;
-                statusGridView.Rows[2].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(0, (RowsCnt - PropGrid.cntHeadsRows) + 1);
+                statusGridView.Rows[2].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(FirstUsedRow, (RowsCnt - PropGrid.cntHeadsRows) + 1);
 
                 foreach (DataGridViewRow rws in dataViewer.Rows)
                 {
@@ -1727,5 +1771,7 @@ namespace dataEditor
                 ShowWindow(GetConsoleWindow(), SHOW);
             }
         }
+
+
     }
 }

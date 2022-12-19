@@ -53,7 +53,12 @@ namespace dataEditor
                 NumericUpDownEditingControl ctl = DataGridView.EditingControl as NumericUpDownEditingControl;
                 ctl.Minimum = this.min;
                 ctl.Maximum = this.max;
-                ctl.Value = Convert.ToDecimal(this.Value);
+                if (Convert.ToDecimal(this.Value) >= min && Convert.ToDecimal(this.Value) <= max)
+                    ctl.Value = Convert.ToDecimal(this.Value);
+                else
+                {
+                    ctl.Value = Convert.ToDecimal(this.min);
+                }       
             }
 
             public override Type EditType
@@ -128,7 +133,7 @@ namespace dataEditor
                 return (keyData == Keys.Left || keyData == Keys.Right ||
                     keyData == Keys.Up || keyData == Keys.Down ||
                     keyData == Keys.Home || keyData == Keys.End ||
-                    keyData == Keys.PageDown || keyData == Keys.PageUp || keyData == Keys.Escape);
+                    keyData == Keys.PageDown || keyData == Keys.PageUp || keyData == Keys.Escape || keyData == Keys.Enter);
             }
 
             public object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)

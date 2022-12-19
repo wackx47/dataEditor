@@ -95,7 +95,7 @@ namespace dataEditor
             this.ExportXML.Cursor = System.Windows.Forms.Cursors.Hand;
             this.ExportXML.Enabled = false;
             this.ExportXML.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ExportXML.Location = new System.Drawing.Point(785, 500);
+            this.ExportXML.Location = new System.Drawing.Point(785, 562);
             this.ExportXML.Name = "ExportXML";
             this.ExportXML.Size = new System.Drawing.Size(285, 37);
             this.ExportXML.TabIndex = 11;
@@ -165,7 +165,7 @@ namespace dataEditor
             this.optionsGrid.Location = new System.Drawing.Point(3, 3);
             this.optionsGrid.Name = "optionsGrid";
             this.optionsGrid.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.optionsGrid.Size = new System.Drawing.Size(285, 280);
+            this.optionsGrid.Size = new System.Drawing.Size(285, 342);
             this.optionsGrid.TabIndex = 64;
             this.optionsGrid.UseCompatibleTextRendering = true;
             this.optionsGrid.ViewBackColor = System.Drawing.SystemColors.ControlLightLight;
@@ -190,7 +190,7 @@ namespace dataEditor
             // 
             this.BackUserMessanger.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.BackUserMessanger.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.BackUserMessanger.Location = new System.Drawing.Point(0, 550);
+            this.BackUserMessanger.Location = new System.Drawing.Point(0, 612);
             this.BackUserMessanger.Name = "BackUserMessanger";
             this.BackUserMessanger.Size = new System.Drawing.Size(1082, 24);
             this.BackUserMessanger.TabIndex = 65;
@@ -252,7 +252,7 @@ namespace dataEditor
             this.dataViewer.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataViewer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewer.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dataViewer.GridColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dataViewer.GridColor = System.Drawing.SystemColors.ControlDarkDark;
             this.dataViewer.Location = new System.Drawing.Point(3, 3);
             this.dataViewer.Name = "dataViewer";
             this.dataViewer.ReadOnly = true;
@@ -268,7 +268,7 @@ namespace dataEditor
             this.dataViewer.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dataViewer.RowTemplate.Height = 25;
             this.dataViewer.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dataViewer.Size = new System.Drawing.Size(766, 475);
+            this.dataViewer.Size = new System.Drawing.Size(766, 537);
             this.dataViewer.TabIndex = 1;
             // 
             // tableLayoutPanel1
@@ -284,7 +284,7 @@ namespace dataEditor
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(772, 481);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(772, 543);
             this.tableLayoutPanel1.TabIndex = 71;
             // 
             // statusGridView
@@ -391,7 +391,7 @@ namespace dataEditor
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(291, 286);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(291, 348);
             this.tableLayoutPanel2.TabIndex = 72;
             // 
             // tableLayoutPanel3
@@ -424,7 +424,7 @@ namespace dataEditor
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel2);
-            this.splitContainer1.Size = new System.Drawing.Size(291, 438);
+            this.splitContainer1.Size = new System.Drawing.Size(291, 500);
             this.splitContainer1.SplitterDistance = 148;
             this.splitContainer1.TabIndex = 74;
             // 
@@ -522,7 +522,7 @@ namespace dataEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1082, 574);
+            this.ClientSize = new System.Drawing.Size(1082, 636);
             this.Controls.Add(this.ExportXML);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.BackUserMessanger);
