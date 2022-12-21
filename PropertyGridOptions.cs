@@ -20,7 +20,7 @@ namespace dataEditor
     class PropertySet
         {
 
-        string appVersion = "0.821a";
+        string appVersion = "0.833a";
         [CategoryAttribute("App"), ReadOnlyAttribute(true)]
         public string AppVersion
         {
@@ -244,6 +244,18 @@ namespace dataEditor
             set { m_AvailableXML = value; }
         }
 
+        bool m_alternativeImportMode = false;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("Alternative method imports using provider Microsoft Access for fill dataGrid and available only with installed and registered Microsoft.ACE.OLEDB.12.0")]
+        [DisplayName("UseOLEDBprovider")]
+        [Category("Other")]
+        public bool alternativeImportMode
+        {
+            get { return m_alternativeImportMode; }
+            set { m_alternativeImportMode = value; }
+        }
+
         bool m_extdEdit;
         [Browsable(false)]
         [Description("Allow manual editing settings")]
@@ -257,13 +269,37 @@ namespace dataEditor
 
         bool m_ForceCloseExl;
         [Browsable(true)]
-        [Description("Terminate all Excel processes before closing the program.")]
+        [Description("Terminate all Excel processes before closing the program")]
         [DisplayName("ForceCloseAllExcel")]
         [Category("Other")]
         public bool ForceCloseExl
         {
             get { return m_ForceCloseExl; }
             set { m_ForceCloseExl = value; }
+        }
+
+        bool m_ShowConsoleOnStartUp = false;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("Open console whith starts programm")]
+        [DisplayName("ShowConsoleOnStartUp")]
+        [Category("Other")]
+        public bool ShowConsoleOnStartUp
+        {
+            get { return m_ShowConsoleOnStartUp; }
+            set { m_ShowConsoleOnStartUp = value; }
+        }
+
+        bool m_ShowHelpPropetryGrid = false;
+        [Browsable(false)]
+        [ReadOnly(false)]
+        [Description("Show help area in property grid")]
+        [DisplayName("ShowHelpPropetryGrid")]
+        [Category("Other")]
+        public bool ShowHelpPropetryGrid
+        {
+            get { return m_ShowHelpPropetryGrid; }
+            set { m_ShowHelpPropetryGrid = value; }
         }
 
     }

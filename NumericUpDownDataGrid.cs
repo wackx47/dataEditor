@@ -54,10 +54,14 @@ namespace dataEditor
                 ctl.Minimum = this.min;
                 ctl.Maximum = this.max;
                 if (Convert.ToDecimal(this.Value) >= min && Convert.ToDecimal(this.Value) <= max)
+                {
                     ctl.Value = Convert.ToDecimal(this.Value);
+                }
                 else
                 {
                     ctl.Value = Convert.ToDecimal(this.min);
+                    SendKeys.Send("{UP}");
+                    SendKeys.Send("{DOWN}");
                 }       
             }
 

@@ -268,7 +268,7 @@ namespace dataEditor
             this.dataViewer.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dataViewer.RowTemplate.Height = 25;
             this.dataViewer.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dataViewer.Size = new System.Drawing.Size(766, 537);
+            this.dataViewer.Size = new System.Drawing.Size(766, 534);
             this.dataViewer.TabIndex = 1;
             // 
             // tableLayoutPanel1
@@ -284,7 +284,7 @@ namespace dataEditor
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(772, 543);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(772, 540);
             this.tableLayoutPanel1.TabIndex = 71;
             // 
             // statusGridView
@@ -502,6 +502,7 @@ namespace dataEditor
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutShow);
             // 
             // menuStrip1
             // 
@@ -533,7 +534,7 @@ namespace dataEditor
             this.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "dataEditor";
+            this.Text = "universalReader";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.RowContext.ResumeLayout(false);
             this.propGrid_stripMenu.ResumeLayout(false);

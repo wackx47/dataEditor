@@ -21,6 +21,7 @@ using System.Reflection.Metadata;
 using System.Drawing.Imaging;
 using System.Linq;
 using Microsoft.Win32;
+using universalReader;
 
 namespace dataEditor
 {
@@ -40,6 +41,7 @@ namespace dataEditor
         int cntShows = 0;
         int HFR = 0;
         int FirstUsedRow = 1;
+        int FirstUsedColumn = 1;
         int prvCntHedRw = 2;
         int RowsCnt = 0;
         bool allowVoid = false;
@@ -155,18 +157,33 @@ namespace dataEditor
             optionsGrid.SelectedObject = PropGrid;
             PropGrid.sqlNames = "Name;Dat8;Type;Is_fact;OAO;GTP_Kod;GTP;Nomer_Dog;Kontragent;K_GTP_Kod;K_GTP;Dog_V;V;S;S_NDS";
             TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["ExtraColCnt"].SetReadOnlyAttribute(true);
-            Console.WriteLine(Environment.OSVersion.Platform.ToString());
-            Console.WriteLine(Environment.OSVersion.VersionString + " (" + AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName + ") " + Environment.OSVersion.Version.CompareTo(OsMinVersion));
+
+            Console.WriteLine(Environment.OSVersion.Platform.ToString() + " || " + Environment.OSVersion.VersionString + " (" + AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName + ")");
             Console.WriteLine("Soft powered by 47 5'9 (ver. " + PropGrid.AppVersion + ") //.build for GitHub");
+            splitContainer1.Panel1Collapsed = true;
+
             ReadINI();
             AutoFillList();
             CheckRegLib();
-            Information();
+            ImportExcelMode();
 
             tempPropColors.Add(PropGrid.ColorHeads);
             tempPropColors.Add(PropGrid.ColorDataRows);
             tempPropColors.Add(PropGrid.ColorStaticDat);
             tempPropColors.Add(PropGrid.SecondColorHeads);
+
+            if (PropGrid.ShowHelpPropetryGrid == true)
+            {
+                optionsGrid.HelpVisible = !optionsGrid.HelpVisible;
+                helpToolStripMenuItem.Checked = !helpToolStripMenuItem.Checked;
+            }
+
+            if (PropGrid.ShowConsoleOnStartUp == true)
+            {
+                Magician.AppearConsole();
+                DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_BYCOMMAND);
+                showConsoleToolStripMenuItem.Checked = true;
+            }
         }
 
         private void statusGridView_CellCmbxValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -217,7 +234,7 @@ namespace dataEditor
             {
                 foreach (DataGridViewRow rws in dataViewer.Rows)
                 {
-                    if (rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads | rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads)
+                    if (rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads | rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads | rws.DefaultCellStyle.BackColor == PropGrid.ColorDataRows | rws.DefaultCellStyle.BackColor == PropGrid.ColorDataRows)
                     {
                         rws.DefaultCellStyle.BackColor = Color.Empty;
                         rws.DefaultCellStyle.ForeColor = Color.Black;
@@ -266,7 +283,7 @@ namespace dataEditor
                     dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-(FirstUsedRow)].DefaultCellStyle.BackColor = PropGrid.ColorDataRows;
                     dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-(FirstUsedRow)].DefaultCellStyle.ForeColor = fntClDat;
 
-                    for (int i = (Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-(FirstUsedRow) + Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1); i <= RowsCnt-(FirstUsedRow); i += Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1)
+                    for (int i = (Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-(FirstUsedRow) + Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1); i < RowsCnt-(FirstUsedRow); i += Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1)
                     {
                         if (dataViewer.Rows[i].Cells[1].Value != DBNull.Value)
                         {
@@ -326,6 +343,18 @@ namespace dataEditor
                 if (INI.KeyExists("ForceCloseAllExcel", "Other"))
                 {
                     PropGrid.ForceCloseExl = bool.Parse(INI.ReadINI("Other", "ForceCloseAllExcel"));
+                }
+                if (INI.KeyExists("ShowConsoleOnStartUp", "Other"))
+                {
+                    PropGrid.ShowConsoleOnStartUp = bool.Parse(INI.ReadINI("Other", "ShowConsoleOnStartUp"));
+                }
+                if (INI.KeyExists("ShowHelpPropetryGrid", "Other"))
+                {
+                    PropGrid.ShowHelpPropetryGrid = bool.Parse(INI.ReadINI("Other", "ShowHelpPropetryGrid"));
+                }
+                if (INI.KeyExists("UseOLEDBprovider", "Other"))
+                {
+                    PropGrid.alternativeImportMode = bool.Parse(INI.ReadINI("Other", "UseOLEDBprovider"));
                 }
                 autoFontColor();
                 optionsGrid.Refresh();
@@ -633,7 +662,7 @@ namespace dataEditor
                             }
                             else
                             {
-                                TreeColViewer.Rows[rc].HeaderCell.Value = "F" + (i + 1);
+                                TreeColViewer.Rows[rc].HeaderCell.Value = dataViewer.Columns[i].HeaderCell.Value;
                             }
                             rc++;
                         }
@@ -644,7 +673,7 @@ namespace dataEditor
                     if (dataViewer.Rows[Convert.ToInt32(HFR) - 1].Cells[i].Value != DBNull.Value)
                     {
                         TreeColViewer.Rows.Add();
-                        TreeColViewer.Rows[rc].HeaderCell.Value = "F" + (i + 1);
+                        TreeColViewer.Rows[rc].HeaderCell.Value = dataViewer.Columns[i].HeaderCell.Value;
                         TreeColViewer.Rows[rc].Cells[0].Value = dataViewer.Rows[Convert.ToInt32(HFR) - 1].Cells[i].Value;
                     }
                 }
@@ -1033,22 +1062,30 @@ namespace dataEditor
             }
         }
 
-        public void Information()
+        public void ImportExcelMode()
         {
             DataTable table = new OleDbEnumerator().GetElements();
+            int i = 0;
+
             foreach (DataRow row in table.Rows)
             {
-                if (row["SOURCES_NAME"].ToString() == "Microsoft.ACE.OLEDB.12.0")
+                if (row["SOURCES_NAME"].ToString() == "Microsoft.ACE.OLEDB.12.0" | row["SOURCES_NAME"].ToString() == "Microsoft.Jet.OLEDB.4.0")
                 {
-                    Console.WriteLine("Elements: " + row["SOURCES_NAME"]);
-                    return;
+                    Console.WriteLine("Provider registred: " + row["SOURCES_NAME"]);
+                    TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["alternativeImportMode"].SetReadOnlyAttribute(false);
+                    i++;
                 }
+            }
+            if (i == 0)
+            {
+                Console.WriteLine("Providers Microsoft.ACE.OLEDB.12.0 or Microsoft.Jet.OLEDB.4.0 not registred");
+                TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["alternativeImportMode"].SetReadOnlyAttribute(true);
+                PropGrid.alternativeImportMode = false;
             }
         }
 
         private void ImportEXCL_Click(object sender, EventArgs e)
         {
-
             dataViewer.DataSource = null;
             DataTable DT = (DataTable)dataViewer.DataSource;
             if (DT != null)
@@ -1082,96 +1119,78 @@ namespace dataEditor
             Excel.Range ExcelRange = xlSht.UsedRange;
             int xlRowCount = ExcelRange.Rows.Count;
             int xlColCount = ExcelRange.Columns.Count;
+            RowsCnt = xlRowCount;
 
-            for (int i = 1; i<= xlRowCount; i++)
-            {
-                if (xlSht.Cells[i,1].Value != null)
-                {
-                    FirstUsedRow = i;
-                    break;
-                }
-            }
+            string Range = (ExcelRange.get_Address(true, true, Excel.XlReferenceStyle.xlR1C1, false, false).ToString().Split(':').First()).Split('R').Last();
+            FirstUsedRow = Convert.ToInt32(Range.Split('C').First());
+            FirstUsedColumn = Convert.ToInt32(Range.Split('C').Last());
 
             String SheetName = xlSht.Name;
 
-            OleDbConnection con = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + xlFileName + ";Extended Properties='Excel 12.0;HDR=NO;IMEX=1;'");
-            OleDbDataAdapter sda = new OleDbDataAdapter("Select * From [" + SheetName + "$]", con);
-
-            con.Open();
-            DataTable data = new DataTable();
-            sda.Fill(data);
-
-            DataTable dataVariantB = new DataTable();
-            AlternativeMethodImportExcel(dataVariantB, xlRowCount, xlColCount, ExcelRange);
-
-            dataViewer.DataSource = data;
-            dataViewer.AllowUserToAddRows = false;
-            dataViewer.AllowUserToDeleteRows = false;
-
-            int ick = 0;
-
-            for (int i=0; i<(data.Rows.Count); i++)
-            {
-                if (dataViewer.Rows[i].Cells[data.Columns.Count-1].Value == DBNull.Value)
+                if (PropGrid.alternativeImportMode == false)
                 {
-                    ick++;
+                    DataTable dataVariantB = new DataTable();
+                    AlternativeMethodImportExcel(dataVariantB, xlRowCount, xlColCount, ExcelRange);
+                    dataViewer.DataSource = dataVariantB;
                 }
-            }
-
-            Console.WriteLine("Empty cells: " + ick.ToString());
-            Console.WriteLine("Rows.Count: " + dataViewer.Rows.Count.ToString());
-            Console.WriteLine("Columns.Count: " + dataViewer.Columns.Count.ToString());
-
-            int colCount = data.Columns.Count;
-
-            if (ick == data.Rows.Count)
-            {
-                colCount = data.Columns.Count - 1;
-                dataViewer.Columns.RemoveAt(colCount);
-                Console.WriteLine("Deleted last Column");
-            }
-
-            foreach (DataGridViewColumn column in dataViewer.Columns)
-            {
-                column.SortMode = DataGridViewColumnSortMode.NotSortable;
-                column.Width = 120;
-            }
-
-            int RowIndex = Convert.ToInt32(FirstUsedRow);
-            foreach (DataGridViewRow row in dataViewer.Rows)
-            {
+                else
                 {
-                    row.HeaderCell.Value = "ROW " + RowIndex.ToString();
-                    RowIndex++;
+                    DataTable dataVariantOLEDB = new DataTable();
+                    OLEDBModeImport(xlFileName, SheetName, dataVariantOLEDB);
+                    dataViewer.DataSource = dataVariantOLEDB;
+
+                    int ick = 0;
+
+                    for (int i = 0; i < (dataVariantOLEDB.Rows.Count); i++)
+                    {
+                        if (dataViewer.Rows[i].Cells[dataVariantOLEDB.Columns.Count - 1].Value == DBNull.Value)
+                        {
+                            ick++;
+                        }
+                    }
+
+                    int dataColCount = dataVariantOLEDB.Columns.Count;
+
+                    if (ick == dataVariantOLEDB.Rows.Count)
+                    {
+                        dataColCount = dataVariantOLEDB.Columns.Count - 1;
+                        dataViewer.Columns.RemoveAt(dataColCount);
+                        Console.WriteLine("Deleted last Column");
+                    }
                 }
-            }
 
-            dataViewer.EnableHeadersVisualStyles = false;
+             dataViewer.AllowUserToAddRows = false;
+             dataViewer.AllowUserToDeleteRows = false;
 
-            //dataViewer.CellContentClick += new DataGridViewCellEventHandler(DataViewer_SwitchCheckRow);
-            //dataViewer.CellContentClick += new DataGridViewCellEventHandler(DataViewer_CheckClick);
-            dataViewer.MouseDown += new MouseEventHandler(dataViewer_MouseClick);
-            dataViewer.RowHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_RowSelected);
-            dataViewer.ColumnHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_ColumnsSelected);
+             Console.WriteLine("FirstUsedRow: " + FirstUsedRow.ToString());
+             Console.WriteLine("FirstUsedColumn: " + FirstUsedColumn.ToString());
+             Console.WriteLine("Rows.Count: " + dataViewer.Rows.Count.ToString());
+             Console.WriteLine("Columns.Count: " + dataViewer.Columns.Count.ToString());
 
-            RowsCnt = RowIndex-1;
+             CompleteDataViewerGrid(xlColCount);
 
-            FillStatusGrid(RowsCnt, colCount);
-            statusGridView.Rows[1].Cells[1].Value = colCount;
-            statusGridView.Rows[4].Cells[1].Value = 0;
+             dataViewer.EnableHeadersVisualStyles = false;
+             //dataViewer.CellContentClick += new DataGridViewCellEventHandler(DataViewer_SwitchCheckRow);
+             //dataViewer.CellContentClick += new DataGridViewCellEventHandler(DataViewer_CheckClick);
+             dataViewer.MouseDown += new MouseEventHandler(dataViewer_MouseClick);
+             dataViewer.RowHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_RowSelected);
+             dataViewer.ColumnHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_ColumnsSelected);
 
-            for (int i = 0; i < FormName.Items.Count; i++)
-            {
+
+                for (int i = 0; i < FormName.Items.Count; i++)
+                {
                 int c = FormName.Items[i].ToString().IndexOf(Path.GetFileNameWithoutExtension(xlFileName).Substring(Path.GetFileNameWithoutExtension(xlFileName).LastIndexOf("_") + 1));
-                if (c >= 0)
-                {
+                    if (c >= 0)
+                    {
                     FormName.Text = "presset_" + FormName.Items[i].ToString();
                     statusGridView.Rows[0].Cells[1].Value = FormName.Text;
+                    }
                 }
-            }
 
+            
             tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
             optionsGrid.Refresh();
+            splitContainer1.Panel1Collapsed = false;
 
             xlWB.Close(false, false, false);
             xlApp.Quit();
@@ -1181,27 +1200,131 @@ namespace dataEditor
             GC.Collect();
         }
 
-        private void AlternativeMethodImportExcel(DataTable dataVariantB, int xlRowCount , int xlColCount, Excel.Range ExcelRange)
+        private void AlternativeMethodImportExcel(DataTable dataVariantB, int xlRowCount, int xlColCount, Excel.Range ExcelRange)
         {
-            DataRow xlrow = null;
+            ProgressDialog progressDialog = new ProgressDialog();
 
-            for (int j = 1; j <= xlColCount; j++)
-            {
-                dataVariantB.Columns.Add();
-            }
-
-            for (int i = 1; i <= xlRowCount; i++)
-            {
-                xlrow = dataVariantB.NewRow();
-
-                for (int j = 1; j <= xlColCount; j++)
+            Thread backgroundThread = new Thread(
+                new ThreadStart(() =>
                 {
-                    xlrow[j - 1] = ExcelRange.Cells[i, j].Value;
-                    Console.WriteLine("Colum: " + j + "    Value: " + ExcelRange.Cells[i, j].Value);
-                }
-                Console.WriteLine();
-                dataVariantB.Rows.Add(xlrow);
-            }
+                    DataRow xlrow = null;
+                    progressDialog.progressBar1.Value = 0;
+                    progressDialog.progressBar1.Maximum = xlRowCount;
+
+                    for (int j = 1; j <= xlColCount; j++)
+                    {
+                        dataVariantB.Columns.Add();
+                        progressDialog.stepLabel.Text = "Add columns to dataSet: column " + j.ToString();
+                    }
+
+                    for (int i = 1; i <= xlRowCount; i++)
+                    {
+                        xlrow = dataVariantB.NewRow();
+                        for (int j = 1; j <= xlColCount; j++)
+                        {
+                            xlrow[j - 1] = ExcelRange.Cells[i, j].Value;
+                            progressDialog.stepLabel.Text = "Fill dataSet values: Cells[" + i.ToString() + "," + j.ToString() + "] = " + ExcelRange.Cells[i, j].Value;
+                        }
+                        progressDialog.stepLabel.Text = "Add new row to dataSet: column " + i.ToString();
+                        progressDialog.progressBar1.Value += (progressDialog.progressBar1.Maximum / xlRowCount);
+                        dataVariantB.Rows.Add(xlrow);
+                    }
+                    progressDialog.progressBar1.Value += (progressDialog.progressBar1.Maximum - progressDialog.progressBar1.Value);
+                    progressDialog.BeginInvoke(new Action(() => progressDialog.Close()));
+                }));
+            backgroundThread.Start();
+            progressDialog.ShowDialog();
+        }
+
+        private void OLEDBModeImport(string xlFileName, String SheetName, DataTable dataVariantOLEDB)
+        {
+            ProgressDialog progressDialog = new ProgressDialog();
+
+            Thread backgroundThread = new Thread(
+                new ThreadStart(() =>
+                {
+                    progressDialog.progressBar1.Value = 0;
+                    progressDialog.progressBar1.Maximum = 100;
+
+                        string strConnect = string.Empty;
+                        string extension = Path.GetExtension(xlFileName);
+
+
+                        progressDialog.progressBar1.Value += 25;
+                        progressDialog.stepLabel.Text = "Get file: " + xlFileName;
+
+                    switch (extension)
+                        {
+                            case ".xls":
+                                strConnect = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + xlFileName + ";Extended Properties='Excel 8.0;HDR=Yes;IMEX=1;'";
+                                progressDialog.stepLabel.Text = "Selected provider Microsoft.Jet.OLEDB.4.0";
+                                progressDialog.progressBar1.Value += 25;
+                            break;
+
+                            case ".xlsx":
+                                strConnect = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + xlFileName + ";Extended Properties='Excel 12.0;HDR=Yes;IMEX=1;'";
+                                progressDialog.stepLabel.Text = "Selected provider Microsoft.ACE.OLEDB.12.0";
+                                progressDialog.progressBar1.Value += 25;
+                            break;
+
+                            default:
+                                strConnect = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + xlFileName + ";Extended Properties='Excel 12.0;HDR=Yes;IMEX=1;'";
+                                progressDialog.stepLabel.Text = "Selected provider Microsoft.ACE.OLEDB.12.0";
+                                progressDialog.progressBar1.Value += 25;
+                            break;
+                    }
+
+                        progressDialog.stepLabel.Text = "Create new OleDbConnection";
+                        progressDialog.progressBar1.Value += 25;
+                        OleDbConnection connect = new OleDbConnection(strConnect);
+                        OleDbDataAdapter sda = new OleDbDataAdapter("Select * From [" + SheetName + "$]", connect);
+                        connect.Open();
+                        progressDialog.stepLabel.Text = "Fill dataSet";
+                        progressDialog.progressBar1.Value += 25;
+                        sda.Fill(dataVariantOLEDB);
+                    progressDialog.BeginInvoke(new Action(() => progressDialog.Close()));
+                }));
+            backgroundThread.Start();
+            progressDialog.ShowDialog();
+        }
+
+        private void CompleteDataViewerGrid(int xlColCount)
+        {
+            ProgressDialog progressDialog = new ProgressDialog();
+
+            Thread backgroundThread = new Thread(
+                new ThreadStart(() =>
+                {
+                    progressDialog.progressBar1.Value = 0;
+                    progressDialog.progressBar1.Maximum = dataViewer.Rows.Count*dataViewer.Columns.Count;
+                    progressDialog.stepLabel.Text = "Working with dataGrid...";
+
+                    int RowIndex = Convert.ToInt32(FirstUsedRow);
+                    foreach (DataGridViewRow row in dataViewer.Rows)
+                    {
+                        row.HeaderCell.Value = "ROW " + RowIndex.ToString();
+                        RowIndex++;
+                        progressDialog.progressBar1.Value += ((dataViewer.Rows.Count * dataViewer.Columns.Count)/2)/ dataViewer.Rows.Count;
+                    }
+
+                    int ColumnsIndex = Convert.ToInt32(FirstUsedColumn);
+                    foreach (DataGridViewColumn cols in dataViewer.Columns)
+                    {
+                        cols.SortMode = DataGridViewColumnSortMode.NotSortable;
+                        cols.Width = 120;
+                        cols.HeaderText = "F" + ColumnsIndex.ToString();
+                        ColumnsIndex++;
+                        progressDialog.progressBar1.Value += ((dataViewer.Rows.Count * dataViewer.Columns.Count)/2)/ dataViewer.Columns.Count;
+                    }
+
+                    FillStatusGrid((RowIndex - 1), xlColCount);
+                    statusGridView.Rows[1].Cells[1].Value = xlColCount;
+                    statusGridView.Rows[4].Cells[1].Value = 0;
+
+                    progressDialog.BeginInvoke(new Action(() => progressDialog.Close()));
+                }));
+            backgroundThread.Start();
+            progressDialog.ShowDialog();
         }
 
         private void FillStatusGrid(int maxRows, int maxCols)
@@ -1290,7 +1413,7 @@ namespace dataEditor
 
             foreach (DataGridViewRow rws in dataViewer.Rows)
             {
-                if (rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads | rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads)
+                if (rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads | rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads | rws.DefaultCellStyle.BackColor == PropGrid.ColorDataRows | rws.DefaultCellStyle.BackColor == PropGrid.ColorDataRows)
                 {
                     rws.DefaultCellStyle.BackColor = Color.Empty;
                     rws.DefaultCellStyle.ForeColor = Color.Black;
@@ -1340,7 +1463,7 @@ namespace dataEditor
                 dataViewer.Rows[(ActiveCell.RowIndex)].DefaultCellStyle.BackColor = PropGrid.ColorDataRows;
                 dataViewer.Rows[(ActiveCell.RowIndex)].DefaultCellStyle.ForeColor = fntClDat;
 
-                for (int i = (ActiveCell.RowIndex + Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1); i < RowsCnt; i += Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1)
+                for (int i = (ActiveCell.RowIndex + Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1); i < RowsCnt-1; i += Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1)
                 {
                     if (dataViewer.Rows[i].Cells[1].Value != DBNull.Value)
                     {
@@ -1349,6 +1472,7 @@ namespace dataEditor
                     }
                 }
                 dataViewer.ClearSelection();
+                statusGridView.ClearSelection();
                 optionsGrid.Refresh();
             }
         }
@@ -1626,6 +1750,7 @@ namespace dataEditor
             {
                 statusGridView.Rows[2].Cells[1].Value = null;
                 statusGridView.Rows[2].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(FirstUsedRow, (RowsCnt - PropGrid.cntHeadsRows) + 1);
+                statusGridView.Rows[5].Cells[1].Value = null;
 
                 foreach (DataGridViewRow rws in dataViewer.Rows)
                 {
@@ -1671,7 +1796,7 @@ namespace dataEditor
             RegistryKey OleDB = TypeLib.OpenSubKey("{00020813-0000-0000-C000-000000000046}");
             try
             {
-                //Console.WriteLine("Cheked sub: {0}.", OleDB.Name + " check status — ok.");
+                //Console.WriteLine("Checked sub: {0}.", OleDB.Name + " check status — ok.");
             }
             catch (Exception e)
             {
@@ -1684,7 +1809,7 @@ namespace dataEditor
             RegistryKey lastKey = OleDB.OpenSubKey("1.9");
             try
             {
-                Console.WriteLine("Cheked sub: {0}.", lastKey.Name + " check status — ok.");
+                Console.WriteLine("Checked sub: {0}.", lastKey.Name + " check status — ok.");
 
                 lastKey.Close();
                 OleDB.Close();
@@ -1748,6 +1873,12 @@ namespace dataEditor
             }
             TypeLib.Close();
             root.Close();
+        }
+
+        private void aboutShow(object sender, EventArgs e)
+        {
+            AboutBox1 a = new AboutBox1();
+            a.Show();
         }
 
         class Magician
