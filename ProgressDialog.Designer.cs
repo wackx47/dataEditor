@@ -34,24 +34,24 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 30);
+            this.progressBar1.Location = new System.Drawing.Point(12, 32);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(460, 30);
+            this.progressBar1.Size = new System.Drawing.Size(460, 32);
             this.progressBar1.TabIndex = 0;
             // 
             // stepLabel
             // 
             this.stepLabel.AutoSize = true;
-            this.stepLabel.Location = new System.Drawing.Point(12, 9);
+            this.stepLabel.Location = new System.Drawing.Point(12, 10);
             this.stepLabel.Name = "stepLabel";
-            this.stepLabel.Size = new System.Drawing.Size(0, 15);
+            this.stepLabel.Size = new System.Drawing.Size(0, 16);
             this.stepLabel.TabIndex = 1;
             // 
             // ProgressDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 72);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.ClientSize = new System.Drawing.Size(484, 77);
             this.ControlBox = false;
             this.Controls.Add(this.stepLabel);
             this.Controls.Add(this.progressBar1);
