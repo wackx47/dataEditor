@@ -122,7 +122,6 @@ namespace dataEditor
         public MainForm()
         {
             InitializeComponent();
-            LoadListName();
             AllocConsole();
             Magician.DisappearConsole();
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
@@ -157,6 +156,7 @@ namespace dataEditor
             PropGrid = new PropertySet();
             optionsGrid.SelectedObject = PropGrid;
             PropGrid.sqlNames = "Name;Dat8;Type;Is_fact;OAO;GTP_Kod;GTP;Nomer_Dog;Kontragent;K_GTP_Kod;K_GTP;Dog_V;V;S;S_NDS";
+            //PropGrid.atsReports = "buy_norem;cfrliab;cfrliabdpg;CESSM;CFR_PART_LIAB_DEL_NOTICE;svnc_part_s_plan;PROGN_LIAB_FRSFG;power_consumer_3_fact;frs_dev_factcost";
             TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["ExtraColCnt"].SetReadOnlyAttribute(true);
 
             Console.WriteLine(Environment.OSVersion.Platform.ToString() + " || " + Environment.OSVersion.VersionString + " (" + AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName + ")");
@@ -394,7 +394,7 @@ namespace dataEditor
                 {
                     foreach (GridItem gi in ((GridItem)category).GridItems)
                     {
-                        if (gi.Label.ToString() != "AvailableXML" && gi.Parent.Label.ToString() != "App" && gi.Parent.Label.ToString() != "Visuals")
+                        if (gi.Label.ToString() != "AvailableXML" && gi.Label.ToString() != "ReportsList" && gi.Parent.Label.ToString() != "App" && gi.Parent.Label.ToString() != "Visuals")
                         {
                             INI.Write(gi.Parent.Label.ToString(), gi.Label.ToString(), gi.Value.ToString());
                         }
@@ -1020,10 +1020,10 @@ namespace dataEditor
             sfd.InitialDirectory = Environment.CurrentDirectory;
             sfd.Filter = "XML File (*.xml*)|*.xml*";
             sfd.Title = "Save as XML";
-            sfd.FileName = FormName.Text.ToString() + ".xml";
+            sfd.FileName = statusGridView.Rows[1].Cells[1].ToString() + ".xml";
 
 
-            if (statusGridView.Rows[1].Cells[1].Value != null && statusGridView.Rows[5].Cells[1].Value != null)
+            if (statusGridView.Rows[0].Cells[1].Value != null && statusGridView.Rows[5].Cells[1].Value != null)
             {
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
@@ -1074,6 +1074,7 @@ namespace dataEditor
                     Console.WriteLine("Provider registred: " + row["SOURCES_NAME"]);
                     TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["alternativeImportMode"].SetReadOnlyAttribute(false);
                     ProviderOLEDB = 12;
+                    return;
                 }
                 if (row["SOURCES_NAME"].ToString() == "Microsoft.Jet.OLEDB.4.0")
                 {
@@ -1136,7 +1137,7 @@ namespace dataEditor
                 if (PropGrid.alternativeImportMode == false)
                 {
                     DataTable dataVariantB = new DataTable();
-                    AlternativeMethodImportExcel(dataVariantB, xlRowCount, xlColCount, ExcelRange);
+                    ClassicParseModeImport(dataVariantB, xlRowCount, xlColCount, ExcelRange);
                     dataViewer.DataSource = dataVariantB;
                 }
                 else
@@ -1196,23 +1197,9 @@ namespace dataEditor
             dataViewer.EnableHeadersVisualStyles = false;
             dataViewer.Update();
 
-            //dataViewer.CellContentClick += new DataGridViewCellEventHandler(DataViewer_SwitchCheckRow);
-            //dataViewer.CellContentClick += new DataGridViewCellEventHandler(DataViewer_CheckClick);
             dataViewer.MouseDown += new MouseEventHandler(dataViewer_MouseClick);
             dataViewer.RowHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_RowSelected);
             dataViewer.ColumnHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_ColumnsSelected);
-
-
-                for (int i = 0; i < FormName.Items.Count; i++)
-                {
-                int c = FormName.Items[i].ToString().IndexOf(Path.GetFileNameWithoutExtension(xlFileName).Substring(Path.GetFileNameWithoutExtension(xlFileName).LastIndexOf("_") + 1));
-                    if (c >= 0)
-                    {
-                    FormName.Text = "presset_" + FormName.Items[i].ToString();
-                    statusGridView.Rows[0].Cells[1].Value = FormName.Text;
-                    }
-                }
-
 
             tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
             optionsGrid.Refresh();
@@ -1226,7 +1213,7 @@ namespace dataEditor
             GC.Collect();
         }
 
-        private void AlternativeMethodImportExcel(DataTable dataVariantB, int xlRowCount, int xlColCount, Excel.Range ExcelRange)
+        private void ClassicParseModeImport(DataTable dataVariantB, int xlRowCount, int xlColCount, Excel.Range ExcelRange)
         {
             ProgressDialog progressDialog = new ProgressDialog();
 
@@ -1387,12 +1374,6 @@ namespace dataEditor
             ConfirmCols.Enabled = false;
         }
 
-        private void LoadListName()
-        {
-            string[] ListName = { "buy_norem", "cfrliab", "cfrliabdpg", "CESSM", "CFR_PART_LIAB_DEL_NOTICE", "svnc_part_s_plan", "PROGN_LIAB_FRSFG", "power_consumer_3_fact", "frs_dev_factcost" };
-            FormName.Items.AddRange(ListName);
-        }
-
         private void StripMenuHeaderRow_Click(object sender, EventArgs e)
         {
             TreeFormDestroyer();
@@ -1494,22 +1475,6 @@ namespace dataEditor
                 return;
 
             string xlFileName = ofd.FileName;
-
-            //string xlFileName = "C:\\Users\\ChernyshovKS\\Desktop\\temp_tester\\20220828_TULAENSK_cfrliabdpg.xls";
-
-            for (int i = 0; i < FormName.Items.Count; i++)
-            {
-                int c = FormName.Items[i].ToString().IndexOf(Path.GetFileNameWithoutExtension(xlFileName).Substring(Path.GetFileNameWithoutExtension(xlFileName).LastIndexOf("_")+1));
-
-                if (c >= 0)
-                {
-                    string LastChars = "\\presset_" + FormName.Items[i].ToString() + ".xml";
-                    xmlFileName = Environment.CurrentDirectory + LastChars;
-                    Console.WriteLine("Selected presset: " + LastChars);
-                    Console.WriteLine("File.Exists: " + xmlFileName.ToString());
-                }
-            }
-
 
 
             if (File.Exists(xmlFileName))

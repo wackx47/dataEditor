@@ -183,6 +183,20 @@ namespace dataEditor
             set { m_sqlNames = value; }
         }
 
+        string m_atsReports;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("The most used reports from ATS")]
+        [DisplayName("ReportsList")]
+        [TypeConverter(typeof(ListBoxForReports))]
+        [Category("Common")]
+        public string atsReports
+        {
+            get { return m_atsReports; }
+            set { m_atsReports = value; }
+        }
+
+
         Color m_ColorHeads = Color.Gray;
         [Browsable(true)]
         [Description("Color for choosing rows contains Headers")]
@@ -237,7 +251,7 @@ namespace dataEditor
         [Description("Available presset for Universal Reader")]
         [DisplayName("AvailableXML")]
         [Category("Other")]
-        [TypeConverter(typeof(ListBox))]
+        [TypeConverter(typeof(ListBoxForXml))]
         public string AvailablePresset
         {
             get { return m_AvailableXML; }
@@ -303,7 +317,7 @@ namespace dataEditor
         }
 
     }
-    public class ListBox : TypeConverter
+    public class ListBoxForXml : TypeConverter
     {
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
         {
@@ -323,7 +337,21 @@ namespace dataEditor
             return new StandardValuesCollection(files);
             return base.GetStandardValues(context);
         }
+    }
 
+    public class ListBoxForReports : TypeConverter
+    {
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        {
+            return true;
+        }
 
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            string[] reports = { "buy_norem", "cfrliab", "cfrliabdpg", "CESSM", "CFR_PART_LIAB_DEL_NOTICE", "svnc_part_s_plan", "PROGN_LIAB_FRSFG", "power_consumer_3_fact", "frs_dev_factcost" };
+
+            return new StandardValuesCollection(reports);
+            return base.GetStandardValues(context);
+        }
     }
 }   
