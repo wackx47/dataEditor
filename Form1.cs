@@ -125,6 +125,7 @@ namespace dataEditor
             AllocConsole();
             Magician.DisappearConsole();
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
+            xFAReaderToolStripMenuItem.Click += new EventHandler(XFA2PDFconvertor.XFA2PDF);
         }
 
         public static void ScaleControlElements(DataGridView ScaleSource, SizeF ScaleFactor)
@@ -1166,13 +1167,13 @@ namespace dataEditor
                     }
                 }
 
-             dataViewer.AllowUserToAddRows = false;
-             dataViewer.AllowUserToDeleteRows = false;
+            dataViewer.AllowUserToAddRows = false;
+            dataViewer.AllowUserToDeleteRows = false;
 
-             Console.WriteLine("FirstUsedRow: " + FirstUsedRow.ToString());
-             Console.WriteLine("FirstUsedColumn: " + FirstUsedColumn.ToString());
-             Console.WriteLine("Rows.Count: " + dataViewer.Rows.Count.ToString());
-             Console.WriteLine("Columns.Count: " + dataViewer.Columns.Count.ToString());
+            Console.WriteLine("FirstUsedRow: " + FirstUsedRow.ToString());
+            Console.WriteLine("FirstUsedColumn: " + FirstUsedColumn.ToString());
+            Console.WriteLine("Rows.Count: " + dataViewer.Rows.Count.ToString());
+            Console.WriteLine("Columns.Count: " + dataViewer.Columns.Count.ToString());
 
             int RowIndex = Convert.ToInt32(FirstUsedRow);
             foreach (DataGridViewRow row in dataViewer.Rows)
@@ -1227,7 +1228,7 @@ namespace dataEditor
                     for (int j = 1; j <= xlColCount; j++)
                     {
                         dataVariantB.Columns.Add();
-                        progressDialog.stepLabel.Text = "Add columns to dataSet: column " + j.ToString();
+                        //progressDialog.stepLabel.Text = "Add columns to dataSet: column " + j.ToString();
                     }
 
                     for (int i = 1; i <= xlRowCount; i++)
@@ -1236,9 +1237,10 @@ namespace dataEditor
                         for (int j = 1; j <= xlColCount; j++)
                         {
                             xlrow[j - 1] = ExcelRange.Cells[i, j].Value;
-                            progressDialog.stepLabel.Text = "Fill dataSet values: Cells[" + i.ToString() + "," + j.ToString() + "] = " + ExcelRange.Cells[i, j].Value;
+                            progressDialog.stepLabel.Text = "Fill dataSet: Cells[" + i.ToString() + "," + j.ToString() + "] of [" + xlRowCount + "," + xlColCount +"];    values: " + ExcelRange.Cells[i, j].Value;
+                            //Thread.Sleep(10);
                         }
-                        progressDialog.stepLabel.Text = "Add new row to dataSet: column " + i.ToString();
+                        //progressDialog.stepLabel.Text = "Add new row to dataSet: column " + i.ToString();
                         progressDialog.progressBar1.Value += (progressDialog.progressBar1.Maximum / xlRowCount);
                         dataVariantB.Rows.Add(xlrow);
                     }
@@ -1259,40 +1261,40 @@ namespace dataEditor
                     progressDialog.progressBar1.Value = 0;
                     progressDialog.progressBar1.Maximum = 100;
 
-                        string strConnect = string.Empty;
+                    string strConnect = string.Empty;
 
-                        progressDialog.progressBar1.Value += 25;
-                        progressDialog.stepLabel.Text = "Get file: " + xlFileName;
+                    progressDialog.progressBar1.Value += 25;
+                    progressDialog.stepLabel.Text = "Get file: " + xlFileName;
 
                     switch (ProviderOLEDB)
-                        {
-                            case 4:
-                                strConnect = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + xlFileName + ";Extended Properties='Excel 8.0;HDR=Yes;IMEX=1;'";
-                                progressDialog.stepLabel.Text = "Selected provider Microsoft.Jet.OLEDB.4.0";
-                                progressDialog.progressBar1.Value += 25;
+                    {
+                        case 4:
+                            strConnect = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + xlFileName + ";Extended Properties='Excel 8.0;HDR=Yes;IMEX=1;'";
+                            progressDialog.stepLabel.Text = "Selected provider Microsoft.Jet.OLEDB.4.0";
+                            progressDialog.progressBar1.Value += 25;
                             break;
 
-                            case 12:
-                                strConnect = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + xlFileName + ";Extended Properties='Excel 12.0;HDR=Yes;IMEX=1;'";
-                                progressDialog.stepLabel.Text = "Selected provider Microsoft.ACE.OLEDB.12.0";
-                                progressDialog.progressBar1.Value += 25;
+                        case 12:
+                            strConnect = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + xlFileName + ";Extended Properties='Excel 12.0;HDR=Yes;IMEX=1;'";
+                            progressDialog.stepLabel.Text = "Selected provider Microsoft.ACE.OLEDB.12.0";
+                            progressDialog.progressBar1.Value += 25;
                             break;
 
-                            default:
-                                strConnect = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + xlFileName + ";Extended Properties='Excel 12.0;HDR=Yes;IMEX=1;'";
-                                progressDialog.stepLabel.Text = "Selected provider Microsoft.ACE.OLEDB.12.0";
-                                progressDialog.progressBar1.Value += 25;
+                        default:
+                            strConnect = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + xlFileName + ";Extended Properties='Excel 12.0;HDR=Yes;IMEX=1;'";
+                            progressDialog.stepLabel.Text = "Selected provider Microsoft.ACE.OLEDB.12.0";
+                            progressDialog.progressBar1.Value += 25;
                             break;
                     }
 
-                        progressDialog.stepLabel.Text = "Create new OleDbConnection";
-                        progressDialog.progressBar1.Value += 25;
-                        OleDbConnection connect = new OleDbConnection(strConnect);
-                        OleDbDataAdapter sda = new OleDbDataAdapter("Select * From [" + SheetName + "$]", connect);
-                        connect.Open();
-                        progressDialog.stepLabel.Text = "Fill dataSet";
-                        progressDialog.progressBar1.Value += 25;
-                        sda.Fill(dataVariantOLEDB);
+                    progressDialog.stepLabel.Text = "Create new OleDbConnection";
+                    progressDialog.progressBar1.Value += 25;
+                    OleDbConnection connect = new OleDbConnection(strConnect);
+                    OleDbDataAdapter sda = new OleDbDataAdapter("Select * From [" + SheetName + "$]", connect);
+                    connect.Open();
+                    progressDialog.stepLabel.Text = "Fill dataSet";
+                    progressDialog.progressBar1.Value += 25;
+                    sda.Fill(dataVariantOLEDB);
 
                     progressDialog.BeginInvoke(new Action(() => progressDialog.Close()));
                 }));
@@ -1830,6 +1832,11 @@ namespace dataEditor
         {
             AboutBox1 a = new AboutBox1();
             a.Show();
+        }
+
+        protected void callXFA(object sender, EventArgs eArgs)
+        {
+            MessageBox.Show("got to MainResponse");
         }
 
         class Magician

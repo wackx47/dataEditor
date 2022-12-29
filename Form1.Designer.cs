@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Windows.Forms;
+using universalReader;
 using static dataEditor.Program;
 
 namespace dataEditor
@@ -69,6 +70,7 @@ namespace dataEditor
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.xFAReaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RowContext.SuspendLayout();
             this.propGrid_stripMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BackUserMessanger)).BeginInit();
@@ -321,7 +323,6 @@ namespace dataEditor
             // 
             // Column1
             // 
-            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewCellStyle6.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.Column1.DefaultCellStyle = dataGridViewCellStyle6;
@@ -329,9 +330,11 @@ namespace dataEditor
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
             this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column1.Width = 104;
             // 
             // Column2
             // 
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.ControlLightLight;
             dataGridViewCellStyle7.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
@@ -339,7 +342,6 @@ namespace dataEditor
             this.Column2.HeaderText = "Value";
             this.Column2.Name = "Column2";
             this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column2.Width = 130;
             // 
             // Column3
             // 
@@ -432,7 +434,8 @@ namespace dataEditor
             // universalReaderToolStripMenuItem1
             // 
             this.universalReaderToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openFileToolStripMenuItem});
+            this.openFileToolStripMenuItem,
+            this.xFAReaderToolStripMenuItem});
             this.universalReaderToolStripMenuItem1.Name = "universalReaderToolStripMenuItem1";
             this.universalReaderToolStripMenuItem1.Size = new System.Drawing.Size(106, 20);
             this.universalReaderToolStripMenuItem1.Text = "Universal Reader";
@@ -440,7 +443,7 @@ namespace dataEditor
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openFileToolStripMenuItem.Text = "Open File";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.FileWriter);
             // 
@@ -487,6 +490,12 @@ namespace dataEditor
             this.splitContainer2.Size = new System.Drawing.Size(1058, 554);
             this.splitContainer2.SplitterDistance = 769;
             this.splitContainer2.TabIndex = 75;
+            // 
+            // xFAReaderToolStripMenuItem
+            // 
+            this.xFAReaderToolStripMenuItem.Name = "xFAReaderToolStripMenuItem";
+            this.xFAReaderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.xFAReaderToolStripMenuItem.Text = "XFA reader";
             // 
             // MainForm
             // 
@@ -558,5 +567,6 @@ namespace dataEditor
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn Column2;
         private DataGridViewTextBoxColumn Column3;
+        private ToolStripMenuItem xFAReaderToolStripMenuItem;
     }
 }

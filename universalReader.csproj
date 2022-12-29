@@ -35,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspose.PDF" Version="22.12.0" />
     <PackageReference Include="System.Data.OleDb" Version="6.0.0" />
   </ItemGroup>
 
