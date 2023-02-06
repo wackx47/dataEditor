@@ -1021,7 +1021,7 @@ namespace dataEditor
             sfd.InitialDirectory = Environment.CurrentDirectory;
             sfd.Filter = "XML File (*.xml*)|*.xml*";
             sfd.Title = "Save as XML";
-            sfd.FileName = statusGridView.Rows[1].Cells[1].ToString() + ".xml";
+            sfd.FileName = statusGridView.Rows[1].Cells[1].Value.ToString() + ".xml";
 
 
             if (statusGridView.Rows[0].Cells[1].Value != null && statusGridView.Rows[5].Cells[1].Value != null)
