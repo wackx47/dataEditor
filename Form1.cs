@@ -54,12 +54,14 @@ namespace dataEditor
         DataGridViewColumn ActiveColumn = null;
 
         XElement strID = null;
+        XElement strName = null;
         XElement extraColumns = null;
         XElement headsRow = null;
         XElement firstData = null;
         XElement columnsCount = null;
 
-        int[] obj1 = new int[] { };
+        int[] objID = new int[] { };
+        string[] objName = new string[] { };
         string xmlFileName = "";
         string ExlFileName = null;
         List<int> tempPropVal = new List<int>() { };
@@ -1021,7 +1023,7 @@ namespace dataEditor
             sfd.InitialDirectory = Environment.CurrentDirectory;
             sfd.Filter = "XML File (*.xml*)|*.xml*";
             sfd.Title = "Save as XML";
-            sfd.FileName = statusGridView.Rows[1].Cells[1].Value.ToString() + ".xml";
+            sfd.FileName = statusGridView.Rows[0].Cells[1].Value.ToString() + ".xml";
 
 
             if (statusGridView.Rows[0].Cells[1].Value != null && statusGridView.Rows[5].Cells[1].Value != null)
@@ -1493,7 +1495,7 @@ namespace dataEditor
                 int ww = 0;
 
 
-                for (int i = 0; i < obj1.Length + Convert.ToInt32(extraColumns.Value); i++)
+                for (int i = 0; i < objID.Length + Convert.ToInt32(extraColumns.Value); i++)
                 {
                     dt_db_shema.Columns.Add();
                 }
@@ -1510,11 +1512,11 @@ namespace dataEditor
                         {
                             dt_db_shema.Rows[we][j] = xlSht.Cells[4, 3].Value;
                         }
-                        for (int c = 0; c < obj1.Length; c++)
+                        for (int c = 0; c < objID.Length; c++)
                         {
-                            if (xlSht.Cells[i, obj1[c]].Text != string.Empty)
+                            if (xlSht.Cells[i, objID[c]].Text != string.Empty)
                             {
-                                dt_db_shema.Rows[we][c + Convert.ToInt32(extraColumns.Value)] = xlSht.Cells[i, obj1[c]].Value;
+                                dt_db_shema.Rows[we][c + Convert.ToInt32(extraColumns.Value)] = xlSht.Cells[i, objID[c]].Value;
                             }
                             else
                             {
@@ -1570,25 +1572,41 @@ namespace dataEditor
 
                     DataSet ds = new DataSet();
 
-                    int n = 0;
+                    int idn = 0;
+                    int nameN = 0;
                     ds.ReadXml(xmlFileName);
+
+            Console.WriteLine("\n" + "///New section in XML (usedColumns ID) ///" + "\n");
 
                     foreach (XElement infoElement in XMLfile.Root.Elements("usedColumns"))
                     {
                         strID = infoElement.Element("id");
-                        Array.Resize(ref obj1, n + 1);
-                        obj1[n] = Convert.ToInt32(strID.Value);
-                        Console.WriteLine(obj1[n].ToString() + "; ");
-                        n++;
+                        Array.Resize(ref objID, idn + 1);
+                        objID[idn] = Convert.ToInt32(strID.Value);
+                        Console.WriteLine(objID[idn].ToString() + "; ");
+                        idn++;
                     }
+
+            Console.WriteLine("\n" + "///New section in XML (usedColumns NAME) ///" + "\n");
+
+                    foreach (XElement infoElement in XMLfile.Root.Elements("usedColumns"))
+                    {
+                        strName = infoElement.Element("name");
+                        Array.Resize(ref objName, nameN + 1);
+                        objName[nameN] = Convert.ToString(strName.Value);
+                        Console.WriteLine(objName[nameN].ToString() + "; ");
+                        nameN++;
+                    }
+
+            Console.WriteLine("\n" + "///New section in XML (commonSettings) ///" + "\n");
 
                     foreach (XElement infoElement in XMLfile.Root.Elements("commonSettings"))
                     {
                         extraColumns = infoElement.Element("extraColumns");
                         headsRow = infoElement.Element("headsRow");
-                        firstData = infoElement.Element("firstData");
+                        //firstData = infoElement.Element("firstData");
                         columnsCount = infoElement.Element("columnsCount");
-                        Console.WriteLine("extraColumns: " + extraColumns.Value + "; headsRow: " + headsRow.Value + "; firstData: " + firstData.Value + "; columnsCount: " + columnsCount.Value + "; ");
+                        Console.WriteLine("extraColumns: " + extraColumns.Value + "; \n headsRow: " + headsRow.Value + "; \n firstData: not used /// " + "; \n columnsCount: " + columnsCount.Value + "; \n");
                     }
                     return;
         }

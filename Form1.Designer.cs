@@ -73,6 +73,7 @@ namespace dataEditor
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabExcel = new System.Windows.Forms.TabPage();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.RowContext.SuspendLayout();
             this.propGrid_stripMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BackUserMessanger)).BeginInit();
@@ -222,7 +223,6 @@ namespace dataEditor
             // 
             this.dataViewer.AllowUserToAddRows = false;
             this.dataViewer.AllowUserToDeleteRows = false;
-            this.dataViewer.AllowUserToResizeColumns = false;
             this.dataViewer.AllowUserToResizeRows = false;
             this.dataViewer.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
             this.dataViewer.BackgroundColor = System.Drawing.SystemColors.ControlLight;
@@ -447,14 +447,14 @@ namespace dataEditor
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openFileToolStripMenuItem.Text = "Open File";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.FileWriter);
             // 
             // xFAReaderToolStripMenuItem
             // 
             this.xFAReaderToolStripMenuItem.Name = "xFAReaderToolStripMenuItem";
-            this.xFAReaderToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.xFAReaderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.xFAReaderToolStripMenuItem.Text = "XFA reader";
             // 
             // aboutToolStripMenuItem
@@ -521,6 +521,11 @@ namespace dataEditor
             this.tabExcel.Size = new System.Drawing.Size(1055, 581);
             this.tabExcel.TabIndex = 0;
             this.tabExcel.Text = "Excel Reader";
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
             // MainForm
             // 
@@ -597,5 +602,6 @@ namespace dataEditor
         private ToolStripMenuItem xFAReaderToolStripMenuItem;
         private TabControl tabControl;
         private TabPage tabExcel;
+        private ContextMenuStrip contextMenuStrip1;
     }
 }
