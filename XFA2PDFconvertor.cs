@@ -9,6 +9,7 @@ using Aspose.Pdf.Devices;
 using Aspose.Pdf.Forms;
 using Microsoft.Office.Interop.Excel;
 
+
 namespace universalReader
 {
     public static class XFA2PDFconvertor
@@ -23,17 +24,16 @@ namespace universalReader
                 string fieldName = doc.Form.XFA.GetFieldTemplate(names[count]).InnerText;
                 string fieldValue = doc.Form.XFA[names[count]];
 
-                if (!string.IsNullOrEmpty(fieldValue) && fieldValue != "0")
-                {
-                    Console.WriteLine("Field Name : " + field.Attributes["name"].Value);
-                    //Console.WriteLine("Field Description : " + fieldName);
-                    Console.WriteLine("Field Value : " + fieldValue);
-                    Console.WriteLine();
-                }
+               if (!string.IsNullOrEmpty(fieldValue) && fieldValue != "0")
+               {
+                   Console.WriteLine("Field Name : " + field.Attributes["name"].Value);
+                   //Console.WriteLine("Field Description : " + fieldName);
+                   Console.WriteLine("Field Value : " + fieldValue);
+                   Console.WriteLine();
+               }
             }
             doc.Flatten();
-
-            //doc.Save(@"C:\Users\ChernyshovKS\Desktop\temp_tester\PDF\test_out.pdf");
+            doc.Save(@"C:\Users\ChernyshovKS\Desktop\temp_tester\PDF\test_out.pdf");
         }
 
     }
