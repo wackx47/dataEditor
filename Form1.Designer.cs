@@ -93,6 +93,7 @@ namespace dataEditor
             this.tabControl.SuspendLayout();
             this.tabExcel.SuspendLayout();
             this.SuspendLayout();
+            this.dataViewer.DoubleBuffered(true);
             // 
             // ExportXML
             // 
@@ -100,7 +101,7 @@ namespace dataEditor
             this.ExportXML.Cursor = System.Windows.Forms.Cursors.Hand;
             this.ExportXML.Enabled = false;
             this.ExportXML.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ExportXML.Location = new System.Drawing.Point(929, 21);
+            this.ExportXML.Location = new System.Drawing.Point(889, 21);
             this.ExportXML.Name = "ExportXML";
             this.ExportXML.Size = new System.Drawing.Size(138, 25);
             this.ExportXML.TabIndex = 11;
@@ -114,7 +115,7 @@ namespace dataEditor
             this.Convert2Tree.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Convert2Tree.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Convert2Tree.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.Convert2Tree.Location = new System.Drawing.Point(787, 21);
+            this.Convert2Tree.Location = new System.Drawing.Point(747, 21);
             this.Convert2Tree.Name = "Convert2Tree";
             this.Convert2Tree.Size = new System.Drawing.Size(138, 25);
             this.Convert2Tree.TabIndex = 15;
@@ -160,7 +161,7 @@ namespace dataEditor
             this.optionsGrid.Location = new System.Drawing.Point(0, 0);
             this.optionsGrid.Name = "optionsGrid";
             this.optionsGrid.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.optionsGrid.Size = new System.Drawing.Size(285, 406);
+            this.optionsGrid.Size = new System.Drawing.Size(285, 425);
             this.optionsGrid.TabIndex = 64;
             this.optionsGrid.UseCompatibleTextRendering = true;
             this.optionsGrid.ViewBackColor = System.Drawing.SystemColors.ControlLightLight;
@@ -187,7 +188,7 @@ namespace dataEditor
             this.BackUserMessanger.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.BackUserMessanger.Location = new System.Drawing.Point(0, 642);
             this.BackUserMessanger.Name = "BackUserMessanger";
-            this.BackUserMessanger.Size = new System.Drawing.Size(1087, 24);
+            this.BackUserMessanger.Size = new System.Drawing.Size(1047, 24);
             this.BackUserMessanger.TabIndex = 65;
             this.BackUserMessanger.TabStop = false;
             // 
@@ -262,7 +263,7 @@ namespace dataEditor
             this.dataViewer.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dataViewer.RowTemplate.Height = 25;
             this.dataViewer.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dataViewer.Size = new System.Drawing.Size(760, 575);
+            this.dataViewer.Size = new System.Drawing.Size(720, 575);
             this.dataViewer.TabIndex = 1;
             // 
             // statusGridView
@@ -320,7 +321,7 @@ namespace dataEditor
             this.statusGridView.RowTemplate.Height = 17;
             this.statusGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.statusGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.statusGridView.Size = new System.Drawing.Size(285, 165);
+            this.statusGridView.Size = new System.Drawing.Size(285, 146);
             this.statusGridView.TabIndex = 70;
             this.statusGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.statusGridView_CellCmbxValueChanged);
             this.statusGridView.CurrentCellDirtyStateChanged += new System.EventHandler(this.statusGridView_CurrentCellDirtyStateChanged);
@@ -362,8 +363,10 @@ namespace dataEditor
             // 
             // splitContainer1
             // 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer1.BackColor = System.Drawing.SystemColors.Control;
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
@@ -372,13 +375,14 @@ namespace dataEditor
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.statusGridView);
+            this.splitContainer1.Panel1MinSize = 35;
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.optionsGrid);
-            this.splitContainer1.Panel2MinSize = 406;
+            this.splitContainer1.Panel2MinSize = 0;
             this.splitContainer1.Size = new System.Drawing.Size(285, 575);
-            this.splitContainer1.SplitterDistance = 165;
+            this.splitContainer1.SplitterDistance = 146;
             this.splitContainer1.TabIndex = 74;
             // 
             // FileMenu
@@ -447,14 +451,15 @@ namespace dataEditor
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.openFileToolStripMenuItem.Text = "Open File";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.FileWriter);
             // 
             // xFAReaderToolStripMenuItem
             // 
+            this.xFAReaderToolStripMenuItem.Enabled = false;
             this.xFAReaderToolStripMenuItem.Name = "xFAReaderToolStripMenuItem";
-            this.xFAReaderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.xFAReaderToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.xFAReaderToolStripMenuItem.Text = "XFA reader";
             // 
             // aboutToolStripMenuItem
@@ -475,13 +480,15 @@ namespace dataEditor
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1087, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1047, 24);
             this.menuStrip1.TabIndex = 22;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // splitContainer2
             // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.splitContainer2.Location = new System.Drawing.Point(3, 3);
             this.splitContainer2.Name = "splitContainer2";
@@ -495,8 +502,8 @@ namespace dataEditor
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer1);
             this.splitContainer2.Panel2MinSize = 285;
-            this.splitContainer2.Size = new System.Drawing.Size(1049, 575);
-            this.splitContainer2.SplitterDistance = 760;
+            this.splitContainer2.Size = new System.Drawing.Size(1009, 575);
+            this.splitContainer2.SplitterDistance = 720;
             this.splitContainer2.TabIndex = 75;
             // 
             // tabControl
@@ -508,7 +515,7 @@ namespace dataEditor
             this.tabControl.Location = new System.Drawing.Point(12, 27);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1063, 609);
+            this.tabControl.Size = new System.Drawing.Size(1023, 609);
             this.tabControl.TabIndex = 76;
             // 
             // tabExcel
@@ -518,7 +525,7 @@ namespace dataEditor
             this.tabExcel.Location = new System.Drawing.Point(4, 24);
             this.tabExcel.Name = "tabExcel";
             this.tabExcel.Padding = new System.Windows.Forms.Padding(3);
-            this.tabExcel.Size = new System.Drawing.Size(1055, 581);
+            this.tabExcel.Size = new System.Drawing.Size(1015, 581);
             this.tabExcel.TabIndex = 0;
             this.tabExcel.Text = "Excel Reader";
             // 
@@ -531,7 +538,7 @@ namespace dataEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1087, 666);
+            this.ClientSize = new System.Drawing.Size(1047, 666);
             this.Controls.Add(this.Convert2Tree);
             this.Controls.Add(this.ExportXML);
             this.Controls.Add(this.tabControl);
@@ -539,6 +546,7 @@ namespace dataEditor
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.MainMenuStrip = this.menuStrip1;
+            this.MinimumSize = new System.Drawing.Size(500, 500);
             this.Name = "MainForm";
             this.Text = "universalReader";
             this.Load += new System.EventHandler(this.MainForm_Load);

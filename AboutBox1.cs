@@ -17,7 +17,7 @@ namespace universalReader
             this.Text = String.Format("О программе {0}", AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
             this.labelVersion.Text = String.Format("Версия {0}", AssemblyVersion);
-            this.labelCopyright.Text = AssemblyCopyright;
+            this.labelCopyright.Text = "Автор: " + AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
         }
 
@@ -100,5 +100,10 @@ namespace universalReader
             }
         }
         #endregion
+
+        private void okButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

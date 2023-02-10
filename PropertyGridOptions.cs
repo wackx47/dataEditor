@@ -1,11 +1,14 @@
-﻿using Microsoft.Office.Interop.Excel;
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.Design;
 using System.Configuration;
+using System.Data.SqlTypes;
 using System.Drawing.Design;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -20,14 +23,14 @@ namespace dataEditor
     class PropertySet
         {
 
-        string appVersion = "0.833a";
+        string appVersion = "0.876a";
         [CategoryAttribute("App"), ReadOnlyAttribute(true)]
         public string AppVersion
         {
             get { return appVersion; }
             set { appVersion = value; }
         }
-        string appBuild = "1222";
+        string appBuild = "2302";
         [CategoryAttribute("App"), ReadOnlyAttribute(true)]
         public string AppBuild
         {
@@ -168,20 +171,15 @@ namespace dataEditor
         //{
         //    get { return m_TextExportColumns; }
         //    set { m_TextExportColumns = value; }
-        //}
+        //}        
 
-
-        string m_sqlNames;
-        [Browsable(true)]
-        [ReadOnly(false)]
-        [Description("All SQL names")]
-        [DisplayName("SQLNamesList")]
-        [Category("SQL")]
-        public string sqlNames
-        {
-            get { return m_sqlNames; }
-            set { m_sqlNames = value; }
-        }
+        //string m_sqlNames;
+        //[Browsable(true)]
+        //[ReadOnly(true)]
+        //[Description("All SQL names")]
+        //[DisplayName("SQLNamesList")]
+        //[Category("SQL")]
+        //public string sqlNames { get { return m_sqlNames; } set { m_sqlNames = value; } }
 
         string m_atsReports;
         [Browsable(true)]
@@ -316,14 +314,40 @@ namespace dataEditor
             set { m_ShowHelpPropetryGrid = value; }
         }
 
+
+        string[] m_sqlArray = {};
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("Used SQL collumns")]
+        [DisplayName("SQLcollumns")]
+        [Category("SQL")]
+        [TypeConverter(typeof(CollectionTypeConverter))]
+
+        public string[] sqlArray { get { return m_sqlArray; } set { m_sqlArray = value; } }
+
     }
-    public class ListBoxForXml : TypeConverter
+
+
+    class CollectionTypeConverter : TypeConverter
     {
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destType)
+        {
+            return destType == typeof(string);
+        }
+
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destType)
+        {
+            return "View List...";
+        }
+    }
+
+
+public class ListBoxForXml : TypeConverter
+        {
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
         {
             return true;
         }
-
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
             string path = Environment.CurrentDirectory + "\\";
@@ -339,13 +363,13 @@ namespace dataEditor
         }
     }
 
+
     public class ListBoxForReports : TypeConverter
     {
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
         {
             return true;
         }
-
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
             string[] reports = { "buy_norem", "cfrliab", "cfrliabdpg", "CESSM", "CFR_PART_LIAB_DEL_NOTICE", "svnc_part_s_plan", "PROGN_LIAB_FRSFG", "power_consumer_3_fact", "frs_dev_factcost" };
@@ -354,4 +378,5 @@ namespace dataEditor
             return base.GetStandardValues(context);
         }
     }
+
 }   

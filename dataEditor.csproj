@@ -15,7 +15,7 @@
     <Company>ПАО ГК "ТНС энерго"</Company>
     <Authors>47 5'9</Authors>
     <Copyright>47 5'9</Copyright>
-    <Product>Universal File Reader</Product>
+    <Product>dataReader</Product>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -35,8 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspose.PDF" Version="22.12.0" />
-    <PackageReference Include="System.Data.OleDb" Version="6.0.0" />
+    <PackageReference Include="Aspose.PDF" Version="23.1.0" />
+    <PackageReference Include="System.Data.OleDb" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
