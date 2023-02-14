@@ -25,17 +25,6 @@ using System.Text.RegularExpressions;
 
 namespace dataEditor
 {
-
-    public static class ExtensionMethods
-    {
-        public static void DoubleBuffered(this DataGridView dgv, bool setting)
-        {
-            Type dgvType = dgv.GetType();
-            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            pi.SetValue(dgv, setting, null);
-        }
-    }
-
     public partial class MainForm : Form
     {
         Version OsMinVersion = new Version(10, 0, 15063, 0);
@@ -153,14 +142,6 @@ namespace dataEditor
             }
         }
 
-        public static void ScaleControlElements(ListView ScaleSource, SizeF ScaleFactor)
-        {
-            foreach (ColumnHeader Column in ScaleSource.Columns)
-            {
-                Column.Width = (int)Math.Round(Column.Width * ScaleFactor.Width);
-            }
-        }
-
         protected override void ScaleControl(SizeF ScalingFactor, BoundsSpecified Bounds)
         {
             base.ScaleControl(ScalingFactor, Bounds);
@@ -187,14 +168,15 @@ namespace dataEditor
 
             //Console.WriteLine(Environment.OSVersion.Platform.ToString() + " || " + Environment.OSVersion.VersionString + " (" + AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName + ")");
             Console.WriteLine("Soft powered by 47 5'9 (ver. " + PropGrid.AppVersion + ") //.build for GitHub");
-            splitContainer1.Panel1Collapsed = true;
+            splitContainer_rightProps.Panel1Collapsed = true;
 
             ReadINI();
-            string[] loadSQLarray = defaultSQL.Split(';');
-            loadSQLarray = loadSQLarray.SkipLast(1).ToArray();
-            PropGrid.sqlArray = loadSQLarray;
-
-
+            if (defaultSQL != null | defaultSQL != "")
+            {
+                string[] loadSQLarray = defaultSQL.Split(';');
+                loadSQLarray = loadSQLarray.SkipLast(1).ToArray();
+                PropGrid.sqlArray = loadSQLarray;
+            }
             AutoFillList();
             CheckRegLib();
             ImportExcelMode();
@@ -266,6 +248,7 @@ namespace dataEditor
 
         private void statusGridView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
+            int mxRw;
             if (dataViewer.DataSource != null && statusGridView.Rows[2].Cells[1].Value != null && statusGridView.CurrentCellAddress.X == 1 && statusGridView.CurrentCellAddress.Y == 2)
             {
                 foreach (DataGridViewRow rws in dataViewer.Rows)
@@ -280,8 +263,14 @@ namespace dataEditor
                 {
                     HFR = Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value)- (FirstUsedRow-1);
 
+                    int ls = (Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) + PropGrid.cntHeadsRows);
+                    if (ls >= FirstUsedRow + RowsCnt)
+                        mxRw = ls - 1;
+                    else
+                        mxRw = ls;
+
                     statusGridView.Rows[3].Cells[1].Value = null;
-                    statusGridView.Rows[3].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value)+PropGrid.cntHeadsRows, RowsCnt);
+                    statusGridView.Rows[3].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(mxRw, FirstUsedRow - 1 + RowsCnt);
 
                     dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - (FirstUsedRow)].DefaultCellStyle.BackColor = PropGrid.ColorHeads;
                     dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - (FirstUsedRow)].DefaultCellStyle.ForeColor = fntCl;
@@ -392,6 +381,10 @@ namespace dataEditor
                 {
                     PropGrid.alternativeImportMode = bool.Parse(INI.ReadINI("Other", "UseOLEDBprovider"));
                 }
+
+                if (defaultSQL == null | defaultSQL == "")
+                    defaultSQL = "Name;Dat8;Type;Is_fact;OAO;GTP_Kod;GTP;Nomer_Dog;Kontragent;K_GTP_Kod;K_GTP;Dog_V;V;S;S_NDS";
+
                 autoFontColor();
                 optionsGrid.Refresh();
             }
@@ -524,18 +517,27 @@ namespace dataEditor
         private void DataViewer_ColumnsSelected(object sender, DataGridViewCellMouseEventArgs e)
         {
             dataViewer.ClearSelection();
+
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 if (e.ColumnIndex > -1 && e.RowIndex == -1)
                 {
                     //dataViewer.SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect;
                     //dataViewer.Columns[e.ColumnIndex].Selected = true;
+                    ActiveCell = dataViewer[e.ColumnIndex, 0];
                     ColumnContext.Show(Cursor.Position);
-                    statusGridView.Rows[6].Cells[1].Value += dataViewer.Columns[e.ColumnIndex].Name.ToString() + ";";
-                    optionsGrid.Refresh();
                 }
             }
         }
+
+        private void StripMenuHeaderColumnSelect_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine(dataViewer.Columns[ActiveCell.ColumnIndex].HeaderText.ToString());
+            dataViewer.ClearSelection();
+            statusGridView.ClearSelection();
+            optionsGrid.Refresh();
+        }
+
 
         private void DataViewer_RowSelected(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -607,6 +609,7 @@ namespace dataEditor
         private void dataViewer_MouseClick(Object sender, MouseEventArgs e)
         {
             dataViewer.ClearSelection();
+            
 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
@@ -624,7 +627,18 @@ namespace dataEditor
                         CellContext.Show(dataViewer, new Point(e.X, e.Y));
                 }
             }
-
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                System.Windows.Forms.DataGridView.HitTestInfo hittestinfo = dataViewer.HitTest(e.X, e.Y);
+                if (hittestinfo != null && hittestinfo.Type == DataGridViewHitTestType.Cell)
+                {
+                    ActiveCell = dataViewer.Rows[hittestinfo.RowIndex].Cells[hittestinfo.ColumnIndex];
+                    ActiveCell.Selected = true;
+                    CellViewer.Text = ActiveCell.Value.ToString();
+                    int count = CellViewer.GetLineFromCharIndex(int.MaxValue) + 1;
+                    //splitContainer_dataGrids.SplitterDistance = 18 * (count);
+                }
+            }
         }
 
         private void cellStripSubMenu_Click(object sender, EventArgs e)
@@ -1165,6 +1179,12 @@ namespace dataEditor
             string xlFileName = ofd.FileName;
             ExlFileName = Path.GetFileName(xlFileName);
 
+            if (Path.GetExtension(xlFileName) == ".xlsx" && ProviderOLEDB == 4)
+            {
+                PropGrid.alternativeImportMode = false;
+                optionsGrid.Refresh();
+            }
+
             int xlRowCount = 0;
             int xlColCount = 0;
 
@@ -1190,13 +1210,14 @@ namespace dataEditor
                     FirstUsedRow = Convert.ToInt32(Range.Split('C').First());
                     FirstUsedColumn = Convert.ToInt32(Range.Split('C').Last());
                     String SheetName = xlSht.Name;
+                    
 
                     DataTable dataVariantB = new DataTable();
                     ClassicParseModeImport(dataVariantB, xlRowCount, xlColCount, ExcelRange);
                     dataViewer.DataSource = dataVariantB;
 
                     dataViewerFillHeadres(FirstUsedRow, FirstUsedColumn);
-                    FillStatusGrid((FirstUsedRow - 1), xlColCount);
+                    FillStatusGrid(xlRowCount, xlColCount);
 
                     statusGridView.Rows[1].Cells[1].Value = xlColCount;
                     statusGridView.Rows[4].Cells[1].Value = 0;
@@ -1243,7 +1264,6 @@ namespace dataEditor
             dataViewer.AllowUserToAddRows = false;
             dataViewer.AllowUserToDeleteRows = false;
 
-
             dataViewer.EnableHeadersVisualStyles = false;
             dataViewer.MouseDown += new MouseEventHandler(dataViewer_MouseClick);
             dataViewer.RowHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_RowSelected);
@@ -1251,7 +1271,7 @@ namespace dataEditor
             dataViewer.Update();
 
             tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
-            splitContainer1.Panel1Collapsed = false;
+            splitContainer_rightProps.Panel1Collapsed = false;
             optionsGrid.Refresh();
 
             Console.ForegroundColor = ConsoleColor.Green;
@@ -1307,6 +1327,7 @@ namespace dataEditor
                     progressDialog.progressBar1.Maximum = 100;
 
                     string strConnect = string.Empty;
+                    string HDR = "No";
 
                     progressDialog.progressBar1.Value += 25;
                     progressDialog.stepLabel.Text = "Get file: " + xlFileName;
@@ -1314,19 +1335,29 @@ namespace dataEditor
                     switch (ProviderOLEDB)
                     {
                         case 4:
-                            strConnect = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + xlFileName + ";Extended Properties='Excel 8.0;HDR=No;IMEX=1;TypeGuessRows=0;ImportMixedTypes=Text'";
+                            strConnect = @"Provider=Microsoft.Jet.OLEDB.4.0;" +
+                                         @"Data Source=" + xlFileName + ";" +
+                                         @"Extended Properties=" + Convert.ToChar(34).ToString() +
+                                         @"Excel 8.0;HDR=" + HDR + ";IMEX=1;ImportMixedTypes=Text;" + Convert.ToChar(34).ToString() + ";";
                             progressDialog.stepLabel.Text = "Selected provider Microsoft.Jet.OLEDB.4.0";
                             progressDialog.progressBar1.Value += 25;
                             break;
 
                         case 12:
-                            strConnect = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + xlFileName + ";Extended Properties='Excel 12.0;HDR=No;IMEX=1;TypeGuessRows=0;ImportMixedTypes=Text'";
+                            strConnect = @"Provider=Microsoft.ACE.OLEDB.12.0;" +
+                                         @"Data Source=" + xlFileName + ";" +
+                                         @"Extended Properties=" + Convert.ToChar(34).ToString() +
+                                         @"Excel 12.0;HDR=" + HDR + ";IMEX=1;ImportMixedTypes=Text;" + Convert.ToChar(34).ToString() + ";";
+
                             progressDialog.stepLabel.Text = "Selected provider Microsoft.ACE.OLEDB.12.0";
                             progressDialog.progressBar1.Value += 25;
                             break;
 
                         default:
-                            strConnect = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + xlFileName + ";Extended Properties='Excel 12.0;HDR=No;IMEX=1;TypeGuessRows=0;ImportMixedTypes=Text'";
+                            strConnect = "Provider=Microsoft.ACE.OLEDB.12.0;" +
+                                         @"Data Source=" + xlFileName + ";" +
+                                         @"Extended Properties=" + Convert.ToChar(34).ToString() +
+                                         @"Excel 12.0;HDR=" + HDR + ";IMEX=1;ImportMixedTypes=Text;" + Convert.ToChar(34).ToString() + ";";
                             progressDialog.stepLabel.Text = "Selected provider Microsoft.ACE.OLEDB.12.0";
                             progressDialog.progressBar1.Value += 25;
                             break;
@@ -1340,31 +1371,24 @@ namespace dataEditor
                     using (OleDbConnection connect = new OleDbConnection(strConnect))
                     {
                         connect.Open();
-                        DataTable schemaTable = connect.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                        DataTable schemaTable = connect.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
                         string sheetName = schemaTable.Rows[0]["TABLE_NAME"].ToString();
-                        connect.Close();
-                        connect.Open();
                         OleDbCommand cmd = connect.CreateCommand();
                         cmd.CommandText = "SELECT * FROM [" + sheetName + "]";
-                        OleDbDataAdapter oleDA = new OleDbDataAdapter();
-                        oleDA.SelectCommand = cmd;
-                        oleDA.Fill(dataVariantOLEDB);
-                        connect.Close();
-
-                        //OleDbDataReader reader = cmd.ExecuteReader();
+                        OleDbDataReader reader = cmd.ExecuteReader();
 
                         progressDialog.stepLabel.Text = "Fill dataSet";
-                        progressDialog.progressBar1.Value += 25;
+                        progressDialog.progressBar1.Value += 12;
 
-                        //dataVariantOLEDB.Load(reader);
-
-                        xlColCount = dataVariantOLEDB.Columns.Count;
-                        RowsCnt = dataVariantOLEDB.Rows.Count;
-
+                        dataVariantOLEDB.Load(reader);
+                        connect.Close();
                         connect.Dispose();
                     }
 
-                    FillStatusGrid(1, xlColCount);
+                    xlColCount = dataVariantOLEDB.Columns.Count;
+                    RowsCnt = dataVariantOLEDB.Rows.Count;
+
+                    FillStatusGrid(RowsCnt, xlColCount);
 
                     statusGridView.Rows[1].Cells[1].Value = xlColCount;
                     statusGridView.Rows[4].Cells[1].Value = 0;
@@ -1408,12 +1432,12 @@ namespace dataEditor
             statusGridView.Rows.Add();
             statusGridView.Rows[2].HeaderCell.Value = "FirstHeaderRow";
             statusGridView.Rows[2].Cells[0].Value = "FirstHeaderRow";
-            statusGridView.Rows[2].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(FirstUsedRow, (maxRows-PropGrid.cntHeadsRows)+1);
+            statusGridView.Rows[2].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(FirstUsedRow, ((FirstUsedRow+maxRows) - PropGrid.cntHeadsRows));
 
             statusGridView.Rows.Add();
             statusGridView.Rows[3].HeaderCell.Value = "FirstDataRow";
             statusGridView.Rows[3].Cells[0].Value = "FirstDataRow";
-            statusGridView.Rows[3].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(FirstUsedRow, maxRows);
+            statusGridView.Rows[3].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(FirstUsedRow, FirstUsedRow+maxRows);
 
             statusGridView.Rows.Add();
             statusGridView.Rows[4].HeaderCell.Value = "Steps";
@@ -1471,6 +1495,7 @@ namespace dataEditor
         private void StripMenuHeaderRow_Click(object sender, EventArgs e)
         {
             TreeFormDestroyer();
+            int mxRw;
 
             foreach (DataGridViewRow rws in dataViewer.Rows)
             {
@@ -1486,8 +1511,14 @@ namespace dataEditor
                 HFR = ActiveCell.RowIndex + 1;
                 statusGridView.Rows[2].Cells[1].Value = Convert.ToInt32(dataViewer.Rows[ActiveCell.RowIndex].HeaderCell.Value.ToString().Split(' ').Last());
 
+                int ls = (Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) + PropGrid.cntHeadsRows);
+                if (ls >= FirstUsedRow + RowsCnt)
+                    mxRw = ls - 1;
+                else
+                    mxRw = ls;
+
                 statusGridView.Rows[3].Cells[1].Value = null;
-                statusGridView.Rows[3].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) + PropGrid.cntHeadsRows, RowsCnt);
+                statusGridView.Rows[3].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(mxRw, FirstUsedRow+RowsCnt);
 
                 dataViewer.Rows[ActiveCell.RowIndex].DefaultCellStyle.BackColor = PropGrid.ColorHeads;
                 dataViewer.Rows[ActiveCell.RowIndex].DefaultCellStyle.ForeColor = fntCl;
@@ -1976,6 +2007,14 @@ namespace dataEditor
             }
         }
 
-
+    }
+    public static class ExtensionMethods
+    {
+        public static void DoubleBuffered(this DataGridView dgv, bool setting)
+        {
+            Type dgvType = dgv.GetType();
+            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+            pi.SetValue(dgv, setting, null);
+        }
     }
 }
