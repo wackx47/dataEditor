@@ -1,4 +1,6 @@
-﻿using System;
+﻿using dataEditor.Properties;
+using Microsoft.VisualBasic.Devices;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,11 +8,14 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.Design;
 using System.Configuration;
+using System.Data.OleDb;
+using System.Data;
 using System.Data.SqlTypes;
 using System.Drawing.Design;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,12 +23,10 @@ using System.Windows.Forms.Design;
 
 namespace dataEditor
 {
-
-
     class PropertySet
         {
-
         string appVersion = "0.876a";
+        [Browsable(true)]
         [CategoryAttribute("App"), ReadOnlyAttribute(true)]
         public string AppVersion
         {
@@ -31,6 +34,7 @@ namespace dataEditor
             set { appVersion = value; }
         }
         string appBuild = "2302";
+        [Browsable(true)]
         [CategoryAttribute("App"), ReadOnlyAttribute(true)]
         public string AppBuild
         {
@@ -51,7 +55,7 @@ namespace dataEditor
         //    set { m_pressetName = value; }
         //}
 
-        bool m_DRow = true;
+        private bool m_DRow = true;
             [Browsable(true)]
             [ReadOnly(true)]
             [Description("Headers takes over 2 rows in table")]
@@ -63,7 +67,7 @@ namespace dataEditor
                 set { m_DRow = value; }
                 }
 
-        int m_cntHeadsRows=2;
+        private int m_cntHeadsRows=2;
         [Browsable(true)]
         [ReadOnly(true)]
         [Description("Count of rows takes header")]
@@ -87,7 +91,7 @@ namespace dataEditor
        //     set { m_HeadFirstRow = value; }
        // }
 
-        bool m_useExtraCol=false;
+        private bool m_useExtraCol=false;
             [Browsable(true)]
             [ReadOnly(true)]
             [Description("Enable extra columns")]
@@ -99,7 +103,7 @@ namespace dataEditor
                  set { m_useExtraCol = value; }
                 }
 
-        int m_ExtraColCnt;
+        private int m_ExtraColCnt;
             [Browsable(true)]
             [Description("Count extra columns")]
             [DisplayName("CountExtraColumns")]
@@ -181,7 +185,7 @@ namespace dataEditor
         //[Category("SQL")]
         //public string sqlNames { get { return m_sqlNames; } set { m_sqlNames = value; } }
 
-        string m_atsReports;
+        private string m_atsReports;
         [Browsable(true)]
         [ReadOnly(false)]
         [Description("The most used reports from ATS")]
@@ -243,32 +247,34 @@ namespace dataEditor
             set { m_ColorStaticDat = value; }
         }
 
-        string m_AvailableXML;
+        private string m_ImportMode = "Excel Interop";
         [Browsable(true)]
         [ReadOnly(false)]
-        [Description("Available presset for Universal Reader")]
-        [DisplayName("AvailableXML")]
-        [Category("Other")]
-        [TypeConverter(typeof(ListBoxForXml))]
-        public string AvailablePresset
+        [Description("Available import methods")]
+        [DisplayName("ImportMode")]
+        [Category("ImportSettings")]
+        [TypeConverter(typeof(ImportMode))]
+        public string ImportMode
         {
-            get { return m_AvailableXML; }
-            set { m_AvailableXML = value; }
+            get { return m_ImportMode; }
+            set { m_ImportMode = value; }
         }
 
-        bool m_alternativeImportMode = false;
+
+        public OleDBModeSets m_OleDBImportMode = new OleDBModeSets("", false, 1);
         [Browsable(true)]
         [ReadOnly(false)]
         [Description("Alternative method imports using provider Microsoft Access for fill dataGrid and available only with installed and registered Microsoft.ACE.OLEDB.12.0")]
-        [DisplayName("UseOLEDBprovider")]
-        [Category("Other")]
-        public bool alternativeImportMode
+        [DisplayName("OLEDBprovider")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        [Category("ImportSettings")]
+        public OleDBModeSets OleDBImportMode
         {
-            get { return m_alternativeImportMode; }
-            set { m_alternativeImportMode = value; }
+            get { return m_OleDBImportMode; }
+            set { m_OleDBImportMode = value; }
         }
 
-        bool m_extdEdit;
+        private bool m_extdEdit;
         [Browsable(false)]
         [Description("Allow manual editing settings")]
         [DisplayName("UnlockSettings")]
@@ -279,7 +285,7 @@ namespace dataEditor
             set { m_extdEdit = value; }
         }
 
-        bool m_ForceCloseExl;
+        private bool m_ForceCloseExl;
         [Browsable(true)]
         [Description("Terminate all Excel processes before closing the program")]
         [DisplayName("ForceCloseAllExcel")]
@@ -290,7 +296,7 @@ namespace dataEditor
             set { m_ForceCloseExl = value; }
         }
 
-        bool m_ShowConsoleOnStartUp = false;
+        private bool m_ShowConsoleOnStartUp = false;
         [Browsable(true)]
         [ReadOnly(false)]
         [Description("Open console whith starts programm")]
@@ -302,7 +308,7 @@ namespace dataEditor
             set { m_ShowConsoleOnStartUp = value; }
         }
 
-        bool m_ShowHelpPropetryGrid = false;
+        private bool m_ShowHelpPropetryGrid = false;
         [Browsable(false)]
         [ReadOnly(false)]
         [Description("Show help area in property grid")]
@@ -322,27 +328,107 @@ namespace dataEditor
         [DisplayName("SQLcollumns")]
         [Category("SQL")]
         [TypeConverter(typeof(CollectionTypeConverter))]
-
         public string[] sqlArray { get { return m_sqlArray; } set { m_sqlArray = value; } }
 
+
+        private string m_AvailableXML;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("Available presset for Universal Reader")]
+        [DisplayName("AvailableXML")]
+        [Category("Other")]
+        [TypeConverter(typeof(ListBoxForXml))]
+        public string AvailablePresset
+        {
+            get { return m_AvailableXML; }
+            set { m_AvailableXML = value; }
+        }
+    }
+
+    class OleDBModeSets
+    {
+        public OleDBModeSets(string Version, bool HDR, uint IMEX)
+        {
+            _verOleDB = Version;
+            _HDR = HDR;
+            _IMEX = IMEX;
+        }
+
+        private string _verOleDB;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("The Microsoft OLE DB Provider for SQL Server, SQLOLEDB, allows ADO to access Microsoft SQL Server.")]
+        [DisplayName("Provider")]
+        [TypeConverter(typeof(ProvidersList))]
+        public string VersionOleDB
+        {
+            get { return _verOleDB; }
+            set { _verOleDB = value; }
+        }
+
+
+        private bool _HDR;
+        [Browsable(true)]
+        [DisplayName("HDR")]
+        [Description("Indicates that the first row contains columnnames, not data")]
+        [TypeConverter(typeof(BooleanTypeConverter))]
+        public bool HDR
+        {
+            get { return _HDR; }
+            set { _HDR = value; }
+        }
+
+        [Browsable(false)]
+        public string strHDR { get { return _HDR ? "Yes" : "No"; } }
+            
+
+        private uint _IMEX;
+        [Browsable(true)]
+        [DisplayName("IMEX")]
+        [Description("Tells the driver to always read “intermixed” (numbers, dates, strings etc) data columns as text")]
+        public uint IMEX
+        {
+            get { return _IMEX; }
+            set { _IMEX = value; }
+        }
+
+        public override string ToString()
+        {
+                return VersionOleDB + " (HDR=" + strHDR + "; IMEX=" + IMEX + ")";
+        }
+    }
+
+    class BooleanTypeConverter : BooleanConverter
+    {
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destType)
+        {
+            return (bool)value ?
+              "Yes" : "No";
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            return (string)value == "Yes";
+        }
     }
 
 
     class CollectionTypeConverter : TypeConverter
     {
+        
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destType)
         {
             return destType == typeof(string);
         }
-
+            
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destType)
         {
-            return "View List...";
+            return "(...)";
         }
     }
 
 
-public class ListBoxForXml : TypeConverter
+    public class ListBoxForXml : TypeConverter
         {
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
         {
@@ -363,7 +449,6 @@ public class ListBoxForXml : TypeConverter
         }
     }
 
-
     public class ListBoxForReports : TypeConverter
     {
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
@@ -379,4 +464,54 @@ public class ListBoxForXml : TypeConverter
         }
     }
 
+    class ImportMode : StringConverter
+    {
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        {
+            return true;
+        }
+
+        public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
+        {
+            return true;
+        }
+
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            List<string> AvailableMode = new List<string>() { };
+
+            if (ImportList.AvailableMethods == 2)
+            {
+                AvailableMode.Add("Excel Interop");
+                AvailableMode.Add("EPPlus");
+            }
+
+            if (ImportList.AvailableMethods == 3)
+            {
+                AvailableMode.Add("Excel Interop");
+                AvailableMode.Add("EPPlus");
+                AvailableMode.Add("OleDB");
+            }
+
+            return new StandardValuesCollection(AvailableMode);
+        }
+    }
+
+    class ProvidersList : StringConverter
+    {
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        {
+            return true;
+        }
+
+        public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
+        {
+            return true;
+        }
+
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            return new StandardValuesCollection(ImportList.ProvidersList);
+        }
+    }
 }   

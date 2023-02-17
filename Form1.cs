@@ -22,6 +22,7 @@ using System.Linq;
 using Microsoft.Win32;
 using universalReader;
 using System.Text.RegularExpressions;
+using OfficeOpenXml;
 
 namespace dataEditor
 {
@@ -44,8 +45,11 @@ namespace dataEditor
         int ProviderOLEDB = 0;
         int FirstUsedRow = 1;
         int FirstUsedColumn = 1;
+        uint IMEX = 1;
         bool allowVoid = false;
         bool lockVoid = false;
+        bool useOleDB = false;
+        bool HDR = false;
         string xmlFileName = "";
         string ExlFileName = null;
         string memSQLlist = null;
@@ -73,6 +77,7 @@ namespace dataEditor
 
         DataTable dt_db_shema = new DataTable();
 
+        
         PropertySet PropGrid;
         Color fntCl = Color.Black;
         Color fntClDat = Color.Black;
@@ -163,7 +168,6 @@ namespace dataEditor
             foreach (string s in PropGrid.sqlArray)
                 memSQLlist += s + ";";
 
-            //PropGrid.atsReports = "buy_norem;cfrliab;cfrliabdpg;CESSM;CFR_PART_LIAB_DEL_NOTICE;svnc_part_s_plan;PROGN_LIAB_FRSFG;power_consumer_3_fact;frs_dev_factcost";
             TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["ExtraColCnt"].SetReadOnlyAttribute(true);
 
             //Console.WriteLine(Environment.OSVersion.Platform.ToString() + " || " + Environment.OSVersion.VersionString + " (" + AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName + ")");
@@ -179,7 +183,8 @@ namespace dataEditor
             }
             AutoFillList();
             CheckRegLib();
-            ImportExcelMode();
+            ImportList.CheckProviders();
+            //ImportExcelMode();
 
             tempPropColors.Add(PropGrid.ColorHeads);
             tempPropColors.Add(PropGrid.ColorDataRows);
@@ -379,7 +384,7 @@ namespace dataEditor
                 }
                 if (INI.KeyExists("UseOLEDBprovider", "Other"))
                 {
-                    PropGrid.alternativeImportMode = bool.Parse(INI.ReadINI("Other", "UseOLEDBprovider"));
+                    //PropGrid.OleDBImportMode.useOleDBMode = bool.Parse(INI.ReadINI("Other", "UseOLEDBprovider"));
                 }
 
                 if (defaultSQL == null | defaultSQL == "")
@@ -397,14 +402,8 @@ namespace dataEditor
 
         private void ConfigUpdater_handle()
         {
-            foreach(string s in PropGrid.sqlArray)
-            INI.Write("SQL", "SQLcollumns", s.ToString());
-
-            INI.Write("Visuals", "ColorHeaders", PropGrid.ColorHeads.Name.ToString());
-            INI.Write("Visuals", "ColorHeaders(ListView)", PropGrid.SecondColorHeads.Name.ToString());
-            INI.Write("Visuals", "ColorDataRows", PropGrid.ColorDataRows.Name.ToString());
-            INI.Write("Visuals", "ColorStaticCell", PropGrid.ColorStaticDat.Name.ToString());
-            INI.Write("Other", "ForceCloseAllExcel", PropGrid.ForceCloseExl.ToString());
+            INI.Write("SQL", "SQLcollumns", memSQLlist);
+            //INI.Write("Other", "UseOLEDBprovider", PropGrid.OleDBImportMode.useOleDBMode.ToString());
         }
 
         public void ConfigUpdater()
@@ -425,7 +424,7 @@ namespace dataEditor
                 {
                     foreach (GridItem gi in ((GridItem)category).GridItems)
                     {
-                        if (gi.Label.ToString() != "AvailableXML" && gi.Label.ToString() != "ReportsList" && gi.Parent.Label.ToString() != "App" && gi.Parent.Label.ToString() != "Visuals" && gi.Label.ToString() != "SQLcollumns")
+                        if (gi.Label.ToString() != "AvailableXML" && gi.Label.ToString() != "ReportsList" && gi.Parent.Label.ToString() != "App" && gi.Parent.Label.ToString() != "Visuals" && gi.Label.ToString() != "SQLcollumns" && gi.Label.ToString() != "OLEDBprovider" && gi.Label.ToString() != "ImportMode")
                         {
                             INI.Write(gi.Parent.Label.ToString(), gi.Label.ToString(), gi.Value.ToString());
 
@@ -439,7 +438,7 @@ namespace dataEditor
                     }
                 }
             }
-            INI.Write("SQL", "SQLcollumns", memSQLlist);
+            ConfigUpdater_handle();
         }
 
         private void OnProcessExit(object sender, EventArgs e)
@@ -538,7 +537,6 @@ namespace dataEditor
             optionsGrid.Refresh();
         }
 
-
         private void DataViewer_RowSelected(object sender, DataGridViewCellMouseEventArgs e)
         {
             dataViewer.ClearSelection();
@@ -609,7 +607,6 @@ namespace dataEditor
         private void dataViewer_MouseClick(Object sender, MouseEventArgs e)
         {
             dataViewer.ClearSelection();
-            
 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
@@ -636,7 +633,13 @@ namespace dataEditor
                     ActiveCell.Selected = true;
                     CellViewer.Text = ActiveCell.Value.ToString();
                     int count = CellViewer.GetLineFromCharIndex(int.MaxValue) + 1;
-                    //splitContainer_dataGrids.SplitterDistance = 18 * (count);
+
+                    
+                    for (int i = splitContainer_dataGrids.SplitterDistance; i < 18 * (count); i+=5)
+                        splitContainer_dataGrids.SplitterDistance = i;
+
+                    for (int i = splitContainer_dataGrids.SplitterDistance; i > 18 * (count); i-=5)
+                        splitContainer_dataGrids.SplitterDistance = i;
                 }
             }
         }
@@ -1136,22 +1139,21 @@ namespace dataEditor
                 if (row["SOURCES_NAME"].ToString() == "Microsoft.ACE.OLEDB.12.0")
                 {
                     Console.WriteLine("Provider registred: " + row["SOURCES_NAME"]);
-                    TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["alternativeImportMode"].SetReadOnlyAttribute(false);
+                    TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["OleDBImportMode"].SetReadOnlyAttribute(false);
                     ProviderOLEDB = 12;
                     return;
                 }
                 if (row["SOURCES_NAME"].ToString() == "Microsoft.Jet.OLEDB.4.0")
                 {
                     Console.WriteLine("Provider registred: " + row["SOURCES_NAME"]);
-                    TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["alternativeImportMode"].SetReadOnlyAttribute(false);
+                    TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["OleDBImportMode"].SetReadOnlyAttribute(false);
                     ProviderOLEDB = 4;
                 }
             }
             if (ProviderOLEDB == 0)
             {
                 Console.WriteLine("Providers Microsoft.ACE.OLEDB.12.0 or Microsoft.Jet.OLEDB.4.0 not registred");
-                TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["alternativeImportMode"].SetReadOnlyAttribute(true);
-                PropGrid.alternativeImportMode = false;
+                TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["OleDBImportMode"].SetReadOnlyAttribute(true);
             }
         }
 
@@ -1179,11 +1181,15 @@ namespace dataEditor
             string xlFileName = ofd.FileName;
             ExlFileName = Path.GetFileName(xlFileName);
 
-            if (Path.GetExtension(xlFileName) == ".xlsx" && ProviderOLEDB == 4)
+
+            //////////Need to work with condition of version/////////////////////////
+            if (Path.GetExtension(xlFileName) == ".xlsx")
             {
-                PropGrid.alternativeImportMode = false;
+                
                 optionsGrid.Refresh();
             }
+            /////////////////////////////////////////////////////////////////////////
+
 
             int xlRowCount = 0;
             int xlColCount = 0;
@@ -1194,7 +1200,7 @@ namespace dataEditor
 
             Console.WriteLine("Open new Excel file: " + ExlFileName);
 
-                if (PropGrid.alternativeImportMode == false)            //Classic Import Mode
+                if (PropGrid.ImportMode == "Excel Interop")            //Classic Import Mode
                 {
                     Excel.Application xlApp = new Excel.Application();
                     Excel.Workbook xlWB;
@@ -1233,7 +1239,7 @@ namespace dataEditor
                     xlWB = null;
                     xlSht = null;
                 }
-                else
+                if (PropGrid.ImportMode == "OleDB")
                 {
                     DataTable dataVariantOLEDB = new DataTable();
                     OLEDBModeImport(xlFileName, dataVariantOLEDB);
@@ -1327,7 +1333,6 @@ namespace dataEditor
                     progressDialog.progressBar1.Maximum = 100;
 
                     string strConnect = string.Empty;
-                    string HDR = "No";
 
                     progressDialog.progressBar1.Value += 25;
                     progressDialog.stepLabel.Text = "Get file: " + xlFileName;
@@ -1338,7 +1343,7 @@ namespace dataEditor
                             strConnect = @"Provider=Microsoft.Jet.OLEDB.4.0;" +
                                          @"Data Source=" + xlFileName + ";" +
                                          @"Extended Properties=" + Convert.ToChar(34).ToString() +
-                                         @"Excel 8.0;HDR=" + HDR + ";IMEX=1;ImportMixedTypes=Text;" + Convert.ToChar(34).ToString() + ";";
+                                         @"Excel 8.0;HDR=" + PropGrid.OleDBImportMode.strHDR + ";IMEX=" + PropGrid.OleDBImportMode.IMEX.ToString() + ";MaxScanRows=0;" + Convert.ToChar(34).ToString() + ";";
                             progressDialog.stepLabel.Text = "Selected provider Microsoft.Jet.OLEDB.4.0";
                             progressDialog.progressBar1.Value += 25;
                             break;
@@ -1347,7 +1352,7 @@ namespace dataEditor
                             strConnect = @"Provider=Microsoft.ACE.OLEDB.12.0;" +
                                          @"Data Source=" + xlFileName + ";" +
                                          @"Extended Properties=" + Convert.ToChar(34).ToString() +
-                                         @"Excel 12.0;HDR=" + HDR + ";IMEX=1;ImportMixedTypes=Text;" + Convert.ToChar(34).ToString() + ";";
+                                         @"Excel 12.0;HDR=" + PropGrid.OleDBImportMode.strHDR + ";IMEX=" + PropGrid.OleDBImportMode.IMEX.ToString() + ";" + Convert.ToChar(34).ToString() + ";";
 
                             progressDialog.stepLabel.Text = "Selected provider Microsoft.ACE.OLEDB.12.0";
                             progressDialog.progressBar1.Value += 25;
@@ -1357,7 +1362,7 @@ namespace dataEditor
                             strConnect = "Provider=Microsoft.ACE.OLEDB.12.0;" +
                                          @"Data Source=" + xlFileName + ";" +
                                          @"Extended Properties=" + Convert.ToChar(34).ToString() +
-                                         @"Excel 12.0;HDR=" + HDR + ";IMEX=1;ImportMixedTypes=Text;" + Convert.ToChar(34).ToString() + ";";
+                                         @"Excel 12.0;HDR=" + PropGrid.OleDBImportMode.strHDR + ";IMEX=" + PropGrid.OleDBImportMode.IMEX.ToString() + ";" + Convert.ToChar(34).ToString() + ";";
                             progressDialog.stepLabel.Text = "Selected provider Microsoft.ACE.OLEDB.12.0";
                             progressDialog.progressBar1.Value += 25;
                             break;
@@ -1378,7 +1383,7 @@ namespace dataEditor
                         OleDbDataReader reader = cmd.ExecuteReader();
 
                         progressDialog.stepLabel.Text = "Fill dataSet";
-                        progressDialog.progressBar1.Value += 12;
+                        progressDialog.progressBar1.Value += 25;
 
                         dataVariantOLEDB.Load(reader);
                         connect.Close();
@@ -1397,6 +1402,25 @@ namespace dataEditor
                 }));
             backgroundThread.Start();
             progressDialog.ShowDialog();
+        }
+
+        private void EPPlusModeImport(string xlFileName)
+        {
+            FileInfo existingFile = new FileInfo(xlFileName);
+            using (ExcelPackage package = new ExcelPackage(existingFile))
+            {
+                //get the first worksheet in the workbook
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+                int colCount = worksheet.Dimension.End.Column;  //get Column Count
+                int rowCount = worksheet.Dimension.End.Row;     //get row count
+                for (int row = 1; row <= rowCount; row++)
+                {
+                    for (int col = 1; col <= colCount; col++)
+                    {
+                        Console.WriteLine(" Row:" + row + " column:" + col + " Value:" + worksheet.Cells[row, col].Value?.ToString().Trim());
+                    }
+                }
+            }
         }
 
         private void dataViewerFillHeadres(int FirstUsedRow, int FirstUsedColumn)
@@ -1798,6 +1822,7 @@ namespace dataEditor
             {
                 temp += s + ";";
             }
+
             if (temp != memSQLlist)
                 AutoFillList();
             
@@ -1811,8 +1836,10 @@ namespace dataEditor
                 { PropGrid.cntHeadsRows = RowsCnt; }
                 updateStatusGrid(PropGrid.cntHeadsRows);
             }
-                
+
+            optionsGrid.Refresh();
         }
+
 
         private void updateDataGridColors()
         {
@@ -2015,6 +2042,29 @@ namespace dataEditor
             Type dgvType = dgv.GetType();
             PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
             pi.SetValue(dgv, setting, null);
+        }
+    }
+
+    public class ImportList
+    {
+        public static int AvailableMethods = 2;
+        public static List<string> ProvidersList = new List<string>() { };
+        public static void CheckProviders()
+        {
+            int i = 0;
+            DataTable table = new OleDbEnumerator().GetElements();
+            foreach (DataRow row in table.Rows)
+            {
+                if (row["SOURCES_NAME"].ToString() == "Microsoft.ACE.OLEDB.12.0" | row["SOURCES_NAME"].ToString() == "Microsoft.Jet.OLEDB.4.0")
+                {
+                    Console.WriteLine("Provider registred: " + row["SOURCES_NAME"]);
+                    ProvidersList.Add(row["SOURCES_NAME"].ToString());
+                    AvailableMethods = 3;
+                    i++;
+                }
+            }
+            if (i == 0)
+            Console.WriteLine("Providers Microsoft.ACE.OLEDB.12.0 or Microsoft.Jet.OLEDB.4.0 not registred");
         }
     }
 }
