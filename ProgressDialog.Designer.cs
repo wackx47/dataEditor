@@ -44,7 +44,7 @@
             this.stepLabel.AutoSize = true;
             this.stepLabel.Location = new System.Drawing.Point(12, 10);
             this.stepLabel.Name = "stepLabel";
-            this.stepLabel.Size = new System.Drawing.Size(0, 16);
+            this.stepLabel.Size = new System.Drawing.Size(0, 15);
             this.stepLabel.TabIndex = 1;
             // 
             // ProgressDialog

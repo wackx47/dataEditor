@@ -152,6 +152,7 @@
             // ChangeLogBox
             // 
             this.ChangeLogBox.Location = new System.Drawing.Point(10, 151);
+            this.ChangeLogBox.MaxLength = 0;
             this.ChangeLogBox.Multiline = true;
             this.ChangeLogBox.Name = "ChangeLogBox";
             this.ChangeLogBox.ReadOnly = true;

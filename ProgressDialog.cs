@@ -17,16 +17,5 @@ namespace dataEditor
         {
             InitializeComponent();
         }
-
-        public void UpdateProgress(int progress)
-        {
-            progressBar1.BeginInvoke(
-                new Action(() =>
-                {
-                    progressBar1.Value = progress;
-                }
-            ));
-        }
-
     }
 }

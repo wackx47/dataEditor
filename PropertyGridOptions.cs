@@ -42,19 +42,6 @@ namespace dataEditor
             set { appBuild = value; }
         }
 
-
-        //string m_pressetName;
-        //[Browsable(true)]
-        //[ReadOnly(false)]
-        //[Description("Type your name for new presset")]
-        //[DisplayName("PressetName*")]
-        //[Category("Extract Options")]
-        //public string pressetName
-        //{
-        //    get { return m_pressetName; }
-        //    set { m_pressetName = value; }
-        //}
-
         private bool m_DRow = true;
             [Browsable(true)]
             [ReadOnly(true)]
@@ -247,7 +234,7 @@ namespace dataEditor
             set { m_ColorStaticDat = value; }
         }
 
-        private string m_ImportMode = "Excel Interop";
+        private string m_ImportMode;
         [Browsable(true)]
         [ReadOnly(false)]
         [Description("Available import methods")]
@@ -260,10 +247,9 @@ namespace dataEditor
             set { m_ImportMode = value; }
         }
 
-
         public OleDBModeSets m_OleDBImportMode = new OleDBModeSets("", false, 1);
         [Browsable(true)]
-        [ReadOnly(false)]
+        [ReadOnly(true)]
         [Description("Alternative method imports using provider Microsoft Access for fill dataGrid and available only with installed and registered Microsoft.ACE.OLEDB.12.0")]
         [DisplayName("OLEDBprovider")]
         [TypeConverter(typeof(ExpandableObjectConverter))]
@@ -366,6 +352,7 @@ namespace dataEditor
             set { _verOleDB = value; }
         }
 
+        private string[] ver { get { return VersionOleDB.Split('.'); } }
 
         private bool _HDR;
         [Browsable(true)]
@@ -394,7 +381,10 @@ namespace dataEditor
 
         public override string ToString()
         {
-                return VersionOleDB + " (HDR=" + strHDR + "; IMEX=" + IMEX + ")";
+            if (VersionOleDB != "")
+                return ver[3] + "." + ver[4] + " (HDR=" + strHDR + "; IMEX=" + IMEX + ")";
+            else
+                return "Method not available";
         }
     }
 
@@ -478,22 +468,7 @@ namespace dataEditor
 
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            List<string> AvailableMode = new List<string>() { };
-
-            if (ImportList.AvailableMethods == 2)
-            {
-                AvailableMode.Add("Excel Interop");
-                AvailableMode.Add("EPPlus");
-            }
-
-            if (ImportList.AvailableMethods == 3)
-            {
-                AvailableMode.Add("Excel Interop");
-                AvailableMode.Add("EPPlus");
-                AvailableMode.Add("OleDB");
-            }
-
-            return new StandardValuesCollection(AvailableMode);
+            return new StandardValuesCollection(ImportList.AvailableMode);
         }
     }
 

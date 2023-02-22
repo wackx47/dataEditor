@@ -51,6 +51,7 @@ namespace dataEditor
             this.setAsStaticValueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ColumnContext = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setAsColumn4CheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dynamicCycleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataViewer = new System.Windows.Forms.DataGridView();
             this.statusGridView = new dataEditor.MainForm.StatusGridViewEditMode();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -215,9 +216,10 @@ namespace dataEditor
             // 
             this.ColumnContext.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.ColumnContext.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.setAsColumn4CheckToolStripMenuItem});
+            this.setAsColumn4CheckToolStripMenuItem,
+            this.dynamicCycleToolStripMenuItem});
             this.ColumnContext.Name = "ColumnContext";
-            this.ColumnContext.Size = new System.Drawing.Size(190, 26);
+            this.ColumnContext.Size = new System.Drawing.Size(190, 48);
             // 
             // setAsColumn4CheckToolStripMenuItem
             // 
@@ -225,6 +227,13 @@ namespace dataEditor
             this.setAsColumn4CheckToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.setAsColumn4CheckToolStripMenuItem.Text = "Set as Column4Check";
             this.setAsColumn4CheckToolStripMenuItem.Click += new System.EventHandler(this.StripMenuHeaderColumnSelect_Click);
+            // 
+            // dynamicCycleToolStripMenuItem
+            // 
+            this.dynamicCycleToolStripMenuItem.Name = "dynamicCycleToolStripMenuItem";
+            this.dynamicCycleToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.dynamicCycleToolStripMenuItem.Text = "DynamicCycle";
+            this.dynamicCycleToolStripMenuItem.Click += new System.EventHandler(this.DynamicCycleData_Click);
             // 
             // dataViewer
             // 
@@ -654,5 +663,6 @@ namespace dataEditor
         private ContextMenuStrip contextMenuStrip1;
         private SplitContainer splitContainer_dataGrids;
         private TextBox CellViewer;
+        private ToolStripMenuItem dynamicCycleToolStripMenuItem;
     }
 }

@@ -23,6 +23,12 @@ using Microsoft.Win32;
 using universalReader;
 using System.Text.RegularExpressions;
 using OfficeOpenXml;
+using System.Linq.Expressions;
+using NPOI.XSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.SS.Formula.Functions;
+using NPOI.HSSF.UserModel;
+using NPOI.XSSF.Streaming;
 
 namespace dataEditor
 {
@@ -42,14 +48,11 @@ namespace dataEditor
         int HFR = 0;
         int prvCntHedRw = 2;
         int RowsCnt = 0;
-        int ProviderOLEDB = 0;
         int FirstUsedRow = 1;
         int FirstUsedColumn = 1;
-        uint IMEX = 1;
         bool allowVoid = false;
         bool lockVoid = false;
         bool useOleDB = false;
-        bool HDR = false;
         string xmlFileName = "";
         string ExlFileName = null;
         string memSQLlist = null;
@@ -203,6 +206,11 @@ namespace dataEditor
                 DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_BYCOMMAND);
                 showConsoleToolStripMenuItem.Checked = true;
             }
+
+            if (ImportList.ProvidersList.Count != 0)
+                PropGrid.OleDBImportMode.VersionOleDB = ImportList.ProvidersList[0];
+
+            PropGrid.ImportMode = ImportList.AvailableMode[0];
         }
 
         private void statusGridView_CellCmbxValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -535,6 +543,17 @@ namespace dataEditor
             dataViewer.ClearSelection();
             statusGridView.ClearSelection();
             optionsGrid.Refresh();
+        }
+
+        private void DynamicCycleData_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in dataViewer.Rows)
+            {
+                if(row.Cells[ActiveCell.ColumnIndex].Value != DBNull.Value)
+                {
+                    Console.WriteLine(row.Cells[ActiveCell.ColumnIndex].Value.ToString());
+                }
+            }
         }
 
         private void DataViewer_RowSelected(object sender, DataGridViewCellMouseEventArgs e)
@@ -1130,35 +1149,9 @@ namespace dataEditor
             }
         }
 
-        public void ImportExcelMode()
-        {
-            DataTable table = new OleDbEnumerator().GetElements();
-
-            foreach (DataRow row in table.Rows)
-            {
-                if (row["SOURCES_NAME"].ToString() == "Microsoft.ACE.OLEDB.12.0")
-                {
-                    Console.WriteLine("Provider registred: " + row["SOURCES_NAME"]);
-                    TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["OleDBImportMode"].SetReadOnlyAttribute(false);
-                    ProviderOLEDB = 12;
-                    return;
-                }
-                if (row["SOURCES_NAME"].ToString() == "Microsoft.Jet.OLEDB.4.0")
-                {
-                    Console.WriteLine("Provider registred: " + row["SOURCES_NAME"]);
-                    TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["OleDBImportMode"].SetReadOnlyAttribute(false);
-                    ProviderOLEDB = 4;
-                }
-            }
-            if (ProviderOLEDB == 0)
-            {
-                Console.WriteLine("Providers Microsoft.ACE.OLEDB.12.0 or Microsoft.Jet.OLEDB.4.0 not registred");
-                TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["OleDBImportMode"].SetReadOnlyAttribute(true);
-            }
-        }
-
         private void ImportEXCL_Click(object sender, EventArgs e)
         {
+
             dataViewer.DataSource = null;
             DataTable DT = (DataTable)dataViewer.DataSource;
             if (DT != null)
@@ -1181,15 +1174,11 @@ namespace dataEditor
             string xlFileName = ofd.FileName;
             ExlFileName = Path.GetFileName(xlFileName);
 
-
-            //////////Need to work with condition of version/////////////////////////
-            if (Path.GetExtension(xlFileName) == ".xlsx")
+            if (Path.GetExtension(xlFileName) == ".xlsx" && PropGrid.OleDBImportMode.VersionOleDB == "Microsoft.Jet.OLEDB.4.0")
             {
-                
-                optionsGrid.Refresh();
+                Console.WriteLine("Microsoft.Jet.OLEDB.4.0 not supported this file extension");
+                return;
             }
-            /////////////////////////////////////////////////////////////////////////
-
 
             int xlRowCount = 0;
             int xlColCount = 0;
@@ -1199,6 +1188,54 @@ namespace dataEditor
             Console.ForegroundColor = ConsoleColor.White;
 
             Console.WriteLine("Open new Excel file: " + ExlFileName);
+
+                if (PropGrid.ImportMode == "EPPlus" && Path.GetExtension(xlFileName) != ".xls")
+                {
+                    try
+                    {
+                        using (var stream = File.OpenRead(xlFileName))
+                        {
+                            DataTable dataExport = new DataTable();
+                            EPPlusModeImport(dataExport, xlFileName, xlRowCount, xlColCount);
+                            dataViewer.DataSource = dataExport;
+
+                            dataViewerFillHeadres(1, 1);
+
+                            tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
+                            splitContainer_rightProps.Panel1Collapsed = false;
+                            optionsGrid.Refresh();
+
+                            Console.WriteLine("Rows.Count in dataGridView: " + RowsCnt.ToString());
+                            Console.WriteLine("Columns.Count in dataGridView: " + dataViewer.Columns.Count.ToString());
+                        }
+                    }
+                    catch
+                    {
+                        Console.WriteLine("The process cannot access the file because it is being used by another process");
+                    }
+                }
+
+                if (PropGrid.ImportMode == "NPOI")
+                {
+                    try
+                    {
+                        using (var stream = File.OpenRead(xlFileName))
+                        {
+                            DataTable dataExport = new DataTable();
+                            NPOIModeImport(dataExport, xlFileName);
+                            dataViewer.DataSource = dataExport;
+                            dataViewerFillHeadres(FirstUsedRow, FirstUsedColumn);
+
+                            tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
+                            splitContainer_rightProps.Panel1Collapsed = false;
+                            optionsGrid.Refresh();
+                        }
+                    }
+                    catch
+                    {
+                        Console.WriteLine("The process cannot access the file because it is being used by another process");
+                    }
+                }
 
                 if (PropGrid.ImportMode == "Excel Interop")            //Classic Import Mode
                 {
@@ -1216,7 +1253,7 @@ namespace dataEditor
                     FirstUsedRow = Convert.ToInt32(Range.Split('C').First());
                     FirstUsedColumn = Convert.ToInt32(Range.Split('C').Last());
                     String SheetName = xlSht.Name;
-                    
+
 
                     DataTable dataVariantB = new DataTable();
                     ClassicParseModeImport(dataVariantB, xlRowCount, xlColCount, ExcelRange);
@@ -1227,11 +1264,15 @@ namespace dataEditor
 
                     statusGridView.Rows[1].Cells[1].Value = xlColCount;
                     statusGridView.Rows[4].Cells[1].Value = 0;
-                    
+
+                    tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
+                    splitContainer_rightProps.Panel1Collapsed = false;
+                    optionsGrid.Refresh();
+
                     Console.WriteLine("FirstUsedRow: " + FirstUsedRow.ToString());
                     Console.WriteLine("FirstUsedColumn: " + FirstUsedColumn.ToString());
-                    Console.WriteLine("Rows.Count: " + RowsCnt.ToString());
-                    Console.WriteLine("Columns.Count: " + dataViewer.Columns.Count.ToString());
+                    Console.WriteLine("Rows.Count in used Range: " + RowsCnt.ToString());
+                    Console.WriteLine("Columns.Count in used Range: " + dataViewer.Columns.Count.ToString());
 
                     xlWB.Close(false, false, false);
                     xlApp.Quit();
@@ -1265,113 +1306,58 @@ namespace dataEditor
                         dataViewer.Columns.RemoveAt(dataColCount);
                         Console.WriteLine("Deleted last Column");
                     }
+
+                    tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
+                    splitContainer_rightProps.Panel1Collapsed = false;
+                    optionsGrid.Refresh();
                 }
 
-            dataViewer.AllowUserToAddRows = false;
-            dataViewer.AllowUserToDeleteRows = false;
+                dataViewer.AllowUserToAddRows = false;
+                dataViewer.AllowUserToDeleteRows = false;
 
-            dataViewer.EnableHeadersVisualStyles = false;
-            dataViewer.MouseDown += new MouseEventHandler(dataViewer_MouseClick);
-            dataViewer.RowHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_RowSelected);
-            dataViewer.ColumnHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_ColumnsSelected);
-            dataViewer.Update();
+                dataViewer.EnableHeadersVisualStyles = false;
+                dataViewer.MouseDown += new MouseEventHandler(dataViewer_MouseClick);
+                dataViewer.RowHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_RowSelected);
+                dataViewer.ColumnHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_ColumnsSelected);
+                dataViewer.Update();
 
-            tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
-            splitContainer_rightProps.Panel1Collapsed = false;
-            optionsGrid.Refresh();
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("\n" + "----------Completed----------" + "\n");
-            Console.ForegroundColor = ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("\n" + "----------Completed----------" + "\n");
+                Console.ForegroundColor = ConsoleColor.White;
         }
 
         private void ClassicParseModeImport(DataTable dataVariantB, int xlRowCount, int xlColCount, Excel.Range ExcelRange)
-        {
-            ProgressDialog progressDialog = new ProgressDialog();
+        {                
+          DataRow xlrow = null;
+           for (int j = 1; j <= xlColCount; j++)
+           {
+             dataVariantB.Columns.Add();
+           }
 
-            Thread backgroundThread = new Thread(
-                new ThreadStart(() =>
+            for (int i = 1; i <= xlRowCount; i++)
+            {
+                xlrow = dataVariantB.NewRow();
+                for (int j = 1; j <= xlColCount; j++)
                 {
-                    DataRow xlrow = null;
-                    progressDialog.progressBar1.Value = 0;
-                    progressDialog.progressBar1.Maximum = xlRowCount;
-
-                    for (int j = 1; j <= xlColCount; j++)
-                    {
-                        dataVariantB.Columns.Add();
-                        //progressDialog.stepLabel.Text = "Add columns to dataSet: column " + j.ToString();
-                    }
-
-                    for (int i = 1; i <= xlRowCount; i++)
-                    {
-                        xlrow = dataVariantB.NewRow();
-                        for (int j = 1; j <= xlColCount; j++)
-                        {
-                            xlrow[j - 1] = ExcelRange.Cells[i, j].Value;
-                            progressDialog.stepLabel.Text = "Fill dataSet: Cells[" + i.ToString() + "," + j.ToString() + "] of [" + xlRowCount + "," + xlColCount +"];    values: " + ExcelRange.Cells[i, j].Value;
-                            //Thread.Sleep(10);
-                        }
-                        //progressDialog.stepLabel.Text = "Add new row to dataSet: column " + i.ToString();
-                        progressDialog.progressBar1.Value += (progressDialog.progressBar1.Maximum / xlRowCount);
-                        dataVariantB.Rows.Add(xlrow);
-                    }
-                    progressDialog.progressBar1.Value += (progressDialog.progressBar1.Maximum - progressDialog.progressBar1.Value);
-                    progressDialog.BeginInvoke(new Action(() => progressDialog.Close()));
-                }));
-            backgroundThread.Start();
-            progressDialog.ShowDialog();
+                    xlrow[j - 1] = ExcelRange.Cells[i, j].Value;
+                }
+                dataVariantB.Rows.Add(xlrow);
+            }
         }
 
         private void OLEDBModeImport(string xlFileName, DataTable dataVariantOLEDB)
         {
-            ProgressDialog progressDialog = new ProgressDialog();
+             string strConnect = string.Empty;
+             string ExlVer = "12";
+                    
+            if (PropGrid.OleDBImportMode.VersionOleDB == "Microsoft.Jet.OLEDB.4.0")    
+                ExlVer = "8";
+                    strConnect = @"Provider=" + PropGrid.OleDBImportMode.VersionOleDB + ";" +
+                                 @"Data Source=" + xlFileName + ";" +
+                                 @"Extended Properties=" + Convert.ToChar(34).ToString() +
+                                 @"Excel " + ExlVer + ".0;HDR=" + PropGrid.OleDBImportMode.strHDR + ";IMEX=" + PropGrid.OleDBImportMode.IMEX.ToString() + ";" + Convert.ToChar(34).ToString() + ";";
 
-            Thread backgroundThread = new Thread(
-                new ThreadStart(() =>
-                {
-                    progressDialog.progressBar1.Value = 0;
-                    progressDialog.progressBar1.Maximum = 100;
-
-                    string strConnect = string.Empty;
-
-                    progressDialog.progressBar1.Value += 25;
-                    progressDialog.stepLabel.Text = "Get file: " + xlFileName;
-
-                    switch (ProviderOLEDB)
-                    {
-                        case 4:
-                            strConnect = @"Provider=Microsoft.Jet.OLEDB.4.0;" +
-                                         @"Data Source=" + xlFileName + ";" +
-                                         @"Extended Properties=" + Convert.ToChar(34).ToString() +
-                                         @"Excel 8.0;HDR=" + PropGrid.OleDBImportMode.strHDR + ";IMEX=" + PropGrid.OleDBImportMode.IMEX.ToString() + ";MaxScanRows=0;" + Convert.ToChar(34).ToString() + ";";
-                            progressDialog.stepLabel.Text = "Selected provider Microsoft.Jet.OLEDB.4.0";
-                            progressDialog.progressBar1.Value += 25;
-                            break;
-
-                        case 12:
-                            strConnect = @"Provider=Microsoft.ACE.OLEDB.12.0;" +
-                                         @"Data Source=" + xlFileName + ";" +
-                                         @"Extended Properties=" + Convert.ToChar(34).ToString() +
-                                         @"Excel 12.0;HDR=" + PropGrid.OleDBImportMode.strHDR + ";IMEX=" + PropGrid.OleDBImportMode.IMEX.ToString() + ";" + Convert.ToChar(34).ToString() + ";";
-
-                            progressDialog.stepLabel.Text = "Selected provider Microsoft.ACE.OLEDB.12.0";
-                            progressDialog.progressBar1.Value += 25;
-                            break;
-
-                        default:
-                            strConnect = "Provider=Microsoft.ACE.OLEDB.12.0;" +
-                                         @"Data Source=" + xlFileName + ";" +
-                                         @"Extended Properties=" + Convert.ToChar(34).ToString() +
-                                         @"Excel 12.0;HDR=" + PropGrid.OleDBImportMode.strHDR + ";IMEX=" + PropGrid.OleDBImportMode.IMEX.ToString() + ";" + Convert.ToChar(34).ToString() + ";";
-                            progressDialog.stepLabel.Text = "Selected provider Microsoft.ACE.OLEDB.12.0";
-                            progressDialog.progressBar1.Value += 25;
-                            break;
-                    }
-
-                    progressDialog.stepLabel.Text = "Create new OleDbConnection";
-                    progressDialog.progressBar1.Value += 25;
-
-                    int xlColCount = 0;
+             int xlColCount = 0;
 
                     using (OleDbConnection connect = new OleDbConnection(strConnect))
                     {
@@ -1382,45 +1368,153 @@ namespace dataEditor
                         cmd.CommandText = "SELECT * FROM [" + sheetName + "]";
                         OleDbDataReader reader = cmd.ExecuteReader();
 
-                        progressDialog.stepLabel.Text = "Fill dataSet";
-                        progressDialog.progressBar1.Value += 25;
+
 
                         dataVariantOLEDB.Load(reader);
                         connect.Close();
                         connect.Dispose();
                     }
 
-                    xlColCount = dataVariantOLEDB.Columns.Count;
-                    RowsCnt = dataVariantOLEDB.Rows.Count;
+             xlColCount = dataVariantOLEDB.Columns.Count;
+             RowsCnt = dataVariantOLEDB.Rows.Count;
 
-                    FillStatusGrid(RowsCnt, xlColCount);
+             FillStatusGrid(RowsCnt, xlColCount);
+
+             statusGridView.Rows[1].Cells[1].Value = xlColCount;
+             statusGridView.Rows[4].Cells[1].Value = 0;
+        }
+
+        private void EPPlusModeImport(DataTable dataExport, string xlFileName, int xlColCount, int xlRowCount)
+        {
+            ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+
+                    DataRow xlrow = null;
+
+                    FileInfo existingFile = new FileInfo(xlFileName);
+                    using (ExcelPackage package = new ExcelPackage(existingFile))
+                    {
+                        try
+                        {
+                            using (var stream = File.OpenRead(xlFileName))
+                            {
+                                package.Load(stream);
+                            }
+                            ExcelWorksheet worksheet = package.Workbook.Worksheets.First();
+                            string ErrorMessage = string.Empty;
+                            xlColCount = worksheet.Dimension.End.Column;  //get Column Count
+                            xlRowCount = worksheet.Dimension.End.Row;     //get row count
+                            RowsCnt = xlRowCount;
+
+                            FillStatusGrid(xlRowCount, xlColCount);
+
+                            statusGridView.Rows[1].Cells[1].Value = xlColCount;
+                            statusGridView.Rows[4].Cells[1].Value = 0;
+
+                            for (int col = 1; col <= xlColCount; col++)
+                            {
+                                dataExport.Columns.Add();
+                            }
+                            for (int row = 1; row <= xlRowCount; row++)
+                            {
+                                xlrow = dataExport.NewRow();
+                                for (int col = 1; col <= xlColCount; col++)
+                                {
+                                    xlrow[col-1] = worksheet.Cells[row, col].Value;
+                                    //Console.WriteLine(" Row:" + row + " column:" + col + " Value:" + worksheet.Cells[row, col].Value?.ToString().Trim());
+                                }
+                                dataExport.Rows.Add(xlrow);
+                            }
+                            //FirstUsedRow = worksheet.Dimension.Start.Row;
+                            //FirstUsedColumn = worksheet.Dimension.Start.Column;
+                            Console.WriteLine("FirstUsedRow: " + worksheet.Dimension.Start.Row.ToString());
+                            Console.WriteLine("FirstUsedColumn: " + worksheet.Dimension.Start.Column.ToString());
+                        }
+                        catch (Exception exp)
+                        {
+
+                        }
+                    }
+        }
+
+        private void NPOIModeImport(DataTable dataExport, string xlFileName)
+        {
+            DataRow xlrow = null;
+            ISheet wSheet;
+
+                using (FileStream stream = new FileStream(xlFileName, FileMode.Open, FileAccess.Read))
+                {
+                    if (Path.GetExtension(xlFileName) != ".xls")
+                    {
+                        XSSFWorkbook xssWorkbook = new XSSFWorkbook(stream);
+                        wSheet = xssWorkbook.GetSheetAt(0);
+                    }
+                    else
+                    {
+                        HSSFWorkbook hssWorkbook = new HSSFWorkbook(stream);
+                        wSheet = hssWorkbook.GetSheetAt(0);
+                    }
+                    FirstUsedRow = wSheet.FirstRowNum+1;
+
+                    int xlRowCount = wSheet.PhysicalNumberOfRows;
+                    int xlColCount = (wSheet.GetRow(wSheet.FirstRowNum).LastCellNum - wSheet.GetRow(wSheet.FirstRowNum).FirstCellNum)+1;
+                    RowsCnt = xlRowCount;
+                    int cellCnt = 0;
+                    int ColCreat = 0;
+
+                    for (int row = wSheet.FirstRowNum; row <= wSheet.PhysicalNumberOfRows; row++)
+                    {
+                        if (wSheet.GetRow(row) != null)
+                        {
+                            foreach (ICell cell in wSheet.GetRow(row))
+                            {
+                                cellCnt++;
+                                if (cell.ColumnIndex > ColCreat)
+                                    ColCreat = cell.ColumnIndex;
+                                if (cell.ColumnIndex < FirstUsedColumn)
+                                    FirstUsedColumn = cell.ColumnIndex+1;
+                            }
+                        }
+                    }
+                    xlColCount = ColCreat + 1;
+
+                    for (int col = 0; col <= ColCreat; col++)
+                    {
+                        dataExport.Columns.Add();
+                    }
+                    for (int row = wSheet.FirstRowNum; row <= wSheet.LastRowNum; row++)
+                    {
+                        if (wSheet.GetRow(row) != null)
+                        {
+                            xlrow = dataExport.NewRow();
+                            foreach (ICell cell in wSheet.GetRow(row))
+                            {
+                                var cellType = wSheet.GetRow(row).GetCell(cell.ColumnIndex);
+                                switch (cellType.CellType)
+                                {
+                                    case CellType.Numeric:
+                                        xlrow[cell.ColumnIndex] = wSheet.GetRow(row).GetCell(cell.ColumnIndex).NumericCellValue;
+                                        break;
+                                    case CellType.String:
+                                        xlrow[cell.ColumnIndex] = wSheet.GetRow(row).GetCell(cell.ColumnIndex).StringCellValue;
+                                        break;
+                                    case CellType.Blank:
+                                        xlrow[cell.ColumnIndex] = null;
+                                        break;
+                                }
+                            }
+                            dataExport.Rows.Add(xlrow);
+                        }
+                    }
+                    FillStatusGrid(xlRowCount, xlColCount);
 
                     statusGridView.Rows[1].Cells[1].Value = xlColCount;
                     statusGridView.Rows[4].Cells[1].Value = 0;
 
-                    progressDialog.BeginInvoke(new Action(() => progressDialog.Close()));
-                }));
-            backgroundThread.Start();
-            progressDialog.ShowDialog();
-        }
-
-        private void EPPlusModeImport(string xlFileName)
-        {
-            FileInfo existingFile = new FileInfo(xlFileName);
-            using (ExcelPackage package = new ExcelPackage(existingFile))
-            {
-                //get the first worksheet in the workbook
-                ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
-                int colCount = worksheet.Dimension.End.Column;  //get Column Count
-                int rowCount = worksheet.Dimension.End.Row;     //get row count
-                for (int row = 1; row <= rowCount; row++)
-                {
-                    for (int col = 1; col <= colCount; col++)
-                    {
-                        Console.WriteLine(" Row:" + row + " column:" + col + " Value:" + worksheet.Cells[row, col].Value?.ToString().Trim());
-                    }
+                    Console.WriteLine("Rows.Count in used Range: " + xlRowCount.ToString());
+                    Console.WriteLine("Columns.Count in used Range: " + xlColCount.ToString());
+                    Console.WriteLine("FirstUsedRow: " + FirstUsedRow.ToString());
+                    Console.WriteLine("FirstUsedColumn: " + FirstUsedColumn.ToString());
                 }
-            }
         }
 
         private void dataViewerFillHeadres(int FirstUsedRow, int FirstUsedColumn)
@@ -1836,10 +1930,8 @@ namespace dataEditor
                 { PropGrid.cntHeadsRows = RowsCnt; }
                 updateStatusGrid(PropGrid.cntHeadsRows);
             }
-
             optionsGrid.Refresh();
         }
-
 
         private void updateDataGridColors()
         {
@@ -2033,7 +2125,6 @@ namespace dataEditor
                 ShowWindow(GetConsoleWindow(), SHOW);
             }
         }
-
     }
     public static class ExtensionMethods
     {
@@ -2047,8 +2138,8 @@ namespace dataEditor
 
     public class ImportList
     {
-        public static int AvailableMethods = 2;
         public static List<string> ProvidersList = new List<string>() { };
+        public static List<string> AvailableMode = new List<string>() { };
         public static void CheckProviders()
         {
             int i = 0;
@@ -2059,12 +2150,23 @@ namespace dataEditor
                 {
                     Console.WriteLine("Provider registred: " + row["SOURCES_NAME"]);
                     ProvidersList.Add(row["SOURCES_NAME"].ToString());
-                    AvailableMethods = 3;
                     i++;
                 }
             }
-            if (i == 0)
-            Console.WriteLine("Providers Microsoft.ACE.OLEDB.12.0 or Microsoft.Jet.OLEDB.4.0 not registred");
+
+            Type officeType = Type.GetTypeFromProgID("Excel.Application");
+            if (officeType != null)
+            {
+                AvailableMode.Add("Excel Interop");
+            }
+
+            AvailableMode.Add("NPOI");
+            AvailableMode.Add("EPPlus");
+
+            if (i != 0)
+            {
+                AvailableMode.Add("OleDB");
+            }
         }
     }
 }
