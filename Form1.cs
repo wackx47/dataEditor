@@ -29,6 +29,8 @@ using NPOI.SS.UserModel;
 using NPOI.SS.Formula.Functions;
 using NPOI.HSSF.UserModel;
 using NPOI.XSSF.Streaming;
+using System.Diagnostics.Metrics;
+using NPOI.XSSF.Streaming.Values;
 
 namespace dataEditor
 {
@@ -87,7 +89,8 @@ namespace dataEditor
         Color fntTreeCl = Color.Black;
         Color fntClStaticDat = Color.Black;
 
-
+        BackgroundWorker bgWorker;
+        ProgressDialog progressDlg;
 
         private const int MF_BYCOMMAND = 0x00000000;
         public const int SC_CLOSE = 0xF060;
@@ -303,6 +306,7 @@ namespace dataEditor
                 TreeFormDestroyer();
                 dataViewer.ClearSelection();
                 optionsGrid.Refresh();
+                Convert2Tree.Enabled = true;
             }
 
             if (dataViewer.DataSource != null && statusGridView.Rows[3].Cells[1].Value != null && statusGridView.CurrentCellAddress.X == 1 && statusGridView.CurrentCellAddress.Y == 3 || statusGridView.CurrentCellAddress.Y == 4)
@@ -547,13 +551,7 @@ namespace dataEditor
 
         private void DynamicCycleData_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow row in dataViewer.Rows)
-            {
-                if(row.Cells[ActiveCell.ColumnIndex].Value != DBNull.Value)
-                {
-                    Console.WriteLine(row.Cells[ActiveCell.ColumnIndex].Value.ToString());
-                }
-            }
+
         }
 
         private void DataViewer_RowSelected(object sender, DataGridViewCellMouseEventArgs e)
@@ -1149,9 +1147,165 @@ namespace dataEditor
             }
         }
 
+
+        private void dataViewerConvertToMicroGen_MouseClick(Object sender, MouseEventArgs e)
+        {
+            dataViewer.ClearSelection();
+
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                System.Windows.Forms.DataGridView.HitTestInfo hittestinfo = dataViewer.HitTest(e.X, e.Y);
+                if (hittestinfo != null && hittestinfo.Type == DataGridViewHitTestType.Cell)
+                {
+                    ActiveCell = dataViewer.Rows[hittestinfo.RowIndex].Cells[hittestinfo.ColumnIndex];
+                    ActiveCell.Selected = true;
+                    CellViewer.Text = ActiveCell.Value.ToString();
+                    int count = CellViewer.GetLineFromCharIndex(int.MaxValue) + 1;
+
+
+                    for (int i = splitContainer_dataGrids.SplitterDistance; i < 18 * (count); i += 5)
+                        splitContainer_dataGrids.SplitterDistance = i;
+
+                    for (int i = splitContainer_dataGrids.SplitterDistance; i > 18 * (count); i -= 5)
+                        splitContainer_dataGrids.SplitterDistance = i;
+                }
+            }
+        }
+
+        private void MenuMicrogeneration_Click(object sender, EventArgs e)
+        {
+            int InitRowStart= 0;
+            int InitRowEnd = 0;
+            int number;
+            decimal ConsumptionValue;
+            decimal GenerationValue;
+
+            DataTable ConvertExcel = new DataTable();
+            ConvertExcel.Clear();
+            //ConvertExcel.Columns.Add("id");
+            ConvertExcel.Columns.Add(new DataColumn("Agreement", typeof(string)));
+            ConvertExcel.Columns.Add(new DataColumn("DateIntoForce", typeof(DateOnly)));
+            ConvertExcel.Columns.Add(new DataColumn("Name", typeof(string)));
+            ConvertExcel.Columns.Add(new DataColumn("Type", typeof(string)));
+            ConvertExcel.Columns.Add(new DataColumn("inn", typeof(int)));
+            ConvertExcel.Columns.Add(new DataColumn("ConsumptionSumm", typeof(decimal)));
+            ConvertExcel.Columns.Add(new DataColumn("GenerationSumm", typeof(decimal)));
+            ConvertExcel.Columns.Add(new DataColumn("Sell", typeof(decimal)));
+            ConvertExcel.Columns.Add(new DataColumn("Buy", typeof(decimal)));
+            ConvertExcel.Columns.Add(new DataColumn("Price", typeof(decimal)));
+            ConvertExcel.Columns.Add(new DataColumn("Cost", typeof(decimal)));
+
+
+            for (int i=0; i<dataViewer.RowCount; i++)
+            {
+                bool result = Int32.TryParse(dataViewer.Rows[i].Cells[0].Value.ToString(), out number);
+                if (dataViewer.Rows[i].Cells[0].Value != DBNull.Value && result)
+                {
+                    InitRowStart = i+1;
+                    DataRow row = ConvertExcel.NewRow();
+                    //row["id"] = number;
+                    Console.WriteLine("AddToTableRowWithID: " + number);
+                    row["Name"] = dataViewer.Rows[i].Cells[2].Value.ToString().Split(',').First();
+                    Console.WriteLine("AddToTableRowWithName: " + dataViewer.Rows[i].Cells[2].Value.ToString());
+
+                    if (dataViewer.Rows[i].Cells[7].Value.ToString() == "A+, êÂò*÷" && dataViewer.Rows[i+1].Cells[7].Value.ToString() == "A-, êÂò*÷")
+                    {
+                        decimal.TryParse(dataViewer.Rows[i].Cells[11].Value.ToString(), out ConsumptionValue);
+                        row["ConsumptionSumm"] = Math.Round(ConsumptionValue, 0);
+                        Console.WriteLine("ConsumptionSumm: " + dataViewer.Rows[InitRowStart - 1].Cells[11].Value.ToString());
+                        InitRowStart++;
+                        InitRowEnd = InitRowStart;
+                    }
+                    else
+                    {
+                        while (InitRowStart < dataViewer.Rows.Count && dataViewer.Rows[InitRowStart].Cells[0].Value == DBNull.Value)
+                        {
+                            InitRowStart++;
+                            InitRowEnd = InitRowStart;
+                            if (InitRowStart < dataViewer.Rows.Count && dataViewer.Rows[InitRowStart].Cells[7].Value.ToString() == "A-, êÂò*÷")
+                            {
+                                decimal.TryParse(dataViewer.Rows[InitRowStart - 1].Cells[11].Value.ToString(), out ConsumptionValue);
+                                row["ConsumptionSumm"] = Math.Round(ConsumptionValue, 0);
+                                Console.WriteLine("ConsumptionSumm: " + dataViewer.Rows[InitRowStart - 1].Cells[11].Value.ToString());
+                            }
+                        }
+                    }
+                    decimal.TryParse(dataViewer.Rows[InitRowEnd - 1].Cells[11].Value.ToString(), out GenerationValue);
+                    row["GenerationSumm"] = Math.Round(GenerationValue,0);
+                    Console.WriteLine("GenerationSumm: " + dataViewer.Rows[InitRowEnd-1].Cells[11].Value.ToString() + "\n");
+                    ConvertExcel.Rows.Add(row);
+                }
+            }
+
+            dataViewer.DataSource = null;
+            DataTable DT = (DataTable)dataViewer.DataSource;
+            if (DT != null)
+                DT.Clear();
+
+            dataViewer.Rows.Clear();
+            dataViewer.Refresh();
+            int count = this.dataViewer.Columns.Count;
+            for (int i = 0; i < count; i++)
+                this.dataViewer.Columns.RemoveAt(0);
+
+
+            dataViewer.DataSource = ConvertExcel;
+
+            dataViewer.MouseDown -= new MouseEventHandler(dataViewer_MouseClick);
+            dataViewer.RowHeaderMouseClick -= new DataGridViewCellMouseEventHandler(DataViewer_RowSelected);
+            dataViewer.ColumnHeaderMouseClick -= new DataGridViewCellMouseEventHandler(DataViewer_ColumnsSelected);
+            dataViewer.MouseDown += new MouseEventHandler(dataViewerConvertToMicroGen_MouseClick);
+
+            splitContainer_rightProps.Panel1Collapsed = true;
+
+            //dataViewer.Columns["id"].Width = 40;
+            dataViewer.Columns["Agreement"].Width = 120;
+            dataViewer.Columns["DateIntoForce"].Width = 60;
+            dataViewer.Columns["Name"].Width = 300;
+            dataViewer.Columns["Type"].Width = 40;
+            dataViewer.Columns["inn"].Width = 100;
+            dataViewer.Columns["ConsumptionSumm"].Width = 50;
+            dataViewer.Columns["GenerationSumm"].Width = 50;
+            dataViewer.Columns["Sell"].Width = 50;
+            dataViewer.Columns["Buy"].Width = 50;
+            dataViewer.Columns["Price"].Width = 50;
+            dataViewer.Columns["Cost"].Width = 100;
+
+            this.Width = 1280;
+
+            foreach (DataGridViewRow dr in dataViewer.Rows)
+            {
+                dr.HeaderCell.Value = (dr.Index + 1).ToString();
+                try
+                {
+                    if (Convert.ToInt32(dr.Cells["GenerationSumm"].Value)> Convert.ToInt32(dr.Cells["ConsumptionSumm"].Value))
+                    {
+                        dr.Cells["Sell"].Value = 0;
+                        dr.Cells["Buy"].Value = Convert.ToInt32(dr.Cells["GenerationSumm"].Value) - Convert.ToInt32(dr.Cells["ConsumptionSumm"].Value);
+                    }
+                    else
+                    {
+                        dr.Cells["Sell"].Value = Convert.ToInt32(dr.Cells["ConsumptionSumm"].Value) - Convert.ToInt32(dr.Cells["GenerationSumm"].Value);
+                        dr.Cells["Buy"].Value = 0;
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+
+
+            foreach(DataGridViewColumn cl in dataViewer.Columns)
+            {
+                cl.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
+
+            dataViewer.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        }
+
         private void ImportEXCL_Click(object sender, EventArgs e)
         {
-
             dataViewer.DataSource = null;
             DataTable DT = (DataTable)dataViewer.DataSource;
             if (DT != null)
@@ -1174,12 +1328,6 @@ namespace dataEditor
             string xlFileName = ofd.FileName;
             ExlFileName = Path.GetFileName(xlFileName);
 
-            if (Path.GetExtension(xlFileName) == ".xlsx" && PropGrid.OleDBImportMode.VersionOleDB == "Microsoft.Jet.OLEDB.4.0")
-            {
-                Console.WriteLine("Microsoft.Jet.OLEDB.4.0 not supported this file extension");
-                return;
-            }
-
             int xlRowCount = 0;
             int xlColCount = 0;
 
@@ -1189,129 +1337,95 @@ namespace dataEditor
 
             Console.WriteLine("Open new Excel file: " + ExlFileName);
 
-                if (PropGrid.ImportMode == "EPPlus" && Path.GetExtension(xlFileName) != ".xls")
-                {
-                    try
-                    {
-                        using (var stream = File.OpenRead(xlFileName))
+            switch (PropGrid.ImportMode)
+            {
+                case "EEPlus":
+                        try
                         {
-                            DataTable dataExport = new DataTable();
-                            EPPlusModeImport(dataExport, xlFileName, xlRowCount, xlColCount);
-                            dataViewer.DataSource = dataExport;
+                            using (var stream = File.OpenRead(xlFileName))
+                            {
+                                DataTable dataExport = new DataTable();
+                                EPPlusModeImport(dataExport, xlFileName, xlRowCount, xlColCount);
+                                dataViewer.DataSource = dataExport;
 
-                            dataViewerFillHeadres(1, 1);
+                                dataViewerFillHeadres(1, 1);
 
-                            tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
-                            splitContainer_rightProps.Panel1Collapsed = false;
-                            optionsGrid.Refresh();
+                                tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
+                                splitContainer_rightProps.Panel1Collapsed = false;
+                                optionsGrid.Refresh();
 
-                            Console.WriteLine("Rows.Count in dataGridView: " + RowsCnt.ToString());
-                            Console.WriteLine("Columns.Count in dataGridView: " + dataViewer.Columns.Count.ToString());
+                                Console.WriteLine("Rows.Count in dataGridView: " + RowsCnt.ToString());
+                                Console.WriteLine("Columns.Count in dataGridView: " + dataViewer.Columns.Count.ToString());
+                            }
                         }
-                    }
-                    catch
-                    {
-                        Console.WriteLine("The process cannot access the file because it is being used by another process");
-                    }
-                }
-
-                if (PropGrid.ImportMode == "NPOI")
-                {
-                    try
-                    {
-                        using (var stream = File.OpenRead(xlFileName))
+                        catch
                         {
-                            DataTable dataExport = new DataTable();
-                            NPOIModeImport(dataExport, xlFileName);
-                            dataViewer.DataSource = dataExport;
-                            dataViewerFillHeadres(FirstUsedRow, FirstUsedColumn);
-
-                            tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
-                            splitContainer_rightProps.Panel1Collapsed = false;
-                            optionsGrid.Refresh();
+                            Console.WriteLine("The process cannot access the file because it is being used by another process");
                         }
-                    }
-                    catch
-                    {
-                        Console.WriteLine("The process cannot access the file because it is being used by another process");
-                    }
-                }
+                    break;
 
-                if (PropGrid.ImportMode == "Excel Interop")            //Classic Import Mode
-                {
-                    Excel.Application xlApp = new Excel.Application();
-                    Excel.Workbook xlWB;
-                    Excel.Worksheet xlSht;
-                    xlWB = xlApp.Workbooks.Add(xlFileName);
-                    xlSht = xlWB.Worksheets[1];
-                    Excel.Range ExcelRange = xlSht.UsedRange;
-                    xlRowCount = ExcelRange.Rows.Count;
-                    xlColCount = ExcelRange.Columns.Count;
-                    RowsCnt = xlRowCount;
-
-                    string Range = (ExcelRange.get_Address(true, true, Excel.XlReferenceStyle.xlR1C1, false, false).ToString().Split(':').First()).Split('R').Last();
-                    FirstUsedRow = Convert.ToInt32(Range.Split('C').First());
-                    FirstUsedColumn = Convert.ToInt32(Range.Split('C').Last());
-                    String SheetName = xlSht.Name;
-
-
-                    DataTable dataVariantB = new DataTable();
-                    ClassicParseModeImport(dataVariantB, xlRowCount, xlColCount, ExcelRange);
-                    dataViewer.DataSource = dataVariantB;
-
-                    dataViewerFillHeadres(FirstUsedRow, FirstUsedColumn);
-                    FillStatusGrid(xlRowCount, xlColCount);
-
-                    statusGridView.Rows[1].Cells[1].Value = xlColCount;
-                    statusGridView.Rows[4].Cells[1].Value = 0;
-
-                    tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
-                    splitContainer_rightProps.Panel1Collapsed = false;
-                    optionsGrid.Refresh();
-
-                    Console.WriteLine("FirstUsedRow: " + FirstUsedRow.ToString());
-                    Console.WriteLine("FirstUsedColumn: " + FirstUsedColumn.ToString());
-                    Console.WriteLine("Rows.Count in used Range: " + RowsCnt.ToString());
-                    Console.WriteLine("Columns.Count in used Range: " + dataViewer.Columns.Count.ToString());
-
-                    xlWB.Close(false, false, false);
-                    xlApp.Quit();
-                    xlApp = null;
-                    xlWB = null;
-                    xlSht = null;
-                }
-                if (PropGrid.ImportMode == "OleDB")
-                {
-                    DataTable dataVariantOLEDB = new DataTable();
-                    OLEDBModeImport(xlFileName, dataVariantOLEDB);
-                    dataViewer.DataSource = dataVariantOLEDB;
-
-                    dataViewerFillHeadres(1, 1);
-
-                    int ick = 0;
-
-                    for (int i = 0; i < (dataVariantOLEDB.Rows.Count); i++)
-                    {
-                        if (dataViewer.Rows[i].Cells[dataVariantOLEDB.Columns.Count - 1].Value == DBNull.Value)
+                case "NPOI":
+                        try
                         {
-                            ick++;
+                            using (var stream = File.OpenRead(xlFileName))
+                            {
+                                DataTable dataExport = new DataTable();
+                                NPOIModeImport(dataExport, xlFileName);
+                                dataViewer.DataSource = dataExport;
+                                dataViewerFillHeadres(FirstUsedRow, FirstUsedColumn);
+
+                                tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
+                                splitContainer_rightProps.Panel1Collapsed = false;
+                                optionsGrid.Refresh();
+                            }
                         }
-                    }
+                        catch
+                        {
+                            Console.WriteLine("The process cannot access the file because it is being used by another process");
+                        }
+                    break;
 
-                    int dataColCount = dataVariantOLEDB.Columns.Count;
+                case "Excel Interop":
+                    IteropModeImport(xlFileName, xlRowCount, xlColCount);
+                    break;
 
-                    if (ick == dataVariantOLEDB.Rows.Count)
-                    {
-                        dataColCount = dataVariantOLEDB.Columns.Count - 1;
-                        dataViewer.Columns.RemoveAt(dataColCount);
-                        Console.WriteLine("Deleted last Column");
-                    }
+                case "OleDB":
+                        if (Path.GetExtension(xlFileName) == ".xlsx" && PropGrid.OleDBImportMode.VersionOleDB == "Microsoft.Jet.OLEDB.4.0")
+                        {
+                            Console.WriteLine("Microsoft.Jet.OLEDB.4.0 not supported this file extension");
+                            return;
+                        }
 
-                    tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
-                    splitContainer_rightProps.Panel1Collapsed = false;
-                    optionsGrid.Refresh();
-                }
+                        DataTable dataVariantOLEDB = new DataTable();
+                        OLEDBModeImport(xlFileName, dataVariantOLEDB);
+                        dataViewer.DataSource = dataVariantOLEDB;
+                        dataViewerFillHeadres(1, 1);
 
+                        int ick = 0;
+
+                        for (int i = 0; i < (dataVariantOLEDB.Rows.Count); i++)
+                        {
+                            if (dataViewer.Rows[i].Cells[dataVariantOLEDB.Columns.Count - 1].Value == DBNull.Value)
+                            {
+                                ick++;
+                            }
+                        }
+
+                        int dataColCount = dataVariantOLEDB.Columns.Count;
+
+                        if (ick == dataVariantOLEDB.Rows.Count)
+                        {
+                            dataColCount = dataVariantOLEDB.Columns.Count - 1;
+                            dataViewer.Columns.RemoveAt(dataColCount);
+                            Console.WriteLine("Deleted last Column");
+                        }
+
+                        tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
+                        splitContainer_rightProps.Panel1Collapsed = false;
+                        optionsGrid.Refresh();
+                    break;
+            }
+            
                 dataViewer.AllowUserToAddRows = false;
                 dataViewer.AllowUserToDeleteRows = false;
 
@@ -1320,34 +1434,88 @@ namespace dataEditor
                 dataViewer.RowHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_RowSelected);
                 dataViewer.ColumnHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_ColumnsSelected);
                 dataViewer.Update();
+                
+                MenuMicrogeneration.Enabled = true;
 
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("\n" + "----------Completed----------" + "\n");
                 Console.ForegroundColor = ConsoleColor.White;
         }
 
-        private void ClassicParseModeImport(DataTable dataVariantB, int xlRowCount, int xlColCount, Excel.Range ExcelRange)
-        {                
-          DataRow xlrow = null;
-           for (int j = 1; j <= xlColCount; j++)
-           {
-             dataVariantB.Columns.Add();
-           }
+        private void IteropModeImport(string xlFileName, int xlRowCount, int xlColCount)
+        {
+            Excel.Application xlApp = new Excel.Application();
+            Excel.Workbook xlWB;
+            Excel.Worksheet xlSht;
+            xlWB = xlApp.Workbooks.Add(xlFileName);
+            xlSht = xlWB.Worksheets[1];
+            Excel.Range ExcelRange = xlSht.UsedRange;
+            xlRowCount = ExcelRange.Rows.Count;
+            xlColCount = ExcelRange.Columns.Count;
+            RowsCnt = xlRowCount;
 
-            for (int i = 1; i <= xlRowCount; i++)
-            {
-                xlrow = dataVariantB.NewRow();
-                for (int j = 1; j <= xlColCount; j++)
+            string Range = (ExcelRange.get_Address(true, true, Excel.XlReferenceStyle.xlR1C1, false, false).ToString().Split(':').First()).Split('R').Last();
+            FirstUsedRow = Convert.ToInt32(Range.Split('C').First());
+            FirstUsedColumn = Convert.ToInt32(Range.Split('C').Last());
+            String SheetName = xlSht.Name;
+            DataTable dataVariantB = new DataTable();
+
+            List<object> arguments = new List<object>();
+            arguments.Add(dataVariantB);
+            arguments.Add(xlRowCount);
+            arguments.Add(xlColCount);
+            arguments.Add(ExcelRange);
+
+            bgWorker = new BackgroundWorker();
+            bgWorker.WorkerReportsProgress = true;
+            bgWorker.WorkerSupportsCancellation = true;
+            bgWorker.DoWork += new DoWorkEventHandler(bgWorker_Interop);
+
+            bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
+            bgWorker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
+
+            bgWorker.RunWorkerAsync(arguments);
+
+            progressDlg = new ProgressDialog();
+            progressDlg.stopProgress = new EventHandler((s, e1) => {
+                switch (progressDlg.DialogResult)
                 {
-                    xlrow[j - 1] = ExcelRange.Cells[i, j].Value;
+                    case DialogResult.Cancel:
+                        bgWorker.CancelAsync();
+                        progressDlg.Close();
+                        break;
                 }
-                dataVariantB.Rows.Add(xlrow);
-            }
+            });
+            progressDlg.ShowDialog();
+
+            
+            dataViewer.DataSource = dataVariantB;
+
+            dataViewerFillHeadres(FirstUsedRow, FirstUsedColumn);
+            FillStatusGrid(xlRowCount, xlColCount);
+
+            statusGridView.Rows[1].Cells[1].Value = xlColCount;
+            statusGridView.Rows[4].Cells[1].Value = 0;
+
+            tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
+            splitContainer_rightProps.Panel1Collapsed = false;
+            optionsGrid.Refresh();
+
+            Console.WriteLine("FirstUsedRow: " + FirstUsedRow.ToString());
+            Console.WriteLine("FirstUsedColumn: " + FirstUsedColumn.ToString());
+            Console.WriteLine("Rows.Count in used Range: " + RowsCnt.ToString());
+            Console.WriteLine("Columns.Count in used Range: " + dataViewer.Columns.Count.ToString());
+
+            xlWB.Close(false, false, false);
+            xlApp.Quit();
+            xlApp = null;
+            xlWB = null;
+            xlSht = null;
         }
 
         private void OLEDBModeImport(string xlFileName, DataTable dataVariantOLEDB)
         {
-             string strConnect = string.Empty;
+            string strConnect = string.Empty;
              string ExlVer = "12";
                     
             if (PropGrid.OleDBImportMode.VersionOleDB == "Microsoft.Jet.OLEDB.4.0")    
@@ -1441,80 +1609,106 @@ namespace dataEditor
             DataRow xlrow = null;
             ISheet wSheet;
 
-                using (FileStream stream = new FileStream(xlFileName, FileMode.Open, FileAccess.Read))
+            using (FileStream stream = new FileStream(xlFileName, FileMode.Open, FileAccess.Read))
+            {
+                if (Path.GetExtension(xlFileName) != ".xls")
                 {
-                    if (Path.GetExtension(xlFileName) != ".xls")
-                    {
-                        XSSFWorkbook xssWorkbook = new XSSFWorkbook(stream);
-                        wSheet = xssWorkbook.GetSheetAt(0);
-                    }
-                    else
-                    {
-                        HSSFWorkbook hssWorkbook = new HSSFWorkbook(stream);
-                        wSheet = hssWorkbook.GetSheetAt(0);
-                    }
-                    FirstUsedRow = wSheet.FirstRowNum+1;
-
-                    int xlRowCount = wSheet.PhysicalNumberOfRows;
-                    int xlColCount = (wSheet.GetRow(wSheet.FirstRowNum).LastCellNum - wSheet.GetRow(wSheet.FirstRowNum).FirstCellNum)+1;
-                    RowsCnt = xlRowCount;
-                    int cellCnt = 0;
-                    int ColCreat = 0;
-
-                    for (int row = wSheet.FirstRowNum; row <= wSheet.PhysicalNumberOfRows; row++)
-                    {
-                        if (wSheet.GetRow(row) != null)
-                        {
-                            foreach (ICell cell in wSheet.GetRow(row))
-                            {
-                                cellCnt++;
-                                if (cell.ColumnIndex > ColCreat)
-                                    ColCreat = cell.ColumnIndex;
-                                if (cell.ColumnIndex < FirstUsedColumn)
-                                    FirstUsedColumn = cell.ColumnIndex+1;
-                            }
-                        }
-                    }
-                    xlColCount = ColCreat + 1;
-
-                    for (int col = 0; col <= ColCreat; col++)
-                    {
-                        dataExport.Columns.Add();
-                    }
-                    for (int row = wSheet.FirstRowNum; row <= wSheet.LastRowNum; row++)
-                    {
-                        if (wSheet.GetRow(row) != null)
-                        {
-                            xlrow = dataExport.NewRow();
-                            foreach (ICell cell in wSheet.GetRow(row))
-                            {
-                                var cellType = wSheet.GetRow(row).GetCell(cell.ColumnIndex);
-                                switch (cellType.CellType)
-                                {
-                                    case CellType.Numeric:
-                                        xlrow[cell.ColumnIndex] = wSheet.GetRow(row).GetCell(cell.ColumnIndex).NumericCellValue;
-                                        break;
-                                    case CellType.String:
-                                        xlrow[cell.ColumnIndex] = wSheet.GetRow(row).GetCell(cell.ColumnIndex).StringCellValue;
-                                        break;
-                                    case CellType.Blank:
-                                        xlrow[cell.ColumnIndex] = null;
-                                        break;
-                                }
-                            }
-                            dataExport.Rows.Add(xlrow);
-                        }
-                    }
-                    FillStatusGrid(xlRowCount, xlColCount);
-
-                    statusGridView.Rows[1].Cells[1].Value = xlColCount;
-                    statusGridView.Rows[4].Cells[1].Value = 0;
-
-                    Console.WriteLine("Rows.Count in used Range: " + xlRowCount.ToString());
-                    Console.WriteLine("Columns.Count in used Range: " + xlColCount.ToString());
-                    Console.WriteLine("FirstUsedRow: " + FirstUsedRow.ToString());
-                    Console.WriteLine("FirstUsedColumn: " + FirstUsedColumn.ToString());
+                    XSSFWorkbook xssWorkbook = new XSSFWorkbook(stream);
+                    wSheet = xssWorkbook.GetSheetAt(0);
                 }
+                else
+                {
+                    HSSFWorkbook hssWorkbook = new HSSFWorkbook(stream);
+                    wSheet = hssWorkbook.GetSheetAt(0);
+                }
+                FirstUsedRow = wSheet.FirstRowNum + 1;
+
+                int xlRowCount = wSheet.PhysicalNumberOfRows;
+                int xlColCount = (wSheet.GetRow(wSheet.FirstRowNum).LastCellNum - wSheet.GetRow(wSheet.FirstRowNum).FirstCellNum) + 1;
+                RowsCnt = xlRowCount;
+                int cellCnt = 0;
+                int ColCreat = 0;
+
+                for (int row = wSheet.FirstRowNum; row <= wSheet.PhysicalNumberOfRows; row++)
+                {
+                    if (wSheet.GetRow(row) != null)
+                    {
+                        foreach (ICell cell in wSheet.GetRow(row))
+                        {
+                            cellCnt++;
+                            if (cell.ColumnIndex > ColCreat)
+                                ColCreat = cell.ColumnIndex;
+                            if (cell.ColumnIndex < FirstUsedColumn)
+                                FirstUsedColumn = cell.ColumnIndex + 1;
+                        }
+                    }
+                }
+                xlColCount = ColCreat + 1;
+
+                for (int col = 0; col <= ColCreat; col++)
+                {
+                    dataExport.Columns.Add();
+                }
+                for (int row = wSheet.FirstRowNum; row <= wSheet.LastRowNum; row++)
+                {
+                    if (wSheet.GetRow(row) != null)
+                    {
+                        xlrow = dataExport.NewRow();
+                        foreach (ICell cell in wSheet.GetRow(row))
+                        {
+                            var cellType = wSheet.GetRow(row).GetCell(cell.ColumnIndex);
+                            switch (cellType.CellType)
+                            {
+                                case CellType.Numeric:
+                                    xlrow[cell.ColumnIndex] = wSheet.GetRow(row).GetCell(cell.ColumnIndex).NumericCellValue;
+                                    break;
+                                case CellType.String:
+                                    xlrow[cell.ColumnIndex] = wSheet.GetRow(row).GetCell(cell.ColumnIndex).StringCellValue;
+                                    break;
+                                case CellType.Blank:
+                                    xlrow[cell.ColumnIndex] = null;
+                                    break;
+                            }
+                        }
+                        dataExport.Rows.Add(xlrow);
+                    }
+                }
+            FillStatusGrid(xlRowCount, xlColCount);
+
+            statusGridView.Rows[1].Cells[1].Value = xlColCount;
+            statusGridView.Rows[4].Cells[1].Value = 0;
+
+            Console.WriteLine("Rows.Count in used Range: " + xlRowCount.ToString());
+            Console.WriteLine("Columns.Count in used Range: " + xlColCount.ToString());
+            Console.WriteLine("FirstUsedRow: " + FirstUsedRow.ToString());
+            Console.WriteLine("FirstUsedColumn: " + FirstUsedColumn.ToString());
+            }
+        }
+
+        private void backWorkerDialog()
+        {
+            bgWorker = new BackgroundWorker();
+            bgWorker.WorkerReportsProgress = true;
+            bgWorker.WorkerSupportsCancellation = true;
+            bgWorker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
+            bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
+            bgWorker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
+
+            bgWorker.RunWorkerAsync();
+
+            progressDlg = new ProgressDialog();
+            progressDlg.stopProgress = new EventHandler((s, e1) =>
+            {
+                switch (progressDlg.DialogResult)
+                {
+                    case DialogResult.Cancel:
+                        bgWorker.CancelAsync();
+                        progressDlg.Close();
+                        break;
+                }
+
+            });
+            progressDlg.ShowDialog();
         }
 
         private void dataViewerFillHeadres(int FirstUsedRow, int FirstUsedColumn)
@@ -1650,6 +1844,12 @@ namespace dataEditor
                     }
                 }
             }
+            if (HFR != 0)
+            {
+                Convert2Tree.Enabled = true;
+            }
+
+
             tempPropVal.Add(Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value)); //[1] - Rows counts take Header
             dataViewer.ClearSelection();
             statusGridView.ClearSelection();
@@ -1858,6 +2058,7 @@ namespace dataEditor
             TreeColViewer.Rows.Clear();
             TextExtractColumns.Text = "";
             allowVoid = false;
+            Convert2Tree.Enabled = false;
         }
 
         private void ColsChecker()
@@ -2125,6 +2326,74 @@ namespace dataEditor
                 ShowWindow(GetConsoleWindow(), SHOW);
             }
         }
+
+        private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            for (int i = 1; i <= 100; i++)
+            {
+                if (worker.CancellationPending == true)
+                {
+                    e.Cancel = true;
+                    break;
+                }
+                else
+                {
+                    Thread.Sleep(1);
+                    worker.ReportProgress(i);
+                }
+            }
+        }
+
+        private void bgWorker_Interop(object sender, DoWorkEventArgs e)
+        {
+            List<object> genericlist = e.Argument as List<object>;
+            DataTable dataVariantB = (DataTable)genericlist[0];
+            int xlRowCount = (int)genericlist[1];
+            int xlColCount = (int)genericlist[2];
+            Excel.Range ExcelRange = (Excel.Range)genericlist[3];
+
+            BackgroundWorker worker = sender as BackgroundWorker;
+            DataRow xlrow = null;
+
+            
+            for (int j = 1; j <= xlColCount; j++)
+            {
+                dataVariantB.Columns.Add();
+            }
+
+            for (int i = 1; i <= xlRowCount; i++)
+            {
+                if (worker.CancellationPending == true)
+                {
+                    e.Cancel = true;
+                    break;
+                }
+                else
+                {
+                    xlrow = dataVariantB.NewRow();
+                    for (int j = 1; j <= xlColCount; j++)
+                    {
+                        xlrow[j - 1] = ExcelRange.Cells[i, j].Value;
+                    }
+                    dataVariantB.Rows.Add(xlrow);
+                    int percentage = (i * 100) / xlRowCount;
+                    worker.ReportProgress(percentage);
+                }
+            }
+        }
+
+        private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            progressDlg.Message = ("Extracting data: " + e.ProgressPercentage.ToString() + "%");
+            progressDlg.ProgressValue = e.ProgressPercentage;
+        }
+
+        private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            progressDlg.Close();
+        }
+
     }
     public static class ExtensionMethods
     {

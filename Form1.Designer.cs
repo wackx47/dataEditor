@@ -66,9 +66,10 @@ namespace dataEditor
             this.showConsoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeAllExcelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.regLibOfficeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.universalReaderToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.universalReaderToolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xFAReaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuMicrogeneration = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.splitContainer_bigMain = new System.Windows.Forms.SplitContainer();
@@ -120,6 +121,7 @@ namespace dataEditor
             // 
             this.Convert2Tree.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Convert2Tree.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Convert2Tree.Enabled = false;
             this.Convert2Tree.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.Convert2Tree.Location = new System.Drawing.Point(747, 21);
             this.Convert2Tree.Name = "Convert2Tree";
@@ -413,14 +415,14 @@ namespace dataEditor
             // ImportExcel
             // 
             this.ImportExcel.Name = "ImportExcel";
-            this.ImportExcel.Size = new System.Drawing.Size(138, 22);
-            this.ImportExcel.Text = "New Presset";
+            this.ImportExcel.Size = new System.Drawing.Size(180, 22);
+            this.ImportExcel.Text = "Open";
             this.ImportExcel.Click += new System.EventHandler(this.ImportEXCL_Click);
             // 
             // importXMLToolStripMenuItem
             // 
             this.importXMLToolStripMenuItem.Name = "importXMLToolStripMenuItem";
-            this.importXMLToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.importXMLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.importXMLToolStripMenuItem.Text = "Import XML";
             this.importXMLToolStripMenuItem.Click += new System.EventHandler(this.import2Universal_Click);
             // 
@@ -455,19 +457,20 @@ namespace dataEditor
             this.regLibOfficeToolStripMenuItem.Text = "RegLibOffice";
             this.regLibOfficeToolStripMenuItem.Click += new System.EventHandler(this.RigesterCOMfix);
             // 
-            // universalReaderToolStripMenuItem1
+            // universalReaderToolStripMenu
             // 
-            this.universalReaderToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.universalReaderToolStripMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openFileToolStripMenuItem,
-            this.xFAReaderToolStripMenuItem});
-            this.universalReaderToolStripMenuItem1.Name = "universalReaderToolStripMenuItem1";
-            this.universalReaderToolStripMenuItem1.Size = new System.Drawing.Size(106, 20);
-            this.universalReaderToolStripMenuItem1.Text = "Universal Reader";
+            this.xFAReaderToolStripMenuItem,
+            this.MenuMicrogeneration});
+            this.universalReaderToolStripMenu.Name = "universalReaderToolStripMenu";
+            this.universalReaderToolStripMenu.Size = new System.Drawing.Size(106, 20);
+            this.universalReaderToolStripMenu.Text = "Universal Reader";
             // 
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.openFileToolStripMenuItem.Text = "Open File";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.FileWriter);
             // 
@@ -475,8 +478,16 @@ namespace dataEditor
             // 
             this.xFAReaderToolStripMenuItem.Enabled = false;
             this.xFAReaderToolStripMenuItem.Name = "xFAReaderToolStripMenuItem";
-            this.xFAReaderToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.xFAReaderToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.xFAReaderToolStripMenuItem.Text = "XFA reader";
+            // 
+            // MenuMicrogeneration
+            // 
+            this.MenuMicrogeneration.Enabled = false;
+            this.MenuMicrogeneration.Name = "MenuMicrogeneration";
+            this.MenuMicrogeneration.Size = new System.Drawing.Size(162, 22);
+            this.MenuMicrogeneration.Text = "Microgeneration";
+            this.MenuMicrogeneration.Click += new System.EventHandler(this.MenuMicrogeneration_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -492,7 +503,7 @@ namespace dataEditor
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileMenu,
             this.MenuOptions,
-            this.universalReaderToolStripMenuItem1,
+            this.universalReaderToolStripMenu,
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -648,7 +659,7 @@ namespace dataEditor
         private ToolStripMenuItem MenuOptions;
         private ToolStripMenuItem showConsoleToolStripMenuItem;
         private ToolStripMenuItem closeAllExcelsToolStripMenuItem;
-        private ToolStripMenuItem universalReaderToolStripMenuItem1;
+        private ToolStripMenuItem universalReaderToolStripMenu;
         private ToolStripMenuItem openFileToolStripMenuItem;
         private ToolStripMenuItem aboutToolStripMenuItem;
         private MenuStrip menuStrip1;
@@ -664,5 +675,6 @@ namespace dataEditor
         private SplitContainer splitContainer_dataGrids;
         private TextBox CellViewer;
         private ToolStripMenuItem dynamicCycleToolStripMenuItem;
+        private ToolStripMenuItem MenuMicrogeneration;
     }
 }

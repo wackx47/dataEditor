@@ -25,7 +25,7 @@ namespace dataEditor
 {
     class PropertySet
         {
-        string appVersion = "0.876a";
+        string appVersion = "0.901a";
         [Browsable(true)]
         [CategoryAttribute("App"), ReadOnlyAttribute(true)]
         public string AppVersion
@@ -33,7 +33,7 @@ namespace dataEditor
             get { return appVersion; }
             set { appVersion = value; }
         }
-        string appBuild = "2302";
+        string appBuild = "2303";
         [Browsable(true)]
         [CategoryAttribute("App"), ReadOnlyAttribute(true)]
         public string AppBuild

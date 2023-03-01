@@ -13,9 +13,29 @@ namespace dataEditor
 {
     public partial class ProgressDialog : Form
     {
+        public string Message
+        {
+            set { this.stepLabel.Text = value; }
+        }
+
+        public int ProgressValue
+        {
+            set { this.progressBar1.Value = value; }
+        }
+
+        public EventHandler stopProgress;
         public ProgressDialog()
         {
             InitializeComponent();
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            if (stopProgress != null)
+            {
+                stopProgress(sender, e);
+            }
         }
     }
 }

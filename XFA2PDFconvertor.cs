@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Office.Interop.Excel;
-
-
-namespace universalReader
+﻿namespace universalReader
 {
     public static class XFA2PDFconvertor
     {

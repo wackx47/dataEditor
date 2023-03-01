@@ -30,6 +30,7 @@
         {
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.stepLabel = new System.Windows.Forms.Label();
+            this.btnStop = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // progressBar1
@@ -47,12 +48,23 @@
             this.stepLabel.Size = new System.Drawing.Size(0, 15);
             this.stepLabel.TabIndex = 1;
             // 
+            // btnStop
+            // 
+            this.btnStop.Location = new System.Drawing.Point(397, 70);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Size = new System.Drawing.Size(75, 23);
+            this.btnStop.TabIndex = 2;
+            this.btnStop.Text = "Stop";
+            this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            // 
             // ProgressDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(484, 77);
+            this.ClientSize = new System.Drawing.Size(484, 98);
             this.ControlBox = false;
+            this.Controls.Add(this.btnStop);
             this.Controls.Add(this.stepLabel);
             this.Controls.Add(this.progressBar1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -71,5 +83,6 @@
 
         public ProgressBar progressBar1;
         public Label stepLabel;
+        private Button btnStop;
     }
 }
