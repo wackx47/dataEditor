@@ -415,14 +415,14 @@ namespace dataEditor
             // ImportExcel
             // 
             this.ImportExcel.Name = "ImportExcel";
-            this.ImportExcel.Size = new System.Drawing.Size(180, 22);
+            this.ImportExcel.Size = new System.Drawing.Size(137, 22);
             this.ImportExcel.Text = "Open";
             this.ImportExcel.Click += new System.EventHandler(this.ImportEXCL_Click);
             // 
             // importXMLToolStripMenuItem
             // 
             this.importXMLToolStripMenuItem.Name = "importXMLToolStripMenuItem";
-            this.importXMLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.importXMLToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.importXMLToolStripMenuItem.Text = "Import XML";
             this.importXMLToolStripMenuItem.Click += new System.EventHandler(this.import2Universal_Click);
             // 
@@ -439,21 +439,22 @@ namespace dataEditor
             // showConsoleToolStripMenuItem
             // 
             this.showConsoleToolStripMenuItem.Name = "showConsoleToolStripMenuItem";
-            this.showConsoleToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.showConsoleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.showConsoleToolStripMenuItem.Text = "Show Console";
             this.showConsoleToolStripMenuItem.Click += new System.EventHandler(this.ShowConsole_Click);
             // 
             // closeAllExcelsToolStripMenuItem
             // 
             this.closeAllExcelsToolStripMenuItem.Name = "closeAllExcelsToolStripMenuItem";
-            this.closeAllExcelsToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.closeAllExcelsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.closeAllExcelsToolStripMenuItem.Text = "Close all Excel";
             this.closeAllExcelsToolStripMenuItem.Click += new System.EventHandler(this.CloseAllExcel_Click);
             // 
             // regLibOfficeToolStripMenuItem
             // 
+            this.regLibOfficeToolStripMenuItem.Enabled = false;
             this.regLibOfficeToolStripMenuItem.Name = "regLibOfficeToolStripMenuItem";
-            this.regLibOfficeToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.regLibOfficeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.regLibOfficeToolStripMenuItem.Text = "RegLibOffice";
             this.regLibOfficeToolStripMenuItem.Click += new System.EventHandler(this.RigesterCOMfix);
             // 

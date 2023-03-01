@@ -260,6 +260,18 @@ namespace dataEditor
             set { m_OleDBImportMode = value; }
         }
 
+        private bool m_checkRealRange = true;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("Check the real range to exclude empty cells")]
+        [DisplayName("СheckRealRange")]
+        [Category("ImportSettings")]
+        public bool checkRealRange
+        {
+            get { return m_checkRealRange; }
+            set { m_checkRealRange = value; }
+        }
+
         private bool m_extdEdit;
         [Browsable(false)]
         [Description("Allow manual editing settings")]

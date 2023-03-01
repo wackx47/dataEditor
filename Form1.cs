@@ -31,6 +31,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.XSSF.Streaming;
 using System.Diagnostics.Metrics;
 using NPOI.XSSF.Streaming.Values;
+using OfficeOpenXml.Table;
 
 namespace dataEditor
 {
@@ -1488,7 +1489,13 @@ namespace dataEditor
             });
             progressDlg.ShowDialog();
 
-            
+            if (PropGrid.checkRealRange == true)
+            {
+                CheckingRealDat(dataVariantB);
+                xlRowCount = dataVariantB.Rows.Count;
+                xlColCount = dataVariantB.Columns.Count;
+            }
+
             dataViewer.DataSource = dataVariantB;
 
             dataViewerFillHeadres(FirstUsedRow, FirstUsedColumn);
@@ -1673,6 +1680,14 @@ namespace dataEditor
                         dataExport.Rows.Add(xlrow);
                     }
                 }
+                if (PropGrid.checkRealRange == true)
+                {
+                    CheckingRealDat(dataExport);
+                    xlRowCount = dataExport.Rows.Count;
+                    xlColCount = dataExport.Columns.Count;
+                }
+            
+
             FillStatusGrid(xlRowCount, xlColCount);
 
             statusGridView.Rows[1].Cells[1].Value = xlColCount;
@@ -1683,6 +1698,73 @@ namespace dataEditor
             Console.WriteLine("FirstUsedRow: " + FirstUsedRow.ToString());
             Console.WriteLine("FirstUsedColumn: " + FirstUsedColumn.ToString());
             }
+        }
+
+        private void CheckingRealDat(DataTable ExportsDatTable)
+        {
+            List<DataRow> removeRowIndex = new List<DataRow>();
+            int RowCounter = 0;
+            int indexForStarts= 0;
+            int RowEmptyStrike = 0;
+            int RowStrike = 0;
+            int colStrike = 0;
+            int emptyRowLimit = 20;
+
+            foreach (DataRow dRow in ExportsDatTable.Rows)
+            {
+                if (RowEmptyStrike <= emptyRowLimit)
+                {
+                    for (int index = 0; index < ExportsDatTable.Columns.Count; index++)
+                    {
+                        if (dRow[index] != DBNull.Value)
+                        {
+                            RowEmptyStrike = 0;
+                            indexForStarts++;
+                            break;
+                        }
+                        else
+                        {
+                            indexForStarts++;
+                            colStrike++;
+                        }
+                    }
+                    if (colStrike == ExportsDatTable.Columns.Count)
+                    {
+                        RowEmptyStrike++;
+                    }
+                }
+                else
+                {
+                    for (int index = 0; index < ExportsDatTable.Columns.Count; index++)
+                    {
+                        if (dRow[index] == DBNull.Value)
+                        {
+                            removeRowIndex.Add(dRow);
+                            break;
+                        }
+                        else if (string.IsNullOrEmpty(dRow[index].ToString().Trim()))
+                        {
+                            removeRowIndex.Add(dRow);
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+            foreach (DataRow rowIndex in removeRowIndex)
+            {
+                 ExportsDatTable.Rows.Remove(rowIndex);
+            }
+
+
+            for (int i = ExportsDatTable.Columns.Count - 1; i >= 0; i--)
+            {
+                DataColumn row = ExportsDatTable.Columns[i];
+                if (ExportsDatTable.AsEnumerable().All(r => r.IsNull(row) || string.IsNullOrWhiteSpace(r[row].ToString())))
+                    ExportsDatTable.Columns.RemoveAt(i);
+            }
+
         }
 
         private void backWorkerDialog()
