@@ -260,16 +260,17 @@ namespace dataEditor
             set { m_OleDBImportMode = value; }
         }
 
-        private bool m_checkRealRange = true;
+        public EmptyRowsCheckSettings m_CheckEmptyRows = new EmptyRowsCheckSettings(true, 10);
         [Browsable(true)]
-        [ReadOnly(false)]
+        [ReadOnly(true)]
         [Description("Check the real range to exclude empty cells")]
         [DisplayName("СheckRealRange")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         [Category("ImportSettings")]
-        public bool checkRealRange
+        public EmptyRowsCheckSettings CheckEmptyRows
         {
-            get { return m_checkRealRange; }
-            set { m_checkRealRange = value; }
+            get { return m_CheckEmptyRows; }
+            set { m_CheckEmptyRows = value; }
         }
 
         private bool m_extdEdit;
@@ -340,6 +341,43 @@ namespace dataEditor
         {
             get { return m_AvailableXML; }
             set { m_AvailableXML = value; }
+        }
+    }
+
+
+    class EmptyRowsCheckSettings
+    {
+        public EmptyRowsCheckSettings(bool SwitchChecks, int EmptyRowsLimit)
+        {
+            _SwitchChecks = SwitchChecks;
+            _EmptyRowsLimit = EmptyRowsLimit;
+        }
+
+        private bool _SwitchChecks;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("СheckRealRange")]
+        [Description("Check the real range to exclude empty cells")]
+        public bool SwitchChecks
+        {
+            get { return _SwitchChecks; }
+            set { _SwitchChecks = value; }
+        }
+
+        private int _EmptyRowsLimit;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("EmptyRowsLimit")]
+        [Description("Limits for empty rows, use more than 10 for save data")]
+        public int EmptyRowsLimit
+        {
+            get { return _EmptyRowsLimit; }
+            set { _EmptyRowsLimit = value; }
+        }
+
+        public override string ToString()
+        {
+                return SwitchChecks + " (RowsLimit=" + EmptyRowsLimit + ")";
         }
     }
 

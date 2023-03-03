@@ -32,6 +32,7 @@ using NPOI.XSSF.Streaming;
 using System.Diagnostics.Metrics;
 using NPOI.XSSF.Streaming.Values;
 using OfficeOpenXml.Table;
+using NPOI.SS.Formula;
 
 namespace dataEditor
 {
@@ -1148,7 +1149,6 @@ namespace dataEditor
             }
         }
 
-
         private void dataViewerConvertToMicroGen_MouseClick(Object sender, MouseEventArgs e)
         {
             dataViewer.ClearSelection();
@@ -1175,11 +1175,12 @@ namespace dataEditor
 
         private void MenuMicrogeneration_Click(object sender, EventArgs e)
         {
-            int InitRowStart= 0;
-            int InitRowEnd = 0;
+            int BigCycle = 0;
+            int SmallCycle = 0;
             int number;
             decimal ConsumptionValue;
             decimal GenerationValue;
+
 
             DataTable ConvertExcel = new DataTable();
             ConvertExcel.Clear();
@@ -1202,38 +1203,51 @@ namespace dataEditor
                 bool result = Int32.TryParse(dataViewer.Rows[i].Cells[0].Value.ToString(), out number);
                 if (dataViewer.Rows[i].Cells[0].Value != DBNull.Value && result)
                 {
-                    InitRowStart = i+1;
+                    BigCycle = i;
+
                     DataRow row = ConvertExcel.NewRow();
                     //row["id"] = number;
                     Console.WriteLine("AddToTableRowWithID: " + number);
                     row["Name"] = dataViewer.Rows[i].Cells[2].Value.ToString().Split(',').First();
-                    Console.WriteLine("AddToTableRowWithName: " + dataViewer.Rows[i].Cells[2].Value.ToString());
 
                     if (dataViewer.Rows[i].Cells[7].Value.ToString() == "A+, êÂò*÷" && dataViewer.Rows[i+1].Cells[7].Value.ToString() == "A-, êÂò*÷")
                     {
                         decimal.TryParse(dataViewer.Rows[i].Cells[11].Value.ToString(), out ConsumptionValue);
                         row["ConsumptionSumm"] = Math.Round(ConsumptionValue, 0);
-                        Console.WriteLine("ConsumptionSumm: " + dataViewer.Rows[InitRowStart - 1].Cells[11].Value.ToString());
-                        InitRowStart++;
-                        InitRowEnd = InitRowStart;
+                        Console.WriteLine("ConsumptionSumm: " + dataViewer.Rows[i].Cells[11].Value.ToString());
+
+                        decimal.TryParse(dataViewer.Rows[i+1].Cells[11].Value.ToString(), out GenerationValue);
+                        row["GenerationSumm"] = Math.Round(GenerationValue, 0);
+                        Console.WriteLine("GenerationSumm: " + dataViewer.Rows[i+1].Cells[11].Value.ToString() + "\n");
                     }
                     else
                     {
-                        while (InitRowStart < dataViewer.Rows.Count && dataViewer.Rows[InitRowStart].Cells[0].Value == DBNull.Value)
+                        BigCycle++;
+                        while (BigCycle < dataViewer.Rows.Count && dataViewer.Rows[BigCycle].Cells[0].Value == DBNull.Value)
                         {
-                            InitRowStart++;
-                            InitRowEnd = InitRowStart;
-                            if (InitRowStart < dataViewer.Rows.Count && dataViewer.Rows[InitRowStart].Cells[7].Value.ToString() == "A-, êÂò*÷")
+                            if (BigCycle < dataViewer.Rows.Count && dataViewer.Rows[BigCycle].Cells[7].Value.ToString() == "A-, êÂò*÷")
                             {
-                                decimal.TryParse(dataViewer.Rows[InitRowStart - 1].Cells[11].Value.ToString(), out ConsumptionValue);
+                                decimal.TryParse(dataViewer.Rows[BigCycle - 1].Cells[11].Value.ToString(), out ConsumptionValue);
                                 row["ConsumptionSumm"] = Math.Round(ConsumptionValue, 0);
-                                Console.WriteLine("ConsumptionSumm: " + dataViewer.Rows[InitRowStart - 1].Cells[11].Value.ToString());
+                                Console.WriteLine("ConsumptionSumm: " + dataViewer.Rows[BigCycle - 1].Cells[11].Value.ToString());
+
+                                SmallCycle = BigCycle+1;
+
+                                while (SmallCycle < dataViewer.Rows.Count && dataViewer.Rows[SmallCycle].Cells[7].Value == DBNull.Value)
+                                {
+                                    if (dataViewer.Rows[SmallCycle].Cells[8].Value.ToString() == "Ñóììà")
+                                    {
+                                        decimal.TryParse(dataViewer.Rows[SmallCycle].Cells[11].Value.ToString(), out GenerationValue);
+                                        row["GenerationSumm"] = Math.Round(GenerationValue, 0);
+                                        Console.WriteLine("GenerationSumm: " + dataViewer.Rows[SmallCycle].Cells[11].Value.ToString() + "\n");
+                                        BigCycle = SmallCycle;
+                                    }
+                                    SmallCycle++;
+                                }
                             }
+                            BigCycle++;
                         }
                     }
-                    decimal.TryParse(dataViewer.Rows[InitRowEnd - 1].Cells[11].Value.ToString(), out GenerationValue);
-                    row["GenerationSumm"] = Math.Round(GenerationValue,0);
-                    Console.WriteLine("GenerationSumm: " + dataViewer.Rows[InitRowEnd-1].Cells[11].Value.ToString() + "\n");
                     ConvertExcel.Rows.Add(row);
                 }
             }
@@ -1272,7 +1286,7 @@ namespace dataEditor
             dataViewer.Columns["Price"].Width = 50;
             dataViewer.Columns["Cost"].Width = 100;
 
-            this.Width = 1280;
+            this.Width = 1600;
 
             foreach (DataGridViewRow dr in dataViewer.Rows)
             {
@@ -1303,6 +1317,34 @@ namespace dataEditor
             }
 
             dataViewer.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        }
+
+        private void SwitcherMode_Click(object sender, EventArgs e)
+        {
+            ToolStripItem clickedItem = sender as ToolStripItem;
+            switch (clickedItem.Text)
+            {
+                case "Excel Interop":
+                    PropGrid.ImportMode = "Excel Interop";
+                    optionsGrid.Refresh();
+                    break;
+
+                case "NPOI":
+                    PropGrid.ImportMode = "NPOI";
+                    optionsGrid.Refresh();
+                    break;
+
+                case "EEPlus":
+                    PropGrid.ImportMode = "EEPlus";
+                    optionsGrid.Refresh();
+                    break;
+
+                case "OleDB":
+                    PropGrid.ImportMode = "OleDB";
+                    optionsGrid.Refresh();
+                    break;
+            }
+            ImportEXCL_Click(this, new EventArgs());
         }
 
         private void ImportEXCL_Click(object sender, EventArgs e)
@@ -1370,14 +1412,7 @@ namespace dataEditor
                         {
                             using (var stream = File.OpenRead(xlFileName))
                             {
-                                DataTable dataExport = new DataTable();
-                                NPOIModeImport(dataExport, xlFileName);
-                                dataViewer.DataSource = dataExport;
-                                dataViewerFillHeadres(FirstUsedRow, FirstUsedColumn);
-
-                                tempPropVal.Add(PropGrid.cntHeadsRows); //[0] - Rows counts take Header
-                                splitContainer_rightProps.Panel1Collapsed = false;
-                                optionsGrid.Refresh();
+                                NPOIModeImport(xlFileName);
                             }
                         }
                         catch
@@ -1489,7 +1524,7 @@ namespace dataEditor
             });
             progressDlg.ShowDialog();
 
-            if (PropGrid.checkRealRange == true)
+            if (PropGrid.CheckEmptyRows.SwitchChecks == true)
             {
                 CheckingRealDat(dataVariantB);
                 xlRowCount = dataVariantB.Rows.Count;
@@ -1611,23 +1646,27 @@ namespace dataEditor
                     }
         }
 
-        private void NPOIModeImport(DataTable dataExport, string xlFileName)
+        private void NPOIModeImport(string xlFileName)
         {
             DataRow xlrow = null;
+            DataTable dataExport = new DataTable();
             ISheet wSheet;
 
             using (FileStream stream = new FileStream(xlFileName, FileMode.Open, FileAccess.Read))
             {
-                if (Path.GetExtension(xlFileName) != ".xls")
-                {
+                //if (Path.GetExtension(xlFileName) == ".xlsx")
+                //{
                     XSSFWorkbook xssWorkbook = new XSSFWorkbook(stream);
+                    XSSFFormulaEvaluator xsseva = new XSSFFormulaEvaluator(xssWorkbook);
                     wSheet = xssWorkbook.GetSheetAt(0);
-                }
-                else
-                {
-                    HSSFWorkbook hssWorkbook = new HSSFWorkbook(stream);
-                    wSheet = hssWorkbook.GetSheetAt(0);
-                }
+                //}
+                //else
+                //{
+                 //   HSSFWorkbook hssWorkbook = new HSSFWorkbook(stream);
+                 //   HSSFFormulaEvaluator hsseva = new HSSFFormulaEvaluator(hssWorkbook);
+                 //   wSheet = hssWorkbook.GetSheetAt(0);
+                //}
+
                 FirstUsedRow = wSheet.FirstRowNum + 1;
 
                 int xlRowCount = wSheet.PhysicalNumberOfRows;
@@ -1635,6 +1674,7 @@ namespace dataEditor
                 RowsCnt = xlRowCount;
                 int cellCnt = 0;
                 int ColCreat = 0;
+
 
                 for (int row = wSheet.FirstRowNum; row <= wSheet.PhysicalNumberOfRows; row++)
                 {
@@ -1663,13 +1703,19 @@ namespace dataEditor
                         xlrow = dataExport.NewRow();
                         foreach (ICell cell in wSheet.GetRow(row))
                         {
+                            xsseva.EvaluateInCell(cell);
+
                             var cellType = wSheet.GetRow(row).GetCell(cell.ColumnIndex);
+
                             switch (cellType.CellType)
                             {
                                 case CellType.Numeric:
                                     xlrow[cell.ColumnIndex] = wSheet.GetRow(row).GetCell(cell.ColumnIndex).NumericCellValue;
                                     break;
                                 case CellType.String:
+                                    xlrow[cell.ColumnIndex] = wSheet.GetRow(row).GetCell(cell.ColumnIndex).StringCellValue;
+                                    break;
+                                case CellType.Unknown:
                                     xlrow[cell.ColumnIndex] = wSheet.GetRow(row).GetCell(cell.ColumnIndex).StringCellValue;
                                     break;
                                 case CellType.Blank:
@@ -1680,13 +1726,20 @@ namespace dataEditor
                         dataExport.Rows.Add(xlrow);
                     }
                 }
-                if (PropGrid.checkRealRange == true)
+                if (PropGrid.CheckEmptyRows.SwitchChecks == true)
                 {
                     CheckingRealDat(dataExport);
                     xlRowCount = dataExport.Rows.Count;
                     xlColCount = dataExport.Columns.Count;
                 }
-            
+
+
+            dataViewer.DataSource = dataExport;
+            dataViewerFillHeadres(FirstUsedRow, FirstUsedColumn);
+
+            tempPropVal.Add(PropGrid.cntHeadsRows);
+            splitContainer_rightProps.Panel1Collapsed = false;
+            optionsGrid.Refresh();
 
             FillStatusGrid(xlRowCount, xlColCount);
 
@@ -1708,19 +1761,19 @@ namespace dataEditor
             int RowEmptyStrike = 0;
             int RowStrike = 0;
             int colStrike = 0;
-            int emptyRowLimit = 20;
 
             foreach (DataRow dRow in ExportsDatTable.Rows)
             {
-                if (RowEmptyStrike <= emptyRowLimit)
+                if (RowEmptyStrike <= PropGrid.CheckEmptyRows.EmptyRowsLimit)
                 {
+                    colStrike = 0;
                     for (int index = 0; index < ExportsDatTable.Columns.Count; index++)
                     {
                         if (dRow[index] != DBNull.Value)
                         {
                             RowEmptyStrike = 0;
                             indexForStarts++;
-                            break;
+                            continue;
                         }
                         else
                         {
@@ -1737,6 +1790,10 @@ namespace dataEditor
                 {
                     for (int index = 0; index < ExportsDatTable.Columns.Count; index++)
                     {
+                        if (dRow[index] != DBNull.Value)
+                        {
+                            break;
+                        }
                         if (dRow[index] == DBNull.Value)
                         {
                             removeRowIndex.Add(dRow);
@@ -2463,6 +2520,11 @@ namespace dataEditor
                     worker.ReportProgress(percentage);
                 }
             }
+        }
+
+        private void bgWorker_NPOI(object sender, DoWorkEventArgs e)
+        {
+
         }
 
         private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
