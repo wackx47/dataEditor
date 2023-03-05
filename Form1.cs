@@ -33,6 +33,7 @@ using System.Diagnostics.Metrics;
 using NPOI.XSSF.Streaming.Values;
 using OfficeOpenXml.Table;
 using NPOI.SS.Formula;
+using OfficeOpenXml.ConditionalFormatting;
 
 namespace dataEditor
 {
@@ -1412,7 +1413,21 @@ namespace dataEditor
                         {
                             using (var stream = File.OpenRead(xlFileName))
                             {
-                                NPOIModeImport(xlFileName);
+                            ISheet wSheet;
+                                if (Path.GetExtension(xlFileName) == ".xlsx")
+                                {
+                                    XSSFWorkbook xssWorkbook = new XSSFWorkbook(stream);
+                                    XSSFFormulaEvaluator xsseva = new XSSFFormulaEvaluator(xssWorkbook);
+                                    wSheet = xssWorkbook.GetSheetAt(0);
+                                    NPOIModeImport(xlFileName, wSheet, xsseva, null);
+                                }
+                                else
+                                {
+                                   HSSFWorkbook hssWorkbook = new HSSFWorkbook(stream);
+                                   HSSFFormulaEvaluator hsseva = new HSSFFormulaEvaluator(hssWorkbook);
+                                   wSheet = hssWorkbook.GetSheetAt(0);
+                                   NPOIModeImport(xlFileName, wSheet, null, hsseva);
+                                }
                             }
                         }
                         catch
@@ -1646,26 +1661,13 @@ namespace dataEditor
                     }
         }
 
-        private void NPOIModeImport(string xlFileName)
+        private void NPOIModeImport(string xlFileName, ISheet wSheet, XSSFFormulaEvaluator xsseva, HSSFFormulaEvaluator hsseva)
         {
             DataRow xlrow = null;
             DataTable dataExport = new DataTable();
-            ISheet wSheet;
 
             using (FileStream stream = new FileStream(xlFileName, FileMode.Open, FileAccess.Read))
             {
-                //if (Path.GetExtension(xlFileName) == ".xlsx")
-                //{
-                    XSSFWorkbook xssWorkbook = new XSSFWorkbook(stream);
-                    XSSFFormulaEvaluator xsseva = new XSSFFormulaEvaluator(xssWorkbook);
-                    wSheet = xssWorkbook.GetSheetAt(0);
-                //}
-                //else
-                //{
-                 //   HSSFWorkbook hssWorkbook = new HSSFWorkbook(stream);
-                 //   HSSFFormulaEvaluator hsseva = new HSSFFormulaEvaluator(hssWorkbook);
-                 //   wSheet = hssWorkbook.GetSheetAt(0);
-                //}
 
                 FirstUsedRow = wSheet.FirstRowNum + 1;
 
@@ -1703,7 +1705,14 @@ namespace dataEditor
                         xlrow = dataExport.NewRow();
                         foreach (ICell cell in wSheet.GetRow(row))
                         {
-                            xsseva.EvaluateInCell(cell);
+                            if (Path.GetExtension(xlFileName) == ".xlsx")
+                            {
+                                xsseva.EvaluateInCell(cell);
+                            }
+                            else
+                            {
+                                hsseva.EvaluateInCell(cell);
+                            }
 
                             var cellType = wSheet.GetRow(row).GetCell(cell.ColumnIndex);
 
@@ -2495,7 +2504,6 @@ namespace dataEditor
             BackgroundWorker worker = sender as BackgroundWorker;
             DataRow xlrow = null;
 
-            
             for (int j = 1; j <= xlColCount; j++)
             {
                 dataVariantB.Columns.Add();
@@ -2523,6 +2531,16 @@ namespace dataEditor
         }
 
         private void bgWorker_NPOI(object sender, DoWorkEventArgs e)
+        {
+
+        }
+
+        private void bgWorker_EEPlus(object sender, DoWorkEventArgs e)
+        {
+
+        }
+
+        private void bgWorker_OleDB(object sender, DoWorkEventArgs e)
         {
 
         }
