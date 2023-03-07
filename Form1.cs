@@ -34,6 +34,7 @@ using NPOI.XSSF.Streaming.Values;
 using OfficeOpenXml.Table;
 using NPOI.SS.Formula;
 using OfficeOpenXml.ConditionalFormatting;
+using System.Reflection.Emit;
 
 namespace dataEditor
 {
@@ -116,7 +117,6 @@ namespace dataEditor
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool FreeConsole();
 
-
         public class StatusGridViewEditMode : DataGridView
         {
             protected override bool ProcessDialogKey(Keys keyData)
@@ -193,7 +193,6 @@ namespace dataEditor
             AutoFillList();
             CheckRegLib();
             ImportList.CheckProviders();
-            //ImportExcelMode();
 
             tempPropColors.Add(PropGrid.ColorHeads);
             tempPropColors.Add(PropGrid.ColorDataRows);
@@ -217,6 +216,8 @@ namespace dataEditor
                 PropGrid.OleDBImportMode.VersionOleDB = ImportList.ProvidersList[0];
 
             PropGrid.ImportMode = ImportList.AvailableMode[0];
+
+            PropGrid.Region = "KUBANESK";
         }
 
         private void statusGridView_CellCmbxValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -1150,10 +1151,37 @@ namespace dataEditor
             }
         }
 
-        private void dataViewerConvertToMicroGen_MouseClick(Object sender, MouseEventArgs e)
+        private void LoadXMLforMG()
         {
-            dataViewer.ClearSelection();
+            if (File.Exists(Environment.CurrentDirectory + "\\contractors_" + PropGrid.Region + ".xml"))
+            {
+                string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + PropGrid.Region + ".xml";
 
+                DataSet ExportsDats = new DataSet();
+                ExportsDats.ReadXml(xmlFileName);
+
+                DataTable mgDictionaryTable = ExportsDats.Tables[0];
+            }
+            else
+            {
+                Console.WriteLine("Failed to upload counterparty data");
+            }
+        }
+        private static void PrintValues(DataTable table, string label)
+        {
+            Console.WriteLine(label + "\n");
+            foreach (DataRow row in table.Rows)
+            {
+                foreach (DataColumn column in table.Columns)
+                {
+                    Console.Write("\t{0}", row[column]);
+                }
+                Console.WriteLine();
+            }
+        }
+
+        private void mgDataViewerLeftClick(Object sender, MouseEventArgs e)
+        {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 System.Windows.Forms.DataGridView.HitTestInfo hittestinfo = dataViewer.HitTest(e.X, e.Y);
@@ -1174,13 +1202,34 @@ namespace dataEditor
             }
         }
 
-        private void MenuMicrogeneration_Click(object sender, EventArgs e)
+        private void mgMenuConvertFile_Click(object sender, EventArgs e)
         {
             int BigCycle = 0;
             int SmallCycle = 0;
             int number;
             decimal ConsumptionValue;
             decimal GenerationValue;
+            DataTable mgDictionaryTable = new DataTable();
+
+
+            if (File.Exists(Environment.CurrentDirectory + "\\contractors_" + PropGrid.Region + ".xml"))
+            {
+                string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + PropGrid.Region + ".xml";
+
+                DataSet ExportsDats = new DataSet();
+                ExportsDats.ReadXml(xmlFileName);
+
+                mgDictionaryTable = ExportsDats.Tables[0];
+                DataRow[] results = mgDictionaryTable.Select("Agreement like '%" + "MG003" + "%'");
+                int residx = mgDictionaryTable.Rows.IndexOf(results[0]);
+                Console.WriteLine(residx);
+            }
+            else
+            {
+                Console.WriteLine("Failed to upload counterparty data");
+            }
+
+
 
 
             DataTable ConvertExcel = new DataTable();
@@ -1199,7 +1248,7 @@ namespace dataEditor
             ConvertExcel.Columns.Add(new DataColumn("Cost", typeof(decimal)));
 
 
-            for (int i=0; i<dataViewer.RowCount; i++)
+            for (int i = 0; i < dataViewer.RowCount; i++)
             {
                 bool result = Int32.TryParse(dataViewer.Rows[i].Cells[0].Value.ToString(), out number);
                 if (dataViewer.Rows[i].Cells[0].Value != DBNull.Value && result)
@@ -1211,15 +1260,15 @@ namespace dataEditor
                     Console.WriteLine("AddToTableRowWithID: " + number);
                     row["Name"] = dataViewer.Rows[i].Cells[2].Value.ToString().Split(',').First();
 
-                    if (dataViewer.Rows[i].Cells[7].Value.ToString() == "A+, êÂò*÷" && dataViewer.Rows[i+1].Cells[7].Value.ToString() == "A-, êÂò*÷")
+                    if (dataViewer.Rows[i].Cells[7].Value.ToString() == "A+, êÂò*÷" && dataViewer.Rows[i + 1].Cells[7].Value.ToString() == "A-, êÂò*÷")
                     {
                         decimal.TryParse(dataViewer.Rows[i].Cells[11].Value.ToString(), out ConsumptionValue);
                         row["ConsumptionSumm"] = Math.Round(ConsumptionValue, 0);
                         Console.WriteLine("ConsumptionSumm: " + dataViewer.Rows[i].Cells[11].Value.ToString());
 
-                        decimal.TryParse(dataViewer.Rows[i+1].Cells[11].Value.ToString(), out GenerationValue);
+                        decimal.TryParse(dataViewer.Rows[i + 1].Cells[11].Value.ToString(), out GenerationValue);
                         row["GenerationSumm"] = Math.Round(GenerationValue, 0);
-                        Console.WriteLine("GenerationSumm: " + dataViewer.Rows[i+1].Cells[11].Value.ToString() + "\n");
+                        Console.WriteLine("GenerationSumm: " + dataViewer.Rows[i + 1].Cells[11].Value.ToString() + "\n");
                     }
                     else
                     {
@@ -1232,7 +1281,7 @@ namespace dataEditor
                                 row["ConsumptionSumm"] = Math.Round(ConsumptionValue, 0);
                                 Console.WriteLine("ConsumptionSumm: " + dataViewer.Rows[BigCycle - 1].Cells[11].Value.ToString());
 
-                                SmallCycle = BigCycle+1;
+                                SmallCycle = BigCycle + 1;
 
                                 while (SmallCycle < dataViewer.Rows.Count && dataViewer.Rows[SmallCycle].Cells[7].Value == DBNull.Value)
                                 {
@@ -1270,7 +1319,7 @@ namespace dataEditor
             dataViewer.MouseDown -= new MouseEventHandler(dataViewer_MouseClick);
             dataViewer.RowHeaderMouseClick -= new DataGridViewCellMouseEventHandler(DataViewer_RowSelected);
             dataViewer.ColumnHeaderMouseClick -= new DataGridViewCellMouseEventHandler(DataViewer_ColumnsSelected);
-            dataViewer.MouseDown += new MouseEventHandler(dataViewerConvertToMicroGen_MouseClick);
+            dataViewer.MouseDown += new MouseEventHandler(mgDataViewerLeftClick);
 
             splitContainer_rightProps.Panel1Collapsed = true;
 
@@ -1287,14 +1336,14 @@ namespace dataEditor
             dataViewer.Columns["Price"].Width = 50;
             dataViewer.Columns["Cost"].Width = 100;
 
-            this.Width = 1600;
+            this.Width = 1300;
 
             foreach (DataGridViewRow dr in dataViewer.Rows)
             {
                 dr.HeaderCell.Value = (dr.Index + 1).ToString();
                 try
                 {
-                    if (Convert.ToInt32(dr.Cells["GenerationSumm"].Value)> Convert.ToInt32(dr.Cells["ConsumptionSumm"].Value))
+                    if (Convert.ToInt32(dr.Cells["GenerationSumm"].Value) > Convert.ToInt32(dr.Cells["ConsumptionSumm"].Value))
                     {
                         dr.Cells["Sell"].Value = 0;
                         dr.Cells["Buy"].Value = Convert.ToInt32(dr.Cells["GenerationSumm"].Value) - Convert.ToInt32(dr.Cells["ConsumptionSumm"].Value);
@@ -1311,13 +1360,13 @@ namespace dataEditor
                 }
             }
 
-
-            foreach(DataGridViewColumn cl in dataViewer.Columns)
+            foreach (DataGridViewColumn cl in dataViewer.Columns)
             {
                 cl.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
 
             dataViewer.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataViewer.Columns["Agreement"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
         }
 
         private void SwitcherMode_Click(object sender, EventArgs e)
@@ -1486,7 +1535,7 @@ namespace dataEditor
                 dataViewer.ColumnHeaderMouseClick += new DataGridViewCellMouseEventHandler(DataViewer_ColumnsSelected);
                 dataViewer.Update();
                 
-                MenuMicrogeneration.Enabled = true;
+                mgMenuConvertFile.Enabled = true;
 
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("\n" + "----------Completed----------" + "\n");
@@ -2556,6 +2605,13 @@ namespace dataEditor
             progressDlg.Close();
         }
 
+
+        private void mgMenuOpenDatsEditor_Click(object sender, EventArgs e)
+        {
+            mgDatsEditor DictionaryForm = new mgDatsEditor();
+            DictionaryForm.listGTP.Text = PropGrid.Region;
+            DictionaryForm.Show();
+        }
     }
     public static class ExtensionMethods
     {

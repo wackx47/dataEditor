@@ -51,7 +51,6 @@ namespace dataEditor
             this.setAsStaticValueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ColumnContext = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setAsColumn4CheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dynamicCycleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataViewer = new System.Windows.Forms.DataGridView();
             this.statusGridView = new dataEditor.MainForm.StatusGridViewEditMode();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -69,16 +68,18 @@ namespace dataEditor
             this.oleDBmenu3 = new System.Windows.Forms.ToolStripMenuItem();
             this.openPDFmenuSecond = new System.Windows.Forms.ToolStripMenuItem();
             this.importXMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuOptions = new System.Windows.Forms.ToolStripMenuItem();
+            this.OptionsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.showConsoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeAllExcelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.regLibOfficeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.universalReaderToolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xFAReaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.MenuMicrogeneration = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.mgMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.mgMenuConvertFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.mgMenuOpenDatsEditor = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer_bigMain = new System.Windows.Forms.SplitContainer();
             this.splitContainer_dataGrids = new System.Windows.Forms.SplitContainer();
             this.CellViewer = new System.Windows.Forms.TextBox();
@@ -225,10 +226,9 @@ namespace dataEditor
             // 
             this.ColumnContext.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.ColumnContext.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.setAsColumn4CheckToolStripMenuItem,
-            this.dynamicCycleToolStripMenuItem});
+            this.setAsColumn4CheckToolStripMenuItem});
             this.ColumnContext.Name = "ColumnContext";
-            this.ColumnContext.Size = new System.Drawing.Size(190, 48);
+            this.ColumnContext.Size = new System.Drawing.Size(190, 26);
             // 
             // setAsColumn4CheckToolStripMenuItem
             // 
@@ -236,13 +236,6 @@ namespace dataEditor
             this.setAsColumn4CheckToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.setAsColumn4CheckToolStripMenuItem.Text = "Set as Column4Check";
             this.setAsColumn4CheckToolStripMenuItem.Click += new System.EventHandler(this.StripMenuHeaderColumnSelect_Click);
-            // 
-            // dynamicCycleToolStripMenuItem
-            // 
-            this.dynamicCycleToolStripMenuItem.Name = "dynamicCycleToolStripMenuItem";
-            this.dynamicCycleToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.dynamicCycleToolStripMenuItem.Text = "DynamicCycle";
-            this.dynamicCycleToolStripMenuItem.Click += new System.EventHandler(this.DynamicCycleData_Click);
             // 
             // dataViewer
             // 
@@ -277,11 +270,13 @@ namespace dataEditor
             this.dataViewer.Name = "dataViewer";
             this.dataViewer.ReadOnly = true;
             this.dataViewer.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.ControlDark;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
             dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataViewer.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataViewer.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -423,7 +418,7 @@ namespace dataEditor
             // openMenuMain
             // 
             this.openMenuMain.Name = "openMenuMain";
-            this.openMenuMain.Size = new System.Drawing.Size(180, 22);
+            this.openMenuMain.Size = new System.Drawing.Size(137, 22);
             this.openMenuMain.Text = "Open";
             this.openMenuMain.Click += new System.EventHandler(this.ImportEXCL_Click);
             // 
@@ -433,7 +428,7 @@ namespace dataEditor
             this.openExcelMenuSecond,
             this.openPDFmenuSecond});
             this.OpenMenuWithMain.Name = "OpenMenuWithMain";
-            this.OpenMenuWithMain.Size = new System.Drawing.Size(180, 22);
+            this.OpenMenuWithMain.Size = new System.Drawing.Size(137, 22);
             this.OpenMenuWithMain.Text = "Open with";
             // 
             // openExcelMenuSecond
@@ -444,7 +439,7 @@ namespace dataEditor
             this.eEPlusMenu3,
             this.oleDBmenu3});
             this.openExcelMenuSecond.Name = "openExcelMenuSecond";
-            this.openExcelMenuSecond.Size = new System.Drawing.Size(180, 22);
+            this.openExcelMenuSecond.Size = new System.Drawing.Size(118, 22);
             this.openExcelMenuSecond.Text = "Excel";
             // 
             // interopMenu3
@@ -479,37 +474,37 @@ namespace dataEditor
             // 
             this.openPDFmenuSecond.Enabled = false;
             this.openPDFmenuSecond.Name = "openPDFmenuSecond";
-            this.openPDFmenuSecond.Size = new System.Drawing.Size(180, 22);
+            this.openPDFmenuSecond.Size = new System.Drawing.Size(118, 22);
             this.openPDFmenuSecond.Text = "PDF XFA";
             // 
             // importXMLToolStripMenuItem
             // 
             this.importXMLToolStripMenuItem.Name = "importXMLToolStripMenuItem";
-            this.importXMLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.importXMLToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.importXMLToolStripMenuItem.Text = "Import XML";
             this.importXMLToolStripMenuItem.Click += new System.EventHandler(this.import2Universal_Click);
             // 
-            // MenuOptions
+            // OptionsMenu
             // 
-            this.MenuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.OptionsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showConsoleToolStripMenuItem,
             this.closeAllExcelsToolStripMenuItem,
             this.regLibOfficeToolStripMenuItem});
-            this.MenuOptions.Name = "MenuOptions";
-            this.MenuOptions.Size = new System.Drawing.Size(46, 20);
-            this.MenuOptions.Text = "Tools";
+            this.OptionsMenu.Name = "OptionsMenu";
+            this.OptionsMenu.Size = new System.Drawing.Size(46, 20);
+            this.OptionsMenu.Text = "Tools";
             // 
             // showConsoleToolStripMenuItem
             // 
             this.showConsoleToolStripMenuItem.Name = "showConsoleToolStripMenuItem";
-            this.showConsoleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.showConsoleToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.showConsoleToolStripMenuItem.Text = "Show Console";
             this.showConsoleToolStripMenuItem.Click += new System.EventHandler(this.ShowConsole_Click);
             // 
             // closeAllExcelsToolStripMenuItem
             // 
             this.closeAllExcelsToolStripMenuItem.Name = "closeAllExcelsToolStripMenuItem";
-            this.closeAllExcelsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.closeAllExcelsToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.closeAllExcelsToolStripMenuItem.Text = "Close all Excel";
             this.closeAllExcelsToolStripMenuItem.Click += new System.EventHandler(this.CloseAllExcel_Click);
             // 
@@ -517,7 +512,7 @@ namespace dataEditor
             // 
             this.regLibOfficeToolStripMenuItem.Enabled = false;
             this.regLibOfficeToolStripMenuItem.Name = "regLibOfficeToolStripMenuItem";
-            this.regLibOfficeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.regLibOfficeToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.regLibOfficeToolStripMenuItem.Text = "RegLibOffice";
             this.regLibOfficeToolStripMenuItem.Click += new System.EventHandler(this.RigesterCOMfix);
             // 
@@ -525,8 +520,7 @@ namespace dataEditor
             // 
             this.universalReaderToolStripMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openFileToolStripMenuItem,
-            this.xFAReaderToolStripMenuItem,
-            this.MenuMicrogeneration});
+            this.xFAReaderToolStripMenuItem});
             this.universalReaderToolStripMenu.Name = "universalReaderToolStripMenu";
             this.universalReaderToolStripMenu.Size = new System.Drawing.Size(106, 20);
             this.universalReaderToolStripMenu.Text = "Universal Reader";
@@ -534,7 +528,7 @@ namespace dataEditor
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.openFileToolStripMenuItem.Text = "Open File";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.FileWriter);
             // 
@@ -542,23 +536,15 @@ namespace dataEditor
             // 
             this.xFAReaderToolStripMenuItem.Enabled = false;
             this.xFAReaderToolStripMenuItem.Name = "xFAReaderToolStripMenuItem";
-            this.xFAReaderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.xFAReaderToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.xFAReaderToolStripMenuItem.Text = "XFA reader";
             // 
-            // MenuMicrogeneration
+            // MenuAbout
             // 
-            this.MenuMicrogeneration.Enabled = false;
-            this.MenuMicrogeneration.Name = "MenuMicrogeneration";
-            this.MenuMicrogeneration.Size = new System.Drawing.Size(180, 22);
-            this.MenuMicrogeneration.Text = "Microgeneration";
-            this.MenuMicrogeneration.Click += new System.EventHandler(this.MenuMicrogeneration_Click);
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
-            this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutShow);
+            this.MenuAbout.Name = "MenuAbout";
+            this.MenuAbout.Size = new System.Drawing.Size(52, 20);
+            this.MenuAbout.Text = "About";
+            this.MenuAbout.Click += new System.EventHandler(this.aboutShow);
             // 
             // menuStrip1
             // 
@@ -566,14 +552,38 @@ namespace dataEditor
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileMenu,
-            this.MenuOptions,
+            this.OptionsMenu,
             this.universalReaderToolStripMenu,
-            this.aboutToolStripMenuItem});
+            this.mgMenu,
+            this.MenuAbout});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1047, 24);
             this.menuStrip1.TabIndex = 22;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // mgMenu
+            // 
+            this.mgMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mgMenuConvertFile,
+            this.mgMenuOpenDatsEditor});
+            this.mgMenu.Name = "mgMenu";
+            this.mgMenu.Size = new System.Drawing.Size(107, 20);
+            this.mgMenu.Text = "Microgeneration";
+            // 
+            // mgMenuConvertFile
+            // 
+            this.mgMenuConvertFile.Name = "mgMenuConvertFile";
+            this.mgMenuConvertFile.Size = new System.Drawing.Size(188, 22);
+            this.mgMenuConvertFile.Text = "ConvertFile";
+            this.mgMenuConvertFile.Click += new System.EventHandler(this.mgMenuConvertFile_Click);
+            // 
+            // mgMenuOpenDatsEditor
+            // 
+            this.mgMenuOpenDatsEditor.Name = "mgMenuOpenDatsEditor";
+            this.mgMenuOpenDatsEditor.Size = new System.Drawing.Size(188, 22);
+            this.mgMenuOpenDatsEditor.Text = "OpenDictionaryEditor";
+            this.mgMenuOpenDatsEditor.Click += new System.EventHandler(this.mgMenuOpenDatsEditor_Click);
             // 
             // splitContainer_bigMain
             // 
@@ -720,12 +730,12 @@ namespace dataEditor
         private ToolStripMenuItem FileMenu;
         private ToolStripMenuItem OpenMenuWithMain;
         private ToolStripMenuItem importXMLToolStripMenuItem;
-        private ToolStripMenuItem MenuOptions;
+        private ToolStripMenuItem OptionsMenu;
         private ToolStripMenuItem showConsoleToolStripMenuItem;
         private ToolStripMenuItem closeAllExcelsToolStripMenuItem;
         private ToolStripMenuItem universalReaderToolStripMenu;
         private ToolStripMenuItem openFileToolStripMenuItem;
-        private ToolStripMenuItem aboutToolStripMenuItem;
+        private ToolStripMenuItem MenuAbout;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem regLibOfficeToolStripMenuItem;
         private SplitContainer splitContainer_bigMain;
@@ -738,8 +748,6 @@ namespace dataEditor
         private ContextMenuStrip contextMenuStrip1;
         private SplitContainer splitContainer_dataGrids;
         private TextBox CellViewer;
-        private ToolStripMenuItem dynamicCycleToolStripMenuItem;
-        private ToolStripMenuItem MenuMicrogeneration;
         private ToolStripMenuItem openExcelMenuSecond;
         private ToolStripMenuItem interopMenu3;
         private ToolStripMenuItem nPOImenu3;
@@ -747,5 +755,8 @@ namespace dataEditor
         private ToolStripMenuItem oleDBmenu3;
         private ToolStripMenuItem openPDFmenuSecond;
         private ToolStripMenuItem openMenuMain;
+        private ToolStripMenuItem mgMenu;
+        private ToolStripMenuItem mgMenuConvertFile;
+        private ToolStripMenuItem mgMenuOpenDatsEditor;
     }
 }

@@ -42,6 +42,20 @@ namespace dataEditor
             set { appBuild = value; }
         }
 
+        private string m_Region;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("Available regions for microgenerations.")]
+        [DisplayName("GTP")]
+        [Category("Region")]
+        [TypeConverter(typeof(Regions))]
+        public string Region
+        {
+            get { return m_Region; }
+            set { m_Region = value; }
+        }
+
+
         private bool m_DRow = true;
             [Browsable(true)]
             [ReadOnly(true)]
@@ -500,6 +514,21 @@ namespace dataEditor
             string[] reports = { "buy_norem", "cfrliab", "cfrliabdpg", "CESSM", "CFR_PART_LIAB_DEL_NOTICE", "svnc_part_s_plan", "PROGN_LIAB_FRSFG", "power_consumer_3_fact", "frs_dev_factcost" };
 
             return new StandardValuesCollection(reports);
+            return base.GetStandardValues(context);
+        }
+    }
+
+    public class Regions : StringConverter
+    {
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        {
+            return true;
+        }
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            string[] regions = { "KUBANESK" };
+
+            return new StandardValuesCollection(regions);
             return base.GetStandardValues(context);
         }
     }
