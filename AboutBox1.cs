@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -16,9 +17,13 @@ namespace universalReader
             InitializeComponent();
             this.Text = String.Format("О программе {0}", AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = String.Format("Версия {0}", AssemblyVersion);
+            this.labelBuild.Text = String.Format("build: {0}", AssemblyVersion);
+            this.labelVersion.Text = String.Format("version: {0}", Application.ProductVersion);
             this.labelCopyright.Text = "Автор: " + AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
+            if (File.Exists(Environment.CurrentDirectory + "\\RELEASE-NOTES.txt"))
+                this.ChangeLogBox.Text = File.ReadAllText(Environment.CurrentDirectory + "\\RELEASE-NOTES.txt");
+
         }
 
         #region Методы доступа к атрибутам сборки

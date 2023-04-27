@@ -253,7 +253,6 @@ namespace dataEditor
                 }
                 set
                 {
-                    // Ensure that the cell used for the template is a CalendarCell.
                     if (value != null &&
                         !value.GetType().IsAssignableFrom(typeof(CalendarCell)))
                     {
@@ -271,7 +270,6 @@ namespace dataEditor
             public CalendarCell()
                 : base()
             {
-                // Use the short date format.
                 this.Style.Format = "d";
             }
 
@@ -290,7 +288,7 @@ namespace dataEditor
                 }
                 else
                 {
-                    ctl.Value = (DateTime)this.Value;
+                    //ctl.Value = (DateTime)this.Value;
                 }
             }
 
@@ -298,7 +296,6 @@ namespace dataEditor
             {
                 get
                 {
-                    // Return the type of the editing control that CalendarCell uses.
                     return typeof(CalendarEditingControl);
                 }
             }
@@ -307,8 +304,6 @@ namespace dataEditor
             {
                 get
                 {
-                    // Return the type of the value that CalendarCell contains.
-
                     return typeof(DateOnly);
                 }
             }
@@ -317,7 +312,6 @@ namespace dataEditor
             {
                 get
                 {
-                    // Use the current date and time as the default value.
                     return DateTime.Now;
                 }
             }
@@ -334,8 +328,6 @@ namespace dataEditor
                 this.Format = DateTimePickerFormat.Short;
             }
 
-            // Implements the IDataGridViewEditingControl.EditingControlFormattedValue 
-            // property.
             public object EditingControlFormattedValue
             {
                 get
@@ -348,31 +340,24 @@ namespace dataEditor
                     {
                         try
                         {
-                            // This will throw an exception of the string is 
-                            // null, empty, or not in the format of a date.
                             this.Value = DateTime.Parse((String)value);
                         }
                         catch
                         {
-                            // In the case of an exception, just use the 
-                            // default value so we're not left with a null
-                            // value.
                             this.Value = DateTime.Now;
                         }
                     }
                 }
             }
 
-            // Implements the 
-            // IDataGridViewEditingControl.GetEditingControlFormattedValue method.
+
             public object GetEditingControlFormattedValue(
                 DataGridViewDataErrorContexts context)
             {
                 return EditingControlFormattedValue;
             }
 
-            // Implements the 
-            // IDataGridViewEditingControl.ApplyCellStyleToEditingControl method.
+
             public void ApplyCellStyleToEditingControl(
                 DataGridViewCellStyle dataGridViewCellStyle)
             {
@@ -381,8 +366,7 @@ namespace dataEditor
                 this.CalendarMonthBackground = dataGridViewCellStyle.BackColor;
             }
 
-            // Implements the IDataGridViewEditingControl.EditingControlRowIndex 
-            // property.
+
             public int EditingControlRowIndex
             {
                 get
@@ -395,12 +379,10 @@ namespace dataEditor
                 }
             }
 
-            // Implements the IDataGridViewEditingControl.EditingControlWantsInputKey 
-            // method.
             public bool EditingControlWantsInputKey(
                 Keys key, bool dataGridViewWantsInputKey)
             {
-                // Let the DateTimePicker handle the keys listed.
+                
                 switch (key & Keys.KeyCode)
                 {
                     case Keys.Left:
@@ -417,15 +399,12 @@ namespace dataEditor
                 }
             }
 
-            // Implements the IDataGridViewEditingControl.PrepareEditingControlForEdit 
-            // method.
+
             public void PrepareEditingControlForEdit(bool selectAll)
             {
                 // No preparation needs to be done.
             }
 
-            // Implements the IDataGridViewEditingControl
-            // .RepositionEditingControlOnValueChange property.
             public bool RepositionEditingControlOnValueChange
             {
                 get
@@ -434,8 +413,6 @@ namespace dataEditor
                 }
             }
 
-            // Implements the IDataGridViewEditingControl
-            // .EditingControlDataGridView property.
             public DataGridView EditingControlDataGridView
             {
                 get
@@ -448,8 +425,6 @@ namespace dataEditor
                 }
             }
 
-            // Implements the IDataGridViewEditingControl
-            // .EditingControlValueChanged property.
             public bool EditingControlValueChanged
             {
                 get
@@ -462,8 +437,6 @@ namespace dataEditor
                 }
             }
 
-            // Implements the IDataGridViewEditingControl
-            // .EditingPanelCursor property.
             public Cursor EditingPanelCursor
             {
                 get
@@ -474,8 +447,6 @@ namespace dataEditor
 
             protected override void OnValueChanged(EventArgs eventargs)
             {
-                // Notify the DataGridView that the contents of the cell
-                // have changed.
                 valueChanged = true;
                 this.EditingControlDataGridView.NotifyCurrentCellDirty(true);
                 base.OnValueChanged(eventargs);

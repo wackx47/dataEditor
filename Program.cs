@@ -28,12 +28,11 @@ namespace dataEditor
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm());
+            Application.Run(new StartScreen());
         }
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern bool SetProcessDPIAware();
-
 
         public partial class NativeMethods
         {

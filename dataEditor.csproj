@@ -9,13 +9,16 @@
     <PlatformTarget>x86</PlatformTarget>
     <UseWPF>False</UseWPF>
     <FileVersion>1.0</FileVersion>
-    <AssemblyVersion>0.812</AssemblyVersion>
+    <AssemblyVersion>2023.04.06</AssemblyVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version />
+    <Version>0.933.1-beta</Version>
     <Company>ПАО ГК "ТНС энерго"</Company>
     <Authors>47 5'9</Authors>
     <Copyright>47 5'9</Copyright>
     <Product>dataReader</Product>
+    <Title>dataEditor</Title>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <Description></Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

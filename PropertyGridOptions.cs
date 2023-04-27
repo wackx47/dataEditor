@@ -25,7 +25,7 @@ namespace dataEditor
 {
     class PropertySet
         {
-        string appVersion = "0.901a";
+        string appVersion = Application.ProductVersion;
         [Browsable(true)]
         [CategoryAttribute("App"), ReadOnlyAttribute(true)]
         public string AppVersion
@@ -33,7 +33,7 @@ namespace dataEditor
             get { return appVersion; }
             set { appVersion = value; }
         }
-        string appBuild = "2303";
+        string appBuild = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         [Browsable(true)]
         [CategoryAttribute("App"), ReadOnlyAttribute(true)]
         public string AppBuild
@@ -261,6 +261,19 @@ namespace dataEditor
             set { m_ImportMode = value; }
         }
 
+        public EmptyRowsCheckSettings m_CheckEmptyRows = new EmptyRowsCheckSettings(true, 10, 10);
+        [Browsable(true)]
+        [ReadOnly(true)]
+        [Description("Check the real range to exclude empty cells")]
+        [DisplayName("СheckRealRange")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        [Category("ImportSettings")]
+        public EmptyRowsCheckSettings CheckEmptyRows
+        {
+            get { return m_CheckEmptyRows; }
+            set { m_CheckEmptyRows = value; }
+        }
+
         public OleDBModeSets m_OleDBImportMode = new OleDBModeSets("", false, 1);
         [Browsable(true)]
         [ReadOnly(true)]
@@ -272,19 +285,6 @@ namespace dataEditor
         {
             get { return m_OleDBImportMode; }
             set { m_OleDBImportMode = value; }
-        }
-
-        public EmptyRowsCheckSettings m_CheckEmptyRows = new EmptyRowsCheckSettings(true, 10);
-        [Browsable(true)]
-        [ReadOnly(true)]
-        [Description("Check the real range to exclude empty cells")]
-        [DisplayName("СheckRealRange")]
-        [TypeConverter(typeof(ExpandableObjectConverter))]
-        [Category("ImportSettings")]
-        public EmptyRowsCheckSettings CheckEmptyRows
-        {
-            get { return m_CheckEmptyRows; }
-            set { m_CheckEmptyRows = value; }
         }
 
         private bool m_extdEdit;
@@ -361,10 +361,11 @@ namespace dataEditor
 
     class EmptyRowsCheckSettings
     {
-        public EmptyRowsCheckSettings(bool SwitchChecks, int EmptyRowsLimit)
+        public EmptyRowsCheckSettings(bool SwitchChecks, int EmptyRowsLimit, int EmptyColmLimit)
         {
             _SwitchChecks = SwitchChecks;
             _EmptyRowsLimit = EmptyRowsLimit;
+            _EmptyColmLimit = EmptyColmLimit;
         }
 
         private bool _SwitchChecks;
@@ -389,9 +390,20 @@ namespace dataEditor
             set { _EmptyRowsLimit = value; }
         }
 
+        private int _EmptyColmLimit;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("EmptyColumnsLimit")]
+        [Description("Limits for empty columns, use more than 10 for save data")]
+        public int EmptyColmLimit
+        {
+            get { return _EmptyColmLimit; }
+            set { _EmptyColmLimit = value; }
+        }
+
         public override string ToString()
         {
-                return SwitchChecks + " (RowsLimit=" + EmptyRowsLimit + ")";
+                return SwitchChecks + " (RLim=" + EmptyRowsLimit + " CLim="  + EmptyColmLimit + ")";
         }
     }
 

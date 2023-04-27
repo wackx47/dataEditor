@@ -35,12 +35,6 @@ namespace dataEditor
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridDictionary = new System.Windows.Forms.DataGridView();
-            this.Agreement = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DateIntoForce = new dataEditor.mgDatsEditor.CalendarColumn();
-            this.FullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Type = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.INN = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Other = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnAddNew = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.mgMenuFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,6 +46,16 @@ namespace dataEditor
             this.listGTP = new System.Windows.Forms.ComboBox();
             this.mgRightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mgMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.Agreement = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DateIntoForce = new dataEditor.mgDatsEditor.CalendarColumn();
+            this.Type = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.FullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PhoneNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Mail = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.INN = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PWR = new dataEditor.NumericUpDownDataGrid.NumericUpDownColumn();
+            this.Status = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Other = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridDictionary)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.mgRightClickMenu.SuspendLayout();
@@ -68,19 +72,24 @@ namespace dataEditor
             this.dataGridDictionary.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ControlDark;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridDictionary.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridDictionary.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridDictionary.ColumnHeadersHeight = 30;
+            this.dataGridDictionary.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridDictionary.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Agreement,
             this.DateIntoForce,
-            this.FullName,
             this.Type,
+            this.FullName,
+            this.PhoneNumber,
+            this.Mail,
             this.INN,
+            this.PWR,
+            this.Status,
             this.Other});
             this.dataGridDictionary.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
             this.dataGridDictionary.EnableHeadersVisualStyles = false;
@@ -101,50 +110,9 @@ namespace dataEditor
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridDictionary.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridDictionary.RowTemplate.Height = 20;
-            this.dataGridDictionary.Size = new System.Drawing.Size(776, 385);
+            this.dataGridDictionary.Size = new System.Drawing.Size(1133, 385);
             this.dataGridDictionary.TabIndex = 0;
             this.dataGridDictionary.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridDictionary_EditingControlShowing);
-            // 
-            // Agreement
-            // 
-            this.Agreement.HeaderText = "Agreement";
-            this.Agreement.Name = "Agreement";
-            this.Agreement.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Agreement.Width = 140;
-            // 
-            // DateIntoForce
-            // 
-            this.DateIntoForce.HeaderText = "DateIntoForce";
-            this.DateIntoForce.Name = "DateIntoForce";
-            // 
-            // FullName
-            // 
-            this.FullName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.FullName.HeaderText = "Name";
-            this.FullName.Name = "FullName";
-            this.FullName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Type
-            // 
-            this.Type.HeaderText = "Type";
-            this.Type.Items.AddRange(new object[] {
-            "ФЗ",
-            "ЮЛ"});
-            this.Type.Name = "Type";
-            this.Type.Width = 50;
-            // 
-            // INN
-            // 
-            this.INN.HeaderText = "INN";
-            this.INN.Name = "INN";
-            this.INN.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.INN.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Other
-            // 
-            this.Other.HeaderText = "Other";
-            this.Other.Name = "Other";
-            this.Other.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // btnAddNew
             // 
@@ -164,7 +132,7 @@ namespace dataEditor
             this.mgElementAdd});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1157, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -181,21 +149,21 @@ namespace dataEditor
             // mgMenuFileOpen
             // 
             this.mgMenuFileOpen.Name = "mgMenuFileOpen";
-            this.mgMenuFileOpen.Size = new System.Drawing.Size(180, 22);
+            this.mgMenuFileOpen.Size = new System.Drawing.Size(168, 22);
             this.mgMenuFileOpen.Text = "Open";
             this.mgMenuFileOpen.Click += new System.EventHandler(this.mgMenuFileOpen_Click);
             // 
             // mgMenuFileSave
             // 
             this.mgMenuFileSave.Name = "mgMenuFileSave";
-            this.mgMenuFileSave.Size = new System.Drawing.Size(180, 22);
+            this.mgMenuFileSave.Size = new System.Drawing.Size(168, 22);
             this.mgMenuFileSave.Text = "Save";
             this.mgMenuFileSave.Click += new System.EventHandler(this.mgMenuFileSave_Click);
             // 
             // mgMenuShowInWindows
             // 
             this.mgMenuShowInWindows.Name = "mgMenuShowInWindows";
-            this.mgMenuShowInWindows.Size = new System.Drawing.Size(180, 22);
+            this.mgMenuShowInWindows.Size = new System.Drawing.Size(168, 22);
             this.mgMenuShowInWindows.Text = "Show in Windows";
             this.mgMenuShowInWindows.Click += new System.EventHandler(this.mgMenuShowInWindows_Click);
             // 
@@ -239,11 +207,82 @@ namespace dataEditor
             this.mgMenuDelete.Text = "Remove Contractors";
             this.mgMenuDelete.Click += new System.EventHandler(this.RemoveContractors_Click);
             // 
+            // Agreement
+            // 
+            this.Agreement.HeaderText = "Agreement";
+            this.Agreement.Name = "Agreement";
+            this.Agreement.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Agreement.Width = 140;
+            // 
+            // DateIntoForce
+            // 
+            this.DateIntoForce.HeaderText = "Date";
+            this.DateIntoForce.Name = "DateIntoForce";
+            // 
+            // Type
+            // 
+            this.Type.HeaderText = "Type";
+            this.Type.Items.AddRange(new object[] {
+            "ФЗ",
+            "ЮЛ"});
+            this.Type.Name = "Type";
+            this.Type.Width = 50;
+            // 
+            // FullName
+            // 
+            this.FullName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.FullName.HeaderText = "Name";
+            this.FullName.Name = "FullName";
+            this.FullName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // PhoneNumber
+            // 
+            this.PhoneNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.PhoneNumber.HeaderText = "PhoneNumber";
+            this.PhoneNumber.Name = "PhoneNumber";
+            // 
+            // Mail
+            // 
+            this.Mail.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Mail.HeaderText = "Mail";
+            this.Mail.Name = "Mail";
+            // 
+            // INN
+            // 
+            this.INN.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.INN.HeaderText = "INN";
+            this.INN.Name = "INN";
+            this.INN.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.INN.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // PWR
+            // 
+            this.PWR.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.PWR.HeaderText = "Pmax";
+            this.PWR.Name = "PWR";
+            // 
+            // Status
+            // 
+            this.Status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Status.HeaderText = "Status";
+            this.Status.Items.AddRange(new object[] {
+            "Действует",
+            "Расторгнут"});
+            this.Status.Name = "Status";
+            // 
+            // Other
+            // 
+            this.Other.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.Other.HeaderText = "Other";
+            this.Other.Name = "Other";
+            this.Other.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Other.Width = 44;
+            // 
             // mgDatsEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1157, 450);
             this.Controls.Add(this.listGTP);
             this.Controls.Add(this.btnAddNew);
             this.Controls.Add(this.dataGridDictionary);
@@ -264,12 +303,6 @@ namespace dataEditor
         #endregion
 
         private DataGridView dataGridDictionary;
-        private DataGridViewTextBoxColumn Agreement;
-        private mgDatsEditor.CalendarColumn DateIntoForce;
-        private DataGridViewTextBoxColumn FullName;
-        private DataGridViewComboBoxColumn Type;
-        private DataGridViewTextBoxColumn INN;
-        private DataGridViewTextBoxColumn Other;
         private Button btnAddNew;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem mgMenuFile;
@@ -281,5 +314,15 @@ namespace dataEditor
         private ContextMenuStrip mgRightClickMenu;
         private ToolStripMenuItem mgMenuDelete;
         private ToolStripMenuItem mgMenuShowInWindows;
+        private DataGridViewTextBoxColumn Agreement;
+        private CalendarColumn DateIntoForce;
+        private DataGridViewComboBoxColumn Type;
+        private DataGridViewTextBoxColumn FullName;
+        private DataGridViewTextBoxColumn PhoneNumber;
+        private DataGridViewTextBoxColumn Mail;
+        private DataGridViewTextBoxColumn INN;
+        private NumericUpDownDataGrid.NumericUpDownColumn PWR;
+        private DataGridViewComboBoxColumn Status;
+        private DataGridViewTextBoxColumn Other;
     }
 }

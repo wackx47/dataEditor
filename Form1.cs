@@ -35,6 +35,7 @@ using OfficeOpenXml.Table;
 using NPOI.SS.Formula;
 using OfficeOpenXml.ConditionalFormatting;
 using System.Reflection.Emit;
+using Microsoft.VisualBasic.ApplicationServices;
 
 namespace dataEditor
 {
@@ -141,7 +142,6 @@ namespace dataEditor
             InitializeComponent();
             AllocConsole();
             Magician.DisappearConsole();
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             xFAReaderToolStripMenuItem.Click += new EventHandler(XFA2PDFconvertor.XFA2PDF);
             //ResizeEnd += Form1_ResizeEnd;
             //this.ResizeBegin += (s, e) => { this.SuspendLayout(); };
@@ -455,25 +455,6 @@ namespace dataEditor
                 }
             }
             ConfigUpdater_handle();
-        }
-
-        private void OnProcessExit(object sender, EventArgs e)
-        {
-            if (PropGrid.ForceCloseExl == true)
-            {
-                foreach (Process clsProcess in Process.GetProcesses())
-                {
-                    if (clsProcess.ProcessName.Equals("EXCEL"))
-                    {
-                        clsProcess.Kill();
-                        //break;
-                    }
-                }
-            }
-            else
-            {
-                KillSpecificExcelFileProcess(ExlFileName);
-            }
         }
 
         private void CloseAllExcel_Click(object sender, EventArgs e)
@@ -1397,7 +1378,7 @@ namespace dataEditor
             ImportEXCL_Click(this, new EventArgs());
         }
 
-        private void ImportEXCL_Click(object sender, EventArgs e)
+        public void ImportEXCL_Click(object sender, EventArgs e)
         {
             dataViewer.DataSource = null;
             DataTable DT = (DataTable)dataViewer.DataSource;
@@ -1439,6 +1420,14 @@ namespace dataEditor
                             {
                                 DataTable dataExport = new DataTable();
                                 EPPlusModeImport(dataExport, xlFileName, xlRowCount, xlColCount);
+
+                                if (PropGrid.CheckEmptyRows.SwitchChecks == true)
+                                {
+                                    CheckingRealDat(dataExport);
+                                    xlRowCount = dataExport.Rows.Count;
+                                    xlColCount = dataExport.Columns.Count;
+                                }
+
                                 dataViewer.DataSource = dataExport;
 
                                 dataViewerFillHeadres(1, 1);
@@ -1542,7 +1531,7 @@ namespace dataEditor
                 Console.ForegroundColor = ConsoleColor.White;
         }
 
-        private void IteropModeImport(string xlFileName, int xlRowCount, int xlColCount)
+        public void IteropModeImport(string xlFileName, int xlRowCount, int xlColCount)
         {
             Excel.Application xlApp = new Excel.Application();
             Excel.Workbook xlWB;
@@ -1619,7 +1608,7 @@ namespace dataEditor
             xlSht = null;
         }
 
-        private void OLEDBModeImport(string xlFileName, DataTable dataVariantOLEDB)
+        public void OLEDBModeImport(string xlFileName, DataTable dataVariantOLEDB)
         {
             string strConnect = string.Empty;
              string ExlVer = "12";
@@ -1658,11 +1647,9 @@ namespace dataEditor
              statusGridView.Rows[4].Cells[1].Value = 0;
         }
 
-        private void EPPlusModeImport(DataTable dataExport, string xlFileName, int xlColCount, int xlRowCount)
+        public void EPPlusModeImport(DataTable dataExport, string xlFileName, int xlColCount, int xlRowCount)
         {
             ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
-
-                    DataRow xlrow = null;
 
                     FileInfo existingFile = new FileInfo(xlFileName);
                     using (ExcelPackage package = new ExcelPackage(existingFile))
@@ -1679,25 +1666,39 @@ namespace dataEditor
                             xlRowCount = worksheet.Dimension.End.Row;     //get row count
                             RowsCnt = xlRowCount;
 
+                            List<object> arguments = new List<object>();
+                            arguments.Add(dataExport);
+                            arguments.Add(xlRowCount);
+                            arguments.Add(xlColCount);
+                            arguments.Add(worksheet);
+
+                            bgWorker = new BackgroundWorker();
+                            bgWorker.WorkerReportsProgress = true;
+                            bgWorker.WorkerSupportsCancellation = true;
+                            bgWorker.DoWork += new DoWorkEventHandler(bgWorker_EEPlus);
+
+                            bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
+                            bgWorker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
+
+                            bgWorker.RunWorkerAsync(arguments);
+
+                            progressDlg = new ProgressDialog();
+                            progressDlg.stopProgress = new EventHandler((s, e1) => {
+                                switch (progressDlg.DialogResult)
+                                {
+                                    case DialogResult.Cancel:
+                                        bgWorker.CancelAsync();
+                                        progressDlg.Close();
+                                        break;
+                                }
+                            });
+                            progressDlg.ShowDialog();
+
                             FillStatusGrid(xlRowCount, xlColCount);
 
                             statusGridView.Rows[1].Cells[1].Value = xlColCount;
                             statusGridView.Rows[4].Cells[1].Value = 0;
 
-                            for (int col = 1; col <= xlColCount; col++)
-                            {
-                                dataExport.Columns.Add();
-                            }
-                            for (int row = 1; row <= xlRowCount; row++)
-                            {
-                                xlrow = dataExport.NewRow();
-                                for (int col = 1; col <= xlColCount; col++)
-                                {
-                                    xlrow[col-1] = worksheet.Cells[row, col].Value;
-                                    //Console.WriteLine(" Row:" + row + " column:" + col + " Value:" + worksheet.Cells[row, col].Value?.ToString().Trim());
-                                }
-                                dataExport.Rows.Add(xlrow);
-                            }
                             //FirstUsedRow = worksheet.Dimension.Start.Row;
                             //FirstUsedColumn = worksheet.Dimension.Start.Column;
                             Console.WriteLine("FirstUsedRow: " + worksheet.Dimension.Start.Row.ToString());
@@ -1710,7 +1711,7 @@ namespace dataEditor
                     }
         }
 
-        private void NPOIModeImport(string xlFileName, ISheet wSheet, XSSFFormulaEvaluator xsseva, HSSFFormulaEvaluator hsseva)
+        public void NPOIModeImport(string xlFileName, ISheet wSheet, XSSFFormulaEvaluator xsseva, HSSFFormulaEvaluator hsseva)
         {
             DataRow xlrow = null;
             DataTable dataExport = new DataTable();
@@ -1726,71 +1727,38 @@ namespace dataEditor
                 int cellCnt = 0;
                 int ColCreat = 0;
 
+                List<object> arguments = new List<object>();
+                arguments.Add(dataExport);
+                arguments.Add(xlRowCount);
+                arguments.Add(xlColCount);
+                arguments.Add(wSheet);
+                arguments.Add(xsseva);
+                arguments.Add(hsseva);
+                arguments.Add(cellCnt);
+                arguments.Add(ColCreat);
+                arguments.Add(xlFileName);
 
-                for (int row = wSheet.FirstRowNum; row <= wSheet.PhysicalNumberOfRows; row++)
-                {
-                    if (wSheet.GetRow(row) != null)
+                bgWorker = new BackgroundWorker();
+                bgWorker.WorkerReportsProgress = true;
+                bgWorker.WorkerSupportsCancellation = true;
+                bgWorker.DoWork += new DoWorkEventHandler(bgWorker_NPOI);
+
+                bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
+                bgWorker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
+
+                bgWorker.RunWorkerAsync(arguments);
+
+                progressDlg = new ProgressDialog();
+                progressDlg.stopProgress = new EventHandler((s, e1) => {
+                    switch (progressDlg.DialogResult)
                     {
-                        foreach (ICell cell in wSheet.GetRow(row))
-                        {
-                            cellCnt++;
-                            if (cell.ColumnIndex > ColCreat)
-                                ColCreat = cell.ColumnIndex;
-                            if (cell.ColumnIndex < FirstUsedColumn)
-                                FirstUsedColumn = cell.ColumnIndex + 1;
-                        }
+                        case DialogResult.Cancel:
+                            bgWorker.CancelAsync();
+                            progressDlg.Close();
+                            break;
                     }
-                }
-                xlColCount = ColCreat + 1;
-
-                for (int col = 0; col <= ColCreat; col++)
-                {
-                    dataExport.Columns.Add();
-                }
-                for (int row = wSheet.FirstRowNum; row <= wSheet.LastRowNum; row++)
-                {
-                    if (wSheet.GetRow(row) != null)
-                    {
-                        xlrow = dataExport.NewRow();
-                        foreach (ICell cell in wSheet.GetRow(row))
-                        {
-                            if (Path.GetExtension(xlFileName) == ".xlsx")
-                            {
-                                xsseva.EvaluateInCell(cell);
-                            }
-                            else
-                            {
-                                hsseva.EvaluateInCell(cell);
-                            }
-
-                            var cellType = wSheet.GetRow(row).GetCell(cell.ColumnIndex);
-
-                            switch (cellType.CellType)
-                            {
-                                case CellType.Numeric:
-                                    xlrow[cell.ColumnIndex] = wSheet.GetRow(row).GetCell(cell.ColumnIndex).NumericCellValue;
-                                    break;
-                                case CellType.String:
-                                    xlrow[cell.ColumnIndex] = wSheet.GetRow(row).GetCell(cell.ColumnIndex).StringCellValue;
-                                    break;
-                                case CellType.Unknown:
-                                    xlrow[cell.ColumnIndex] = wSheet.GetRow(row).GetCell(cell.ColumnIndex).StringCellValue;
-                                    break;
-                                case CellType.Blank:
-                                    xlrow[cell.ColumnIndex] = null;
-                                    break;
-                            }
-                        }
-                        dataExport.Rows.Add(xlrow);
-                    }
-                }
-                if (PropGrid.CheckEmptyRows.SwitchChecks == true)
-                {
-                    CheckingRealDat(dataExport);
-                    xlRowCount = dataExport.Rows.Count;
-                    xlColCount = dataExport.Columns.Count;
-                }
-
+                });
+                progressDlg.ShowDialog();
 
             dataViewer.DataSource = dataExport;
             dataViewerFillHeadres(FirstUsedRow, FirstUsedColumn);
@@ -1817,6 +1785,7 @@ namespace dataEditor
             int RowCounter = 0;
             int indexForStarts= 0;
             int RowEmptyStrike = 0;
+            int ColmEmptyStrike = 0;
             int RowStrike = 0;
             int colStrike = 0;
 
@@ -1846,6 +1815,7 @@ namespace dataEditor
                 }
                 else
                 {
+                    colStrike = 0;
                     for (int index = 0; index < ExportsDatTable.Columns.Count; index++)
                     {
                         if (dRow[index] != DBNull.Value)
@@ -1854,13 +1824,21 @@ namespace dataEditor
                         }
                         if (dRow[index] == DBNull.Value)
                         {
-                            removeRowIndex.Add(dRow);
-                            break;
+                            colStrike++;
+                            if (colStrike == ExportsDatTable.Columns.Count)
+                            {
+                                removeRowIndex.Add(dRow);
+                                break;
+                            }
                         }
                         else if (string.IsNullOrEmpty(dRow[index].ToString().Trim()))
                         {
-                            removeRowIndex.Add(dRow);
-                            break;
+                            colStrike++;
+                            if (colStrike == ExportsDatTable.Columns.Count)
+                            {
+                                removeRowIndex.Add(dRow);
+                                break;
+                            }
                         }
                     }
                 }
@@ -1877,7 +1855,11 @@ namespace dataEditor
             {
                 DataColumn row = ExportsDatTable.Columns[i];
                 if (ExportsDatTable.AsEnumerable().All(r => r.IsNull(row) || string.IsNullOrWhiteSpace(r[row].ToString())))
-                    ExportsDatTable.Columns.RemoveAt(i);
+                {
+                    ColmEmptyStrike++;
+                    if (ColmEmptyStrike >= PropGrid.CheckEmptyRows.EmptyColmLimit)
+                        ExportsDatTable.Columns.RemoveAt(i);
+                }
             }
 
         }
@@ -2581,12 +2563,132 @@ namespace dataEditor
 
         private void bgWorker_NPOI(object sender, DoWorkEventArgs e)
         {
+            List<object> genericlist = e.Argument as List<object>;
+            DataTable dataExport = (DataTable)genericlist[0];
+            int xlRowCount = (int)genericlist[1];
+            int xlColCount = (int)genericlist[2];
+            ISheet wSheet = (ISheet)genericlist[3];
+            XSSFFormulaEvaluator xsseva = (XSSFFormulaEvaluator)genericlist[4];
+            HSSFFormulaEvaluator hsseva = (HSSFFormulaEvaluator)genericlist[5];
+            int cellCnt = (int)genericlist[6];
+            int ColCreat = (int)genericlist[7];
+            string xlFileName = (string)genericlist[8];
 
+            BackgroundWorker worker = sender as BackgroundWorker;
+            DataRow xlrow = null;
+
+            for (int row = wSheet.FirstRowNum; row <= wSheet.PhysicalNumberOfRows; row++)
+            {
+                if (wSheet.GetRow(row) != null)
+                {
+                    foreach (ICell cell in wSheet.GetRow(row))
+                    {
+                        cellCnt++;
+                        if (cell.ColumnIndex > ColCreat)
+                            ColCreat = cell.ColumnIndex;
+                        if (cell.ColumnIndex < FirstUsedColumn)
+                            FirstUsedColumn = cell.ColumnIndex + 1;
+                    }
+                }
+            }
+            xlColCount = ColCreat + 1;
+
+            for (int col = 0; col <= ColCreat; col++)
+            {
+                dataExport.Columns.Add();
+            }
+            for (int row = wSheet.FirstRowNum; row <= wSheet.LastRowNum; row++)
+            {
+                if (worker.CancellationPending == true)
+                {
+                    e.Cancel = true;
+                    break;
+                }
+                else
+                {
+                    if (wSheet.GetRow(row) != null)
+                    {
+                        xlrow = dataExport.NewRow();
+                        foreach (ICell cell in wSheet.GetRow(row))
+                        {
+                            if (Path.GetExtension(xlFileName) == ".xlsx")
+                            {
+                                xsseva.EvaluateInCell(cell);
+                            }
+                            else
+                            {
+                                hsseva.EvaluateInCell(cell);
+                            }
+
+                            var cellType = wSheet.GetRow(row).GetCell(cell.ColumnIndex);
+
+                            switch (cellType.CellType)
+                            {
+                                case CellType.Numeric:
+                                    xlrow[cell.ColumnIndex] = wSheet.GetRow(row).GetCell(cell.ColumnIndex).NumericCellValue;
+                                    break;
+                                case CellType.String:
+                                    xlrow[cell.ColumnIndex] = wSheet.GetRow(row).GetCell(cell.ColumnIndex).StringCellValue;
+                                    break;
+                                case CellType.Unknown:
+                                    xlrow[cell.ColumnIndex] = wSheet.GetRow(row).GetCell(cell.ColumnIndex).StringCellValue;
+                                    break;
+                                case CellType.Blank:
+                                    xlrow[cell.ColumnIndex] = null;
+                                    break;
+                            }
+                        }
+                        dataExport.Rows.Add(xlrow);
+                    }
+                int percentage = (row * 100) / wSheet.LastRowNum;
+                worker.ReportProgress(percentage);
+                //Thread.Sleep(5);
+                }
+            }
+            if (PropGrid.CheckEmptyRows.SwitchChecks == true)
+            {
+                CheckingRealDat(dataExport);
+                xlRowCount = dataExport.Rows.Count;
+                xlColCount = dataExport.Columns.Count;
+            }
         }
 
         private void bgWorker_EEPlus(object sender, DoWorkEventArgs e)
         {
+            List<object> genericlist = e.Argument as List<object>;
+            DataTable dataExport = (DataTable)genericlist[0];
+            int xlRowCount = (int)genericlist[1];
+            int xlColCount = (int)genericlist[2];
+            ExcelWorksheet worksheet = (ExcelWorksheet)genericlist[3];
 
+
+            BackgroundWorker worker = sender as BackgroundWorker;
+            DataRow xlrow = null;
+
+            for (int col = 1; col <= xlColCount; col++)
+            {
+                dataExport.Columns.Add();
+            }
+            for (int row = 1; row <= xlRowCount; row++)
+            {
+                if (worker.CancellationPending == true)
+                {
+                    e.Cancel = true;
+                    break;
+                }
+                else
+                {
+                    xlrow = dataExport.NewRow();
+                    for (int col = 1; col <= xlColCount; col++)
+                    {
+                        xlrow[col - 1] = worksheet.Cells[row, col].Value;
+                        //Console.WriteLine(" Row:" + row + " column:" + col + " Value:" + worksheet.Cells[row, col].Value?.ToString().Trim());
+                    }
+                    dataExport.Rows.Add(xlrow);
+                    int percentage = (row * 100) / xlRowCount;
+                    worker.ReportProgress(percentage);
+                }
+            }
         }
 
         private void bgWorker_OleDB(object sender, DoWorkEventArgs e)
@@ -2611,6 +2713,31 @@ namespace dataEditor
             mgDatsEditor DictionaryForm = new mgDatsEditor();
             DictionaryForm.listGTP.Text = PropGrid.Region;
             DictionaryForm.Show();
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (PropGrid.ForceCloseExl == true)
+            {
+                foreach (Process clsProcess in Process.GetProcesses())
+                {
+                    if (clsProcess.ProcessName.Equals("EXCEL"))
+                    {
+                        clsProcess.Kill();
+                    }
+                }
+            }
+            else
+            {
+                KillSpecificExcelFileProcess(ExlFileName);
+            }
+            Application.Exit();
+        }
+
+        private void ExitUR_Click(object sender, EventArgs e)
+        {
+            Application.OpenForms["MainForm"].Hide();
+            Application.OpenForms[0].Show();
         }
     }
     public static class ExtensionMethods
