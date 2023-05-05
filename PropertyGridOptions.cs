@@ -42,6 +42,19 @@ namespace dataEditor
             set { appBuild = value; }
         }
 
+        private string m_StartPage;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("Select default page")]
+        [DisplayName("StartPage")]
+        [Category("App")]
+        [TypeConverter(typeof(StartPage))]
+        public string StartPage
+        {
+            get { return m_StartPage; }
+            set { m_StartPage = value; }
+        }
+
         private string m_Region;
         [Browsable(true)]
         [ReadOnly(false)]
@@ -526,6 +539,19 @@ namespace dataEditor
             string[] reports = { "buy_norem", "cfrliab", "cfrliabdpg", "CESSM", "CFR_PART_LIAB_DEL_NOTICE", "svnc_part_s_plan", "PROGN_LIAB_FRSFG", "power_consumer_3_fact", "frs_dev_factcost" };
 
             return new StandardValuesCollection(reports);
+            return base.GetStandardValues(context);
+        }
+    }
+
+    public class StartPage : StringConverter
+    {
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        {
+            return true;
+        }
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            return new StandardValuesCollection(ImportList.AvailablePages);
             return base.GetStandardValues(context);
         }
     }

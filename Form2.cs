@@ -22,15 +22,6 @@ namespace dataEditor
             Application.Exit();
         }
 
-        private void MounthTab_TabIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void MounthTab_Selected(object sender, TabControlEventArgs e)
-        {
-            dataViewer.Parent = e.TabPage;
-        }
 
         private void ExitMG_Click(object sender, EventArgs e)
         {
@@ -40,7 +31,7 @@ namespace dataEditor
 
         private void importFile_Click(object sender, EventArgs e)
         {
-            StartScreen.universalReaderForm.ImportEXCL_Click(this, new EventArgs());
+
         }
     }
 }

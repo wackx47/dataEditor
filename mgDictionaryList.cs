@@ -19,15 +19,16 @@ using System.Xml.Linq;
 
 namespace dataEditor
 {
-    public partial class mgDatsEditor : Form
+    public partial class mgDatsList : Form
     {
         DataGridViewCell ActiveCell = null;
 
 
 
-        public mgDatsEditor()
+        public mgDatsList()
         {
             InitializeComponent();
+            
         }
 
         private void mgDatsEditor_Load(object sender, EventArgs e)
@@ -39,188 +40,69 @@ namespace dataEditor
         {
             DataSet ImportDataSet = new DataSet();
 
-            dataGridDictionary.DataSource = null;
-            DataTable DT = (DataTable)dataGridDictionary.DataSource;
+            dataGridDictionaryList.DataSource = null;
+            DataTable DT = (DataTable)dataGridDictionaryList.DataSource;
             if (DT != null)
                 DT.Clear();
 
-            dataGridDictionary.Rows.Clear();
-            dataGridDictionary.Refresh();
+            dataGridDictionaryList.Rows.Clear();
+            dataGridDictionaryList.Refresh();
 
-            if (File.Exists(Environment.CurrentDirectory + "\\contractors_" + listGTP.Text +".xml"))
+            if (File.Exists(Environment.CurrentDirectory + "\\contractors_" + dictListGTP.Text +".xml"))
             {
-                string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + listGTP.Text +".xml";
+                string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + dictListGTP.Text +".xml";
 
                 XDocument XMLfile = XDocument.Load(xmlFileName);
                 ImportDataSet.ReadXml(xmlFileName);
 
                 int rwi = 0;
-                foreach (XElement infoElement in XMLfile.Root.Elements(listGTP.Text))
+                foreach (XElement infoElement in XMLfile.Root.Elements(dictListGTP.Text))
                 {
-                    dataGridDictionary.Rows.Add();
+                    dataGridDictionaryList.Rows.Add();
                     if (infoElement.Element("Agreement") != null)
-                        dataGridDictionary.Rows[rwi].Cells["Agreement"].Value = infoElement.Element("Agreement").Value;
-                    if (infoElement.Element("DateIntoForce") != null)
-                        dataGridDictionary.Rows[rwi].Cells["DateIntoForce"].Value = infoElement.Element("DateIntoForce").Value;
+                        dataGridDictionaryList.Rows[rwi].Cells["Agreement"].Value = infoElement.Element("Agreement").Value;
+                    if (infoElement.Element("DateAgreement") != null)
+                        dataGridDictionaryList.Rows[rwi].Cells["Agreement"].Value = infoElement.Element("Agreement").Value;
                     if (infoElement.Element("FullName") != null)
-                        dataGridDictionary.Rows[rwi].Cells["FullName"].Value = infoElement.Element("FullName").Value;
+                        dataGridDictionaryList.Rows[rwi].Cells["FullName"].Value = infoElement.Element("FullName").Value;
                     if (infoElement.Element("Type") != null)
-                        dataGridDictionary.Rows[rwi].Cells["Type"].Value = infoElement.Element("Type").Value;
+                        dataGridDictionaryList.Rows[rwi].Cells["Type"].Value = infoElement.Element("Type").Value;
                     if (infoElement.Element("INN") != null)
-                        dataGridDictionary.Rows[rwi].Cells["INN"].Value = infoElement.Element("INN").Value;
+                        dataGridDictionaryList.Rows[rwi].Cells["INN"].Value = infoElement.Element("INN").Value;
                     if (infoElement.Element("Other") != null)
-                        dataGridDictionary.Rows[rwi].Cells["Other"].Value = infoElement.Element("Other").Value;
+                        dataGridDictionaryList.Rows[rwi].Cells["Other"].Value = infoElement.Element("Other").Value;
                     rwi++;
                 }
-                dataGridDictionary.RowHeaderMouseClick += new DataGridViewCellMouseEventHandler(dataGridDictionary_RowSelected);
+                dataGridDictionaryList.RowHeaderMouseClick += new DataGridViewCellMouseEventHandler(dataGridDictionary_RowSelected);
             }
-            dataGridDictionary.Refresh();
+            dataGridDictionaryList.Refresh();
         }
 
         private void dataGridDictionary_RowSelected(object sender, DataGridViewCellMouseEventArgs e)
         {
-            dataGridDictionary.ClearSelection();
+            //dataGridDictionaryList.ClearSelection();
 
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 if (e.ColumnIndex == -1 && e.RowIndex > -1)
                 {
-                    dataGridDictionary.Rows[e.RowIndex].Selected = true;
-                    ActiveCell = dataGridDictionary[0, e.RowIndex];
+                    dataGridDictionaryList.Rows[e.RowIndex].Selected = true;
+                    ActiveCell = dataGridDictionaryList[0, e.RowIndex];
                     mgRightClickMenu.Show(Cursor.Position);
                 }
             }
         }
 
-
-        private void btnAddNew_Click(object sender, EventArgs e)
-        {
-            dataGridDictionary.Rows.Add();
-            dataGridDictionary.Refresh();
-        }
-
-        private void addToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            dataGridDictionary.Rows.Add();
-            dataGridDictionary.Refresh();
-        }
-
         private void RemoveContractors_Click(object sender, EventArgs e)
         {
-            dataGridDictionary.Rows.RemoveAt(ActiveCell.RowIndex);
+            dataGridDictionaryList.Rows.RemoveAt(ActiveCell.RowIndex);
         }
 
-        private void mgMenuShowInWindows_Click(object sender, EventArgs e)
-        {
-            string filePath = Environment.CurrentDirectory + "\\contractors_" + listGTP.Text + ".xml";
-            if (!File.Exists(filePath))
-            {
-                Console.WriteLine("File not found");
-                return;
-            }
-
-            string argument = "/select, \"" + filePath + "\"";
-
-            System.Diagnostics.Process.Start("explorer.exe", argument);
-        }
-
-
-        private void mgMenuFileSave_Click(object sender, EventArgs e)
-        {
-            DataSet DictionaryDataSet = new DataSet("ContractorsDictionary");
-            DataTable exportTable = new DataTable();
-
-            DictionaryDataSet.Clear();
-            exportTable.Clear();
-
-            exportTable.TableName = listGTP.Text;
-            DictionaryDataSet.Tables.Add(exportTable);
-
-            //exportTable.Columns.Add("id");
-            exportTable.Columns.Add("Agreement");
-            exportTable.Columns.Add("DateIntoForce");
-            exportTable.Columns.Add("FullName");
-            exportTable.Columns.Add("Type");
-            exportTable.Columns.Add("INN");
-            exportTable.Columns.Add("Other");
-
-            foreach (DataGridViewRow rw in dataGridDictionary.Rows)
-            {
-                    DataRow row = DictionaryDataSet.Tables[listGTP.Text].NewRow();
-                    //row["id"] = rw.HeaderCell.Value.ToString();
-                    row["Agreement"] = rw.Cells["Agreement"].Value;
-                    row["DateIntoForce"] = rw.Cells["DateIntoForce"].Value;
-                    row["FullName"] = rw.Cells["FullName"].Value;
-                    row["Type"] = rw.Cells["Type"].Value;
-                    row["INN"] = rw.Cells["INN"].Value;
-                    row["Other"] = rw.Cells["Other"].Value;
-
-                    DictionaryDataSet.Tables[listGTP.Text].Rows.Add(row);
-            }
-
-            string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + listGTP.Text + ".xml";
-            try
-            {
-                DictionaryDataSet.WriteXml(xmlFileName.ToString());
-                Console.WriteLine("The file was saved successfully");
-            }
-            catch
-            {
-                Console.WriteLine("Failed to save file");
-            }
-        }
-
-        private void mgMenuFileOpen_Click(object sender, EventArgs e)
-        {
-            DataSet ImportDataSet = new DataSet();
-
-            dataGridDictionary.DataSource = null;
-            DataTable DT = (DataTable)dataGridDictionary.DataSource;
-            if (DT != null)
-                DT.Clear();
-
-            dataGridDictionary.Rows.Clear();
-            dataGridDictionary.Refresh();
-
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Multiselect = false;
-            ofd.DefaultExt = "*.xml";
-            ofd.Filter = "XML File (*.xml*)|*.xml*";
-            ofd.Title = "Import file XML";
-            if (ofd.ShowDialog() != DialogResult.OK)
-                return;
-
-            string xmlFileName = ofd.FileName;
-
-            XDocument XMLfile = XDocument.Load(xmlFileName);
-            ImportDataSet.ReadXml(xmlFileName);
-
-            int rwi = 0;
-            foreach (XElement infoElement in XMLfile.Root.Elements(listGTP.Text))
-            {
-                dataGridDictionary.Rows.Add();
-                if (infoElement.Element("Agreement") != null)
-                    dataGridDictionary.Rows[rwi].Cells["Agreement"].Value = infoElement.Element("Agreement").Value;
-                if (infoElement.Element("DateIntoForce") != null)
-                    dataGridDictionary.Rows[rwi].Cells["DateIntoForce"].Value = infoElement.Element("DateIntoForce").Value;
-                if (infoElement.Element("FullName") != null)
-                    dataGridDictionary.Rows[rwi].Cells["FullName"].Value = infoElement.Element("FullName").Value;
-                if (infoElement.Element("Type") != null)
-                    dataGridDictionary.Rows[rwi].Cells["Type"].Value = infoElement.Element("Type").Value;
-                if (infoElement.Element("INN") != null)
-                    dataGridDictionary.Rows[rwi].Cells["INN"].Value = infoElement.Element("INN").Value;
-                if (infoElement.Element("Other") != null)
-                    dataGridDictionary.Rows[rwi].Cells["Other"].Value = infoElement.Element("Other").Value;
-                rwi++;
-            }
-
-            dataGridDictionary.Refresh();
-        }
 
         private void dataGridDictionary_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
             e.Control.KeyPress -= new KeyPressEventHandler(CheckKey);
-            if (dataGridDictionary.CurrentCell.ColumnIndex == 4) //Desired Column
+            if (dataGridDictionaryList.CurrentCell.ColumnIndex == 4) //Desired Column
             {
                 TextBox tb = e.Control as TextBox;
                 if (tb != null)
@@ -453,5 +335,128 @@ namespace dataEditor
             }
         }
 
+        private void dictBtnSave_Click(object sender, EventArgs e)
+        {
+            DataSet DictionaryDataSet = new DataSet("ContractorsDictionary");
+            DataTable exportTable = new DataTable();
+
+            DictionaryDataSet.Clear();
+            exportTable.Clear();
+
+            exportTable.TableName = dictListGTP.Text;
+            DictionaryDataSet.Tables.Add(exportTable);
+
+            //exportTable.Columns.Add("id");
+            exportTable.Columns.Add("Agreement");
+            exportTable.Columns.Add("DateAgreement");
+            exportTable.Columns.Add("FullName");
+            exportTable.Columns.Add("Type");
+            exportTable.Columns.Add("INN");
+            exportTable.Columns.Add("Other");
+
+            foreach (DataGridViewRow rw in dataGridDictionaryList.Rows)
+            {
+                DataRow row = DictionaryDataSet.Tables[dictListGTP.Text].NewRow();
+                //row["id"] = rw.HeaderCell.Value.ToString();
+                row["Agreement"] = rw.Cells["Agreement"].Value;
+                row["DateAgreement"] = rw.Cells["DateAgreement"].Value;
+                row["FullName"] = rw.Cells["FullName"].Value;
+                row["Type"] = rw.Cells["Type"].Value;
+                row["INN"] = rw.Cells["INN"].Value;
+                row["Other"] = rw.Cells["Other"].Value;
+
+                DictionaryDataSet.Tables[dictListGTP.Text].Rows.Add(row);
+            }
+
+            string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + dictListGTP.Text + ".xml";
+            try
+            {
+                DictionaryDataSet.WriteXml(xmlFileName.ToString());
+                Console.WriteLine("The file was saved successfully");
+            }
+            catch
+            {
+                Console.WriteLine("Failed to save file");
+            }
+        }
+
+        private void dictBtnShowFolder_Click(object sender, EventArgs e)
+        {
+            string filePath = Environment.CurrentDirectory + "\\contractors_" + dictListGTP.Text + ".xml";
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine("File not found");
+                return;
+            }
+
+            string argument = "/select, \"" + filePath + "\"";
+
+            System.Diagnostics.Process.Start("explorer.exe", argument);
+        }
+
+        private void dictBtnAddElm_Click(object sender, EventArgs e)
+        {
+            dataGridDictionaryList.Rows.Add();
+            dataGridDictionaryList.Refresh();
+        }
+
+        private void dictBtnDelElm_Click(object sender, EventArgs e)
+        {
+            ActiveCell = dataGridDictionaryList[0, dataGridDictionaryList.CurrentCell.RowIndex];
+            dataGridDictionaryList.Rows.RemoveAt(ActiveCell.RowIndex);
+        }
+
+        private void mgDatsList_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            Application.OpenForms["mgDatsList"].Hide();
+        }
+
+        private void dictBtnOpen_ButtonClick(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Multiselect = false;
+            ofd.DefaultExt = "*.xml";
+            ofd.Filter = "XML File (*.xml*)|*.xml*";
+            ofd.Title = "Import file XML";
+            if (ofd.ShowDialog() != DialogResult.OK)
+                return;
+
+            string xmlFileName = ofd.FileName;
+
+            DataSet ImportDataSet = new DataSet();
+
+            dataGridDictionaryList.DataSource = null;
+            DataTable DT = (DataTable)dataGridDictionaryList.DataSource;
+            if (DT != null)
+                DT.Clear();
+
+            dataGridDictionaryList.Rows.Clear();
+            dataGridDictionaryList.Refresh();
+
+            XDocument XMLfile = XDocument.Load(xmlFileName);
+            ImportDataSet.ReadXml(xmlFileName);
+
+            int rwi = 0;
+            foreach (XElement infoElement in XMLfile.Root.Elements(dictListGTP.Text))
+            {
+                dataGridDictionaryList.Rows.Add();
+                if (infoElement.Element("Agreement") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["Agreement"].Value = infoElement.Element("Agreement").Value;
+                if (infoElement.Element("DateAgreement") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["DateAgreement"].Value = infoElement.Element("DateAgreement").Value;
+                if (infoElement.Element("FullName") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["FullName"].Value = infoElement.Element("FullName").Value;
+                if (infoElement.Element("Type") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["Type"].Value = infoElement.Element("Type").Value;
+                if (infoElement.Element("INN") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["INN"].Value = infoElement.Element("INN").Value;
+                if (infoElement.Element("Other") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["Other"].Value = infoElement.Element("Other").Value;
+                rwi++;
+            }
+
+            dataGridDictionaryList.Refresh();
+        }
     }
 }
