@@ -20,6 +20,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.Design;
+using NPOI.OpenXmlFormats.Wordprocessing;
 
 namespace dataEditor
 {
@@ -55,17 +56,17 @@ namespace dataEditor
             set { m_StartPage = value; }
         }
 
-        private string m_Region;
+        public mgRegions m_mgCodeName = new mgRegions("", "");
         [Browsable(true)]
         [ReadOnly(false)]
         [Description("Available regions for microgenerations.")]
         [DisplayName("GTP")]
-        [Category("Region")]
-        [TypeConverter(typeof(Regions))]
-        public string Region
+        [Category("Microgeneration")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public mgRegions mgCodeName
         {
-            get { return m_Region; }
-            set { m_Region = value; }
+            get { return m_mgCodeName; }
+            set { m_mgCodeName = value; }
         }
 
 
@@ -419,6 +420,41 @@ namespace dataEditor
                 return SwitchChecks + " (RLim=" + EmptyRowsLimit + " CLim="  + EmptyColmLimit + ")";
         }
     }
+    class mgRegions
+    {
+        public mgRegions(string GTPName, string GTPcode)
+        {
+            _GTPName = GTPName;
+            _GTPcode = GTPcode;
+        }
+        List<string> mgGTPnameList = new List<string> { "KUBANESK", "ROSTOVEN" };
+
+        private string _GTPName;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("")]
+        [DisplayName("GTPname")]
+        [TypeConverter(typeof(mgListGTPnames))]
+        public string propGTPname 
+        { get { return _GTPName; } set { _GTPName = value; } }
+
+        List<string> mgGTPcodeList = new List<string> { "PKUBANEN", "PROSTOVE" };
+
+        private string _GTPcode;
+        [Browsable(true)]
+        [ReadOnly(true)]
+        [Description("")]
+        [DisplayName("GTPcode")]
+        [TypeConverter(typeof(mgListGTPcodes))]
+        public string propGTPcode
+        { get { return mgGTPcodeList[mgGTPnameList.IndexOf(propGTPname)]; } set { _GTPcode = value; } }
+
+        public override string ToString()
+        {
+                return propGTPname + " (" + mgGTPcodeList[mgGTPnameList.IndexOf(propGTPname)] + ")";
+        }
+    }
+
 
     class OleDBModeSets
     {
@@ -556,7 +592,7 @@ namespace dataEditor
         }
     }
 
-    public class Regions : StringConverter
+    public class mgListGTPnames : StringConverter
     {
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
         {
@@ -564,9 +600,24 @@ namespace dataEditor
         }
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            string[] regions = { "KUBANESK" };
+            string[] mgGTPnameList = { "KUBANESK", "ROSTOVEN" };
 
-            return new StandardValuesCollection(regions);
+            return new StandardValuesCollection(mgGTPnameList);
+            return base.GetStandardValues(context);
+        }
+    }
+
+    public class mgListGTPcodes : StringConverter
+    {
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        {
+            return true;
+        }
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            string[] mgGTPcodeList = { "PKUBANEN", "PROSTOVE" };
+
+            return new StandardValuesCollection(mgGTPcodeList);
             return base.GetStandardValues(context);
         }
     }

@@ -155,8 +155,8 @@ namespace dataEditor
             addAvailableProviders(this, new EventArgs());
             TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["ExtraColCnt"].SetReadOnlyAttribute(true);
             PropGrid.ImportMode = ImportList.AvailableMode[0];
-            PropGrid.Region = "KUBANESK";
-            DictionaryForm.dictListGTP.Text = PropGrid.Region;
+            PropGrid.mgCodeName.propGTPname = "KUBANESK";
+            DictionaryForm.dictListGTP.Text = PropGrid.mgCodeName.propGTPname;
         }
 
         public static void ScaleControlElements(DataGridView ScaleSource, SizeF ScaleFactor)
@@ -969,9 +969,9 @@ namespace dataEditor
 
         private void LoadXMLforMG()
         {
-            if (File.Exists(Environment.CurrentDirectory + "\\contractors_" + PropGrid.Region + ".xml"))
+            if (File.Exists(Environment.CurrentDirectory + "\\contractors_" + PropGrid.mgCodeName.propGTPname + ".xml"))
             {
-                string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + PropGrid.Region + ".xml";
+                string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + PropGrid.mgCodeName.propGTPname + ".xml";
 
                 DataSet ExportsDats = new DataSet();
                 ExportsDats.ReadXml(xmlFileName);
@@ -1118,26 +1118,26 @@ namespace dataEditor
             string xlFileName = ofd.FileName;
             ExlFileName = Path.GetFileName(xlFileName);
 
-            DataGridView mgDt = mgWorkDataViewer;
-            mgWorkDataViewer.DataSource = null;
-            DataTable dataExtraction = new DataTable();
-            DataTable DT = (DataTable)mgWorkDataViewer.DataSource;
-            if (DT != null)
-                DT.Clear();
+                DataGridView mgDt = mgDataViewer;
+                mgDataViewer.DataSource = null;
+                DataTable dataExtraction = new DataTable();
+                DataTable DT = (DataTable)mgDataViewer.DataSource;
+                if (DT != null)
+                    DT.Clear();
 
-            mgWorkDataViewer.Rows.Clear();
-            mgWorkDataViewer.Refresh();
-            int count = this.mgWorkDataViewer.Columns.Count;
-            for (int i = 0; i < count; i++)
-                this.mgWorkDataViewer.Columns.RemoveAt(0);
+                mgDataViewer.Rows.Clear();
+                mgDataViewer.Refresh();
+                int count = this.mgDataViewer.Columns.Count;
+                for (int i = 0; i < count; i++)
+                    this.mgDataViewer.Columns.RemoveAt(0);
 
-            commonImportEXCL(this, new EventArgs(), dataExtraction, xlFileName);
-            mgWorkDataViewer.DataSource = dataExtraction;
-            dataViewerFillHeadres(FirstUsedRow, FirstUsedColumn, mgDt);
+                commonImportEXCL(this, new EventArgs(), dataExtraction, xlFileName);
 
-            mgWorkDataViewer.AllowUserToAddRows = false;
-            mgWorkDataViewer.AllowUserToDeleteRows = false;
-            mgWorkDataViewer.EnableHeadersVisualStyles = false;
+                mgDataViewer.DataSource = dataExtraction;
+                dataViewerFillHeadres(FirstUsedRow, FirstUsedColumn, mgDt);
+
+                mgDataViewer.AllowUserToAddRows = false;
+                mgDataViewer.AllowUserToDeleteRows = false;
         }
 
         public void urImportEXCL(object sender, EventArgs e)
@@ -1899,6 +1899,15 @@ namespace dataEditor
                 PropGrid.cntHeadsRows = 1;
             }
 
+            switch (PropGrid.mgCodeName.propGTPname)
+            {
+                case "KUBANESK":
+                    textBoxSubject.PlaceholderText = " раснодарский край";
+                    textBoxGTPcode.PlaceholderText = "PKUBANEN";
+                    textBoxNameGP.PlaceholderText = "ѕјќ “Ќ— энерго  убань";
+                    break;
+            }
+
             if (PropGrid.ExtraColCnt > 10)
                 PropGrid.ExtraColCnt = 10;
 
@@ -2358,11 +2367,6 @@ namespace dataEditor
             Application.OpenForms[0].Show();
         }
 
-        private void MounthTab_Selected(object sender, TabControlEventArgs e)
-        {
-            mgDataViewer.Parent = e.TabPage;
-        }
-
         private void SectionsControl_Selected(object sender, TabControlEventArgs e)
         {
             switch (SectionsControl.SelectedIndex)
@@ -2462,9 +2466,9 @@ namespace dataEditor
             DataTable mgDictionaryTable = new DataTable();
 
 
-            if (File.Exists(Environment.CurrentDirectory + "\\contractors_" + PropGrid.Region + ".xml"))
+            if (File.Exists(Environment.CurrentDirectory + "\\contractors_" + PropGrid.mgCodeName.propGTPname + ".xml"))
             {
-                string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + PropGrid.Region + ".xml";
+                string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + PropGrid.mgCodeName.propGTPname + ".xml";
 
                 DataSet ExportsDats = new DataSet();
                 ExportsDats.ReadXml(xmlFileName);
@@ -2498,48 +2502,48 @@ namespace dataEditor
             ConvertExcel.Columns.Add(new DataColumn("Cost", typeof(decimal)));
 
 
-            for (int i = 0; i < mgWorkDataViewer.RowCount; i++)
+            for (int i = 0; i < mgDataViewer.RowCount; i++)
             {
-                bool result = Int32.TryParse(mgWorkDataViewer.Rows[i].Cells[0].Value.ToString(), out number);
-                if (mgWorkDataViewer.Rows[i].Cells[0].Value != DBNull.Value && result)
+                bool result = Int32.TryParse(mgDataViewer.Rows[i].Cells[0].Value.ToString(), out number);
+                if (mgDataViewer.Rows[i].Cells[0].Value != DBNull.Value && result)
                 {
                     BigCycle = i;
 
                     DataRow row = ConvertExcel.NewRow();
                     //row["id"] = number;
                     Console.WriteLine("AddToTableRowWithID: " + number);
-                    row["Name"] = mgWorkDataViewer.Rows[i].Cells[2].Value.ToString().Split(',').First();
+                    row["Name"] = mgDataViewer.Rows[i].Cells[2].Value.ToString().Split(',').First();
 
-                    if (mgWorkDataViewer.Rows[i].Cells[7].Value.ToString() == "A+, к¬т*ч" && mgWorkDataViewer.Rows[i + 1].Cells[7].Value.ToString() == "A-, к¬т*ч")
+                    if (mgDataViewer.Rows[i].Cells[7].Value.ToString() == "A+, к¬т*ч" && mgDataViewer.Rows[i + 1].Cells[7].Value.ToString() == "A-, к¬т*ч")
                     {
-                        decimal.TryParse(mgWorkDataViewer.Rows[i].Cells[11].Value.ToString(), out ConsumptionValue);
+                        decimal.TryParse(mgDataViewer.Rows[i].Cells[11].Value.ToString(), out ConsumptionValue);
                         row["ConsumptionSumm"] = Math.Round(ConsumptionValue, 0);
-                        Console.WriteLine("ConsumptionSumm: " + mgWorkDataViewer.Rows[i].Cells[11].Value.ToString());
+                        Console.WriteLine("ConsumptionSumm: " + mgDataViewer.Rows[i].Cells[11].Value.ToString());
 
-                        decimal.TryParse(mgWorkDataViewer.Rows[i + 1].Cells[11].Value.ToString(), out GenerationValue);
+                        decimal.TryParse(mgDataViewer.Rows[i + 1].Cells[11].Value.ToString(), out GenerationValue);
                         row["GenerationSumm"] = Math.Round(GenerationValue, 0);
-                        Console.WriteLine("GenerationSumm: " + mgWorkDataViewer.Rows[i + 1].Cells[11].Value.ToString() + "\n");
+                        Console.WriteLine("GenerationSumm: " + mgDataViewer.Rows[i + 1].Cells[11].Value.ToString() + "\n");
                     }
                     else
                     {
                         BigCycle++;
-                        while (BigCycle < mgWorkDataViewer.Rows.Count && mgWorkDataViewer.Rows[BigCycle].Cells[0].Value == DBNull.Value)
+                        while (BigCycle < mgDataViewer.Rows.Count && mgDataViewer.Rows[BigCycle].Cells[0].Value == DBNull.Value)
                         {
-                            if (BigCycle < mgWorkDataViewer.Rows.Count && mgWorkDataViewer.Rows[BigCycle].Cells[7].Value.ToString() == "A-, к¬т*ч")
+                            if (BigCycle < mgDataViewer.Rows.Count && mgDataViewer.Rows[BigCycle].Cells[7].Value.ToString() == "A-, к¬т*ч")
                             {
-                                decimal.TryParse(mgWorkDataViewer.Rows[BigCycle - 1].Cells[11].Value.ToString(), out ConsumptionValue);
+                                decimal.TryParse(mgDataViewer.Rows[BigCycle - 1].Cells[11].Value.ToString(), out ConsumptionValue);
                                 row["ConsumptionSumm"] = Math.Round(ConsumptionValue, 0);
-                                Console.WriteLine("ConsumptionSumm: " + mgWorkDataViewer.Rows[BigCycle - 1].Cells[11].Value.ToString());
+                                Console.WriteLine("ConsumptionSumm: " + mgDataViewer.Rows[BigCycle - 1].Cells[11].Value.ToString());
 
                                 SmallCycle = BigCycle + 1;
 
-                                while (SmallCycle < mgWorkDataViewer.Rows.Count && mgWorkDataViewer.Rows[SmallCycle].Cells[7].Value == DBNull.Value)
+                                while (SmallCycle < mgDataViewer.Rows.Count && mgDataViewer.Rows[SmallCycle].Cells[7].Value == DBNull.Value)
                                 {
-                                    if (mgWorkDataViewer.Rows[SmallCycle].Cells[8].Value.ToString() == "—умма")
+                                    if (mgDataViewer.Rows[SmallCycle].Cells[8].Value.ToString() == "—умма")
                                     {
-                                        decimal.TryParse(mgWorkDataViewer.Rows[SmallCycle].Cells[11].Value.ToString(), out GenerationValue);
+                                        decimal.TryParse(mgDataViewer.Rows[SmallCycle].Cells[11].Value.ToString(), out GenerationValue);
                                         row["GenerationSumm"] = Math.Round(GenerationValue, 0);
-                                        Console.WriteLine("GenerationSumm: " + mgWorkDataViewer.Rows[SmallCycle].Cells[11].Value.ToString() + "\n");
+                                        Console.WriteLine("GenerationSumm: " + mgDataViewer.Rows[SmallCycle].Cells[11].Value.ToString() + "\n");
                                         BigCycle = SmallCycle;
                                     }
                                     SmallCycle++;
@@ -2610,30 +2614,6 @@ namespace dataEditor
             mgDataViewer.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             mgDataViewer.Columns["Agreement"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
         }
-
-        private void mgWorkDataViewer_DragDrop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                foreach (string filePath in files)
-                {
-                    Console.WriteLine(filePath);
-                }
-            }
-        }
-
-        private void mgWorkDataViewer_DragEnter(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                e.Effect = DragDropEffects.Move;
-            }
-            else
-            {
-                e.Effect = DragDropEffects.None;
-            }
-        }
     
         private void StartPage()
         {
@@ -2653,6 +2633,63 @@ namespace dataEditor
                     optionsGrid.Parent = splitContainer_rightProps.Panel2;
                     break;
             }
+        }
+
+        private void mgImportEntryDats(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Multiselect = false;
+            ofd.DefaultExt = "*.xls;*.xlsx";
+            ofd.Filter = "Microsoft Excel (*.xls*)|*.xls*";
+            ofd.Title = "¬ыберите документ Excel";
+            if (ofd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            string xlFileName = ofd.FileName;
+
+            DataTable dataExtraction = new DataTable();
+            commonImportEXCL(this, new EventArgs(), dataExtraction, xlFileName);
+
+            switch (Path.GetFileNameWithoutExtension(xlFileName).Split("_").Last())
+            {
+                case "koeff":
+
+                DataRow[] filteredRows = dataExtraction.Select(string.Format("{0} LIKE '%{1}%'", "column4", PropGrid.mgCodeName.propGTPcode));
+
+                foreach (DataRow row in filteredRows)
+                {
+                    textBoxSubject.Text = row[1].ToString();
+                    textBoxGTPcode.Text = row[3].ToString();
+                    textBoxNameGP.Text = row[2].ToString();
+
+                    datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e1"].Nodes["treeViewLine6e1val"].Text = row[4].ToString();
+                    datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e2"].Nodes["treeViewLine6e2val"].Text = row[5].ToString();
+                    datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e3"].Nodes["treeViewLine6e3val"].Text = row[6].ToString();
+
+                    datsTreeView.Nodes["treeViewLine7"].Nodes["treeViewLine7e1"].Nodes["treeViewLine7e1val"].Text = row[7].ToString();
+                    datsTreeView.Nodes["treeViewLine7"].Nodes["treeViewLine7e2"].Nodes["treeViewLine7e2val"].Text = row[8].ToString();
+                }
+                break;
+
+                case "stage":
+                    datsTreeView.Nodes["treeViewLine2"].Nodes["treeViewLine2e1val"].Text = dataExtraction.Rows[31][1].ToString();
+                    datsTreeView.Nodes["treeViewLine3"].Nodes["treeViewLine3e1val"].Text = dataExtraction.Rows[33][1].ToString();
+
+                    datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e1"].Nodes["treeViewLine4e1val"].Text = dataExtraction.Rows[25][1].ToString();
+                    datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e2"].Nodes["treeViewLine4e2val"].Text = dataExtraction.Rows[26][1].ToString();
+                    datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e3"].Nodes["treeViewLine4e3val"].Text = dataExtraction.Rows[27][1].ToString();
+
+                    datsTreeView.Nodes["treeViewLine5"].Nodes["treeViewLine5e1"].Nodes["treeViewLine5e1val"].Text = dataExtraction.Rows[29][1].ToString();
+                    datsTreeView.Nodes["treeViewLine5"].Nodes["treeViewLine5e2"].Nodes["treeViewLine5e2val"].Text = dataExtraction.Rows[30][1].ToString();
+                    break;
+            }
+        }
+
+        private void EntryDatsKoeff()
+        {
+
         }
 
         private void urBtnSaveXML_Click(object sender, EventArgs e)
@@ -2830,6 +2867,8 @@ namespace dataEditor
             optionsGrid.Refresh();
             TreeColViewer.ClearSelection();
         }
+
+
     }
     public static class ExtensionMethods
     {

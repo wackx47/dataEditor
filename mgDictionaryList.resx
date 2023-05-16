@@ -60,6 +60,9 @@
   <metadata name="mgRightClickMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>132, 17</value>
   </metadata>
+  <metadata name="editLink.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <metadata name="DateAgreement.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -110,16 +113,6 @@
         UmRNGpk5W7LKBWSQNW4r1l8EPP1ICgm3fUNEVyG3gR8pYtK5AAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="dictBtnImportFromExcel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADySURBVDhPpVI7DsIwFMs1UEK/50DqHRBT6cLOgsTACidh
-        ZmCmnKEDEggm6NyNExS/0FcR1IaiWrLcF9lOUkV0ge/7OVg2MK8sdjQEa1YWO8joOM6gSSuLHWRsY2Wx
-        g4x9T9DvJ/6E67oR+GzYwdwlPkZiml61MmAYIVxAJ3Svb1KJNlIoTguRpKVWLqGdYRxDZzBnQRA4nuft
-        8b0wCpLDUod0ASlmAhnIKKVUCJ4xb6F30DUKGFTwCS4gIjSnGVzxWl1AwffxH3pmcEEYhkNc4wTusHaj
-        qxgFbeAC6Bq8KKUkNAM3fxW0sUtB2ytjWl6bEC8byJwadcZcKwAAAABJRU5ErkJggg==
-</value>
-  </data>
   <data name="dictBtnSave.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -153,6 +146,25 @@
         YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB9SURBVDhPY6ApUFRUXAHE+3HgFVBl+IGUlJQwNgwyBKzg
         KLf4f1yYKAMIAWyaQRjFABAHSeIBEP/HgR8QY8B/OTk5SSgORmJLguRGoAE+QAwyBIxBciC1UIxISCAB
         HAagYJAcVAsqAJkGMgSKSTcAGVDDALwJCaqMWoCBAQARpYDQm7Nk6gAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="dictBtnImportFromExcel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD1SURBVDhPpVI7DoJAFNxrmF35nsOEOxgrpLG3MbGw1ZNY
+        W1iLZ6Aw0Wil1HSeAOetPOIaWDFMMhneZt68fWRFF/i+n4NlA/PKYkdDY83KYgcZHccZNGllsYOMbaws
+        dpCx7w36/cSfcF03klI+GyaYU+JjJKbpVSsDhhH2KaAT2uubFKKN1BSnhUjSUiuH0GQYx7jFDOYsCALH
+        87w9vhdGQHJY6iYdQIqaQAYyIkih8Yx6C72DrhHAoIBPcAARTXOqwRWf1QHU+L7+Q9cMDgjDcAg9YZUd
+        zm60ihHQBg6ArsGLUkpCM3DzV0AbuwS0vTKm5bUJ8QLioZv8Zb+hjAAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="dictBtnExportToExcel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACWSURBVDhPtZJNCgMhDEZdz7YrXfgDHmB6684BCrPrVbxJ
+        m0gQmSQqDP3gQcDPJ6LmL0kpvYDPlRjjO4SwU00Plp1zjyskOnPOT6rKmQjmkgVBvQ7VeTRBD3aoznNb
+        IMVau4kCGArwnVCwqwmkDYyhwHtvkdE8FKwwFGin9jN12z8AjiZYoZal4KJ2aj9TnQcWl5+Rx5gfw8WU
+        zBKXolAAAAAASUVORK5CYII=
 </value>
   </data>
 </root>

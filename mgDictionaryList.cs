@@ -1,4 +1,5 @@
-﻿using MathNet.Numerics.LinearAlgebra.Factorization;
+﻿using dataEditor.Properties;
+using MathNet.Numerics.LinearAlgebra.Factorization;
 using NPOI.SS.Formula.Functions;
 using OfficeOpenXml.DataValidation;
 using Org.BouncyCastle.Asn1.X500;
@@ -12,8 +13,10 @@ using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -34,6 +37,7 @@ namespace dataEditor
         private void mgDatsEditor_Load(object sender, EventArgs e)
         {
             loadDictionary();
+            PhoneNumber.Mask = "+7(000)000-00-00;";
         }
 
         private void loadDictionary()
@@ -73,21 +77,75 @@ namespace dataEditor
                         dataGridDictionaryList.Rows[rwi].Cells["Other"].Value = infoElement.Element("Other").Value;
                     rwi++;
                 }
-                dataGridDictionaryList.RowHeaderMouseClick += new DataGridViewCellMouseEventHandler(dataGridDictionary_RowSelected);
             }
             dataGridDictionaryList.Refresh();
         }
 
-        private void dataGridDictionary_RowSelected(object sender, DataGridViewCellMouseEventArgs e)
+        private void mgLocalPhone_Click(object sender, EventArgs e)
         {
-            //dataGridDictionaryList.ClearSelection();
+            if (ActiveCell.Value != null)
+            {
+                string resultString = null;
+                try
+                {
+                    Regex regexObj = new Regex(@"[^\d]");
+                    resultString = regexObj.Replace(ActiveCell.Value.ToString(), "");
+                    if (mgLocalPhone.Checked)
+                    {
+                        resultString = Int64.Parse(resultString).ToString("+0(000)000-00-00");
+                        ActiveCell.Value = resultString + ";";
+                    }
+                    else
+                    {
+                        resultString = Int64.Parse(resultString).ToString("+0(0000)00-00-00");
+                        ActiveCell.Value = resultString + ";";
+                    }
+                }
+                catch (ArgumentException ex)
+                {
 
+                }
+            }
+        }
+
+
+        private void dataGridDictionaryList_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                if (e.ColumnIndex == 9 && e.RowIndex >= 0 && dataGridDictionaryList[e.ColumnIndex, e.RowIndex].Value != null)
+                {
+                    dataGridDictionaryList.ClearSelection();
+                    dataGridDictionaryList[e.ColumnIndex, e.RowIndex].Selected = true;
+                    ActiveCell = dataGridDictionaryList[e.ColumnIndex, e.RowIndex];
+                    mgMenuDelete.Visible = false;
+                    mgLocalPhone.Visible = true;
+                    char c = ActiveCell.Value.ToString()[6];
+                    if (c.ToString() == ")")
+                    {
+                        mgLocalPhone.Checked = false;
+                        mgRightClickMenu.Show(Cursor.Position);
+                    }
+                    else
+                    {
+                        mgLocalPhone.Checked = true;
+                        mgRightClickMenu.Show(Cursor.Position);
+                    }
+                }
+            }
+        }
+
+        private void dataGridDictionaryList_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 if (e.ColumnIndex == -1 && e.RowIndex > -1)
                 {
+                    dataGridDictionaryList.ClearSelection();
                     dataGridDictionaryList.Rows[e.RowIndex].Selected = true;
-                    ActiveCell = dataGridDictionaryList[0, e.RowIndex];
+                    ActiveCell = dataGridDictionaryList[1, e.RowIndex];
+                    mgMenuDelete.Visible = true;
+                    mgLocalPhone.Visible = false;
                     mgRightClickMenu.Show(Cursor.Position);
                 }
             }
@@ -102,7 +160,9 @@ namespace dataEditor
         private void dataGridDictionary_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
             e.Control.KeyPress -= new KeyPressEventHandler(CheckKey);
-            if (dataGridDictionaryList.CurrentCell.ColumnIndex == 4) //Desired Column
+            if (dataGridDictionaryList.Columns[dataGridDictionaryList.CurrentCell.ColumnIndex].Name == "INN" | 
+            dataGridDictionaryList.Columns[dataGridDictionaryList.CurrentCell.ColumnIndex].Name == "NumCC" |
+            dataGridDictionaryList.Columns[dataGridDictionaryList.CurrentCell.ColumnIndex].Name == "PhoneNumber")
             {
                 TextBox tb = e.Control as TextBox;
                 if (tb != null)
@@ -117,6 +177,130 @@ namespace dataEditor
             {
                 e.Handled = true;
             }
+        }
+
+        private void dictBtnSave_Click(object sender, EventArgs e)
+        {
+            DataSet DictionaryDataSet = new DataSet("ContractorsDictionary");
+            DataTable exportTable = new DataTable();
+
+            DictionaryDataSet.Clear();
+            exportTable.Clear();
+
+            exportTable.TableName = dictListGTP.Text;
+            DictionaryDataSet.Tables.Add(exportTable);
+
+            //exportTable.Columns.Add("id");
+            exportTable.Columns.Add("Agreement");
+            exportTable.Columns.Add("DateAgreement");
+            exportTable.Columns.Add("FullName");
+            exportTable.Columns.Add("Type");
+            exportTable.Columns.Add("INN");
+            exportTable.Columns.Add("Other");
+
+            foreach (DataGridViewRow rw in dataGridDictionaryList.Rows)
+            {
+                DataRow row = DictionaryDataSet.Tables[dictListGTP.Text].NewRow();
+                //row["id"] = rw.HeaderCell.Value.ToString();
+                row["Agreement"] = rw.Cells["Agreement"].Value;
+                row["DateAgreement"] = rw.Cells["DateAgreement"].Value;
+                row["FullName"] = rw.Cells["FullName"].Value;
+                row["Type"] = rw.Cells["Type"].Value;
+                row["INN"] = rw.Cells["INN"].Value;
+                row["Other"] = rw.Cells["Other"].Value;
+
+                DictionaryDataSet.Tables[dictListGTP.Text].Rows.Add(row);
+            }
+
+            string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + dictListGTP.Text + ".xml";
+            try
+            {
+                DictionaryDataSet.WriteXml(xmlFileName.ToString());
+                Console.WriteLine("The file was saved successfully");
+            }
+            catch
+            {
+                Console.WriteLine("Failed to save file");
+            }
+        }
+
+        private void dictBtnShowFolder_Click(object sender, EventArgs e)
+        {
+            string filePath = Environment.CurrentDirectory + "\\contractors_" + dictListGTP.Text + ".xml";
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine("File not found");
+                return;
+            }
+
+            string argument = "/select, \"" + filePath + "\"";
+
+            System.Diagnostics.Process.Start("explorer.exe", argument);
+        }
+
+        private void dictBtnAddElm_Click(object sender, EventArgs e)
+        {
+            dataGridDictionaryList.Rows.Add();
+            dataGridDictionaryList.Refresh();
+        }
+
+        private void dictBtnDelElm_Click(object sender, EventArgs e)
+        {
+            ActiveCell = dataGridDictionaryList[0, dataGridDictionaryList.CurrentCell.RowIndex];
+            dataGridDictionaryList.Rows.RemoveAt(ActiveCell.RowIndex);
+        }
+
+        private void mgDatsList_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            Application.OpenForms["mgDatsList"].Hide();
+        }
+
+        private void dictBtnOpen_ButtonClick(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Multiselect = false;
+            ofd.DefaultExt = "*.xml";
+            ofd.Filter = "XML File (*.xml*)|*.xml*";
+            ofd.Title = "Import file XML";
+            if (ofd.ShowDialog() != DialogResult.OK)
+                return;
+
+            string xmlFileName = ofd.FileName;
+
+            DataSet ImportDataSet = new DataSet();
+
+            dataGridDictionaryList.DataSource = null;
+            DataTable DT = (DataTable)dataGridDictionaryList.DataSource;
+            if (DT != null)
+                DT.Clear();
+
+            dataGridDictionaryList.Rows.Clear();
+            dataGridDictionaryList.Refresh();
+
+            XDocument XMLfile = XDocument.Load(xmlFileName);
+            ImportDataSet.ReadXml(xmlFileName);
+
+            int rwi = 0;
+            foreach (XElement infoElement in XMLfile.Root.Elements(dictListGTP.Text))
+            {
+                dataGridDictionaryList.Rows.Add();
+                if (infoElement.Element("Agreement") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["Agreement"].Value = infoElement.Element("Agreement").Value;
+                if (infoElement.Element("DateAgreement") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["DateAgreement"].Value = infoElement.Element("DateAgreement").Value;
+                if (infoElement.Element("FullName") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["FullName"].Value = infoElement.Element("FullName").Value;
+                if (infoElement.Element("Type") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["Type"].Value = infoElement.Element("Type").Value;
+                if (infoElement.Element("INN") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["INN"].Value = infoElement.Element("INN").Value;
+                if (infoElement.Element("Other") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["Other"].Value = infoElement.Element("Other").Value;
+                rwi++;
+            }
+
+            dataGridDictionaryList.Refresh();
         }
 
 
@@ -145,7 +329,6 @@ namespace dataEditor
             }
         }
 
-
         public class CalendarCell : DataGridViewTextBoxCell
         {
 
@@ -155,14 +338,11 @@ namespace dataEditor
                 this.Style.Format = "d";
             }
 
-            public override void InitializeEditingControl(int rowIndex, object
-                initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
+            public override void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
             {
                 // Set the value of the editing control to the current cell value.
-                base.InitializeEditingControl(rowIndex, initialFormattedValue,
-                    dataGridViewCellStyle);
-                CalendarEditingControl ctl =
-                    DataGridView.EditingControl as CalendarEditingControl;
+                base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
+                CalendarEditingControl ctl = DataGridView.EditingControl as CalendarEditingControl;
                 // Use the default row value when Value property is null.
                 if (this.Value == null)
                 {
@@ -335,128 +515,214 @@ namespace dataEditor
             }
         }
 
-        private void dictBtnSave_Click(object sender, EventArgs e)
+        public class MaskedEditColumn : DataGridViewColumn
         {
-            DataSet DictionaryDataSet = new DataSet("ContractorsDictionary");
-            DataTable exportTable = new DataTable();
-
-            DictionaryDataSet.Clear();
-            exportTable.Clear();
-
-            exportTable.TableName = dictListGTP.Text;
-            DictionaryDataSet.Tables.Add(exportTable);
-
-            //exportTable.Columns.Add("id");
-            exportTable.Columns.Add("Agreement");
-            exportTable.Columns.Add("DateAgreement");
-            exportTable.Columns.Add("FullName");
-            exportTable.Columns.Add("Type");
-            exportTable.Columns.Add("INN");
-            exportTable.Columns.Add("Other");
-
-            foreach (DataGridViewRow rw in dataGridDictionaryList.Rows)
+            public MaskedEditColumn()
+                : base(new MaskedEditCell())
             {
-                DataRow row = DictionaryDataSet.Tables[dictListGTP.Text].NewRow();
-                //row["id"] = rw.HeaderCell.Value.ToString();
-                row["Agreement"] = rw.Cells["Agreement"].Value;
-                row["DateAgreement"] = rw.Cells["DateAgreement"].Value;
-                row["FullName"] = rw.Cells["FullName"].Value;
-                row["Type"] = rw.Cells["Type"].Value;
-                row["INN"] = rw.Cells["INN"].Value;
-                row["Other"] = rw.Cells["Other"].Value;
 
-                DictionaryDataSet.Tables[dictListGTP.Text].Rows.Add(row);
+            }
+            public override DataGridViewCell CellTemplate
+            {
+                get
+                {
+                    return base.CellTemplate;
+                }
+                set
+                {
+                    if ((value != null) && !value.GetType().IsAssignableFrom(typeof(MaskedEditCell)))
+                    {
+                        throw new InvalidCastException("Must be a MaskedEditCell");
+                    }
+                    base.CellTemplate = value;
+                }
+            }
+            private string mask;
+
+            public string Mask
+            {
+                get { return mask; }
+                set { mask = value; }
+            }
+            private Type validatingType;
+
+            public Type ValidatingType
+            {
+                get { return validatingType; }
+                set { validatingType = value; }
             }
 
-            string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + dictListGTP.Text + ".xml";
-            try
+            private char promtChar = '_';
+
+            public char PromtChar
             {
-                DictionaryDataSet.WriteXml(xmlFileName.ToString());
-                Console.WriteLine("The file was saved successfully");
+                get { return promtChar; }
+                set { promtChar = value; }
             }
-            catch
+            private MaskedEditCell MaskedEditCellTemplate
             {
-                Console.WriteLine("Failed to save file");
+                get { return this.CellTemplate as MaskedEditCell; }
             }
         }
 
-        private void dictBtnShowFolder_Click(object sender, EventArgs e)
+        class MaskedEditCell : DataGridViewTextBoxCell
         {
-            string filePath = Environment.CurrentDirectory + "\\contractors_" + dictListGTP.Text + ".xml";
-            if (!File.Exists(filePath))
+            public override void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
             {
-                Console.WriteLine("File not found");
+                base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
+                MaskedEditColumn mec = OwningColumn as MaskedEditColumn;
+                MaskedEditControl mectrl = (MaskedEditControl)DataGridView.EditingControl;
+                try
+                {
+                    mectrl.Text = this.Value.ToString();
+                }
+                catch (Exception)
+                {
+                    mectrl.Text = string.Empty;
+                }
+                mectrl.Mask = mec.Mask;
+                mectrl.PromptChar = mec.PromtChar;
+                mectrl.ValidatingType = mec.ValidatingType;
+            }
+            public override Type EditType
+            {
+                get
+                {
+                    return typeof(MaskedEditControl);
+                }
+            }
+            public override Type ValueType
+            {
+                get
+                {
+                    return typeof(string);
+                }
+            }
+            public override object DefaultNewRowValue
+            {
+                get
+                {
+                    return string.Empty;
+                }
+            }
+            protected override void Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, DataGridViewElementStates cellState, object value, object formattedValue, string errorText, DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle advancedBorderStyle, DataGridViewPaintParts paintParts)
+            {
+                base.Paint(graphics, clipBounds, cellBounds, rowIndex, cellState, value, formattedValue, errorText, cellStyle, advancedBorderStyle, paintParts);
+            }
+        }
+
+        class MaskedEditControl : MaskedTextBox, IDataGridViewEditingControl
+        {
+            private DataGridView dataGridViewControl;
+            private bool valueIsChanged = false;
+            private int rowIndexNum;
+            public void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
+            {
+                this.Font = dataGridViewCellStyle.Font;
+                this.BackColor = dataGridViewCellStyle.BackColor;
+                this.ForeColor = dataGridViewCellStyle.ForeColor;
+            }
+
+            public DataGridView EditingControlDataGridView
+            {
+                get
+                {
+                    return dataGridViewControl;
+                }
+                set
+                {
+                    dataGridViewControl = value;
+                }
+            }
+
+            public object EditingControlFormattedValue
+            {
+                get
+                {
+                    return this.Text;
+                }
+                set
+                {
+                    this.Text = value.ToString();
+                }
+            }
+
+            public int EditingControlRowIndex
+            {
+                get
+                {
+                    return rowIndexNum;
+                }
+                set
+                {
+                    rowIndexNum = value;
+                }
+            }
+
+            public bool EditingControlValueChanged
+            {
+                get
+                {
+                    return valueIsChanged;
+                }
+                set
+                {
+                    valueIsChanged = value;
+                }
+            }
+
+            public bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
+            {
+                return true;
+            }
+
+            public Cursor EditingPanelCursor
+            {
+                get { return base.Cursor; }
+            }
+
+            public object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
+            {
+                return this.Text;
+            }
+
+            public void PrepareEditingControlForEdit(bool selectAll)
+            {
+                //throw new NotImplementedException();
+            }
+
+            public bool RepositionEditingControlOnValueChange
+            {
+                get { return false; }
+            }
+            protected override void OnTextChanged(EventArgs e)
+            {
+                valueIsChanged = true;
+                this.EditingControlDataGridView.NotifyCurrentCellDirty(true);
+                base.OnTextChanged(e);
+            }
+        }
+
+        private void grid_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            Image SomeImage = ((System.Drawing.Image)(resources.GetObject("toolBtnDictionaryEditor.Image")));
+
+            if (e.RowIndex < 0)
                 return;
-            }
 
-            string argument = "/select, \"" + filePath + "\"";
-
-            System.Diagnostics.Process.Start("explorer.exe", argument);
-        }
-
-        private void dictBtnAddElm_Click(object sender, EventArgs e)
-        {
-            dataGridDictionaryList.Rows.Add();
-            dataGridDictionaryList.Refresh();
-        }
-
-        private void dictBtnDelElm_Click(object sender, EventArgs e)
-        {
-            ActiveCell = dataGridDictionaryList[0, dataGridDictionaryList.CurrentCell.RowIndex];
-            dataGridDictionaryList.Rows.RemoveAt(ActiveCell.RowIndex);
-        }
-
-        private void mgDatsList_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            e.Cancel = true;
-            Application.OpenForms["mgDatsList"].Hide();
-        }
-
-        private void dictBtnOpen_ButtonClick(object sender, EventArgs e)
-        {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Multiselect = false;
-            ofd.DefaultExt = "*.xml";
-            ofd.Filter = "XML File (*.xml*)|*.xml*";
-            ofd.Title = "Import file XML";
-            if (ofd.ShowDialog() != DialogResult.OK)
-                return;
-
-            string xmlFileName = ofd.FileName;
-
-            DataSet ImportDataSet = new DataSet();
-
-            dataGridDictionaryList.DataSource = null;
-            DataTable DT = (DataTable)dataGridDictionaryList.DataSource;
-            if (DT != null)
-                DT.Clear();
-
-            dataGridDictionaryList.Rows.Clear();
-            dataGridDictionaryList.Refresh();
-
-            XDocument XMLfile = XDocument.Load(xmlFileName);
-            ImportDataSet.ReadXml(xmlFileName);
-
-            int rwi = 0;
-            foreach (XElement infoElement in XMLfile.Root.Elements(dictListGTP.Text))
+            if (e.ColumnIndex == 0)
             {
-                dataGridDictionaryList.Rows.Add();
-                if (infoElement.Element("Agreement") != null)
-                    dataGridDictionaryList.Rows[rwi].Cells["Agreement"].Value = infoElement.Element("Agreement").Value;
-                if (infoElement.Element("DateAgreement") != null)
-                    dataGridDictionaryList.Rows[rwi].Cells["DateAgreement"].Value = infoElement.Element("DateAgreement").Value;
-                if (infoElement.Element("FullName") != null)
-                    dataGridDictionaryList.Rows[rwi].Cells["FullName"].Value = infoElement.Element("FullName").Value;
-                if (infoElement.Element("Type") != null)
-                    dataGridDictionaryList.Rows[rwi].Cells["Type"].Value = infoElement.Element("Type").Value;
-                if (infoElement.Element("INN") != null)
-                    dataGridDictionaryList.Rows[rwi].Cells["INN"].Value = infoElement.Element("INN").Value;
-                if (infoElement.Element("Other") != null)
-                    dataGridDictionaryList.Rows[rwi].Cells["Other"].Value = infoElement.Element("Other").Value;
-                rwi++;
-            }
+                e.Paint(e.CellBounds, DataGridViewPaintParts.All);
 
-            dataGridDictionaryList.Refresh();
+                var w = SomeImage.Width;
+                var h = SomeImage.Height;
+                var x = e.CellBounds.Left + (e.CellBounds.Width - w)/2;
+                var y = e.CellBounds.Top + (e.CellBounds.Height - h)/1;
+
+                e.Graphics.DrawImage(SomeImage, new Rectangle(x, y-3, w, h));
+                e.Handled = true;
+            }
         }
     }
 }
