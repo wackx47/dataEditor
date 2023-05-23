@@ -55,7 +55,10 @@ namespace dataEditor
             this.Mail = new System.Windows.Forms.DataGridViewLinkColumn();
             this.TimeZone = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Status = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.PWR = new dataEditor.NumericUpDownDataGrid.NumericUpDownColumn();
+            this.PWR = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bankNAME = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.KPP = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bankPayAcc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Extra1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Extra2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Extra3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -73,6 +76,8 @@ namespace dataEditor
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.dictBtnImportFromExcel = new System.Windows.Forms.ToolStripButton();
             this.dictBtnExportToExcel = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.dictBtnBankData = new System.Windows.Forms.ToolStripButton();
             this.mgRightClickMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridDictionaryList)).BeginInit();
             this.dictLayoutPanel.SuspendLayout();
@@ -134,6 +139,9 @@ namespace dataEditor
             this.TimeZone,
             this.Status,
             this.PWR,
+            this.bankNAME,
+            this.KPP,
+            this.bankPayAcc,
             this.Extra1,
             this.Extra2,
             this.Extra3,
@@ -160,7 +168,7 @@ namespace dataEditor
             dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridDictionaryList.RowsDefaultCellStyle = dataGridViewCellStyle6;
             this.dataGridDictionaryList.RowTemplate.Height = 20;
-            this.dataGridDictionaryList.Size = new System.Drawing.Size(1148, 571);
+            this.dataGridDictionaryList.Size = new System.Drawing.Size(1053, 571);
             this.dataGridDictionaryList.TabIndex = 0;
             this.dataGridDictionaryList.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridDictionaryList_CellMouseClick);
             this.dataGridDictionaryList.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.grid_CellPainting);
@@ -181,31 +189,32 @@ namespace dataEditor
             // 
             // Agreement
             // 
+            this.Agreement.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.Agreement.FillWeight = 29.56386F;
             this.Agreement.HeaderText = "agreement";
             this.Agreement.Name = "Agreement";
+            this.Agreement.Width = 93;
             // 
             // DateAgreement
             // 
-            this.DateAgreement.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.DateAgreement.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.DateAgreement.FillWeight = 27.15376F;
             this.DateAgreement.HeaderText = "date";
             this.DateAgreement.Name = "DateAgreement";
-            this.DateAgreement.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.DateAgreement.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.DateAgreement.Width = 87;
+            this.DateAgreement.Width = 56;
             // 
             // Type
             // 
             this.Type.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.Type.FillWeight = 14.54666F;
+            this.Type.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Type.HeaderText = "type";
             this.Type.Items.AddRange(new object[] {
-            "ФЗ",
+            "ФЛ",
             "ЮЛ"});
             this.Type.MaxDropDownItems = 2;
             this.Type.Name = "Type";
-            this.Type.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Type.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.Type.Width = 47;
             // 
@@ -226,16 +235,20 @@ namespace dataEditor
             // 
             // FullName
             // 
+            this.FullName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.FullName.FillWeight = 29.56386F;
             this.FullName.HeaderText = "name";
             this.FullName.Name = "FullName";
+            this.FullName.Width = 63;
             // 
             // INN
             // 
+            this.INN.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.INN.FillWeight = 29.56386F;
             this.INN.HeaderText = "inn";
             this.INN.Name = "INN";
             this.INN.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.INN.Width = 48;
             // 
             // Address
             // 
@@ -245,12 +258,15 @@ namespace dataEditor
             // 
             // NumCC
             // 
+            this.NumCC.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.NumCC.FillWeight = 29.56386F;
             this.NumCC.HeaderText = "№Counter";
             this.NumCC.Name = "NumCC";
+            this.NumCC.Width = 89;
             // 
             // PhoneNumber
             // 
+            this.PhoneNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             dataGridViewCellStyle4.NullValue = "+7(XXX)XXX-XX-XX;";
             this.PhoneNumber.DefaultCellStyle = dataGridViewCellStyle4;
             this.PhoneNumber.FillWeight = 33F;
@@ -260,51 +276,79 @@ namespace dataEditor
             this.PhoneNumber.PromtChar = '_';
             this.PhoneNumber.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.PhoneNumber.ValidatingType = null;
+            this.PhoneNumber.Width = 48;
             // 
             // Mail
             // 
+            this.Mail.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.Mail.FillWeight = 29.56386F;
             this.Mail.HeaderText = "mail";
             this.Mail.Name = "Mail";
             this.Mail.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.Mail.TrackVisitedState = false;
+            this.Mail.Width = 36;
             // 
             // TimeZone
             // 
-            this.TimeZone.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.TimeZone.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.TimeZone.FillWeight = 21.3351F;
+            this.TimeZone.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.TimeZone.HeaderText = "typeZone";
             this.TimeZone.Items.AddRange(new object[] {
             "1ЦК",
             "2 зоны",
             "3 зоны"});
             this.TimeZone.Name = "TimeZone";
-            this.TimeZone.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.TimeZone.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.TimeZone.Width = 68;
+            this.TimeZone.Width = 83;
             // 
             // Status
             // 
-            this.Status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.Status.FillWeight = 29.56386F;
+            this.Status.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Status.HeaderText = "status";
             this.Status.Items.AddRange(new object[] {
             "Действует",
             "Расторгнут"});
             this.Status.Name = "Status";
-            this.Status.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Status.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.Status.Width = 92;
+            this.Status.Width = 67;
             // 
             // PWR
             // 
-            this.PWR.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.PWR.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.PWR.FillWeight = 29.56386F;
             this.PWR.HeaderText = "Pmax";
             this.PWR.Name = "PWR";
-            this.PWR.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.PWR.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.PWR.Width = 45;
+            this.PWR.Width = 64;
+            // 
+            // bankNAME
+            // 
+            this.bankNAME.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.bankNAME.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
+            this.bankNAME.DropDownWidth = 350;
+            this.bankNAME.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.bankNAME.HeaderText = "bankName";
+            this.bankNAME.MaxDropDownItems = 16;
+            this.bankNAME.Name = "bankNAME";
+            this.bankNAME.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.bankNAME.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.bankNAME.Width = 92;
+            // 
+            // KPP
+            // 
+            this.KPP.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.KPP.HeaderText = "KPP";
+            this.KPP.Name = "KPP";
+            this.KPP.Width = 55;
+            // 
+            // bankPayAcc
+            // 
+            this.bankPayAcc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.bankPayAcc.HeaderText = "PayAcc";
+            this.bankPayAcc.Name = "bankPayAcc";
+            this.bankPayAcc.Width = 74;
             // 
             // Extra1
             // 
@@ -346,7 +390,7 @@ namespace dataEditor
             this.dictLayoutPanel.RowCount = 2;
             this.dictLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.dictLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.dictLayoutPanel.Size = new System.Drawing.Size(1154, 602);
+            this.dictLayoutPanel.Size = new System.Drawing.Size(1059, 602);
             this.dictLayoutPanel.TabIndex = 4;
             // 
             // urToolStrip
@@ -363,10 +407,12 @@ namespace dataEditor
             this.dictBtnDelElm,
             this.toolStripSeparator3,
             this.dictBtnImportFromExcel,
-            this.dictBtnExportToExcel});
+            this.dictBtnExportToExcel,
+            this.toolStripSeparator4,
+            this.dictBtnBankData});
             this.urToolStrip.Location = new System.Drawing.Point(0, 0);
             this.urToolStrip.Name = "urToolStrip";
-            this.urToolStrip.Size = new System.Drawing.Size(1154, 25);
+            this.urToolStrip.Size = new System.Drawing.Size(1059, 25);
             this.urToolStrip.TabIndex = 77;
             this.urToolStrip.Text = "mgTools";
             // 
@@ -460,16 +506,34 @@ namespace dataEditor
             this.dictBtnExportToExcel.Size = new System.Drawing.Size(23, 22);
             this.dictBtnExportToExcel.Text = "CreateExcel";
             // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // dictBtnBankData
+            // 
+            this.dictBtnBankData.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBtnBankData.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnBankData.Image")));
+            this.dictBtnBankData.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dictBtnBankData.Name = "dictBtnBankData";
+            this.dictBtnBankData.Size = new System.Drawing.Size(23, 22);
+            this.dictBtnBankData.Text = "BankDictionary";
+            this.dictBtnBankData.Click += new System.EventHandler(this.dictBtnBankData_Click);
+            // 
             // mgDatsList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1154, 602);
+            this.AutoScroll = true;
+            this.ClientSize = new System.Drawing.Size(1059, 602);
             this.Controls.Add(this.dictLayoutPanel);
-            this.MinimumSize = new System.Drawing.Size(1000, 500);
+            this.DoubleBuffered = true;
+            this.MinimumSize = new System.Drawing.Size(960, 500);
             this.Name = "mgDatsList";
             this.Text = "DatsEditor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mgDatsList_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.mgDatsList_FormClosed);
             this.Load += new System.EventHandler(this.mgDatsEditor_Load);
             this.mgRightClickMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridDictionaryList)).EndInit();
@@ -485,7 +549,7 @@ namespace dataEditor
         private ContextMenuStrip mgRightClickMenu;
         private ToolStripMenuItem mgMenuDelete;
         private CalendarColumn DateIntoForce;
-        private DataGridView dataGridDictionaryList;
+        public DataGridView dataGridDictionaryList;
         private TableLayoutPanel dictLayoutPanel;
         private ToolStrip urToolStrip;
         private ToolStripSeparator toolStripSeparator2;
@@ -498,6 +562,10 @@ namespace dataEditor
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripButton dictBtnOpen;
         private ToolStripButton dictBtnImportFromExcel;
+        private ToolStripMenuItem mgLocalPhone;
+        private ToolStripButton dictBtnExportToExcel;
+        private ToolStripSeparator toolStripSeparator4;
+        private ToolStripButton dictBtnBankData;
         private DataGridViewButtonColumn editLink;
         private DataGridViewTextBoxColumn Agreement;
         private CalendarColumn DateAgreement;
@@ -507,16 +575,17 @@ namespace dataEditor
         private DataGridViewTextBoxColumn INN;
         private DataGridViewTextBoxColumn Address;
         private DataGridViewTextBoxColumn NumCC;
-        public MaskedEditColumn PhoneNumber;
+        private MaskedEditColumn PhoneNumber;
         private DataGridViewLinkColumn Mail;
         private DataGridViewComboBoxColumn TimeZone;
         private DataGridViewComboBoxColumn Status;
-        private NumericUpDownDataGrid.NumericUpDownColumn PWR;
+        private DataGridViewTextBoxColumn PWR;
+        private DataGridViewComboBoxColumn bankNAME;
+        private DataGridViewTextBoxColumn KPP;
+        private DataGridViewTextBoxColumn bankPayAcc;
         private DataGridViewTextBoxColumn Extra1;
         private DataGridViewTextBoxColumn Extra2;
         private DataGridViewTextBoxColumn Extra3;
         private DataGridViewTextBoxColumn Extra4;
-        private ToolStripMenuItem mgLocalPhone;
-        private ToolStripButton dictBtnExportToExcel;
     }
 }

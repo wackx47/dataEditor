@@ -36,6 +36,9 @@ using NPOI.SS.Formula;
 using OfficeOpenXml.ConditionalFormatting;
 using System.Reflection.Emit;
 using System.Runtime.Intrinsics.X86;
+using System.Globalization;
+using System.Net;
+using OfficeOpenXml.Utils;
 
 namespace dataEditor
 {
@@ -45,10 +48,10 @@ namespace dataEditor
 
         iniFile INI = new iniFile("config.ini");
         Form TreeView = new Form();
-        Form TableView = new Form();
         TextBox TextExtractColumns = new TextBox();
         DataGridView TreeColViewer = new DataGridView();
         DataSet UniversalDataSet = new DataSet("UniversalFileReader");
+        DataSet HoursDataSet = new DataSet("HoursStore");
         Button ConfirmCols = new Button();
 
         public static mgDatsList DictionaryForm = new mgDatsList();
@@ -156,6 +159,7 @@ namespace dataEditor
             TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["ExtraColCnt"].SetReadOnlyAttribute(true);
             PropGrid.ImportMode = ImportList.AvailableMode[0];
             PropGrid.mgCodeName.propGTPname = "KUBANESK";
+            PropGrid.GlobalInfoStandart = "ru-RU";
             DictionaryForm.dictListGTP.Text = PropGrid.mgCodeName.propGTPname;
         }
 
@@ -172,11 +176,6 @@ namespace dataEditor
             base.ScaleControl(ScalingFactor, Bounds);
             ScaleControlElements(dataViewer, ScalingFactor);
             Console.WriteLine("DPI scaling enabled");
-        }
-
-        private void Form1_ResizeEnd(object sender, EventArgs e)
-        {
-
         }
 
         private void addAvailableProviders(object sender, EventArgs e)
@@ -546,10 +545,6 @@ namespace dataEditor
             optionsGrid.Refresh();
         }
 
-        private void DynamicCycleData_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void DataViewer_RowSelected(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -1133,12 +1128,275 @@ namespace dataEditor
 
                 commonImportEXCL(this, new EventArgs(), dataExtraction, xlFileName);
 
+                HoursFile_processing(dataExtraction);
                 mgDataViewer.DataSource = dataExtraction;
                 dataViewerFillHeadres(FirstUsedRow, FirstUsedColumn, mgDt);
 
                 mgDataViewer.AllowUserToAddRows = false;
                 mgDataViewer.AllowUserToDeleteRows = false;
         }
+
+        private void HoursFile_processing(DataTable dataExtraction)
+        {
+            DictionaryForm.loadDictionary(mgDatsList.isLoaded);
+
+            int unkTbls = 0;
+                foreach (DataColumn extractCols in dataExtraction.Columns)
+                {
+                    if (dataExtraction.Rows[7][extractCols].ToString() == "A+, кВт")
+                    {
+                        foreach (DataGridViewRow dictRows in DictionaryForm.dataGridDictionaryList.Rows)
+                        {
+                            if (dictRows.Cells["NumCC"].Value.ToString().Equals(dataExtraction.Rows[4][extractCols].ToString()))
+                            {
+                                Console.WriteLine("\n");
+                                foreach (DataGridViewCell dictEqualsCell in dictRows.Cells)
+                                {
+                                    if(dictEqualsCell.Value != null)
+                                    Console.Write(dictEqualsCell.OwningColumn.Name + ": " + dictEqualsCell.Value + ";   ");
+                                }
+
+                                DataTable newTable = new DataTable(dictRows.Cells["Agreement"].Value.ToString().Split(" от ").First());
+                                HoursDataSet.Tables.Add(newTable);
+
+                                Button newButton = new Button();
+                                newButton.Text = dictRows.Cells["Agreement"].Value.ToString().Split(" от ").First();
+                                newButton.Size = new System.Drawing.Size(120, 40);
+                                newButton.UseVisualStyleBackColor = true;
+                                newButton.Click  += new EventHandler(ShowTableInDataGridView);
+                                newButton.MouseDown += new MouseEventHandler(NewTableButton_MouseDown);
+                                mgFlowPanelResult.Controls.Add(newButton);
+
+
+                                DataColumn Column1 = new DataColumn("date", Type.GetType("System.DateOnly"));
+                                DataColumn Column2 = new DataColumn("time", Type.GetType("System.TimeOnly"));
+                                DataColumn Column3 = new DataColumn("consumption", Type.GetType("System.Decimal"));
+                                DataColumn Column4 = new DataColumn("generation", Type.GetType("System.Decimal"));
+
+                                newTable.Clear();
+                                newTable.Columns.Add(Column1);
+                                newTable.Columns.Add(Column2);
+                                newTable.Columns.Add(Column3);
+                                newTable.Columns.Add(Column4);
+
+                                int kTC = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").First());
+                                int kTV = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").Last());
+
+                                decimal ConSumm = 0;
+                                decimal GenSumm = 0;
+
+                                int i = dataExtraction.Rows.IndexOf(dataExtraction.Rows[8]);
+                                while (i < dataExtraction.Rows.Count && IsDateOnly(dataExtraction.Rows[i][0].ToString()))
+                                {
+                                    if (IsNumeric(dataExtraction.Rows[i][extractCols].ToString()))
+                                    {
+                                        try
+                                        {
+                                            DataRow newTableRow = newTable.NewRow();
+
+                                        //Console.WriteLine("Con: " + decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU")) +
+                                        //"                  Gen: " + decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU")));
+                                            DateOnly.TryParse(dataExtraction.Rows[i][0].ToString(), out DateOnly date);
+                                            TimeOnly.TryParse(dataExtraction.Rows[i][1].ToString(), out TimeOnly time);
+                                            newTableRow["date"] = date;
+                                            newTableRow["time"] = time;
+                                            newTableRow["consumption"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU"));
+                                            newTableRow["generation"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU"));
+
+
+                                            ConSumm += (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU"))* kTC* kTV);
+                                            GenSumm += (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU"))* kTC* kTV);
+
+                                            newTable.Rows.Add(newTableRow);
+                                        }
+                                        catch
+                                        {
+                                            Console.WriteLine("wrong input data: ROW:" + i + "  data: " + dataExtraction.Rows[i][extractCols].ToString());
+                                            Console.WriteLine("Trying parse result: " + decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU")));
+                                        }
+                                    }
+                                    i++;
+                                    
+                                }
+                                Console.WriteLine("ConSumm: " + ConSumm.ToString() + "   GenSumm: " + GenSumm.ToString());
+                                    foreach (DataRow r in newTable.Rows)
+                                    {
+                                        foreach (var cell in r.ItemArray)
+                                            Console.Write("\t{0}", cell);
+                                        Console.WriteLine();
+                                    }
+                            }
+                            else
+                            {
+                            unkTbls++;
+                            DataTable newTable = new DataTable("UnknownTable"+ unkTbls);
+                            HoursDataSet.Tables.Add(newTable);
+
+                            Button newButton = new Button();
+                            newButton.Text = "UnknownTable" + unkTbls;
+                            newButton.Size = new System.Drawing.Size(120, 40);
+                            newButton.UseVisualStyleBackColor = true;
+                            newButton.Click += new EventHandler(ShowTableInDataGridView);
+                            newButton.MouseDown += new MouseEventHandler(NewTableButton_MouseDown);
+                            mgFlowPanelResult.Controls.Add(newButton);
+
+
+                            DataColumn Column1 = new DataColumn("date", Type.GetType("System.DateOnly"));
+                            DataColumn Column2 = new DataColumn("time", Type.GetType("System.TimeOnly"));
+                            DataColumn Column3 = new DataColumn("consumption", Type.GetType("System.Decimal"));
+                            DataColumn Column4 = new DataColumn("generation", Type.GetType("System.Decimal"));
+                            
+
+                            newTable.Clear();
+                            newTable.Columns.Add(Column1);
+                            newTable.Columns.Add(Column2);
+                            newTable.Columns.Add(Column3);
+                            newTable.Columns.Add(Column4);
+
+                            int kTC = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").First());
+                            int kTV = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").Last());
+
+                            decimal ConSumm = 0;
+                            decimal GenSumm = 0;
+
+                            int i = dataExtraction.Rows.IndexOf(dataExtraction.Rows[8]);
+                            while (i < dataExtraction.Rows.Count && IsDateOnly(dataExtraction.Rows[i][0].ToString()))
+                            {
+                                if (IsNumeric(dataExtraction.Rows[i][extractCols].ToString()))
+                                {
+                                    try
+                                    {
+                                        DataRow newTableRow = newTable.NewRow();
+
+                                        //Console.WriteLine("Con: " + decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU")) +
+                                        //"                  Gen: " + decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU")));
+                                        DateOnly.TryParse(dataExtraction.Rows[i][0].ToString(), out DateOnly date);
+                                        TimeOnly.TryParse(dataExtraction.Rows[i][1].ToString(), out TimeOnly time);
+                                        newTableRow["date"] = date;
+                                        newTableRow["time"] = time;
+                                        newTableRow["consumption"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU"));
+                                        newTableRow["generation"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU"));
+
+
+                                        ConSumm += (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU")) * kTC * kTV);
+                                        GenSumm += (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU")) * kTC * kTV);
+
+                                        newTable.Rows.Add(newTableRow);
+                                    }
+                                    catch
+                                    {
+                                        Console.WriteLine("wrong input data: ROW:" + i + "  data: " + dataExtraction.Rows[i][extractCols].ToString());
+                                        Console.WriteLine("Trying parse result: " + decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU")));
+                                    }
+                                }
+                                i++;
+
+                            }
+                            Console.WriteLine("ConSumm: " + ConSumm.ToString() + "   GenSumm: " + GenSumm.ToString());
+                            foreach (DataRow r in newTable.Rows)
+                            {
+                                foreach (var cell in r.ItemArray)
+                                    Console.Write("\t{0}", cell);
+                                Console.WriteLine();
+                            }
+                        }
+                        }
+                    }
+                }
+        }
+
+        public static bool IsDateOnly(string inputS)
+        {
+                bool result = DateOnly.TryParse(inputS, out DateOnly date);
+                return result;
+
+        }
+
+        public static bool IsNumeric(object Expression)
+        {
+            decimal retNum;
+
+            bool isNum = decimal.TryParse(Convert.ToString(Expression), System.Globalization.NumberStyles.Any, System.Globalization.NumberFormatInfo.InvariantInfo, out retNum);
+            return isNum;
+        }
+
+        private void NewTableButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            var button = (Button)sender;
+
+
+        }
+
+        private void ShowTableInDataGridView(object sender, EventArgs e)
+        {
+            Form TableView = new Form();
+            DataGridView tablesDataGridView = new DataGridView();
+            SettingsNewFormTablesResult(TableView, tablesDataGridView);
+
+            var button = (Button)sender;
+
+            tablesDataGridView.DataSource = HoursDataSet;
+            tablesDataGridView.DataMember = button.Text;
+
+            tablesDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+
+            TableView.Text = button.Text + " extracted data research";
+            TableView.Size = new Size(480, 860);
+
+            foreach (DataGridViewColumn cols in tablesDataGridView.Columns)
+            {
+                cols.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            }
+
+            TableView.ShowDialog();
+        }
+
+        private void SettingsNewFormTablesResult(Form TableView, DataGridView tablesDataGridView)
+        {
+            TableView.Name = "TableViewer";
+            
+            TableView.WindowState = FormWindowState.Normal;
+            TableView.FormBorderStyle = FormBorderStyle.Sizable;
+            TableView.MaximizeBox = false;
+
+            tablesDataGridView.Dock = DockStyle.Fill;
+            tablesDataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            tablesDataGridView.Location = new Point(5, 40);
+            tablesDataGridView.ColumnHeadersVisible = true;
+            tablesDataGridView.RowHeadersVisible = false;
+            tablesDataGridView.ScrollBars = ScrollBars.Both;
+            tablesDataGridView.RowTemplate.DefaultCellStyle.Font = new Font("Arial", 9);
+            tablesDataGridView.RowTemplate.MinimumHeight = 18;
+            tablesDataGridView.RowTemplate.Height = 18;
+            tablesDataGridView.AllowUserToAddRows = false;
+            tablesDataGridView.AllowUserToDeleteRows = false;
+            tablesDataGridView.AllowUserToResizeRows = false;
+            tablesDataGridView.GridColor = System.Drawing.SystemColors.ControlDarkDark;
+            tablesDataGridView.BackgroundColor = System.Drawing.SystemColors.ControlLight;
+            tablesDataGridView.ReadOnly = true;
+            tablesDataGridView.EnableHeadersVisualStyles = false;
+
+            tablesDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            tablesDataGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            tablesDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            tablesDataGridView.EditMode = DataGridViewEditMode.EditOnEnter;
+            tablesDataGridView.RowHeadersWidth = 70;
+
+            TableView.Controls.Add(tablesDataGridView);
+        }
+
+
+        private void toolBtnDictionaryEditor_Click(object sender, EventArgs e)
+        {
+            foreach (DataTable tbl in HoursDataSet.Tables)
+            {
+                if (tbl.Rows.Count > 0)
+                {
+                    Console.WriteLine(tbl.TableName);
+                }
+            }
+        }
+
 
         public void urImportEXCL(object sender, EventArgs e)
         {
@@ -1196,8 +1454,10 @@ namespace dataEditor
             Excel.Application xlApp = new Excel.Application();
             Excel.Workbook xlWB;
             Excel.Worksheet xlSht;
-            xlWB = xlApp.Workbooks.Add(xlFileName);
+            
+            xlWB = xlApp.Workbooks.Open(xlFileName);
             xlSht = xlWB.Worksheets[1];
+
             Excel.Range ExcelRange = xlSht.UsedRange;
             int xlRowCount = ExcelRange.Rows.Count;
             int xlColCount = ExcelRange.Columns.Count;
@@ -2330,6 +2590,12 @@ namespace dataEditor
             progressDlg.ProgressValue = e.ProgressPercentage;
         }
 
+        private void bgWorker_DownloadProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            progressDlg.Message = ("Downloading: " + e.ProgressPercentage.ToString() + "%");
+            progressDlg.ProgressValue = e.ProgressPercentage;
+        }
+
         private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             progressDlg.Close();
@@ -2338,6 +2604,7 @@ namespace dataEditor
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             DictionaryForm.Dispose();
+            mgDatsList.dictBankForm.Dispose();
             Application.Exit();
         }
 
@@ -2652,44 +2919,89 @@ namespace dataEditor
             DataTable dataExtraction = new DataTable();
             commonImportEXCL(this, new EventArgs(), dataExtraction, xlFileName);
 
-            switch (Path.GetFileNameWithoutExtension(xlFileName).Split("_").Last())
+            string[] components = Path.GetFileNameWithoutExtension(xlFileName).Split("_");
+
+
+            foreach (string fileTypeTarget in components)
             {
-                case "koeff":
-
-                DataRow[] filteredRows = dataExtraction.Select(string.Format("{0} LIKE '%{1}%'", "column4", PropGrid.mgCodeName.propGTPcode));
-
-                foreach (DataRow row in filteredRows)
+                switch (fileTypeTarget)
                 {
-                    textBoxSubject.Text = row[1].ToString();
-                    textBoxGTPcode.Text = row[3].ToString();
-                    textBoxNameGP.Text = row[2].ToString();
+                    case "koeff":
 
-                    datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e1"].Nodes["treeViewLine6e1val"].Text = row[4].ToString();
-                    datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e2"].Nodes["treeViewLine6e2val"].Text = row[5].ToString();
-                    datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e3"].Nodes["treeViewLine6e3val"].Text = row[6].ToString();
+                        if (toolBtnMounth.SelectedIndex == -1 && toolBtnYear.SelectedIndex == -1)
+                        {
+                            toolBtnMounth.Text = dataExtraction.Rows[1][5].ToString().Split(" ").First();
+                            toolBtnYear.Text = dataExtraction.Rows[1][5].ToString().Split(" ").Last();
+                        }
+                        else
+                        {
+                            if (DateTime.ParseExact(toolBtnMounth.SelectedItem.ToString(), "MMMM", CultureInfo.CurrentCulture).Month != DateTime.ParseExact(dataExtraction.Rows[1][5].ToString().Split(" ").First(), "MMMM", CultureInfo.CurrentCulture).Month)
+                            {
+                                MessageBox.Show("Выбранный месяц не совпадает с указанным расчетным периодом в загружаемом файле.");
+                            }
+                            if (toolBtnYear.SelectedItem.ToString() != dataExtraction.Rows[1][5].ToString().Split(" ").Last())
+                            {
+                                MessageBox.Show("Выбранный год не совпадает с указанным расчетным периодом в загружаемом файле.");
+                            }
+                        }
 
-                    datsTreeView.Nodes["treeViewLine7"].Nodes["treeViewLine7e1"].Nodes["treeViewLine7e1val"].Text = row[7].ToString();
-                    datsTreeView.Nodes["treeViewLine7"].Nodes["treeViewLine7e2"].Nodes["treeViewLine7e2val"].Text = row[8].ToString();
+                        DataRow[] filteredRows = dataExtraction.Select(string.Format("{0} LIKE '%{1}%'", dataExtraction.Columns[3].ColumnName.ToString(), PropGrid.mgCodeName.propGTPcode));
+
+                        foreach (DataRow row in filteredRows)
+                        {
+                            textBoxSubject.Text = row[1].ToString();
+                            textBoxGTPcode.Text = row[3].ToString();
+                            textBoxNameGP.Text = row[2].ToString();
+
+                            datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e1"].Nodes["treeViewLine6e1val"].Text = row[4].ToString();
+                            datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e2"].Nodes["treeViewLine6e2val"].Text = row[5].ToString();
+                            datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e3"].Nodes["treeViewLine6e3val"].Text = row[6].ToString();
+
+                            datsTreeView.Nodes["treeViewLine7"].Nodes["treeViewLine7e1"].Nodes["treeViewLine7e1val"].Text = row[7].ToString();
+                            datsTreeView.Nodes["treeViewLine7"].Nodes["treeViewLine7e2"].Nodes["treeViewLine7e2val"].Text = row[8].ToString();
+                        }
+
+                        mgFileKF.Checked = true;
+
+                        break;
+
+                    case "stage":
+
+                        textBoxGTPcode.Text = dataExtraction.Rows[3][1].ToString();
+                        textBoxNameGP.Text = dataExtraction.Rows[4][1].ToString();
+
+                        if (toolBtnMounth.SelectedIndex == -1 && toolBtnYear.SelectedIndex == -1)
+                        {
+                            toolBtnMounth.Text = dataExtraction.Rows[2][1].ToString().Split(" ").First();
+                            toolBtnYear.Text = dataExtraction.Rows[2][1].ToString().Split(" ").Last();
+                        }
+                        else
+                        {
+                            if (DateTime.ParseExact(toolBtnMounth.SelectedItem.ToString(), "MMMM", CultureInfo.CurrentCulture).Month != DateTime.ParseExact(dataExtraction.Rows[2][1].ToString().Split(" ").First(), "MMMM", CultureInfo.CurrentCulture).Month)
+                            {
+                                MessageBox.Show("Выбранный месяц не совпадает с указанным расчетным периодом в загружаемом файле.");
+                            }
+                            if (toolBtnYear.SelectedItem.ToString() != dataExtraction.Rows[2][1].ToString().Split(" ").Last())
+                            {
+                                MessageBox.Show("Выбранный год не совпадает с указанным расчетным периодом в загружаемом файле.");
+                            }
+                        }
+
+                        datsTreeView.Nodes["treeViewLine2"].Nodes["treeViewLine2e1val"].Text = dataExtraction.Rows[31][1].ToString();
+                        datsTreeView.Nodes["treeViewLine3"].Nodes["treeViewLine3e1val"].Text = dataExtraction.Rows[33][1].ToString();
+
+                        datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e1"].Nodes["treeViewLine4e1val"].Text = dataExtraction.Rows[25][1].ToString();
+                        datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e2"].Nodes["treeViewLine4e2val"].Text = dataExtraction.Rows[26][1].ToString();
+                        datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e3"].Nodes["treeViewLine4e3val"].Text = dataExtraction.Rows[27][1].ToString();
+
+                        datsTreeView.Nodes["treeViewLine5"].Nodes["treeViewLine5e1"].Nodes["treeViewLine5e1val"].Text = dataExtraction.Rows[29][1].ToString();
+                        datsTreeView.Nodes["treeViewLine5"].Nodes["treeViewLine5e2"].Nodes["treeViewLine5e2val"].Text = dataExtraction.Rows[30][1].ToString();
+
+                        mgFileSVNC.Checked = true;
+
+                        break;
                 }
-                break;
-
-                case "stage":
-                    datsTreeView.Nodes["treeViewLine2"].Nodes["treeViewLine2e1val"].Text = dataExtraction.Rows[31][1].ToString();
-                    datsTreeView.Nodes["treeViewLine3"].Nodes["treeViewLine3e1val"].Text = dataExtraction.Rows[33][1].ToString();
-
-                    datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e1"].Nodes["treeViewLine4e1val"].Text = dataExtraction.Rows[25][1].ToString();
-                    datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e2"].Nodes["treeViewLine4e2val"].Text = dataExtraction.Rows[26][1].ToString();
-                    datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e3"].Nodes["treeViewLine4e3val"].Text = dataExtraction.Rows[27][1].ToString();
-
-                    datsTreeView.Nodes["treeViewLine5"].Nodes["treeViewLine5e1"].Nodes["treeViewLine5e1val"].Text = dataExtraction.Rows[29][1].ToString();
-                    datsTreeView.Nodes["treeViewLine5"].Nodes["treeViewLine5e2"].Nodes["treeViewLine5e2val"].Text = dataExtraction.Rows[30][1].ToString();
-                    break;
             }
-        }
-
-        private void EntryDatsKoeff()
-        {
-
         }
 
         private void urBtnSaveXML_Click(object sender, EventArgs e)
@@ -2868,7 +3180,127 @@ namespace dataEditor
             TreeColViewer.ClearSelection();
         }
 
+        private void mgDataViewer_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (files.Length == 1)
+                {
+                    string xlFileName = files[0].ToString();
+                    ExlFileName = Path.GetFileName(xlFileName);
 
+                    DataGridView urDt = mgDataViewer;
+                    mgDataViewer.DataSource = null;
+                    DataTable dataExtraction = new DataTable();
+                    DataTable DT = (DataTable)dataViewer.DataSource;
+                    if (DT != null)
+                        DT.Clear();
+
+                    mgDataViewer.Rows.Clear();
+                    mgDataViewer.Refresh();
+                    int count = this.mgDataViewer.Columns.Count;
+                    for (int i = 0; i < count; i++)
+                        this.mgDataViewer.Columns.RemoveAt(0);
+
+                    commonImportEXCL(this, new EventArgs(), dataExtraction, xlFileName);
+                    mgDataViewer.DataSource = dataExtraction;
+                    mgDataViewer.Update();
+                }
+            }
+        }
+
+        private void mgDataViewer_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Move;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void mgFileKF_Click(object sender, EventArgs e)
+        {
+            bgWorker = new BackgroundWorker();
+            bgWorker.WorkerReportsProgress = true;
+            bgWorker.WorkerSupportsCancellation = true;
+            bgWorker.DoWork += new DoWorkEventHandler(DownloadFile);
+
+            bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
+            bgWorker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_DownloadProgressChanged);
+
+            bgWorker.RunWorkerAsync();
+
+            progressDlg = new ProgressDialog();
+            progressDlg.stopProgress = new EventHandler((s, e1) => {
+                switch (progressDlg.DialogResult)
+                {
+                    case DialogResult.Cancel:
+                        bgWorker.CancelAsync();
+                        progressDlg.Close();
+                        break;
+                }
+            });
+            progressDlg.ShowDialog();
+        }
+
+        private void DownloadFile(object sender, DoWorkEventArgs e)
+        {
+            string sUrlToDnldFile = "https://www.atsenergo.ru/sites/default/files/uchfsk/20230510_042023_koeff.xls";
+            string sFileSavePath;
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            try
+            {
+                Uri url = new Uri(sUrlToDnldFile);
+
+                string sFileName = Path.GetFileName(url.LocalPath);
+                sFileSavePath = "C:\\Users\\ChernyshovKS\\Desktop\\tempTestDownload" + "\\" + sFileName;
+
+                System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);
+                System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)request.GetResponse();
+
+                long iSize = response.ContentLength;
+                long iRunningByteTotal = 0;
+
+                WebClient client = new WebClient();
+                Stream strRemote = client.OpenRead(url);
+                FileStream strLocal = new FileStream(sFileSavePath, FileMode.Create, FileAccess.Write, FileShare.None);
+
+                int iByteSize = 0;
+                byte[] byteBuffer = new byte[1024];
+
+                while ((iByteSize = strRemote.Read(byteBuffer, 0, byteBuffer.Length)) > 0)
+                {
+                    strLocal.Write(byteBuffer, 0, iByteSize);
+                    iRunningByteTotal += iByteSize;
+
+                    double dIndex = (double)(iRunningByteTotal);
+                    double dTotal = (double)iSize;
+                    double dProgressPercentage = (dIndex / dTotal);
+                    int iProgressPercentage = (int)(dProgressPercentage * 100);
+
+                    worker.ReportProgress(iProgressPercentage);
+                }
+                strRemote.Close();
+                response.Close();
+            }
+            catch (Exception exM)
+            {
+                MessageBox.Show("Error: " + exM.Message);
+            }
+        }
+
+        private void mgBtnOpenFolder_Click(object sender, EventArgs e)
+        {
+            string filePath = Environment.CurrentDirectory;
+            string argument = "\"" + filePath + "\"";
+
+            System.Diagnostics.Process.Start("explorer.exe", argument);
+        }
     }
     public static class ExtensionMethods
     {

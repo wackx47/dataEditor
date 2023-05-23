@@ -56,6 +56,19 @@ namespace dataEditor
             set { m_StartPage = value; }
         }
 
+        private string m_GlobalInfoStandart;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("")]
+        [DisplayName("LocalStandart")]
+        [Category("App")]
+        [TypeConverter(typeof(GlobalStandarts))]
+        public string GlobalInfoStandart
+        {
+            get { return m_GlobalInfoStandart; }
+            set { m_GlobalInfoStandart = value; }
+        }
+
         public mgRegions m_mgCodeName = new mgRegions("", "");
         [Browsable(true)]
         [ReadOnly(false)]
@@ -69,6 +82,17 @@ namespace dataEditor
             set { m_mgCodeName = value; }
         }
 
+        private int m_rDateSVNC = 10;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("Число месяца публикации СВНЦ на сайте АТС")]
+        [DisplayName("ReleaseSVNC")]
+        [Category("Microgeneration")]
+        public int rDateSVNC
+        {
+            get { return m_rDateSVNC; }
+            set { m_rDateSVNC = value; }
+        }
 
         private bool m_DRow = true;
             [Browsable(true)]
@@ -373,6 +397,8 @@ namespace dataEditor
     }
 
 
+
+
     class EmptyRowsCheckSettings
     {
         public EmptyRowsCheckSettings(bool SwitchChecks, int EmptyRowsLimit, int EmptyColmLimit)
@@ -542,9 +568,25 @@ namespace dataEditor
         }
     }
 
+    public class GlobalStandarts : TypeConverter
+    {
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        {
+            return true;
+        }
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+
+            string[] standarts = { "ru-RU", "en-US"};
+
+            return new StandardValuesCollection(standarts);
+            return base.GetStandardValues(context);
+        }
+    }
+
 
     public class ListBoxForXml : TypeConverter
-        {
+    {
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
         {
             return true;

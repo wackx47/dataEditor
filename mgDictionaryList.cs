@@ -10,7 +10,9 @@ using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -24,61 +26,69 @@ namespace dataEditor
 {
     public partial class mgDatsList : Form
     {
+        public static bankDictionary dictBankForm = new bankDictionary();
+        public static List<string> banksList = new List<string>();
+
         DataGridViewCell ActiveCell = null;
-
-
+        public static bool isLoaded;
 
         public mgDatsList()
         {
             InitializeComponent();
-            
         }
 
         private void mgDatsEditor_Load(object sender, EventArgs e)
         {
-            loadDictionary();
+            loadDictionary(isLoaded);
+            dictBankForm.loadDictionaryBanks(bankDictionary.isLoadedBanks);
+
+            bankNAME.DataSource = banksList;
             PhoneNumber.Mask = "+7(000)000-00-00;";
         }
 
-        private void loadDictionary()
+        public void loadDictionary(bool fl)
         {
-            DataSet ImportDataSet = new DataSet();
-
-            dataGridDictionaryList.DataSource = null;
-            DataTable DT = (DataTable)dataGridDictionaryList.DataSource;
-            if (DT != null)
-                DT.Clear();
-
-            dataGridDictionaryList.Rows.Clear();
-            dataGridDictionaryList.Refresh();
-
-            if (File.Exists(Environment.CurrentDirectory + "\\contractors_" + dictListGTP.Text +".xml"))
+            if (!isLoaded)
             {
-                string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + dictListGTP.Text +".xml";
+                DataSet ImportDataSet = new DataSet();
 
-                XDocument XMLfile = XDocument.Load(xmlFileName);
-                ImportDataSet.ReadXml(xmlFileName);
+                dataGridDictionaryList.DataSource = null;
+                DataTable DT = (DataTable)dataGridDictionaryList.DataSource;
+                if (DT != null)
+                    DT.Clear();
 
-                int rwi = 0;
-                foreach (XElement infoElement in XMLfile.Root.Elements(dictListGTP.Text))
+                dataGridDictionaryList.Rows.Clear();
+                dataGridDictionaryList.Refresh();
+
+                if (File.Exists(Environment.CurrentDirectory + "\\contractors_" + dictListGTP.Text + ".xml"))
                 {
-                    dataGridDictionaryList.Rows.Add();
-                    if (infoElement.Element("Agreement") != null)
-                        dataGridDictionaryList.Rows[rwi].Cells["Agreement"].Value = infoElement.Element("Agreement").Value;
-                    if (infoElement.Element("DateAgreement") != null)
-                        dataGridDictionaryList.Rows[rwi].Cells["Agreement"].Value = infoElement.Element("Agreement").Value;
-                    if (infoElement.Element("FullName") != null)
-                        dataGridDictionaryList.Rows[rwi].Cells["FullName"].Value = infoElement.Element("FullName").Value;
-                    if (infoElement.Element("Type") != null)
-                        dataGridDictionaryList.Rows[rwi].Cells["Type"].Value = infoElement.Element("Type").Value;
-                    if (infoElement.Element("INN") != null)
-                        dataGridDictionaryList.Rows[rwi].Cells["INN"].Value = infoElement.Element("INN").Value;
-                    if (infoElement.Element("Other") != null)
-                        dataGridDictionaryList.Rows[rwi].Cells["Other"].Value = infoElement.Element("Other").Value;
-                    rwi++;
+                    string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + dictListGTP.Text + ".xml";
+
+                    XDocument XMLfile = XDocument.Load(xmlFileName);
+                    ImportDataSet.ReadXml(xmlFileName);
+
+                    int rwi = 0;
+                    foreach (XElement infoElement in XMLfile.Root.Elements(dictListGTP.Text))
+                    {
+                        dataGridDictionaryList.Rows.Add();
+                        if (infoElement.Element("Agreement") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["Agreement"].Value = infoElement.Element("Agreement").Value;
+                        if (infoElement.Element("DateAgreement") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["Agreement"].Value = infoElement.Element("Agreement").Value;
+                        if (infoElement.Element("FullName") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["FullName"].Value = infoElement.Element("FullName").Value;
+                        if (infoElement.Element("Type") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["Type"].Value = infoElement.Element("Type").Value;
+                        if (infoElement.Element("INN") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["INN"].Value = infoElement.Element("INN").Value;
+                        if (infoElement.Element("NumCC") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["NumCC"].Value = infoElement.Element("NumCC").Value;
+                        rwi++;
+                    }
                 }
+                dataGridDictionaryList.Refresh();
+                isLoaded = true;
             }
-            dataGridDictionaryList.Refresh();
         }
 
         private void mgLocalPhone_Click(object sender, EventArgs e)
@@ -196,7 +206,7 @@ namespace dataEditor
             exportTable.Columns.Add("FullName");
             exportTable.Columns.Add("Type");
             exportTable.Columns.Add("INN");
-            exportTable.Columns.Add("Other");
+            exportTable.Columns.Add("NumCC");
 
             foreach (DataGridViewRow rw in dataGridDictionaryList.Rows)
             {
@@ -207,7 +217,7 @@ namespace dataEditor
                 row["FullName"] = rw.Cells["FullName"].Value;
                 row["Type"] = rw.Cells["Type"].Value;
                 row["INN"] = rw.Cells["INN"].Value;
-                row["Other"] = rw.Cells["Other"].Value;
+                row["NumCC"] = rw.Cells["NumCC"].Value;
 
                 DictionaryDataSet.Tables[dictListGTP.Text].Rows.Add(row);
             }
@@ -299,7 +309,6 @@ namespace dataEditor
                     dataGridDictionaryList.Rows[rwi].Cells["Other"].Value = infoElement.Element("Other").Value;
                 rwi++;
             }
-
             dataGridDictionaryList.Refresh();
         }
 
@@ -724,5 +733,16 @@ namespace dataEditor
                 e.Handled = true;
             }
         }
+
+        private void dictBtnBankData_Click(object sender, EventArgs e)
+        {
+            dictBankForm.Show();
+        }
+
+        private void mgDatsList_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            dictBankForm.Dispose();
+        }
+
     }
 }
