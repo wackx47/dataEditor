@@ -1,6 +1,7 @@
 ﻿using dataEditor.Properties;
 using MathNet.Numerics.LinearAlgebra.Factorization;
 using NPOI.SS.Formula.Functions;
+using NPOI.SS.UserModel;
 using OfficeOpenXml.DataValidation;
 using Org.BouncyCastle.Asn1.X500;
 using Org.BouncyCastle.Bcpg.Sig;
@@ -12,6 +13,8 @@ using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -28,6 +31,9 @@ namespace dataEditor
     {
         public static bankDictionary dictBankForm = new bankDictionary();
         public static List<string> banksList = new List<string>();
+
+        MainForm main = (MainForm)Application.OpenForms["MainForm"];
+        Settings settingsForm = (Settings)Application.OpenForms["Settings"];
 
         DataGridViewCell ActiveCell = null;
         public static bool isLoaded;
@@ -50,6 +56,12 @@ namespace dataEditor
         {
             if (!isLoaded)
             {
+                main = StartScreen.universalReaderForm;
+                settingsForm = MainForm.SettingsForm;
+
+                main.prepareOptionsGridOthersForm();
+                MicrogenerationSettings mgSettings = (MicrogenerationSettings)settingsForm.optionsGrid.SelectedObject;
+
                 DataSet ImportDataSet = new DataSet();
 
                 dataGridDictionaryList.DataSource = null;
@@ -60,9 +72,9 @@ namespace dataEditor
                 dataGridDictionaryList.Rows.Clear();
                 dataGridDictionaryList.Refresh();
 
-                if (File.Exists(Environment.CurrentDirectory + "\\contractors_" + dictListGTP.Text + ".xml"))
+                if (File.Exists(mgSettings.mgFolderAgreeDict.fullPathAgreeDictionary + "\\contractors_" + dictListGTP.Text + ".xml"))
                 {
-                    string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + dictListGTP.Text + ".xml";
+                    string xmlFileName = mgSettings.mgFolderAgreeDict.fullPathAgreeDictionary + "\\contractors_" + dictListGTP.Text + ".xml";
 
                     XDocument XMLfile = XDocument.Load(xmlFileName);
                     ImportDataSet.ReadXml(xmlFileName);
@@ -85,9 +97,15 @@ namespace dataEditor
                             dataGridDictionaryList.Rows[rwi].Cells["NumCC"].Value = infoElement.Element("NumCC").Value;
                         rwi++;
                     }
+
+                    dataGridDictionaryList.Refresh();
+                    isLoaded = true;
+                    Console.WriteLine("DictionaryLoaded, path to Dictionary: " + mgSettings.mgFolderAgreeDict.fullPathAgreeDictionary + "\\contractors_" + dictListGTP.Text + ".xml");
                 }
-                dataGridDictionaryList.Refresh();
-                isLoaded = true;
+                else
+                {
+                    Console.WriteLine("Dictionary is not Loaded, path to Dictionary: " + mgSettings.mgFolderAgreeDict.fullPathAgreeDictionary + "\\contractors_" + dictListGTP.Text + ".xml");
+                }
             }
         }
 
@@ -744,5 +762,113 @@ namespace dataEditor
             dictBankForm.Dispose();
         }
 
+        private void dictBtnImportFromExcel_Click(object sender, EventArgs e)
+        {
+            main = StartScreen.universalReaderForm;
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Multiselect = false;
+            ofd.DefaultExt = "*.xls;*.xlsx";
+            ofd.Filter = "Microsoft Excel (*.xls*)|*.xls*";
+            ofd.Title = "Выберите документ Excel";
+            if (ofd.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            string xlFileName = ofd.FileName;
+            
+            DataTable dataExtraction = new DataTable();
+            main.commonImportEXCL(this, new EventArgs(), dataExtraction, xlFileName);
+
+            //Console.WriteLine(xlFileName);
+            //foreach (DataRow row in dataExtraction.Rows)
+            //{
+            //    foreach (DataColumn column in dataExtraction.Columns)
+            //    {
+            //        Console.Write("\t{0}", row[column]);
+            //    }
+            //    Console.WriteLine();
+            //}
+
+            dataGridDictionaryList.Rows.Clear();
+
+            dataExtraction.Rows[0].Delete();
+            foreach (DataRow rows in dataExtraction.Rows)
+            {
+                if (rows[1] != DBNull.Value)
+                {
+                    dataGridDictionaryList.Rows.Add("", rows[1], DateOnly.FromDateTime(Convert.ToDateTime(rows[2])), rows[3],
+                        ConvertToBoolRU(rows[4].ToString()), rows[5].ToString(), rows[6], rows[7], rows[8], PhoneNumberParse(rows[9].ToString()), 
+                        rows[10].ToString().Split(";").First(), ComboBoxParse(rows[11].ToString()), ComboBoxParse(rows[12].ToString()), rows[13]);
+                }
+            }
+            
+        }
+
+        private static string ComboBoxParse(string input)
+        {
+            if (input != "")
+            {
+                switch (input[0].ToString())
+                {
+                    case "1":
+                        return "1ЦК";
+                    case "2":
+                        return "2 зоны";
+                    case "3":
+                        return "3 зоны";
+                    case "д":
+                        return "Действует";
+                    case "р":
+                        return "Расторгнут";
+                    case "э":
+                        return "";
+                    default:
+                        return "";
+                }
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        private static string PhoneNumberParse(string input)
+        {
+            Regex regexObj = new Regex(@"[^\d]");
+            string result = regexObj.Replace(input.ToString().Split(";").First(), "");
+
+            if (result[0].ToString() == "8")
+            {
+                result = Int64.Parse(result.Substring(1)).ToString("+7(000)000-00-00");
+                return result + ";";
+            }
+            else if (result[0].ToString() == "7" )
+            {
+                result = Int64.Parse(result.Substring(1)).ToString("+7(000)000-00-00");
+                return result + ";";
+            }
+            else
+            {
+                result = Int64.Parse(result).ToString("+7(000)000-00-00");
+                return result + ";";
+            }
+        }
+
+        private static bool ConvertToBoolRU(string input)
+        {
+            if (input.Equals("да", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+            else if (input.Equals("нет", StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

@@ -39,6 +39,16 @@ using System.Runtime.Intrinsics.X86;
 using System.Globalization;
 using System.Net;
 using OfficeOpenXml.Utils;
+using dataEditor.Properties;
+using NPOI.POIFS.Crypt.Dsig;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using Microsoft.VisualBasic.Devices;
+using NPOI.SS.Formula.PTG;
+using System.Resources;
+using System.Drawing;
+using static NPOI.HSSF.Util.HSSFColor;
+using System.Security.Policy;
+
 
 namespace dataEditor
 {
@@ -52,9 +62,13 @@ namespace dataEditor
         DataGridView TreeColViewer = new DataGridView();
         DataSet UniversalDataSet = new DataSet("UniversalFileReader");
         DataSet HoursDataSet = new DataSet("HoursStore");
+        DataSet IntegralsDataSet = new DataSet("IntegralsStore");
         Button ConfirmCols = new Button();
 
+        DataGridViewButtonCell tableRemove;
+
         public static mgDatsList DictionaryForm = new mgDatsList();
+        public static Settings SettingsForm = new Settings();
 
         int cntShows = 0;
         int HFR = 0;
@@ -64,17 +78,13 @@ namespace dataEditor
         int FirstUsedRow = 1;
         int FirstUsedColumn = 1;
         bool allowVoid = false;
-        bool lockVoid = false;
-        bool useOleDB = false;
         string xmlFileName = "";
         string ExlFileName = null;
         string memSQLlist = null;
         string defaultSQL = null;
-        string OpenFileKey = null;
 
         CheckBox headerCheckBox = new CheckBox();
         DataGridViewCell ActiveCell = null;
-        DataGridViewColumn ActiveColumn = null;
 
         XElement strID = null;
         XElement strName = null;
@@ -93,8 +103,11 @@ namespace dataEditor
         String[] SQLdbTempC = { };
 
         DataTable dt_db_shema = new DataTable();
+        commonSettings cmnSettings = new commonSettings();
+        ExcelReaderSettings exclSettings = new ExcelReaderSettings();
+        MicrogenerationSettings mgSettings = new MicrogenerationSettings();
+        urProperty urProperty = new urProperty();
 
-        PropertySet PropGrid = new PropertySet();
 
         Color fntCl = Color.Black;
         Color fntClDat = Color.Black;
@@ -144,23 +157,52 @@ namespace dataEditor
             }
         }
 
+        public class DoubleBufferedDataGridView : DataGridView
+        {
+            protected override bool DoubleBuffered { get => true; }
+        }
+
         public MainForm()
         {
             InitializeComponent();
             AllocConsole();
             Magician.DisappearConsole();
             ReadINI();
-            optionsGrid.SelectedObject = PropGrid;
+
+            urOptionsGrid.SelectedObject = urProperty;
             splitContainer_rightProps.Panel1Collapsed = true;
-            Console.WriteLine("Soft powered by 47 5'9 (ver. " + PropGrid.AppVersion + ") //.build for GitHub");
+            Console.WriteLine("Soft powered by 47 5'9 (ver. " + Application.ProductVersion + ") //.build for GitHub");
             ImportList.CheckProviders();
             StartPage();
             addAvailableProviders(this, new EventArgs());
-            TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["ExtraColCnt"].SetReadOnlyAttribute(true);
-            PropGrid.ImportMode = ImportList.AvailableMode[0];
-            PropGrid.mgCodeName.propGTPname = "KUBANESK";
-            PropGrid.GlobalInfoStandart = "ru-RU";
-            DictionaryForm.dictListGTP.Text = PropGrid.mgCodeName.propGTPname;
+            TypeDescriptor.GetProperties(urOptionsGrid.SelectedObject)["ExtraColCnt"].SetReadOnlyAttribute(true);
+            cmnSettings.ImportMode = ImportList.AvailableMode[0];
+            mgSettings.mgCodeName.propGTPname = "KUBANESK";
+            cmnSettings.GlobalInfoStandart = "ru-RU";
+            DictionaryForm.dictListGTP.Text = mgSettings.mgCodeName.propGTPname;
+            appInfo.Text = "ver." + Application.ProductVersion + " (" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + ")";
+        }
+
+
+        public void switchOptionsGridSettingsGroup()
+        {
+            switch (SettingsForm.SettingsTreeView.SelectedNode.Name)
+            {
+                case "setCommon":
+                    SettingsForm.optionsGrid.SelectedObject = cmnSettings;
+                    break;
+                case "setExcelReader":
+                    SettingsForm.optionsGrid.SelectedObject = exclSettings;
+                    break;
+                case "setMicrogeneration":
+                    SettingsForm.optionsGrid.SelectedObject = mgSettings;
+                    break;
+            }
+        }
+
+        public void prepareOptionsGridOthersForm()
+        {
+            SettingsForm.optionsGrid.SelectedObject = mgSettings;
         }
 
         public static void ScaleControlElements(DataGridView ScaleSource, SizeF ScaleFactor)
@@ -199,30 +241,30 @@ namespace dataEditor
         {
             SettingsNewForm();
 
-            foreach (string s in PropGrid.sqlArray)
+            foreach (string s in exclSettings.sqlArray)
                 memSQLlist += s + ";";
 
             if (defaultSQL != null | defaultSQL != "")
             {
                 string[] loadSQLarray = defaultSQL.Split(';');
                 loadSQLarray = loadSQLarray.SkipLast(1).ToArray();
-                PropGrid.sqlArray = loadSQLarray;
+                exclSettings.sqlArray = loadSQLarray;
             }
             AutoFillList();
             CheckRegLib();
 
-            tempPropColors.Add(PropGrid.ColorHeads);
-            tempPropColors.Add(PropGrid.ColorDataRows);
-            tempPropColors.Add(PropGrid.ColorStaticDat);
-            tempPropColors.Add(PropGrid.SecondColorHeads);
+            tempPropColors.Add(exclSettings.ColorHeads);
+            tempPropColors.Add(exclSettings.ColorDataRows);
+            tempPropColors.Add(exclSettings.ColorStaticDat);
+            tempPropColors.Add(exclSettings.SecondColorHeads);
 
-            if (PropGrid.ShowHelpPropetryGrid == true)
+            if (cmnSettings.ShowHelpPropetryGrid == true)
             {
-                optionsGrid.HelpVisible = !optionsGrid.HelpVisible;
+                SettingsForm.optionsGrid.HelpVisible = !SettingsForm.optionsGrid.HelpVisible;
                 helpToolStripMenuItem.Checked = !helpToolStripMenuItem.Checked;
             }
 
-            if (PropGrid.ShowConsoleOnStartUp == true)
+            if (cmnSettings.ShowConsoleOnStartUp == true)
             {
                 Magician.AppearConsole();
                 DeleteMenu(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_BYCOMMAND);
@@ -230,7 +272,7 @@ namespace dataEditor
             }
 
             if (ImportList.ProvidersList.Count != 0)
-                PropGrid.OleDBImportMode.VersionOleDB = ImportList.ProvidersList[0];
+                cmnSettings.OleDBImportMode.VersionOleDB = ImportList.ProvidersList[0];
         }
 
         private void statusGridView_CellCmbxValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -286,7 +328,7 @@ namespace dataEditor
             {
                 foreach (DataGridViewRow rws in dataViewer.Rows)
                 {
-                    if (rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads | rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads | rws.DefaultCellStyle.BackColor == PropGrid.ColorDataRows | rws.DefaultCellStyle.BackColor == PropGrid.ColorDataRows)
+                    if (rws.DefaultCellStyle.BackColor == exclSettings.ColorHeads | rws.DefaultCellStyle.BackColor == exclSettings.ColorHeads | rws.DefaultCellStyle.BackColor == exclSettings.ColorDataRows | rws.DefaultCellStyle.BackColor == exclSettings.ColorDataRows)
                     {
                         rws.DefaultCellStyle.BackColor = Color.Empty;
                         rws.DefaultCellStyle.ForeColor = Color.Black;
@@ -296,7 +338,7 @@ namespace dataEditor
                 {
                     HFR = Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value)- (FirstUsedRow-1);
 
-                    int ls = (Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) + PropGrid.cntHeadsRows);
+                    int ls = (Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) + urProperty.cntHeadsRows);
                     if (ls >= FirstUsedRow + RowsCnt)
                         mxRw = ls - 1;
                     else
@@ -305,16 +347,16 @@ namespace dataEditor
                     statusGridView.Rows[3].Cells[1].Value = null;
                     statusGridView.Rows[3].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(mxRw, FirstUsedRow - 1 + RowsCnt);
 
-                    dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - (FirstUsedRow)].DefaultCellStyle.BackColor = PropGrid.ColorHeads;
+                    dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - (FirstUsedRow)].DefaultCellStyle.BackColor = exclSettings.ColorHeads;
                     dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - (FirstUsedRow)].DefaultCellStyle.ForeColor = fntCl;
 
-                    if (PropGrid.DRow == true)
+                    if (urProperty.DRow == true)
                     {
-                        for (int i = 1; i < Convert.ToInt32(PropGrid.cntHeadsRows); i++)
+                        for (int i = 1; i < Convert.ToInt32(urProperty.cntHeadsRows); i++)
                         {
                             if (Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - (FirstUsedRow) + i < dataViewer.RowCount)
                             {
-                                dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - (FirstUsedRow) + i].DefaultCellStyle.BackColor = PropGrid.ColorHeads;
+                                dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - (FirstUsedRow) + i].DefaultCellStyle.BackColor = exclSettings.ColorHeads;
                                 dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) - (FirstUsedRow) + i].DefaultCellStyle.ForeColor = fntCl;
                             }
                         }
@@ -322,7 +364,7 @@ namespace dataEditor
                 }
                 TreeFormDestroyer();
                 dataViewer.ClearSelection();
-                optionsGrid.Refresh();
+                SettingsForm.optionsGrid.Refresh();
                 urBtnConvert2Tree.Enabled = true;
             }
 
@@ -330,7 +372,7 @@ namespace dataEditor
             {
                 foreach (DataGridViewRow row in dataViewer.Rows)
                 {
-                    if (row.DefaultCellStyle.BackColor == PropGrid.ColorDataRows | row.DefaultCellStyle.BackColor == PropGrid.ColorDataRows)
+                    if (row.DefaultCellStyle.BackColor == exclSettings.ColorDataRows | row.DefaultCellStyle.BackColor == exclSettings.ColorDataRows)
                     {
                         row.DefaultCellStyle.BackColor = Color.Empty;
                         row.DefaultCellStyle.ForeColor = Color.Black;
@@ -339,20 +381,20 @@ namespace dataEditor
 
                 if (Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value) > 0)
                 {
-                    dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-(FirstUsedRow)].DefaultCellStyle.BackColor = PropGrid.ColorDataRows;
+                    dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-(FirstUsedRow)].DefaultCellStyle.BackColor = exclSettings.ColorDataRows;
                     dataViewer.Rows[Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-(FirstUsedRow)].DefaultCellStyle.ForeColor = fntClDat;
 
                     for (int i = (Convert.ToInt32(statusGridView.Rows[3].Cells[1].Value)-(FirstUsedRow) + Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1); i < RowsCnt-(FirstUsedRow); i += Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1)
                     {
                         if (dataViewer.Rows[i].Cells[1].Value != DBNull.Value)
                         {
-                            dataViewer.Rows[i].DefaultCellStyle.BackColor = PropGrid.ColorDataRows;
+                            dataViewer.Rows[i].DefaultCellStyle.BackColor = exclSettings.ColorDataRows;
                             dataViewer.Rows[i].DefaultCellStyle.ForeColor = fntClDat;
                         }
                     }
                 }
                 dataViewer.ClearSelection();
-                optionsGrid.Refresh();
+                SettingsForm.optionsGrid.Refresh();
             }
         }
 
@@ -360,7 +402,7 @@ namespace dataEditor
         {
             SQLdata.Clear();
             memSQLlist = null;
-            string[] subs = PropGrid.sqlArray;
+            string[] subs = exclSettings.sqlArray;
             SQLdbTemp = subs;
             SQLdbTempB = subs;
 
@@ -385,31 +427,31 @@ namespace dataEditor
                 }
                 if (INI.KeyExists("ColorHeaders", "Visuals"))
                 {
-                    PropGrid.ColorHeads = Color.FromName(INI.ReadINI("Visuals", "ColorHeaders"));
+                    exclSettings.ColorHeads = Color.FromName(INI.ReadINI("Visuals", "ColorHeaders"));
                 }
                 if (INI.KeyExists("ColorHeaders(ListView)", "Visuals"))
                 {
-                    PropGrid.SecondColorHeads = Color.FromName(INI.ReadINI("Visuals", "ColorHeaders(ListView)"));
+                    exclSettings.SecondColorHeads = Color.FromName(INI.ReadINI("Visuals", "ColorHeaders(ListView)"));
                 }
                 if (INI.KeyExists("ColorDataRows", "Visuals"))
                 {
-                    PropGrid.ColorDataRows = Color.FromName(INI.ReadINI("Visuals", "ColorDataRows"));
+                    exclSettings.ColorDataRows = Color.FromName(INI.ReadINI("Visuals", "ColorDataRows"));
                 }
                 if (INI.KeyExists("ColorStaticCell", "Visuals"))
                 {
-                    PropGrid.ColorStaticDat = Color.FromName(INI.ReadINI("Visuals", "ColorStaticCell"));
+                    exclSettings.ColorStaticDat = Color.FromName(INI.ReadINI("Visuals", "ColorStaticCell"));
                 }
                 if (INI.KeyExists("ForceCloseAllExcel", "Other"))
                 {
-                    PropGrid.ForceCloseExl = bool.Parse(INI.ReadINI("Other", "ForceCloseAllExcel"));
+                    cmnSettings.ForceCloseExl = bool.Parse(INI.ReadINI("Other", "ForceCloseAllExcel"));
                 }
                 if (INI.KeyExists("ShowConsoleOnStartUp", "Other"))
                 {
-                    PropGrid.ShowConsoleOnStartUp = bool.Parse(INI.ReadINI("Other", "ShowConsoleOnStartUp"));
+                    cmnSettings.ShowConsoleOnStartUp = bool.Parse(INI.ReadINI("Other", "ShowConsoleOnStartUp"));
                 }
                 if (INI.KeyExists("ShowHelpPropetryGrid", "Other"))
                 {
-                    PropGrid.ShowHelpPropetryGrid = bool.Parse(INI.ReadINI("Other", "ShowHelpPropetryGrid"));
+                    cmnSettings.ShowHelpPropetryGrid = bool.Parse(INI.ReadINI("Other", "ShowHelpPropetryGrid"));
                 }
                 if (INI.KeyExists("UseOLEDBprovider", "Other"))
                 {
@@ -420,7 +462,7 @@ namespace dataEditor
                     defaultSQL = "Name;Dat8;Type;Is_fact;OAO;GTP_Kod;GTP;Nomer_Dog;Kontragent;K_GTP_Kod;K_GTP;Dog_V;V;S;S_NDS";
 
                 autoFontColor();
-                optionsGrid.Refresh();
+                SettingsForm.optionsGrid.Refresh();
             }
             else
             {
@@ -438,13 +480,13 @@ namespace dataEditor
         public void ConfigUpdater()
         {
             GridItemCollection categories;
-            if (optionsGrid.SelectedGridItem.GridItemType == GridItemType.Category)
+            if (SettingsForm.optionsGrid.SelectedGridItem.GridItemType == GridItemType.Category)
             {
-                categories = optionsGrid.SelectedGridItem.Parent.GridItems;
+                categories = SettingsForm.optionsGrid.SelectedGridItem.Parent.GridItems;
             }
             else
             {
-                categories = optionsGrid.SelectedGridItem.Parent.Parent.GridItems;
+                categories = SettingsForm.optionsGrid.SelectedGridItem.Parent.Parent.GridItems;
             }
 
             foreach (var category in categories)
@@ -511,14 +553,14 @@ namespace dataEditor
                 statusGridView.Rows[2].Cells[1].Value = Convert.ToInt32(dataViewer.Rows[e.RowIndex].HeaderCell.Value.ToString().Split(' ').Last());
                 dataViewer.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.SkyBlue;
                 RightClick_HeadsRow.Enabled = true;
-                if (PropGrid.DRow == true)
+                if (urProperty.DRow == true)
                 {
                     dataViewer.Rows[e.RowIndex + 1].DefaultCellStyle.BackColor = Color.PowderBlue;
                     dataViewer.Rows[e.RowIndex + 1].Cells[0].Value = true;
                     RightClick_HeadsRow.Enabled = true;
                 }
             }
-            optionsGrid.Refresh();
+            SettingsForm.optionsGrid.Refresh();
         }
 
         private void DataViewer_ColumnsSelected(object sender, DataGridViewCellMouseEventArgs e)
@@ -542,7 +584,7 @@ namespace dataEditor
             Console.WriteLine(dataViewer.Columns[ActiveCell.ColumnIndex].HeaderText.ToString());
             dataViewer.ClearSelection();
             statusGridView.ClearSelection();
-            optionsGrid.Refresh();
+            SettingsForm.optionsGrid.Refresh();
         }
 
 
@@ -655,7 +697,7 @@ namespace dataEditor
 
         private void cellStripSubMenu_Click(object sender, EventArgs e)
         {
-            if(dataViewer.Rows[ActiveCell.RowIndex].Cells[ActiveCell.ColumnIndex].Style.BackColor == PropGrid.ColorStaticDat)
+            if(dataViewer.Rows[ActiveCell.RowIndex].Cells[ActiveCell.ColumnIndex].Style.BackColor == exclSettings.ColorStaticDat)
             {
                 var rg = new Regex(@"\[(.*?)\]");
                 var result = rg.Match(dataViewer.Rows[ActiveCell.RowIndex].Cells[ActiveCell.ColumnIndex].Value.ToString()).Groups[1].Value;
@@ -673,7 +715,7 @@ namespace dataEditor
                 
 
                 dataViewer.Rows[ActiveCell.RowIndex].Cells[ActiveCell.ColumnIndex].Value += "[" + clickedMenuItem.Text + "]";
-                dataViewer.Rows[ActiveCell.RowIndex].Cells[ActiveCell.ColumnIndex].Style.BackColor = PropGrid.ColorStaticDat;
+                dataViewer.Rows[ActiveCell.RowIndex].Cells[ActiveCell.ColumnIndex].Style.BackColor = exclSettings.ColorStaticDat;
                 dataViewer.Rows[ActiveCell.RowIndex].Cells[ActiveCell.ColumnIndex].Style.ForeColor = fntClStaticDat;
 
                 SQLdbTempB = Array.FindAll(SQLdbTemp, i => i != clickedMenuItem.Text.ToString()).ToArray();
@@ -712,7 +754,7 @@ namespace dataEditor
         private void TreeColViewer_CellCmbxValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (allowVoid == true) {
-                string[] SQLdataTemp = PropGrid.sqlArray;
+                string[] SQLdataTemp = exclSettings.sqlArray;
 
 
                 foreach (var delItem in SQLdbTempC)
@@ -729,6 +771,7 @@ namespace dataEditor
                 }
 
                 SQLdbTemp = SQLdataTemp;
+
 
                 foreach (DataGridViewRow rwcb in TreeColViewer.Rows)
                 {
@@ -802,7 +845,7 @@ namespace dataEditor
             }
 
             DataRow rwe = dte.NewRow();
-            rwe["extraColumns"] = PropGrid.ExtraColCnt;
+            rwe["extraColumns"] = urProperty.ExtraColCnt;
             rwe["headsRow"] = statusGridView.Rows[2].Cells[1].Value;
             rwe["firstData"] = statusGridView.Rows[3].Cells[1].Value;
             rwe["columnsCount"] = statusGridView.Rows[1].Cells[1].Value;
@@ -810,7 +853,7 @@ namespace dataEditor
             dte.Rows.Add(rwe);
 
             TreeView.Hide();
-            optionsGrid.Refresh();
+            SettingsForm.optionsGrid.Refresh();
             statusGridView.ClearSelection();
 
             urBtnSaveXML.Enabled = true;
@@ -859,7 +902,7 @@ namespace dataEditor
                 if (rw.Cells[2].Value != null && rw.Cells[0].Value != "" && Convert.ToBoolean(rw.Cells[0].EditedFormattedValue) == true)
                 {
                     TextExtractColumns.Text += rw.HeaderCell.Value + ";";
-                    rw.DefaultCellStyle.BackColor = PropGrid.SecondColorHeads;
+                    rw.DefaultCellStyle.BackColor = exclSettings.SecondColorHeads;
                     rw.DefaultCellStyle.ForeColor = fntTreeCl;
                     rw.Cells[2].ReadOnly = false;
                     rowsChkCounts++;
@@ -869,7 +912,7 @@ namespace dataEditor
                     DataGridViewComboBoxCell cellSQL = new DataGridViewComboBoxCell();
                     cellSQL.DataSource = SQLdbTemp;
                     TextExtractColumns.Text += rw.HeaderCell.Value + ";";
-                    rw.DefaultCellStyle.BackColor = PropGrid.SecondColorHeads;
+                    rw.DefaultCellStyle.BackColor = exclSettings.SecondColorHeads;
                     rw.DefaultCellStyle.ForeColor = fntTreeCl;
                     rw.Cells[2] = new DataGridViewComboBoxCell();
                     rw.Cells[2] = cellSQL;
@@ -898,8 +941,8 @@ namespace dataEditor
                     {
                         if (TreeColViewer.Rows[n].HeaderCell.Value == "")
                         {
-                            TreeColViewer.Rows[n].DefaultCellStyle.BackColor = Color.FromArgb(255, PropGrid.SecondColorHeads.R / 2, PropGrid.SecondColorHeads.G / 2, PropGrid.SecondColorHeads.B / 2);
-                            if (PropGrid.SecondColorHeads.R / 2 < 120 | PropGrid.SecondColorHeads.G / 2 < 120 | PropGrid.SecondColorHeads.B / 2 < 120)
+                            TreeColViewer.Rows[n].DefaultCellStyle.BackColor = Color.FromArgb(255, exclSettings.SecondColorHeads.R / 2, exclSettings.SecondColorHeads.G / 2, exclSettings.SecondColorHeads.B / 2);
+                            if (exclSettings.SecondColorHeads.R / 2 < 120 | exclSettings.SecondColorHeads.G / 2 < 120 | exclSettings.SecondColorHeads.B / 2 < 120)
                                 TreeColViewer.Rows[n].DefaultCellStyle.ForeColor = Color.White;
                         }
                         else
@@ -922,14 +965,14 @@ namespace dataEditor
                 }
                 foreach (DataGridViewRow rw in TreeColViewer.Rows)
                 {
-                    if (rowsChkCounts >= SQLdata.Count + PropGrid.ExtraColCnt && rw.Cells[0].Value != "" && Convert.ToBoolean(rw.Cells[0].EditedFormattedValue) == false)
+                    if (rowsChkCounts >= SQLdata.Count + urProperty.ExtraColCnt && rw.Cells[0].Value != "" && Convert.ToBoolean(rw.Cells[0].EditedFormattedValue) == false)
                     {
                         DataGridViewCheckBoxCell chk = (DataGridViewCheckBoxCell)rw.Cells[0];
                         chk.FlatStyle = FlatStyle.Flat;
                         chk.Style.ForeColor = Color.DarkGray;
                         chk.ReadOnly = true;
                     }
-                    if (rowsChkCounts < SQLdata.Count + PropGrid.ExtraColCnt && rw.Cells[0].Value != "")
+                    if (rowsChkCounts < SQLdata.Count + urProperty.ExtraColCnt && rw.Cells[0].Value != "")
                     {
                         DataGridViewCheckBoxCell chk = (DataGridViewCheckBoxCell)rw.Cells[0];
                         chk.FlatStyle = FlatStyle.Standard;
@@ -964,9 +1007,9 @@ namespace dataEditor
 
         private void LoadXMLforMG()
         {
-            if (File.Exists(Environment.CurrentDirectory + "\\contractors_" + PropGrid.mgCodeName.propGTPname + ".xml"))
+            if (File.Exists(Environment.CurrentDirectory + "\\contractors_" + mgSettings.mgCodeName.propGTPname + ".xml"))
             {
-                string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + PropGrid.mgCodeName.propGTPname + ".xml";
+                string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + mgSettings.mgCodeName.propGTPname + ".xml";
 
                 DataSet ExportsDats = new DataSet();
                 ExportsDats.ReadXml(xmlFileName);
@@ -981,7 +1024,7 @@ namespace dataEditor
 
         private static void PrintValues(DataTable table, string label)
         {
-            Console.WriteLine(label + "\n");
+            Console.WriteLine(label);
             foreach (DataRow row in table.Rows)
             {
                 foreach (DataColumn column in table.Columns)
@@ -998,23 +1041,23 @@ namespace dataEditor
             switch (clickedItem.Text)
             {
                 case "Excel Interop":
-                    PropGrid.ImportMode = "Excel Interop";
-                    optionsGrid.Refresh();
+                    cmnSettings.ImportMode = "Excel Interop";
+                    SettingsForm.optionsGrid.Refresh();
                     break;
 
                 case "NPOI":
-                    PropGrid.ImportMode = "NPOI";
-                    optionsGrid.Refresh();
+                    cmnSettings.ImportMode = "NPOI";
+                    SettingsForm.optionsGrid.Refresh();
                     break;
 
                 case "EPPlus":
-                    PropGrid.ImportMode = "EPPlus";
-                    optionsGrid.Refresh();
+                    cmnSettings.ImportMode = "EPPlus";
+                    SettingsForm.optionsGrid.Refresh();
                     break;
 
                 case "OleDB":
-                    PropGrid.ImportMode = "OleDB";
-                    optionsGrid.Refresh();
+                    cmnSettings.ImportMode = "OleDB";
+                    SettingsForm.optionsGrid.Refresh();
                     break;
             }
             switch (SectionsControl.SelectedIndex)
@@ -1034,9 +1077,9 @@ namespace dataEditor
             Console.WriteLine("\n" + "***Starting void: ImportExcelFile***" + "\n");
             Console.ForegroundColor = ConsoleColor.White;
 
-            Console.WriteLine("Open new Excel file: " + ExlFileName + " by " + PropGrid.ImportMode.ToString());
+            Console.WriteLine("Open new Excel file: " + ExlFileName + " by " + cmnSettings.ImportMode.ToString());
 
-            switch (PropGrid.ImportMode)
+            switch (cmnSettings.ImportMode)
             {
                 case "EPPlus":
                     try
@@ -1085,7 +1128,7 @@ namespace dataEditor
                     break;
 
                 case "OleDB":
-                    if (Path.GetExtension(xlFileName) == ".xlsx" && PropGrid.OleDBImportMode.VersionOleDB == "Microsoft.Jet.OLEDB.4.0")
+                    if (Path.GetExtension(xlFileName) == ".xlsx" && cmnSettings.OleDBImportMode.VersionOleDB == "Microsoft.Jet.OLEDB.4.0")
                     {
                         Console.WriteLine("Microsoft.Jet.OLEDB.4.0 not supported this file extension");
 
@@ -1113,139 +1156,197 @@ namespace dataEditor
             string xlFileName = ofd.FileName;
             ExlFileName = Path.GetFileName(xlFileName);
 
-                DataGridView mgDt = mgDataViewer;
-                mgDataViewer.DataSource = null;
-                DataTable dataExtraction = new DataTable();
-                DataTable DT = (DataTable)mgDataViewer.DataSource;
-                if (DT != null)
-                    DT.Clear();
+            DataTable dataExtraction = new DataTable();
+            commonImportEXCL(this, new EventArgs(), dataExtraction, xlFileName);
+            HoursFile_processing(dataExtraction);
+            IntegralsFile_processing(dataExtraction);
+            workWithButtonsIntoFlowPanel();
+        }
 
-                mgDataViewer.Rows.Clear();
-                mgDataViewer.Refresh();
-                int count = this.mgDataViewer.Columns.Count;
-                for (int i = 0; i < count; i++)
-                    this.mgDataViewer.Columns.RemoveAt(0);
+        private static int withoutZeroNumCC(string searchValue)
+        {
+            int foundRow = -1;
+            foreach (DataGridViewRow rowsDict in DictionaryForm.dataGridDictionaryList.Rows)
+            {
+                string value = null;
+                try
+                {
+                    value = rowsDict.Cells["NumCC"].Value.ToString();
+                }
+                catch
+                {
+                    value = "";
+                }
 
-                commonImportEXCL(this, new EventArgs(), dataExtraction, xlFileName);
+                foreach (char c in value)
+                {
+                    if (c.ToString() != "0")
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        value = value.Substring(1);
+                    }
+                }
 
-                HoursFile_processing(dataExtraction);
-                mgDataViewer.DataSource = dataExtraction;
-                dataViewerFillHeadres(FirstUsedRow, FirstUsedColumn, mgDt);
+                if (value == searchValue)
+                {
+                    foundRow = rowsDict.Index;
+                    return foundRow;
+                    break;
+                }
+            }
+            return foundRow;
+        }
 
-                mgDataViewer.AllowUserToAddRows = false;
-                mgDataViewer.AllowUserToDeleteRows = false;
+        public static int SearchDGV(DataGridView dgv, string SearchValue, string ColName)
+        {
+            foreach (DataGridViewRow Row in dgv.Rows)
+            {
+                string value = null;
+                try
+                {
+                    value = Row.Cells[ColName].Value.ToString();
+                }
+                catch
+                {
+                    value = "";
+                }
+                if (value.Equals(SearchValue))
+                    return Row.Index;
+            }
+            return -1;
         }
 
         private void HoursFile_processing(DataTable dataExtraction)
         {
             DictionaryForm.loadDictionary(mgDatsList.isLoaded);
 
-            int unkTbls = 0;
-                foreach (DataColumn extractCols in dataExtraction.Columns)
+            int unkn = 0;
+            foreach (DataColumn extractCols in dataExtraction.Columns)
+            {
+                if (dataExtraction.Rows[7][extractCols].ToString() == "A+, к¬т")
                 {
-                    if (dataExtraction.Rows[7][extractCols].ToString() == "A+, к¬т")
+                    Regex regexObj = new Regex(@"[^\d]");
+                    string resultString = regexObj.Replace(dataExtraction.Rows[4][extractCols].ToString(), "");
+
+                    if (resultString == null | resultString == "")
                     {
-                        foreach (DataGridViewRow dictRows in DictionaryForm.dataGridDictionaryList.Rows)
+                        unkn++;
+                        resultString = "unknown"+ unkn;
+                    }
+
+                    int foundRow = SearchDGV(DictionaryForm.dataGridDictionaryList, resultString, "NumCC");
+                    if (foundRow != -1)
+                    {
+                        foreach (DataGridViewCell dictEqualsCell in DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells)
                         {
-                            if (dictRows.Cells["NumCC"].Value.ToString().Equals(dataExtraction.Rows[4][extractCols].ToString()))
+                            //if(dictEqualsCell.Value != null)
+                            //Console.Write(dictEqualsCell.OwningColumn.Name + ": " + dictEqualsCell.Value + ";   ");
+                        }
+                        DataTable headerTable = new DataTable("hrs_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First() + "_Header");
+                        DataTable newTable = new DataTable("hrs_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First());
+                        PrepareHeaderTable(headerTable);
+
+                        headerTable.Rows[0]["Values"] = DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString();
+                        headerTable.Rows[1]["Values"] = dataExtraction.Rows[0][extractCols].ToString();
+                        headerTable.Rows[2]["Values"] = resultString;
+
+                        DataColumn Column1 = new DataColumn("date", Type.GetType("System.DateOnly"));
+                        DataColumn Column2 = new DataColumn("time", Type.GetType("System.TimeOnly"));
+                        DataColumn Column3 = new DataColumn("consumption", Type.GetType("System.Decimal"));
+                        DataColumn Column4 = new DataColumn("generation", Type.GetType("System.Decimal"));
+
+                        newTable.Clear();
+                        newTable.Columns.Add(Column1);
+                        newTable.Columns.Add(Column2);
+                        newTable.Columns.Add(Column3);
+                        newTable.Columns.Add(Column4);
+
+                        int kTC = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").First());
+                        int kTV = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").Last());
+
+                        headerTable.Rows[3]["Values"] = dataExtraction.Rows[5][extractCols].ToString();
+
+                        decimal ConSumm = 0;
+                        decimal GenSumm = 0;
+
+                        int i = dataExtraction.Rows.IndexOf(dataExtraction.Rows[8]);
+                        while (i < dataExtraction.Rows.Count && IsDateOnly(dataExtraction.Rows[i][0].ToString()))
+                        {
+                            DataRow newTableRow = newTable.NewRow();
+
+                            DateOnly.TryParse(dataExtraction.Rows[i][0].ToString(), out DateOnly date);
+                            TimeOnly.TryParse(dataExtraction.Rows[i][1].ToString(), out TimeOnly time);
+                            newTableRow["date"] = date;
+                            newTableRow["time"] = time;
+
+                            if (IsNumeric(dataExtraction.Rows[i][extractCols].ToString()) && IsNumeric(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()))
                             {
-                                Console.WriteLine("\n");
-                                foreach (DataGridViewCell dictEqualsCell in dictRows.Cells)
+                                try
                                 {
-                                    if(dictEqualsCell.Value != null)
-                                    Console.Write(dictEqualsCell.OwningColumn.Name + ": " + dictEqualsCell.Value + ";   ");
+                                    newTableRow["consumption"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                    newTableRow["generation"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+
+                                    ConSumm += (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) * kTC * kTV);
+                                    GenSumm += (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) * kTC * kTV);
                                 }
-
-                                DataTable newTable = new DataTable(dictRows.Cells["Agreement"].Value.ToString().Split(" от ").First());
-                                HoursDataSet.Tables.Add(newTable);
-
-                                Button newButton = new Button();
-                                newButton.Text = dictRows.Cells["Agreement"].Value.ToString().Split(" от ").First();
-                                newButton.Size = new System.Drawing.Size(120, 40);
-                                newButton.UseVisualStyleBackColor = true;
-                                newButton.Click  += new EventHandler(ShowTableInDataGridView);
-                                newButton.MouseDown += new MouseEventHandler(NewTableButton_MouseDown);
-                                mgFlowPanelResult.Controls.Add(newButton);
-
-
-                                DataColumn Column1 = new DataColumn("date", Type.GetType("System.DateOnly"));
-                                DataColumn Column2 = new DataColumn("time", Type.GetType("System.TimeOnly"));
-                                DataColumn Column3 = new DataColumn("consumption", Type.GetType("System.Decimal"));
-                                DataColumn Column4 = new DataColumn("generation", Type.GetType("System.Decimal"));
-
-                                newTable.Clear();
-                                newTable.Columns.Add(Column1);
-                                newTable.Columns.Add(Column2);
-                                newTable.Columns.Add(Column3);
-                                newTable.Columns.Add(Column4);
-
-                                int kTC = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").First());
-                                int kTV = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").Last());
-
-                                decimal ConSumm = 0;
-                                decimal GenSumm = 0;
-
-                                int i = dataExtraction.Rows.IndexOf(dataExtraction.Rows[8]);
-                                while (i < dataExtraction.Rows.Count && IsDateOnly(dataExtraction.Rows[i][0].ToString()))
+                                catch
                                 {
-                                    if (IsNumeric(dataExtraction.Rows[i][extractCols].ToString()))
-                                    {
-                                        try
-                                        {
-                                            DataRow newTableRow = newTable.NewRow();
-
-                                        //Console.WriteLine("Con: " + decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU")) +
-                                        //"                  Gen: " + decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU")));
-                                            DateOnly.TryParse(dataExtraction.Rows[i][0].ToString(), out DateOnly date);
-                                            TimeOnly.TryParse(dataExtraction.Rows[i][1].ToString(), out TimeOnly time);
-                                            newTableRow["date"] = date;
-                                            newTableRow["time"] = time;
-                                            newTableRow["consumption"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU"));
-                                            newTableRow["generation"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU"));
-
-
-                                            ConSumm += (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU"))* kTC* kTV);
-                                            GenSumm += (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU"))* kTC* kTV);
-
-                                            newTable.Rows.Add(newTableRow);
-                                        }
-                                        catch
-                                        {
-                                            Console.WriteLine("wrong input data: ROW:" + i + "  data: " + dataExtraction.Rows[i][extractCols].ToString());
-                                            Console.WriteLine("Trying parse result: " + decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU")));
-                                        }
-                                    }
-                                    i++;
-                                    
+                                    Console.WriteLine("wrong input data: ROW:" + i + "  COL: " + dataExtraction.Columns.IndexOf(extractCols) + "  data: " + dataExtraction.Rows[i][extractCols].ToString());
                                 }
-                                Console.WriteLine("ConSumm: " + ConSumm.ToString() + "   GenSumm: " + GenSumm.ToString());
-                                    foreach (DataRow r in newTable.Rows)
-                                    {
-                                        foreach (var cell in r.ItemArray)
-                                            Console.Write("\t{0}", cell);
-                                        Console.WriteLine();
-                                    }
                             }
                             else
                             {
-                            unkTbls++;
-                            DataTable newTable = new DataTable("UnknownTable"+ unkTbls);
-                            HoursDataSet.Tables.Add(newTable);
+                                try
+                                {
+                                    newTableRow["consumption"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                }
+                                catch
+                                {
+                                    newTableRow["consumption"] = 0;
+                                }
+                                try
+                                {
+                                    newTableRow["generation"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                }
+                                catch
+                                {
+                                    newTableRow["generation"] = 0;
+                                }
+                            }
+                            newTable.Rows.Add(newTableRow);
+                            i++;
+                        }
 
-                            Button newButton = new Button();
-                            newButton.Text = "UnknownTable" + unkTbls;
-                            newButton.Size = new System.Drawing.Size(120, 40);
-                            newButton.UseVisualStyleBackColor = true;
-                            newButton.Click += new EventHandler(ShowTableInDataGridView);
-                            newButton.MouseDown += new MouseEventHandler(NewTableButton_MouseDown);
-                            mgFlowPanelResult.Controls.Add(newButton);
+                        HoursDataSet.Tables.Add(newTable);
+                        HoursDataSet.Tables.Add(headerTable);
 
+                        Button newButton = new Button();
+                        createNewButtonOnTable(newButton, DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First(), "hrs_");
+                        mgFlowPanelResult.Controls.Add(newButton);
+
+                        //PrintValues(newTable, DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First());
+                        //Console.WriteLine("ConSumm: " + ConSumm.ToString() + "   GenSumm: " + GenSumm.ToString());
+                    }
+                    else
+                    {
+                        int foundRow2 = withoutZeroNumCC(resultString);
+                        if (foundRow2 != -1)
+                        {
+                            DataTable headerTable = new DataTable("hrs_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow2].Cells["Agreement"].Value.ToString().Split(" от ").First() + "_Header");
+                            DataTable newTable = new DataTable("hrs_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow2].Cells["Agreement"].Value.ToString().Split(" от ").First());
+                            PrepareHeaderTable(headerTable);
+
+                            headerTable.Rows[0]["Values"] = DictionaryForm.dataGridDictionaryList.Rows[foundRow2].Cells["Agreement"].Value.ToString();
+                            headerTable.Rows[1]["Values"] = dataExtraction.Rows[0][extractCols].ToString();
+                            headerTable.Rows[2]["Values"] = resultString;
 
                             DataColumn Column1 = new DataColumn("date", Type.GetType("System.DateOnly"));
                             DataColumn Column2 = new DataColumn("time", Type.GetType("System.TimeOnly"));
                             DataColumn Column3 = new DataColumn("consumption", Type.GetType("System.Decimal"));
                             DataColumn Column4 = new DataColumn("generation", Type.GetType("System.Decimal"));
-                            
 
                             newTable.Clear();
                             newTable.Columns.Add(Column1);
@@ -1256,53 +1357,542 @@ namespace dataEditor
                             int kTC = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").First());
                             int kTV = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").Last());
 
+                            headerTable.Rows[3]["Values"] = dataExtraction.Rows[5][extractCols].ToString();
+
                             decimal ConSumm = 0;
                             decimal GenSumm = 0;
 
                             int i = dataExtraction.Rows.IndexOf(dataExtraction.Rows[8]);
                             while (i < dataExtraction.Rows.Count && IsDateOnly(dataExtraction.Rows[i][0].ToString()))
                             {
-                                if (IsNumeric(dataExtraction.Rows[i][extractCols].ToString()))
+                                DataRow newTableRow = newTable.NewRow();
+
+                                DateOnly.TryParse(dataExtraction.Rows[i][0].ToString(), out DateOnly date);
+                                TimeOnly.TryParse(dataExtraction.Rows[i][1].ToString(), out TimeOnly time);
+                                newTableRow["date"] = date;
+                                newTableRow["time"] = time;
+
+                                if (IsNumeric(dataExtraction.Rows[i][extractCols].ToString()) && IsNumeric(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()))
                                 {
                                     try
                                     {
-                                        DataRow newTableRow = newTable.NewRow();
+                                        newTableRow["consumption"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                        newTableRow["generation"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
 
-                                        //Console.WriteLine("Con: " + decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU")) +
-                                        //"                  Gen: " + decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU")));
-                                        DateOnly.TryParse(dataExtraction.Rows[i][0].ToString(), out DateOnly date);
-                                        TimeOnly.TryParse(dataExtraction.Rows[i][1].ToString(), out TimeOnly time);
-                                        newTableRow["date"] = date;
-                                        newTableRow["time"] = time;
-                                        newTableRow["consumption"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU"));
-                                        newTableRow["generation"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU"));
-
-
-                                        ConSumm += (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU")) * kTC * kTV);
-                                        GenSumm += (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU")) * kTC * kTV);
-
-                                        newTable.Rows.Add(newTableRow);
+                                        ConSumm += (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) * kTC * kTV);
+                                        GenSumm += (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) * kTC * kTV);
                                     }
                                     catch
                                     {
-                                        Console.WriteLine("wrong input data: ROW:" + i + "  data: " + dataExtraction.Rows[i][extractCols].ToString());
-                                        Console.WriteLine("Trying parse result: " + decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo("ru-RU")));
+                                        Console.WriteLine("wrong input data: ROW:" + i + "  COL: " + dataExtraction.Columns.IndexOf(extractCols) + "  data: " + dataExtraction.Rows[i][extractCols].ToString());
                                     }
                                 }
+                                else
+                                {
+                                    try
+                                    {
+                                        newTableRow["consumption"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                    }
+                                    catch
+                                    {
+                                        newTableRow["consumption"] = 0;
+                                    }
+                                    try
+                                    {
+                                        newTableRow["generation"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                    }
+                                    catch
+                                    {
+                                        newTableRow["generation"] = 0;
+                                    }
+                                }
+                                newTable.Rows.Add(newTableRow);
                                 i++;
+                            }
 
-                            }
-                            Console.WriteLine("ConSumm: " + ConSumm.ToString() + "   GenSumm: " + GenSumm.ToString());
-                            foreach (DataRow r in newTable.Rows)
-                            {
-                                foreach (var cell in r.ItemArray)
-                                    Console.Write("\t{0}", cell);
-                                Console.WriteLine();
-                            }
+                            HoursDataSet.Tables.Add(newTable);
+                            HoursDataSet.Tables.Add(headerTable);
+
+                            Button newButton = new Button();
+                            createNewButtonOnTable(newButton, DictionaryForm.dataGridDictionaryList.Rows[foundRow2].Cells["Agreement"].Value.ToString().Split(" от ").First(), "hrs_");
+                            mgFlowPanelResult.Controls.Add(newButton);
                         }
+                        else
+                        {
+                            DataTable headerTable = new DataTable("hrs_" + resultString + "_Header");
+                            DataTable newTable = new DataTable("hrs_" + resultString);
+                            PrepareHeaderTable(headerTable);
+
+                            headerTable.Rows[1]["Values"] = dataExtraction.Rows[0][extractCols].ToString();
+                            headerTable.Rows[2]["Values"] = resultString;
+
+                            DataColumn Column1 = new DataColumn("date", Type.GetType("System.DateOnly"));
+                            DataColumn Column2 = new DataColumn("time", Type.GetType("System.TimeOnly"));
+                            DataColumn Column3 = new DataColumn("consumption", Type.GetType("System.Decimal"));
+                            DataColumn Column4 = new DataColumn("generation", Type.GetType("System.Decimal"));
+
+                            newTable.Clear();
+                            newTable.Columns.Add(Column1);
+                            newTable.Columns.Add(Column2);
+                            newTable.Columns.Add(Column3);
+                            newTable.Columns.Add(Column4);
+
+                            int kTC = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").First());
+                            int kTV = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").Last());
+
+                            headerTable.Rows[3]["Values"] = dataExtraction.Rows[5][extractCols].ToString();
+
+                            decimal ConSumm = 0;
+                            decimal GenSumm = 0;
+
+                            int i = dataExtraction.Rows.IndexOf(dataExtraction.Rows[8]);
+                            while (i < dataExtraction.Rows.Count && IsDateOnly(dataExtraction.Rows[i][0].ToString()))
+                            {
+                                DataRow newTableRow = newTable.NewRow();
+                                DateOnly.TryParse(dataExtraction.Rows[i][0].ToString(), out DateOnly date);
+                                TimeOnly.TryParse(dataExtraction.Rows[i][1].ToString(), out TimeOnly time);
+                                newTableRow["date"] = date;
+                                newTableRow["time"] = time;
+
+                                if (IsNumeric(dataExtraction.Rows[i][extractCols].ToString()) && IsNumeric(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()))
+                                {
+                                    try
+                                    {
+                                        newTableRow["consumption"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                        newTableRow["generation"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+
+                                        ConSumm += (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) * kTC * kTV);
+                                        GenSumm += (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) * kTC * kTV);
+                                    }
+                                    catch
+                                    {
+                                        Console.WriteLine("wrong input data: ROW:" + i + "  COL: " + dataExtraction.Columns.IndexOf(extractCols) + "  data: " + dataExtraction.Rows[i][extractCols].ToString());
+                                    }
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        newTableRow["consumption"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][extractCols].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                    }
+                                    catch
+                                    {
+                                        newTableRow["consumption"] = 0;
+                                    }
+                                    try
+                                    {
+                                        newTableRow["generation"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][dataExtraction.Columns.IndexOf(extractCols) + 1].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                    }
+                                    catch
+                                    {
+                                        newTableRow["generation"] = 0;
+                                    }
+                                }
+                                newTable.Rows.Add(newTableRow);
+                                i++;
+                            }
+                            HoursDataSet.Tables.Add(newTable);
+                            HoursDataSet.Tables.Add(headerTable);
+
+                            Button newButton = new Button();
+                            createNewButtonOnTable(newButton, resultString, "hrs_");
+                            mgFlowPanelResult.Controls.Add(newButton);
+
+                            //PrintValues(newTable, dataExtraction.Rows[4][extractCols].ToString());
+                            //Console.WriteLine("ConSumm: " + ConSumm.ToString() + "   GenSumm: " + GenSumm.ToString());
                         }
                     }
                 }
+            }
+        }
+
+        private void IntegralsFile_processing(DataTable dataExtraction)
+        {
+            int number;
+
+            DictionaryForm.loadDictionary(mgDatsList.isLoaded);
+            int unkn = 0;
+            foreach (DataRow extractRows in dataExtraction.Rows)
+            {
+                bool result = Int32.TryParse(extractRows[0].ToString(), out number);
+                if (result && extractRows[0].ToString != null)
+                {
+                    string resultString = null;
+                    try
+                    {
+                        Regex regexObj = new Regex(@"[^\d]");
+                        resultString = regexObj.Replace(extractRows[3].ToString().Split(",").Last(), "");
+
+                        Console.WriteLine(number);
+
+                        if (resultString == null | resultString == "")
+                        {
+                            unkn++;
+                            resultString = "unknown" + unkn;
+                        }
+
+                        int foundRow = SearchDGV(DictionaryForm.dataGridDictionaryList, resultString, "NumCC");
+                        if (foundRow != -1)
+                        {
+                            int i = dataExtraction.Rows.IndexOf(extractRows) + 1;
+                            DataTable headerTable = new DataTable("intg_"+DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First() + "_Header");
+                            DataTable newTable = new DataTable("intg_"+DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First());
+
+                            prepareNewIntegralTables(headerTable, newTable);
+
+                            int kTC = Convert.ToInt32(extractRows[4].ToString());
+                            int kTV = Convert.ToInt32(extractRows[5].ToString());
+
+                            headerTable.Rows[0]["Values"] = DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString();
+                            headerTable.Rows[1]["Values"] = extractRows[1].ToString();
+                            headerTable.Rows[2]["Values"] = resultString;
+                            headerTable.Rows[3]["Values"] = kTC + "/" + kTV;
+
+                            if (extractRows[7].ToString().Split(" ").Last() != "к¬јр*ч")
+                            {
+                                DataRow newTableFirstRow = newTable.NewRow();
+                                newTableFirstRow["measure"] = extractRows[7].ToString();
+                                newTableFirstRow["zone"] = extractRows[8].ToString();
+                                newTableFirstRow["initial"] = decimal.Parse(Convert.ToString(extractRows[9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                newTableFirstRow["final"] = decimal.Parse(Convert.ToString(extractRows[10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                if (decimal.Parse(Convert.ToString(extractRows[9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) < decimal.Parse(Convert.ToString(extractRows[10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)))
+                                {
+                                    newTableFirstRow["consumption"] = (decimal.Parse(Convert.ToString(extractRows[10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) - decimal.Parse(Convert.ToString(extractRows[9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)))*kTC*kTV;
+                                }
+                                newTable.Rows.Add(newTableFirstRow);
+                            }
+
+
+                            while (i < dataExtraction.Rows.Count && dataExtraction.Rows[i][0] == DBNull.Value)
+                            {
+                                if (dataExtraction.Rows[i][7] == DBNull.Value & dataExtraction.Rows[i][8].ToString() == "—умма")
+                                {
+
+                                }
+                                else
+                                {
+                                    if (dataExtraction.Rows[i][7].ToString().Split(" ").Last() == "к¬јр*ч")
+                                    {
+                                        break;
+                                    }
+                                    DataRow newTableRow = newTable.NewRow();
+                                    newTableRow["measure"] = dataExtraction.Rows[i][7].ToString();
+                                    newTableRow["zone"] = dataExtraction.Rows[i][8].ToString();
+                                    newTableRow["initial"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                    newTableRow["final"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                    if (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) < decimal.Parse(Convert.ToString(dataExtraction.Rows[i][10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)))
+                                    {
+                                        newTableRow["consumption"] = (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) - decimal.Parse(Convert.ToString(dataExtraction.Rows[i][9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)))*kTC*kTV;
+                                    }
+                                    newTable.Rows.Add(newTableRow);
+                                }
+                                i++;
+                            }
+
+                            Button newButton = new Button();
+                            createNewButtonOnTable(newButton, DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First(), "intg_");
+                            mgFlowPanelResult.Controls.Add(newButton);
+
+                            IntegralsDataSet.Tables.Add(newTable);
+                            IntegralsDataSet.Tables.Add(headerTable);
+
+                            PrintValues(newTable, extractRows[3].ToString());
+                        }
+                        else
+                        {
+                            int i = dataExtraction.Rows.IndexOf(extractRows) + 1;
+                            DataTable headerTable = new DataTable("intg_" + resultString + "_Header");
+                            DataTable newTable = new DataTable("intg_" + resultString);
+
+                            prepareNewIntegralTables(headerTable, newTable);
+
+                            int kTC = Convert.ToInt32(extractRows[4].ToString());
+                            int kTV = Convert.ToInt32(extractRows[5].ToString());
+
+                            headerTable.Rows[1]["Values"] = extractRows[1].ToString();
+                            headerTable.Rows[2]["Values"] = resultString;
+                            headerTable.Rows[3]["Values"] = kTC + "/" + kTV;
+
+                            if (extractRows[7].ToString() != "R+, к¬јр*ч" | extractRows[7].ToString() != "R-, к¬јр*ч")
+                            {
+                                DataRow newTableFirstRow = newTable.NewRow();
+                                newTableFirstRow["measure"] = extractRows[7].ToString();
+                                newTableFirstRow["zone"] = extractRows[8].ToString();
+                                newTableFirstRow["initial"] = decimal.Parse(Convert.ToString(extractRows[9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                newTableFirstRow["final"] = decimal.Parse(Convert.ToString(extractRows[10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                if (decimal.Parse(Convert.ToString(extractRows[9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) < decimal.Parse(Convert.ToString(extractRows[10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)))
+                                {
+                                    newTableFirstRow["consumption"] = (decimal.Parse(Convert.ToString(extractRows[10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) - decimal.Parse(Convert.ToString(extractRows[9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)))*kTC*kTV;
+                                }
+                                newTable.Rows.Add(newTableFirstRow);
+                            }
+
+                            while (i < dataExtraction.Rows.Count && dataExtraction.Rows[i][0] == DBNull.Value)
+                            {
+                                if (dataExtraction.Rows[i][7] == DBNull.Value & dataExtraction.Rows[i][8].ToString() == "—умма")
+                                {
+
+                                }
+                                else
+                                {
+                                    if (dataExtraction.Rows[i][7].ToString().Split(" ").Last() == "к¬јр*ч")
+                                    {
+                                        break;
+                                    }
+                                    DataRow newTableRow = newTable.NewRow();
+                                    newTableRow["measure"] = dataExtraction.Rows[i][7].ToString();
+                                    newTableRow["zone"] = dataExtraction.Rows[i][8].ToString();
+                                    newTableRow["initial"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                    newTableRow["final"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                    if (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) < decimal.Parse(Convert.ToString(dataExtraction.Rows[i][10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)))
+                                    {
+                                        newTableRow["consumption"] = (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) - decimal.Parse(Convert.ToString(dataExtraction.Rows[i][9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)))*kTC*kTV;
+                                    }
+                                    newTable.Rows.Add(newTableRow);
+                                }
+                                i++;
+                            }
+
+                            Button newButton = new Button();
+                            createNewButtonOnTable(newButton, resultString, "intg_");
+                            mgFlowPanelResult.Controls.Add(newButton);
+
+                            IntegralsDataSet.Tables.Add(newTable);
+                            IntegralsDataSet.Tables.Add(headerTable);
+
+                            PrintValues(newTable, extractRows[3].ToString());
+                        }
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            int foundRow = SearchDGV(DictionaryForm.dataGridDictionaryList, resultString, "NumCC");
+                            if (foundRow != -1)
+                            {
+                                int i = dataExtraction.Rows.IndexOf(extractRows) + 1;
+                                DataTable headerTable = new DataTable("intg_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First() + "_Header");
+                                DataTable newTable = new DataTable("intg_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First());
+
+                                prepareNewIntegralTables(headerTable, newTable);
+
+                                int kTC = Convert.ToInt32(extractRows[4].ToString());
+                                int kTV = Convert.ToInt32(extractRows[5].ToString());
+
+                                headerTable.Rows[0]["Values"] = DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString();
+                                headerTable.Rows[1]["Values"] = extractRows[1].ToString();
+                                headerTable.Rows[2]["Values"] = resultString;
+                                headerTable.Rows[3]["Values"] = kTC + "/" + kTV;
+
+                                while (i < dataExtraction.Rows.Count && dataExtraction.Rows[i][0] == DBNull.Value)
+                                {
+                                    if (dataExtraction.Rows[i][7].ToString().Split(" ").Last() == "к¬јр*ч")
+                                    {
+                                        break;
+                                    }
+                                    if (dataExtraction.Rows[i][8].ToString() == "—умма")
+                                    {
+                                        DataRow newTableRow = newTable.NewRow();
+                                        newTableRow["measure"] = dataExtraction.Rows[i][7].ToString();
+                                        newTableRow["zone"] = dataExtraction.Rows[i][8].ToString();
+                                        newTableRow["initial"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                        newTableRow["final"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                        if (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) < decimal.Parse(Convert.ToString(dataExtraction.Rows[i][10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)))
+                                        {
+                                            newTableRow["consumption"] = (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) - decimal.Parse(Convert.ToString(dataExtraction.Rows[i][9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)))*kTC*kTV;
+                                        }
+                                        newTable.Rows.Add(newTableRow);
+                                    }
+                                    i++;
+                                }
+
+                                Button newButton = new Button();
+                                createNewButtonOnTable(newButton, DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First(), "intg_");
+                                mgFlowPanelResult.Controls.Add(newButton);
+
+                                IntegralsDataSet.Tables.Add(newTable);
+                                IntegralsDataSet.Tables.Add(headerTable);
+
+                                PrintValues(newTable, extractRows[3].ToString());
+                            }
+                            else
+                            {
+                                int i = dataExtraction.Rows.IndexOf(extractRows) + 1;
+                                DataTable headerTable = new DataTable("intg_" + resultString + "_Header");
+                                DataTable newTable = new DataTable("intg_" + resultString);
+
+                                prepareNewIntegralTables(headerTable, newTable);
+
+                                int kTC = Convert.ToInt32(extractRows[4].ToString());
+                                int kTV = Convert.ToInt32(extractRows[5].ToString());
+
+                                headerTable.Rows[1]["Values"] = extractRows[1].ToString();
+                                headerTable.Rows[2]["Values"] = resultString;
+                                headerTable.Rows[3]["Values"] = kTC + "/" + kTV;
+
+                                while (i < dataExtraction.Rows.Count && dataExtraction.Rows[i][0] == DBNull.Value)
+                                {
+                                    if (dataExtraction.Rows[i][7].ToString().Split(" ").Last() == "к¬јр*ч")
+                                    {
+                                        break;
+                                    }
+                                    if (dataExtraction.Rows[i][8].ToString() == "—умма")
+                                    {
+                                        DataRow newTableRow = newTable.NewRow();
+                                        newTableRow["measure"] = dataExtraction.Rows[i][7].ToString();
+                                        newTableRow["zone"] = dataExtraction.Rows[i][8].ToString();
+                                        newTableRow["initial"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                        newTableRow["final"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                                        if (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) < decimal.Parse(Convert.ToString(dataExtraction.Rows[i][10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)))
+                                        {
+                                            newTableRow["consumption"] = (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) - decimal.Parse(Convert.ToString(dataExtraction.Rows[i][9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)))*kTC*kTV;
+                                        }
+                                        newTable.Rows.Add(newTableRow);
+                                    }
+                                    i++;
+                                }
+
+                                Button newButton = new Button();
+                                createNewButtonOnTable(newButton, resultString, "intg_");
+                                mgFlowPanelResult.Controls.Add(newButton);
+
+                                IntegralsDataSet.Tables.Add(newTable);
+                                IntegralsDataSet.Tables.Add(headerTable);
+
+                                PrintValues(newTable, extractRows[3].ToString());
+                            }
+                        }
+                        catch
+                        {
+                            
+                        }
+                    }
+                }
+            }
+        }
+
+        private void createNewButtonOnTable(Button newButton, string name, string type)
+        {
+            ComponentResourceManager resources = new ComponentResourceManager(typeof(MainForm));
+
+            newButton.Text = type + name;
+            newButton.FlatStyle = FlatStyle.Flat;
+            newButton.Image = ((System.Drawing.Image)(resources.GetObject("mgOpenDataTable.Image")));
+            newButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            newButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            newButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            newButton.UseVisualStyleBackColor = true;
+            newButton.AutoSize = true;
+            newButton.Click += new EventHandler(ShowTableInDataGridView);
+            newButton.MouseMove += new MouseEventHandler(TableButton_MouseMove);
+            newButton.GiveFeedback += new GiveFeedbackEventHandler(TableButton_GiveFeedback);
+        }
+
+        private void workWithButtonsIntoFlowPanel()
+        {
+            int max = 0;
+            List<Button> listOfButtons = new List<Button>();
+            foreach (Button buttons in mgFlowPanelResult.Controls)
+            {
+                Size len = TextRenderer.MeasureText(buttons.Text, buttons.Font);
+                if (len.Width > max)
+                {
+                    max = len.Width;
+                }
+
+
+                int SearchRowName = -1;
+                switch (buttons.Text.Split("_").First())
+                {
+                    case "intg":
+                        SearchRowName = SearchDGV(mgDataViewer, IntegralsDataSet.Tables[buttons.Text + "_header"].Rows[0][1].ToString(), "Agreement");
+                        break;
+                    case "hrs":
+                        SearchRowName = SearchDGV(mgDataViewer, HoursDataSet.Tables[buttons.Text + "_header"].Rows[0][1].ToString(), "Agreement");
+                        break;
+                }
+                if(SearchRowName != -1)
+                {
+                    DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
+                    btnCell.UseColumnTextForButtonValue = false;
+                    btnCell.ToolTipText = "hrs_" + mgDataViewer.Rows[SearchRowName].Cells["Agreement"].Value.ToString().Split(" от ").First();
+                    mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])] = btnCell;
+                    listOfButtons.Add(buttons);
+                }
+
+                string tempBtnName = buttons.Text.Split("_").Last();
+                foreach (char c in tempBtnName)
+                {
+                    if(c.ToString() != "0")
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        tempBtnName=tempBtnName.Substring(1);
+                    }
+                }
+
+                int SearchRowNumCC = SearchDGV(mgDataViewer, tempBtnName, "NumCC");
+                if (SearchRowNumCC != -1)
+                {
+                    DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
+                    btnCell.UseColumnTextForButtonValue = false;
+                    btnCell.ToolTipText = buttons.Text;
+                    mgDataViewer.Rows[SearchRowNumCC].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])] = btnCell;
+                    listOfButtons.Add(buttons);
+                    switch (buttons.Text.Split("_").First())
+                    {
+                        case "intg":
+                            IntegralsDataSet.Tables[buttons.Text + "_header"].Rows[0][1] = mgDataViewer.Rows[SearchRowNumCC].Cells["Agreement"].Value.ToString();
+                            break;
+                        case "hrs":
+                            HoursDataSet.Tables[buttons.Text + "_header"].Rows[0][1] = mgDataViewer.Rows[SearchRowNumCC].Cells["Agreement"].Value.ToString();
+                            break;
+                    }
+                }
+            }
+
+            foreach(Button removed in listOfButtons)
+            {
+                mgFlowPanelResult.Controls.Remove(removed);
+            }
+
+            splitContainer_inside_vertical.SplitterDistance = splitContainer_inside_vertical.SplitterDistance - (max/4);
+            splitContainer_inside_vertical.Panel2MinSize = max+50;
+        }
+
+        private static void prepareNewIntegralTables(DataTable headerTable, DataTable newTable)
+        {
+            DataColumn hdrColumn1 = new DataColumn("Header");
+            DataColumn hdrColumn2 = new DataColumn("Values");
+            headerTable.Clear();
+            headerTable.Columns.Add(hdrColumn1);
+            headerTable.Columns.Add(hdrColumn2);
+
+            for (int i = 0; i < 4; i++)
+            {
+                DataRow newRow = headerTable.NewRow();
+                headerTable.Rows.Add(newRow);
+            }
+
+            headerTable.Rows[0]["Header"] = "ƒоговор:";
+            headerTable.Rows[1]["Header"] = "“очка учЄта:";
+            headerTable.Rows[2]["Header"] = "ѕ” є:";
+            headerTable.Rows[3]["Header"] = " ““/ “Ќ:";
+
+            DataColumn Column1 = new DataColumn("measure");
+            DataColumn Column2 = new DataColumn("zone");
+            DataColumn Column3 = new DataColumn("initial", Type.GetType("System.Decimal"));
+            DataColumn Column4 = new DataColumn("final", Type.GetType("System.Decimal"));
+            DataColumn Column5 = new DataColumn("consumption", Type.GetType("System.Decimal"));
+
+            newTable.Clear();
+            newTable.Columns.Add(Column1);
+            newTable.Columns.Add(Column2);
+            newTable.Columns.Add(Column3);
+            newTable.Columns.Add(Column4);
+            newTable.Columns.Add(Column5);
         }
 
         public static bool IsDateOnly(string inputS)
@@ -1320,47 +1910,384 @@ namespace dataEditor
             return isNum;
         }
 
-        private void NewTableButton_MouseDown(object sender, MouseEventArgs e)
+        private void TableButton_MouseMove(object sender, MouseEventArgs e)
         {
-            var button = (Button)sender;
+            if (e.Button == MouseButtons.Left)
+            {
+                Button btn = sender as Button;
+                btn.Tag = new Point(e.X, e.Y);
+                btn.DoDragDrop(sender, DragDropEffects.Move);
+            }
+        }
 
+        private void mgDataViewer_MouseDown(object sender, MouseEventArgs e)
+        {
+            DataGridView.HitTestInfo hittest = mgDataViewer.HitTest(e.X, e.Y);
+            if (hittest.ColumnIndex == mgDataViewer.Columns["dataTable"].Index && hittest.RowIndex != -1)
+            {
+                if(mgDataViewer.Rows[hittest.RowIndex].Cells[hittest.ColumnIndex].ToolTipText != "")
+                {
+                    tableRemove = mgDataViewer.Rows[hittest.RowIndex].Cells[hittest.ColumnIndex] as DataGridViewButtonCell;
+                }
+            }
+        }
 
+        private void mgDataViewer_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (tableRemove != null)
+                {
+                    DragDropEffects dropCell = mgDataViewer.DoDragDrop(tableRemove, DragDropEffects.Move);
+                }
+            }
+        }
+
+        private void mgDataViewer_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            if (mgDataViewer.RectangleToScreen(e.RowBounds).Contains(MousePosition))
+            {
+                var r = e.RowBounds; r.Width -= 1; r.Height -= 2;
+                switch (mgDataViewer.Rows[e.RowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].GetType().Name)
+                {
+
+                    case "DataGridViewButtonCell":
+                        //e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, Color.Red)), r);
+                        //e.Graphics.DrawRectangle(new Pen(Color.Red), r);
+                        break;
+
+                    case "DataGridViewTextBoxCell":
+                        e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, Color.Blue)), r);
+                        e.Graphics.DrawRectangle(new Pen(Color.Blue), r);
+                        break;
+                }
+            }
+        }
+
+        private void TableButton_GiveFeedback(object sender, GiveFeedbackEventArgs e)
+        {
+            mgDataViewer.ClearSelection();
+            Point cursorLocation = mgDataViewer.PointToClient(new Point(MousePosition.X, MousePosition.Y));
+            DataGridView.HitTestInfo hittest = mgDataViewer.HitTest(cursorLocation.X, cursorLocation.Y);
+
+            mgDataViewer.Invalidate();
+        }
+
+        private void mgFlowPanelResult_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(DataGridViewButtonCell)))
+            {
+                e.Effect = DragDropEffects.Move;
+            }
+        }
+
+        private void mgDataViewer_DragLeave(object sender, EventArgs e)
+        {
+                mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+        }
+
+        private void mgDataViewer_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Move;
+            }
+            if (e.Data.GetDataPresent(typeof(Button)))
+            {
+                e.Effect = DragDropEffects.Move;
+                mgDataViewer.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+            }
+        }
+
+        private void mgFlowPanelResult_DragDrop(object sender, DragEventArgs e)
+        {
+            Button btn = (Button)e.Data.GetData(typeof(Button));
+            DataGridViewButtonCell btnTable = (DataGridViewButtonCell)e.Data.GetData(typeof(DataGridViewButtonCell));
+
+            FlowLayoutPanel _destination = (FlowLayoutPanel)sender;
+
+            if (e.Data.GetDataPresent(typeof(DataGridViewButtonCell)))
+            {
+                Button newButton = new Button();
+                createNewButtonOnTable(newButton, btnTable.ToolTipText, "");
+                _destination.Controls.Add(newButton);
+
+                DataGridViewTextBoxCell empty = new DataGridViewTextBoxCell();
+                mgDataViewer.Rows[tableRemove.RowIndex].Cells[tableRemove.ColumnIndex] = empty;
+                mgDataViewer.ClearSelection();
+                mgDataViewer.Refresh();
+                tableRemove = null;
+            }
+        }
+
+        private void mgDataViewer_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (files.Length == 1)
+                {
+                    string xlFileName = files[0].ToString();
+                    ExlFileName = Path.GetFileName(xlFileName);
+
+                    DataTable dataExtraction = new DataTable();
+                    commonImportEXCL(this, new EventArgs(), dataExtraction, xlFileName);
+                    HoursFile_processing(dataExtraction);
+
+                    mgDataViewer.Update();
+                }
+            }
+            if (e.Data.GetDataPresent(typeof(Button)))
+            {
+                var table = (Button)e.Data.GetData(typeof(Button));
+                Point cursorLocation = mgDataViewer.PointToClient(new Point(e.X, e.Y));
+                DataGridView.HitTestInfo hittest = mgDataViewer.HitTest(cursorLocation.X, cursorLocation.Y);
+                if (hittest.ColumnIndex != -1 && hittest.RowIndex != -1)
+                {
+                    if (mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].GetType().Name != "DataGridViewButtonCell")
+                    {
+                        DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
+                        btnCell.UseColumnTextForButtonValue = false;
+                        btnCell.ToolTipText = table.Text;
+                        mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["dataTable"].Index] = btnCell;
+                        switch (table.Text.Split("_").First())
+                        {
+                            case "intg":
+                                IntegralsDataSet.Tables[btnCell.ToolTipText + "_header"].Rows[0][1] = mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["Agreement"].Index].Value.ToString();
+                                IntegralsDataSet.Tables[btnCell.ToolTipText + "_header"].Rows[2][1] = mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["NumCC"].Index].Value;
+                                break;
+                            case "hrs":
+                                HoursDataSet.Tables[btnCell.ToolTipText + "_header"].Rows[0][1] = mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["Agreement"].Index].Value.ToString();
+                                HoursDataSet.Tables[btnCell.ToolTipText + "_header"].Rows[2][1] = mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["NumCC"].Index].Value;
+                                break;
+
+                        }
+
+                        mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+                        mgDataViewer.Refresh();
+
+                        mgFlowPanelResult.Controls.Remove((Button)e.Data.GetData(typeof(Button)));
+                    }
+                    else
+                    {
+                        mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+                        mgDataViewer.Refresh();
+                    }
+                }
+
+            }
+        }
+
+        private void PrepareHeaderTable(DataTable headerTable)
+        {
+            DataColumn Column1 = new DataColumn("Header");
+            DataColumn Column2 = new DataColumn("Values");
+            headerTable.Clear();
+            headerTable.Columns.Add(Column1);
+            headerTable.Columns.Add(Column2);
+
+            for (int i =0; i <4; i++)
+            {
+                DataRow newRow = headerTable.NewRow();
+                headerTable.Rows.Add(newRow);
+            }
+
+            headerTable.Rows[0]["Header"] = "ƒоговор:";
+            headerTable.Rows[1]["Header"] = "“очка учЄта:";
+            headerTable.Rows[2]["Header"] = "ѕ” є:";
+            headerTable.Rows[3]["Header"] = " ““/ “Ќ:";
         }
 
         private void ShowTableInDataGridView(object sender, EventArgs e)
         {
             Form TableView = new Form();
-            DataGridView tablesDataGridView = new DataGridView();
-            SettingsNewFormTablesResult(TableView, tablesDataGridView);
+            DataGridView headerDataGridView = new DataGridView();
+            DoubleBufferedDataGridView tablesDataGridView = new DoubleBufferedDataGridView();
+            SettingsNewFormTablesResult(TableView, tablesDataGridView, headerDataGridView);
 
             var button = (Button)sender;
+            int hSize = tablesDataGridView.Size.Height;
 
-            tablesDataGridView.DataSource = HoursDataSet;
+            switch (button.Text.Split("_").First())
+            {
+                case "intg":
+                    tablesDataGridView.DataSource = IntegralsDataSet;
+                    headerDataGridView.DataSource = IntegralsDataSet;
+                    hSize = 150+(IntegralsDataSet.Tables[button.Text].Rows.Count*19);
+                    break;
+                case "hrs":
+                    tablesDataGridView.DataSource = HoursDataSet;
+                    headerDataGridView.DataSource = HoursDataSet;
+                    hSize = 860;
+                    break;
+            }
+
+
             tablesDataGridView.DataMember = button.Text;
-
             tablesDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
 
-            TableView.Text = button.Text + " extracted data research";
-            TableView.Size = new Size(480, 860);
+            headerDataGridView.DataMember = button.Text + "_Header";
+
+            headerDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            headerDataGridView.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            headerDataGridView.Columns[0].Resizable = DataGridViewTriState.False;
+            headerDataGridView.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+
+            int SearchRowNumCC = SearchDGV(mgDataViewer, headerDataGridView.Rows[2].Cells[1].Value.ToString(), "NumCC");
+            if (SearchRowNumCC != -1)
+            {
+                TableView.Text = mgDataViewer.Rows[SearchRowNumCC].Cells["FullName"].Value.ToString();
+            }
+            else
+            {
+                TableView.Text = button.Text.Split("_").Last() + " extracted data research";
+            }
+            TableView.Size = new Size(480, hSize);
+
 
             foreach (DataGridViewColumn cols in tablesDataGridView.Columns)
             {
                 cols.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             }
-
+            tablesDataGridView.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.tablesDataGridView_RowPrePaint);
             TableView.ShowDialog();
         }
 
-        private void SettingsNewFormTablesResult(Form TableView, DataGridView tablesDataGridView)
+        private void tablesDataGridView_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
+            var tablesDataGridView = (DoubleBufferedDataGridView)sender;
+
+            int lim1 = 0;
+            int lim2 = 0;
+            int start = 0;
+            foreach  (DataGridViewRow rows in tablesDataGridView.Rows)
+            {
+                if (start >= 24)
+                {
+                    if (lim1 < 24)
+                    {
+                        rows.DefaultCellStyle.BackColor = Color.LightGray;
+                        lim1++;
+                        lim2++;
+                    }
+                    else if (lim2 != 47)
+                    {
+                        lim2++;
+                    }
+                    else
+                    {
+                        lim1 = 0;
+                        lim2 = 0;
+                    }
+                }
+                else
+                {
+                    start++;
+                }
+            }
+            tablesDataGridView.ClearSelection();
+            tablesDataGridView.RowPrePaint -= new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.tablesDataGridView_RowPrePaint);
+        }
+
+        private void mgDataViewer_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if(e.ColumnIndex == mgDataViewer.Columns["dataTable"].Index && mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell")
+            {
+                Form TableView = new Form();
+                DoubleBufferedDataGridView tablesDataGridView = new DoubleBufferedDataGridView();
+                DataGridView headerDataGridView = new DataGridView();
+                SettingsNewFormTablesResult(TableView, tablesDataGridView, headerDataGridView);
+
+                var button = (DataGridViewButtonCell)mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                int hSize = tablesDataGridView.Size.Height;
+
+                switch (button.ToolTipText.Split("_").First())
+                {
+                    case "intg":
+                        tablesDataGridView.DataSource = IntegralsDataSet;
+                        headerDataGridView.DataSource = IntegralsDataSet;
+                        hSize = 150 + (IntegralsDataSet.Tables[button.ToolTipText].Rows.Count * 19);
+                        break;
+                    case "hrs":
+                        tablesDataGridView.DataSource = HoursDataSet;
+                        headerDataGridView.DataSource = HoursDataSet;
+                        hSize = 860;
+                        break;
+                }
+                       
+                tablesDataGridView.DataMember = button.ToolTipText;
+                tablesDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+                
+                headerDataGridView.DataMember = button.ToolTipText + "_Header";
+
+                headerDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+                headerDataGridView.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                headerDataGridView.Columns[0].Resizable = DataGridViewTriState.False;
+                headerDataGridView.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+
+
+                int SearchRowNumCC = SearchDGV(mgDataViewer, headerDataGridView.Rows[2].Cells[1].Value.ToString(), "NumCC");
+                if (SearchRowNumCC != -1)
+                {
+                    TableView.Text = mgDataViewer.Rows[SearchRowNumCC].Cells["FullName"].Value.ToString();
+                }
+                else
+                {
+                    TableView.Text = button.ToolTipText.Split("_").Last() + " extracted data research";
+                }
+
+                TableView.Size = new Size(480, hSize);
+
+                foreach (DataGridViewColumn cols in tablesDataGridView.Columns)
+                {
+                    cols.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+                }
+                tablesDataGridView.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.tablesDataGridView_RowPrePaint);
+                TableView.ShowDialog();
+            }
+        }
+
+
+        private void SettingsNewFormTablesResult(Form TableView, DataGridView tablesDataGridView, DataGridView headerDataGridView)
+        {
+            TableLayoutPanel layoutPanel = new TableLayoutPanel();
+
             TableView.Name = "TableViewer";
             
             TableView.WindowState = FormWindowState.Normal;
             TableView.FormBorderStyle = FormBorderStyle.Sizable;
             TableView.MaximizeBox = false;
 
+            headerDataGridView.Dock = DockStyle.Fill;
+            headerDataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            headerDataGridView.Location = new Point(5, 40);
+            headerDataGridView.ColumnHeadersVisible = false;
+            headerDataGridView.RowHeadersVisible = false;
+            headerDataGridView.ScrollBars = ScrollBars.Both;
+            headerDataGridView.RowTemplate.DefaultCellStyle.Font = new Font("Arial", 9);
+            headerDataGridView.RowTemplate.MinimumHeight = 18;
+            headerDataGridView.RowTemplate.Height = 18;
+            headerDataGridView.AllowUserToAddRows = false;
+            headerDataGridView.AllowUserToDeleteRows = false;
+            headerDataGridView.AllowUserToResizeRows = false;
+            headerDataGridView.GridColor = System.Drawing.SystemColors.ControlLight;
+            headerDataGridView.BackgroundColor = System.Drawing.SystemColors.ControlLight;
+            headerDataGridView.DefaultCellStyle.BackColor = System.Drawing.SystemColors.ControlLight;
+            headerDataGridView.ReadOnly = true;
+            headerDataGridView.EnableHeadersVisualStyles = false;
+            headerDataGridView.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
+            headerDataGridView.DefaultCellStyle.SelectionBackColor = headerDataGridView.DefaultCellStyle.BackColor;
+            headerDataGridView.DefaultCellStyle.SelectionForeColor = headerDataGridView.DefaultCellStyle.ForeColor;
+
+            headerDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            headerDataGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            headerDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            headerDataGridView.EditMode = DataGridViewEditMode.EditOnEnter;
+            headerDataGridView.RowHeadersWidth = 70;
+
             tablesDataGridView.Dock = DockStyle.Fill;
             tablesDataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            tablesDataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 9, FontStyle.Bold);
             tablesDataGridView.Location = new Point(5, 40);
             tablesDataGridView.ColumnHeadersVisible = true;
             tablesDataGridView.RowHeadersVisible = false;
@@ -1373,6 +2300,7 @@ namespace dataEditor
             tablesDataGridView.AllowUserToResizeRows = false;
             tablesDataGridView.GridColor = System.Drawing.SystemColors.ControlDarkDark;
             tablesDataGridView.BackgroundColor = System.Drawing.SystemColors.ControlLight;
+            tablesDataGridView.DefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
             tablesDataGridView.ReadOnly = true;
             tablesDataGridView.EnableHeadersVisualStyles = false;
 
@@ -1382,13 +2310,21 @@ namespace dataEditor
             tablesDataGridView.EditMode = DataGridViewEditMode.EditOnEnter;
             tablesDataGridView.RowHeadersWidth = 70;
 
-            TableView.Controls.Add(tablesDataGridView);
+            layoutPanel.Dock = DockStyle.Fill;
+            layoutPanel.ColumnCount = 1;
+            layoutPanel.RowCount = 2;
+            layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 82F));
+            layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+
+            TableView.Controls.Add(layoutPanel);
+            layoutPanel.Controls.Add(headerDataGridView, 0, 0);
+            layoutPanel.Controls.Add(tablesDataGridView,0,1);
         }
 
 
         private void toolBtnDictionaryEditor_Click(object sender, EventArgs e)
         {
-            foreach (DataTable tbl in HoursDataSet.Tables)
+            foreach (DataTable tbl in IntegralsDataSet.Tables)
             {
                 if (tbl.Rows.Count > 0)
                 {
@@ -1431,9 +2367,9 @@ namespace dataEditor
             dataViewerFillHeadres(FirstUsedRow, FirstUsedColumn, urDt);
             FillStatusGrid(RowsCnt, ColsCnt);
 
-            tempPropVal.Add(PropGrid.cntHeadsRows);
+            tempPropVal.Add(urProperty.cntHeadsRows);
             splitContainer_rightProps.Panel1Collapsed = false;
-            optionsGrid.Refresh();
+            SettingsForm.optionsGrid.Refresh();
 
             statusGridView.Rows[1].Cells[1].Value = ColsCnt;
             statusGridView.Rows[4].Cells[1].Value = 0;
@@ -1497,7 +2433,7 @@ namespace dataEditor
             });
             progressDlg.ShowDialog();
 
-            if (PropGrid.CheckEmptyRows.SwitchChecks == true)
+            if (cmnSettings.CheckEmptyRows.SwitchChecks == true)
             {
                 CheckingRealDat(dataVariantB);
                 xlRowCount = dataVariantB.Rows.Count;
@@ -1516,12 +2452,12 @@ namespace dataEditor
             string strConnect = string.Empty;
              string ExlVer = "12";
                     
-            if (PropGrid.OleDBImportMode.VersionOleDB == "Microsoft.Jet.OLEDB.4.0")    
+            if (cmnSettings.OleDBImportMode.VersionOleDB == "Microsoft.Jet.OLEDB.4.0")    
                 ExlVer = "8";
-                    strConnect = @"Provider=" + PropGrid.OleDBImportMode.VersionOleDB + ";" +
+                    strConnect = @"Provider=" + cmnSettings.OleDBImportMode.VersionOleDB + ";" +
                                  @"Data Source=" + xlFileName + ";" +
                                  @"Extended Properties=" + Convert.ToChar(34).ToString() +
-                                 @"Excel " + ExlVer + ".0;HDR=" + PropGrid.OleDBImportMode.strHDR + ";IMEX=" + PropGrid.OleDBImportMode.IMEX.ToString() + ";" + Convert.ToChar(34).ToString() + ";";
+                                 @"Excel " + ExlVer + ".0;HDR=" + cmnSettings.OleDBImportMode.strHDR + ";IMEX=" + cmnSettings.OleDBImportMode.IMEX.ToString() + ";" + Convert.ToChar(34).ToString() + ";";
 
              int xlColCount = 0;
 
@@ -1593,7 +2529,7 @@ namespace dataEditor
                             });
                             progressDlg.ShowDialog();
 
-                            if (PropGrid.CheckEmptyRows.SwitchChecks == true)
+                            if (cmnSettings.CheckEmptyRows.SwitchChecks == true)
                             {
                                 CheckingRealDat(dataExport);
                                 xlRowCount = dataExport.Rows.Count;
@@ -1670,7 +2606,7 @@ namespace dataEditor
 
             foreach (DataRow dRow in ExportsDatTable.Rows)
             {
-                if (RowEmptyStrike <= PropGrid.CheckEmptyRows.EmptyRowsLimit)
+                if (RowEmptyStrike <= cmnSettings.CheckEmptyRows.EmptyRowsLimit)
                 {
                     colStrike = 0;
                     for (int index = 0; index < ExportsDatTable.Columns.Count; index++)
@@ -1736,7 +2672,7 @@ namespace dataEditor
                 if (ExportsDatTable.AsEnumerable().All(r => r.IsNull(row) || string.IsNullOrWhiteSpace(r[row].ToString())))
                 {
                     ColmEmptyStrike++;
-                    if (ColmEmptyStrike >= PropGrid.CheckEmptyRows.EmptyColmLimit)
+                    if (ColmEmptyStrike >= cmnSettings.CheckEmptyRows.EmptyColmLimit)
                         ExportsDatTable.Columns.RemoveAt(i);
                 }
             }
@@ -1802,7 +2738,7 @@ namespace dataEditor
             statusGridView.Rows.Add();
             statusGridView.Rows[2].HeaderCell.Value = "FirstHeaderRow";
             statusGridView.Rows[2].Cells[0].Value = "FirstHeaderRow";
-            statusGridView.Rows[2].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(FirstUsedRow, ((FirstUsedRow+maxRows) - PropGrid.cntHeadsRows));
+            statusGridView.Rows[2].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(FirstUsedRow, ((FirstUsedRow+maxRows) - urProperty.cntHeadsRows));
 
             statusGridView.Rows.Add();
             statusGridView.Rows[3].HeaderCell.Value = "FirstDataRow";
@@ -1827,8 +2763,8 @@ namespace dataEditor
             statusGridView.MouseDown += new MouseEventHandler(statusGridView_MouseClick);
 
             statusGridView.ClearSelection();
-            TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["DRow"].SetReadOnlyAttribute(false);
-            TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["cntHeadsRows"].SetReadOnlyAttribute(false);
+            TypeDescriptor.GetProperties(urOptionsGrid.SelectedObject)["DRow"].SetReadOnlyAttribute(false);
+            TypeDescriptor.GetProperties(urOptionsGrid.SelectedObject)["cntHeadsRows"].SetReadOnlyAttribute(false);
         }
 
         private void SettingsNewForm()
@@ -1869,19 +2805,19 @@ namespace dataEditor
 
             foreach (DataGridViewRow rws in dataViewer.Rows)
             {
-                if (rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads | rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads | rws.DefaultCellStyle.BackColor == PropGrid.ColorDataRows | rws.DefaultCellStyle.BackColor == PropGrid.ColorDataRows)
+                if (rws.DefaultCellStyle.BackColor == exclSettings.ColorHeads | rws.DefaultCellStyle.BackColor == exclSettings.ColorHeads | rws.DefaultCellStyle.BackColor == exclSettings.ColorDataRows | rws.DefaultCellStyle.BackColor == exclSettings.ColorDataRows)
                 {
                     rws.DefaultCellStyle.BackColor = Color.Empty;
                     rws.DefaultCellStyle.ForeColor = Color.Black;
                 }
             }
 
-            if (ActiveCell.RowIndex >= 0 && ActiveCell.ColumnIndex == 0 && ActiveCell.RowIndex+ Convert.ToInt32(PropGrid.cntHeadsRows) <= RowsCnt)
+            if (ActiveCell.RowIndex >= 0 && ActiveCell.ColumnIndex == 0 && ActiveCell.RowIndex+ Convert.ToInt32(urProperty.cntHeadsRows) <= RowsCnt)
             {
                 HFR = ActiveCell.RowIndex + 1;
                 statusGridView.Rows[2].Cells[1].Value = Convert.ToInt32(dataViewer.Rows[ActiveCell.RowIndex].HeaderCell.Value.ToString().Split(' ').Last());
 
-                int ls = (Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) + PropGrid.cntHeadsRows);
+                int ls = (Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value) + urProperty.cntHeadsRows);
                 if (ls >= FirstUsedRow + RowsCnt)
                     mxRw = ls - 1;
                 else
@@ -1890,14 +2826,14 @@ namespace dataEditor
                 statusGridView.Rows[3].Cells[1].Value = null;
                 statusGridView.Rows[3].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(mxRw, FirstUsedRow+RowsCnt);
 
-                dataViewer.Rows[ActiveCell.RowIndex].DefaultCellStyle.BackColor = PropGrid.ColorHeads;
+                dataViewer.Rows[ActiveCell.RowIndex].DefaultCellStyle.BackColor = exclSettings.ColorHeads;
                 dataViewer.Rows[ActiveCell.RowIndex].DefaultCellStyle.ForeColor = fntCl;
 
-                if (PropGrid.DRow == true)
+                if (urProperty.DRow == true)
                 {
-                    for (int i = 1; i < Convert.ToInt32(PropGrid.cntHeadsRows); i++)
+                    for (int i = 1; i < Convert.ToInt32(urProperty.cntHeadsRows); i++)
                     {
-                        dataViewer.Rows[ActiveCell.RowIndex + i].DefaultCellStyle.BackColor = PropGrid.ColorHeads;
+                        dataViewer.Rows[ActiveCell.RowIndex + i].DefaultCellStyle.BackColor = exclSettings.ColorHeads;
                         dataViewer.Rows[ActiveCell.RowIndex+i].DefaultCellStyle.ForeColor = fntCl;
                     }
                 }
@@ -1911,14 +2847,14 @@ namespace dataEditor
             tempPropVal.Add(Convert.ToInt32(statusGridView.Rows[2].Cells[1].Value)); //[1] - Rows counts take Header
             dataViewer.ClearSelection();
             statusGridView.ClearSelection();
-            optionsGrid.Refresh();
+            SettingsForm.optionsGrid.Refresh();
         }
 
         private void StripMenuFirstData_Click(object sender, EventArgs e)
         {
             foreach (DataGridViewRow row in dataViewer.Rows)
             {
-                if (row.DefaultCellStyle.BackColor == PropGrid.ColorDataRows | row.DefaultCellStyle.BackColor == PropGrid.ColorDataRows)
+                if (row.DefaultCellStyle.BackColor == exclSettings.ColorDataRows | row.DefaultCellStyle.BackColor == exclSettings.ColorDataRows)
                 {
                     row.DefaultCellStyle.BackColor = Color.Empty;
                     row.DefaultCellStyle.ForeColor = Color.Black;
@@ -1928,20 +2864,20 @@ namespace dataEditor
             if (ActiveCell != null && ActiveCell.RowIndex <= RowsCnt)
             {
                 statusGridView.Rows[3].Cells[1].Value = Convert.ToInt32(dataViewer.Rows[(ActiveCell.RowIndex)].HeaderCell.Value.ToString().Split(' ').Last());
-                dataViewer.Rows[(ActiveCell.RowIndex)].DefaultCellStyle.BackColor = PropGrid.ColorDataRows;
+                dataViewer.Rows[(ActiveCell.RowIndex)].DefaultCellStyle.BackColor = exclSettings.ColorDataRows;
                 dataViewer.Rows[(ActiveCell.RowIndex)].DefaultCellStyle.ForeColor = fntClDat;
 
                 for (int i = (ActiveCell.RowIndex + Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1); i < RowsCnt-1; i += Convert.ToInt32(statusGridView.Rows[4].Cells[1].Value) + 1)
                 {
                     if (dataViewer.Rows[i].Cells[1].Value != DBNull.Value)
                     {
-                        dataViewer.Rows[i].DefaultCellStyle.BackColor = PropGrid.ColorDataRows;
+                        dataViewer.Rows[i].DefaultCellStyle.BackColor = exclSettings.ColorDataRows;
                         dataViewer.Rows[i].DefaultCellStyle.ForeColor = fntClDat;
                     }
                 }
                 dataViewer.ClearSelection();
                 statusGridView.ClearSelection();
-                optionsGrid.Refresh();
+                SettingsForm.optionsGrid.Refresh();
             }
         }
 
@@ -2129,37 +3065,37 @@ namespace dataEditor
 
         private void propGrid_stripHelp(object sender, EventArgs e)
         {
-                optionsGrid.HelpVisible = !optionsGrid.HelpVisible;
+            SettingsForm.optionsGrid.HelpVisible = !SettingsForm.optionsGrid.HelpVisible;
                 helpToolStripMenuItem.Checked = !helpToolStripMenuItem.Checked;
         }
 
         private void optionsGrid_PropertyValueChanged(Object sender, PropertyValueChangedEventArgs e)
         {
 
-            if (PropGrid.useExtraCol == true)
+            if (urProperty.useExtraCol == true)
             {
-                TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["ExtraColCnt"].SetReadOnlyAttribute(false);
+                TypeDescriptor.GetProperties(urOptionsGrid.SelectedObject)["ExtraColCnt"].SetReadOnlyAttribute(false);
             }
             
-            if (PropGrid.useExtraCol == false)
+            if (urProperty.useExtraCol == false)
             {
-                TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["ExtraColCnt"].SetReadOnlyAttribute(true);
-                PropGrid.ExtraColCnt = 0;
+                TypeDescriptor.GetProperties(urOptionsGrid.SelectedObject)["ExtraColCnt"].SetReadOnlyAttribute(true);
+                urProperty.ExtraColCnt = 0;
             }
 
-            if (PropGrid.DRow == true && PropGrid.cntHeadsRows < 2)
+            if (urProperty.DRow == true && urProperty.cntHeadsRows < 2)
             {
-                TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["cntHeadsRows"].SetReadOnlyAttribute(false);
-                PropGrid.cntHeadsRows = 2;
+                TypeDescriptor.GetProperties(urOptionsGrid.SelectedObject)["cntHeadsRows"].SetReadOnlyAttribute(false);
+                urProperty.cntHeadsRows = 2;
             }
 
-            if (PropGrid.DRow == false)
+            if (urProperty.DRow == false)
             {
-                TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["cntHeadsRows"].SetReadOnlyAttribute(true);
-                PropGrid.cntHeadsRows = 1;
+                TypeDescriptor.GetProperties(urOptionsGrid.SelectedObject)["cntHeadsRows"].SetReadOnlyAttribute(true);
+                urProperty.cntHeadsRows = 1;
             }
 
-            switch (PropGrid.mgCodeName.propGTPname)
+            switch (mgSettings.mgCodeName.propGTPname)
             {
                 case "KUBANESK":
                     textBoxSubject.PlaceholderText = " раснодарский край";
@@ -2168,19 +3104,19 @@ namespace dataEditor
                     break;
             }
 
-            if (PropGrid.ExtraColCnt > 10)
-                PropGrid.ExtraColCnt = 10;
+            if (urProperty.ExtraColCnt > 10)
+                urProperty.ExtraColCnt = 10;
 
             
 
-            if (PropGrid.cntHeadsRows != prvCntHedRw)
+            if (urProperty.cntHeadsRows != prvCntHedRw)
             {
-                prvCntHedRw = PropGrid.cntHeadsRows;
+                prvCntHedRw = urProperty.cntHeadsRows;
                 TreeFormDestroyer();
             }
 
             string temp = null;
-            foreach (string s in PropGrid.sqlArray)
+            foreach (string s in exclSettings.sqlArray)
             {
                 temp += s + ";";
             }
@@ -2194,11 +3130,11 @@ namespace dataEditor
 
             if (dataViewer.DataSource != null)
             {
-                if (PropGrid.cntHeadsRows > RowsCnt)
-                { PropGrid.cntHeadsRows = RowsCnt; }
-                updateStatusGrid(PropGrid.cntHeadsRows);
+                if (urProperty.cntHeadsRows > RowsCnt)
+                { urProperty.cntHeadsRows = RowsCnt; }
+                updateStatusGrid(urProperty.cntHeadsRows);
             }
-            optionsGrid.Refresh();
+            SettingsForm.optionsGrid.Refresh();
         }
 
         private void updateDataGridColors()
@@ -2207,40 +3143,40 @@ namespace dataEditor
             {
                 if (row.DefaultCellStyle.BackColor == Color.FromName(tempPropColors[0].Name))
                 {
-                    row.DefaultCellStyle.BackColor = PropGrid.ColorHeads;
+                    row.DefaultCellStyle.BackColor = exclSettings.ColorHeads;
                     row.DefaultCellStyle.ForeColor = fntCl;
                 }
                 if (row.DefaultCellStyle.BackColor == Color.FromName(tempPropColors[1].Name))
                 {
-                    row.DefaultCellStyle.BackColor = PropGrid.ColorDataRows;
+                    row.DefaultCellStyle.BackColor = exclSettings.ColorDataRows;
                     row.DefaultCellStyle.ForeColor = fntClDat;
                 }
                 foreach (DataGridViewCell cell in row.Cells)
                 {
                     if (cell.Style.BackColor == Color.FromName(tempPropColors[2].Name))
                     {
-                        cell.Style.BackColor = PropGrid.ColorStaticDat;
+                        cell.Style.BackColor = exclSettings.ColorStaticDat;
                         cell.Style.ForeColor = fntClStaticDat;
                     }
                 }
             }
-            tempPropColors[0] = PropGrid.ColorHeads;
-            tempPropColors[1] = PropGrid.ColorDataRows;
-            tempPropColors[2] = PropGrid.ColorStaticDat;
-            tempPropColors[3] = PropGrid.SecondColorHeads;
+            tempPropColors[0] = exclSettings.ColorHeads;
+            tempPropColors[1] = exclSettings.ColorDataRows;
+            tempPropColors[2] = exclSettings.ColorStaticDat;
+            tempPropColors[3] = exclSettings.SecondColorHeads;
         }
 
         private void updateStatusGrid(int lastVal)
         {
-            if (tempPropVal[0] != lastVal && TypeDescriptor.GetProperties(this.optionsGrid.SelectedObject)["cntHeadsRows"].IsReadOnly == false)
+            if (tempPropVal[0] != lastVal && TypeDescriptor.GetProperties(urOptionsGrid.SelectedObject)["cntHeadsRows"].IsReadOnly == false)
             {
                 statusGridView.Rows[2].Cells[1].Value = null;
-                statusGridView.Rows[2].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(FirstUsedRow, (RowsCnt - PropGrid.cntHeadsRows) + 1);
+                statusGridView.Rows[2].Cells[1] = new NumericUpDownDataGrid.NumericUpDownCell(FirstUsedRow, (RowsCnt - urProperty.cntHeadsRows) + 1);
                 statusGridView.Rows[5].Cells[1].Value = null;
 
                 foreach (DataGridViewRow rws in dataViewer.Rows)
                 {
-                    if (rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads | rws.DefaultCellStyle.BackColor == PropGrid.ColorHeads)
+                    if (rws.DefaultCellStyle.BackColor == exclSettings.ColorHeads | rws.DefaultCellStyle.BackColor == exclSettings.ColorHeads)
                     {
                         rws.DefaultCellStyle.BackColor = Color.Empty;
                         rws.DefaultCellStyle.ForeColor = Color.Black;
@@ -2253,22 +3189,22 @@ namespace dataEditor
 
         private void autoFontColor()
         {
-            if (PropGrid.ColorHeads.R < 120 | PropGrid.ColorHeads.G < 120 | PropGrid.ColorHeads.B < 120)
+            if (exclSettings.ColorHeads.R < 120 | exclSettings.ColorHeads.G < 120 | exclSettings.ColorHeads.B < 120)
                 fntCl = Color.White;
             else
                 fntCl = Color.Black;
 
-            if (PropGrid.ColorDataRows.R < 120 | PropGrid.ColorDataRows.G < 120 | PropGrid.ColorDataRows.B < 120)
+            if (exclSettings.ColorDataRows.R < 120 | exclSettings.ColorDataRows.G < 120 | exclSettings.ColorDataRows.B < 120)
                 fntClDat = Color.White;
             else
                 fntClDat = Color.Black;
 
-            if (PropGrid.SecondColorHeads.R < 100 | PropGrid.SecondColorHeads.G < 100 | PropGrid.SecondColorHeads.B < 120)
+            if (exclSettings.SecondColorHeads.R < 100 | exclSettings.SecondColorHeads.G < 100 | exclSettings.SecondColorHeads.B < 120)
                 fntTreeCl = Color.White;
             else
                 fntTreeCl = Color.Black;
 
-            if (PropGrid.ColorStaticDat.R < 100 | PropGrid.ColorStaticDat.G < 100 | PropGrid.ColorStaticDat.B < 120)
+            if (exclSettings.ColorStaticDat.R < 100 | exclSettings.ColorStaticDat.G < 100 | exclSettings.ColorStaticDat.B < 120)
                 fntClStaticDat = Color.White;
             else
                 fntClStaticDat = Color.Black;
@@ -2533,7 +3469,7 @@ namespace dataEditor
                 //Thread.Sleep(5);
                 }
             }
-            if (PropGrid.CheckEmptyRows.SwitchChecks == true)
+            if (cmnSettings.CheckEmptyRows.SwitchChecks == true)
             {
                 CheckingRealDat(dataExport);
                 xlRowCount = dataExport.Rows.Count;
@@ -2604,6 +3540,7 @@ namespace dataEditor
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             DictionaryForm.Dispose();
+            SettingsForm.Dispose();
             mgDatsList.dictBankForm.Dispose();
             Application.Exit();
         }
@@ -2612,7 +3549,7 @@ namespace dataEditor
         {
             e.Cancel = false;
 
-            if (PropGrid.ForceCloseExl == true)
+            if (cmnSettings.ForceCloseExl == true)
             {
                 foreach (Process clsProcess in Process.GetProcesses())
                 {
@@ -2639,11 +3576,11 @@ namespace dataEditor
             switch (SectionsControl.SelectedIndex)
             {
                 case 1:
-                    optionsGrid.Parent = mgSplitContainer_vertical.Panel2;
+                    
                     break;
 
                 case 0:
-                    optionsGrid.Parent = splitContainer_rightProps.Panel2;
+                    
                     break;
             }
         }
@@ -2681,9 +3618,9 @@ namespace dataEditor
                     dataViewerFillHeadres(FirstUsedRow, FirstUsedColumn, urDt);
                     FillStatusGrid(RowsCnt, ColsCnt);
 
-                    tempPropVal.Add(PropGrid.cntHeadsRows);
+                    tempPropVal.Add(urProperty.cntHeadsRows);
                     splitContainer_rightProps.Panel1Collapsed = false;
-                    optionsGrid.Refresh();
+                    SettingsForm.optionsGrid.Refresh();
 
                     statusGridView.Rows[1].Cells[1].Value = ColsCnt;
                     statusGridView.Rows[4].Cells[1].Value = 0;
@@ -2733,9 +3670,9 @@ namespace dataEditor
             DataTable mgDictionaryTable = new DataTable();
 
 
-            if (File.Exists(Environment.CurrentDirectory + "\\contractors_" + PropGrid.mgCodeName.propGTPname + ".xml"))
+            if (File.Exists(Environment.CurrentDirectory + "\\contractors_" + mgSettings.mgCodeName.propGTPname + ".xml"))
             {
-                string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + PropGrid.mgCodeName.propGTPname + ".xml";
+                string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + mgSettings.mgCodeName.propGTPname + ".xml";
 
                 DataSet ExportsDats = new DataSet();
                 ExportsDats.ReadXml(xmlFileName);
@@ -2888,39 +3825,41 @@ namespace dataEditor
             {
                 ImportList.AvailablePages.Add(page.Text.ToString());
             }
-            PropGrid.StartPage = ImportList.AvailablePages[1];
-            SectionsControl.SelectedTab = SectionsControl.TabPages["tab"+ PropGrid.StartPage];
-            switch (SectionsControl.SelectedIndex)
-            {
-                case 1:
-                    optionsGrid.Parent = mgSplitContainer_vertical.Panel2;
-                    break;
-
-                case 0:
-                    optionsGrid.Parent = splitContainer_rightProps.Panel2;
-                    break;
-            }
+            cmnSettings.StartPage = ImportList.AvailablePages[1];
+            SectionsControl.SelectedTab = SectionsControl.TabPages["tab"+ cmnSettings.StartPage];
         }
 
-        private void mgImportEntryDats(object sender, EventArgs e)
+        private void mgImportEntryDats(object sender, EventArgs e, string type, string path)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Multiselect = false;
-            ofd.DefaultExt = "*.xls;*.xlsx";
-            ofd.Filter = "Microsoft Excel (*.xls*)|*.xls*";
-            ofd.Title = "¬ыберите документ Excel";
-            if (ofd.ShowDialog() != DialogResult.OK)
+            string xlFileName = "";
+            if (type == "ofd")
             {
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.Multiselect = false;
+                ofd.DefaultExt = "*.xls;*.xlsx";
+                ofd.Filter = "Microsoft Excel (*.xls*)|*.xls*";
+                ofd.Title = "¬ыберите документ Excel";
+                if (ofd.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+                xlFileName = ofd.FileName;
+            }
+            else if (type == "dwn")
+            {
+               xlFileName = path;
+            }
+            else
+            {
+                Console.WriteLine("Type not set");
                 return;
             }
-
-            string xlFileName = ofd.FileName;
 
             DataTable dataExtraction = new DataTable();
             commonImportEXCL(this, new EventArgs(), dataExtraction, xlFileName);
 
-            string[] components = Path.GetFileNameWithoutExtension(xlFileName).Split("_");
 
+            string[] components = Path.GetFileNameWithoutExtension(xlFileName).Split("_");
 
             foreach (string fileTypeTarget in components)
             {
@@ -2945,7 +3884,7 @@ namespace dataEditor
                             }
                         }
 
-                        DataRow[] filteredRows = dataExtraction.Select(string.Format("{0} LIKE '%{1}%'", dataExtraction.Columns[3].ColumnName.ToString(), PropGrid.mgCodeName.propGTPcode));
+                        DataRow[] filteredRows = dataExtraction.Select(string.Format("{0} LIKE '%{1}%'", dataExtraction.Columns[3].ColumnName.ToString(), mgSettings.mgCodeName.propGTPcode));
 
                         foreach (DataRow row in filteredRows)
                         {
@@ -3024,11 +3963,11 @@ namespace dataEditor
                     {
                         //string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\";
                         UniversalDataSet.WriteXml(xlFileName.ToString());
-                        BackUserMessanger.BackColor = Color.LightGreen;
+
                     }
                     catch
                     {
-                        BackUserMessanger.BackColor = Color.IndianRed;
+
                     }
                 }
             }
@@ -3067,9 +4006,9 @@ namespace dataEditor
                 int rc = TreeColViewer.RowCount;
                 int HVC = 0;
 
-                if (PropGrid.DRow == true)
+                if (urProperty.DRow == true)
                 {
-                    for (int j = (Convert.ToInt32(HFR) - 1); j < ((Convert.ToInt32(HFR) - 1) + Convert.ToInt32(PropGrid.cntHeadsRows)); j++)
+                    for (int j = (Convert.ToInt32(HFR) - 1); j < ((Convert.ToInt32(HFR) - 1) + Convert.ToInt32(urProperty.cntHeadsRows)); j++)
                     {
                         if (dataViewer.Rows[j].Cells[i].Value != DBNull.Value)
                         {
@@ -3176,54 +4115,39 @@ namespace dataEditor
             cntShows++;
 
             TreeView.ShowDialog();
-            optionsGrid.Refresh();
+            SettingsForm.optionsGrid.Refresh();
             TreeColViewer.ClearSelection();
         }
 
-        private void mgDataViewer_DragDrop(object sender, DragEventArgs e)
+        private void getURLlinks(List<object> arguments)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                if (files.Length == 1)
-                {
-                    string xlFileName = files[0].ToString();
-                    ExlFileName = Path.GetFileName(xlFileName);
-
-                    DataGridView urDt = mgDataViewer;
-                    mgDataViewer.DataSource = null;
-                    DataTable dataExtraction = new DataTable();
-                    DataTable DT = (DataTable)dataViewer.DataSource;
-                    if (DT != null)
-                        DT.Clear();
-
-                    mgDataViewer.Rows.Clear();
-                    mgDataViewer.Refresh();
-                    int count = this.mgDataViewer.Columns.Count;
-                    for (int i = 0; i < count; i++)
-                        this.mgDataViewer.Columns.RemoveAt(0);
-
-                    commonImportEXCL(this, new EventArgs(), dataExtraction, xlFileName);
-                    mgDataViewer.DataSource = dataExtraction;
-                    mgDataViewer.Update();
-                }
-            }
+            string firstDate = mgSettings.rDateSVNC.Year + ((mgSettings.rDateSVNC.Month - 1).ToString("00")) + "01/";
+            string secondDate = mgSettings.rDateSVNC.Year + mgSettings.rDateSVNC.Month.ToString("00") + mgSettings.rDateSVNC.Day.ToString("00") + "_";
+            string thridDate = "_" + ((mgSettings.rDateSVNC.Month - 1).ToString("00")) + mgSettings.rDateSVNC.Year;
+            string fileNameSVNC = mgSettings.mgCodeName.propGTPname + "_" + mgSettings.mgCodeName.propGTPcode + thridDate + "_gtp_1st_stage.xls";
+            string urlLinkSVNC = "https://www.atsenergo.ru/dload/retail/" + firstDate + secondDate + fileNameSVNC;
+            arguments.Add(urlLinkSVNC);
+            string fileNameKF = mgSettings.rDateSVNC.Year + mgSettings.rDateSVNC.Month.ToString("00") + mgSettings.rDateSVNC.Day.ToString("00") + "_" + ((mgSettings.rDateSVNC.Month - 1).ToString("00")) + mgSettings.rDateSVNC.Year + "_koeff.xls";
+            string urlLinkKF = "https://www.atsenergo.ru/sites/default/files/uchfsk/" + fileNameKF;
+            arguments.Add(urlLinkKF);
         }
 
-        private void mgDataViewer_DragEnter(object sender, DragEventArgs e)
+        private void mgFileSVNC_Click(object sender, EventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                e.Effect = DragDropEffects.Move;
-            }
-            else
-            {
-                e.Effect = DragDropEffects.None;
-            }
-        }
+            ComponentResourceManager resources = new ComponentResourceManager(typeof(MainForm));
+            Image statusOK = ((System.Drawing.Image)(resources.GetObject("imgStatusOk.Image")));
+            Image statusDwnld = ((System.Drawing.Image)(resources.GetObject("imgStatusDwnld.Image")));
+            Image statusFailed = ((System.Drawing.Image)(resources.GetObject("imgStatusFailed.Image")));
+            string Status = null;
 
-        private void mgFileKF_Click(object sender, EventArgs e)
-        {
+            List<object> arguments = new List<object>();
+            string firstDate = mgSettings.rDateSVNC.Year + ((mgSettings.rDateSVNC.Month-1).ToString("00")) + "01/";
+            string secondDate = mgSettings.rDateSVNC.Year + mgSettings.rDateSVNC.Month.ToString("00") + mgSettings.rDateSVNC.Day.ToString("00") + "_";
+            string thridDate = "_" + ((mgSettings.rDateSVNC.Month - 1).ToString("00")) + mgSettings.rDateSVNC.Year;
+            string fileName = mgSettings.mgCodeName.propGTPname + "_" + mgSettings.mgCodeName.propGTPcode + thridDate + "_gtp_1st_stage.xls";
+            string urlLink = "https://www.atsenergo.ru/dload/retail/" + firstDate + secondDate + fileName;
+            arguments.Add(urlLink);
+
             bgWorker = new BackgroundWorker();
             bgWorker.WorkerReportsProgress = true;
             bgWorker.WorkerSupportsCancellation = true;
@@ -3232,7 +4156,7 @@ namespace dataEditor
             bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
             bgWorker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_DownloadProgressChanged);
 
-            bgWorker.RunWorkerAsync();
+            bgWorker.RunWorkerAsync(arguments);
 
             progressDlg = new ProgressDialog();
             progressDlg.stopProgress = new EventHandler((s, e1) => {
@@ -3245,11 +4169,141 @@ namespace dataEditor
                 }
             });
             progressDlg.ShowDialog();
+
+
+            if (File.Exists(mgSettings.mgFolderDonwloads.fullPathDownloads + "\\" + secondDate+fileName))
+            {
+                mgFileSVNCbtn.Image = statusDwnld;
+                string path = mgSettings.mgFolderDonwloads.fullPathDownloads + "\\" + secondDate+fileName;
+                try
+                {
+                    mgImportEntryDats(this, new EventArgs(), "dwn", path);
+                    mgFileSVNCbtn.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                    Status = "Completed";
+                }
+                catch
+                {
+                    Status = "Downloaded";
+                }
+            }
+            else
+            {
+                Status = "Failed";
+            }
+
+            switch (Status)
+            {
+                case "Completed":
+                    mgFileSVNCbtn.Image = statusOK;
+                    mgFileSVNCbtn.ToolTipText = "‘айл обработан";
+                    break;
+                case "Downloaded":
+                    mgFileSVNCbtn.Image = statusDwnld;
+                    mgFileSVNCbtn.ToolTipText = "‘айл загружен";
+                    break;
+                case "Failed":
+                    mgFileSVNCbtn.Image = statusFailed;
+                    mgFileSVNCbtn.ToolTipText = "ќшибка";
+                    break;
+            }
         }
+
+        private void mgFileKF_Click(object sender, EventArgs e)
+        {
+            ComponentResourceManager resources = new ComponentResourceManager(typeof(MainForm));
+            Image statusOK = ((System.Drawing.Image)(resources.GetObject("imgStatusOk.Image")));
+            Image statusDwnld = ((System.Drawing.Image)(resources.GetObject("imgStatusDwnld.Image")));
+            Image statusFailed = ((System.Drawing.Image)(resources.GetObject("imgStatusFailed.Image")));
+            string Status = null;
+
+            List<object> arguments = new List<object>();
+            string fileName = mgSettings.rDateSVNC.Year + mgSettings.rDateSVNC.Month.ToString("00") + mgSettings.rDateSVNC.Day.ToString("00") + "_" + ((mgSettings.rDateSVNC.Month - 1).ToString("00")) + mgSettings.rDateSVNC.Year + "_koeff.xls";
+            string urlLink = "https://www.atsenergo.ru/sites/default/files/uchfsk/" + fileName;
+            arguments.Add(urlLink);
+
+            bgWorker = new BackgroundWorker();
+            bgWorker.WorkerReportsProgress = true;
+            bgWorker.WorkerSupportsCancellation = true;
+            bgWorker.DoWork += new DoWorkEventHandler(DownloadFile);
+
+            bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
+            bgWorker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_DownloadProgressChanged);
+
+            bgWorker.RunWorkerAsync(arguments);
+
+            progressDlg = new ProgressDialog();
+            progressDlg.stopProgress = new EventHandler((s, e1) => {
+                switch (progressDlg.DialogResult)
+                {
+                    case DialogResult.Cancel:
+                        bgWorker.CancelAsync();
+                        progressDlg.Close();
+                        break;
+                }
+            });
+            progressDlg.ShowDialog();
+
+
+            if (File.Exists(mgSettings.mgFolderDonwloads.fullPathDownloads + "\\" + fileName))
+            {
+                mgFileKFbtn.Image = statusDwnld;
+                string path = mgSettings.mgFolderDonwloads.fullPathDownloads + "\\" + fileName;
+                try
+                {
+                    mgImportEntryDats(this, new EventArgs(), "dwn", path);
+                    mgFileKFbtn.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                    Status = "Completed";
+                }
+                catch
+                {
+                    Status = "Downloaded";
+                }
+            }
+            else
+            {
+                Status = "Failed";
+            }
+
+            switch (Status)
+            {
+                case "Completed":
+                    mgFileKFbtn.Image = statusOK;
+                    mgFileKFbtn.ToolTipText = "‘айл обработан";
+                    break;
+                case "Downloaded":
+                    mgFileKFbtn.Image = statusDwnld;
+                    mgFileKFbtn.ToolTipText = "‘айл загружен";
+                    break;
+                case "Failed":
+                    mgFileKFbtn.Image = statusFailed;
+                    mgFileKFbtn.ToolTipText = "ќшибка";
+                    break;
+            }
+        }
+
+        private bool checkRealeseFiles(string url)
+        {
+            try
+            {
+                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+                request.Method = "HEAD";
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                return (response.StatusCode == HttpStatusCode.OK);
+                response.Close();
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
 
         private void DownloadFile(object sender, DoWorkEventArgs e)
         {
-            string sUrlToDnldFile = "https://www.atsenergo.ru/sites/default/files/uchfsk/20230510_042023_koeff.xls";
+            List<object> genericlist = e.Argument as List<object>;
+            string urlLink = (string)genericlist[0];
+
+            string sUrlToDnldFile = urlLink;
             string sFileSavePath;
             BackgroundWorker worker = sender as BackgroundWorker;
 
@@ -3258,7 +4312,7 @@ namespace dataEditor
                 Uri url = new Uri(sUrlToDnldFile);
 
                 string sFileName = Path.GetFileName(url.LocalPath);
-                sFileSavePath = "C:\\Users\\ChernyshovKS\\Desktop\\tempTestDownload" + "\\" + sFileName;
+                sFileSavePath = mgSettings.mgFolderDonwloads.fullPathDownloads + "\\" + sFileName;
 
                 System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);
                 System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)request.GetResponse();
@@ -3286,6 +4340,7 @@ namespace dataEditor
                     worker.ReportProgress(iProgressPercentage);
                 }
                 strRemote.Close();
+                strLocal.Close();
                 response.Close();
             }
             catch (Exception exM)
@@ -3300,6 +4355,208 @@ namespace dataEditor
             string argument = "\"" + filePath + "\"";
 
             System.Diagnostics.Process.Start("explorer.exe", argument);
+        }
+
+        private void mgBtnNewProject_Click(object sender, EventArgs e)
+        {
+            bool rFileKF;
+            bool rFileSVNC;
+            bool rFileSPUNC;
+
+
+            List<object> genericlist = new List<object>();
+            getURLlinks(genericlist);
+            string urlLinkSVNC = (string)genericlist[0];
+            string urlLinkKF = (string)genericlist[1];
+
+            checkFolders();
+            
+            rFileKF = checkRealeseFiles(urlLinkKF);
+            if (rFileKF)
+            {
+                mgFileKFbtn.Visible = true;
+                mgFileKFbtn.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                mgToolStripInputData.Refresh();
+            }
+            else
+            {
+                mgFileKFbtn.Visible = false;
+                mgFileKFbtn.DisplayStyle = ToolStripItemDisplayStyle.Text;
+                mgToolStripInputData.Refresh();
+            }
+
+            rFileSVNC = checkRealeseFiles(urlLinkSVNC);
+            if (rFileSVNC)
+            {
+                mgFileSVNCbtn.Visible = true;
+                mgFileSVNCbtn.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                mgToolStripInputData.Refresh();
+            }
+            else
+            {
+                mgFileSVNCbtn.Visible = false;
+                mgFileSVNCbtn.DisplayStyle = ToolStripItemDisplayStyle.Text;
+                mgToolStripInputData.Refresh();
+            }
+
+            DictionaryForm.loadDictionary(mgDatsList.isLoaded);
+
+            mgDataViewer.DataSource = null;
+            DataTable DT = (DataTable)mgDataViewer.DataSource;
+            if (DT != null)
+                DT.Clear();
+            
+            mgDataViewer.Rows.Clear();
+            mgDataViewer.Refresh();
+
+            mgBtnImportFile.Enabled = true;
+            mgBtnEntryDatFiles.Enabled = true;
+            toolBtnDictionaryList.Enabled = true;
+            toolBtnDictionaryEditor.Enabled = true;
+            mgBtnOpenFolder.Enabled = true;
+
+            int idRow = 1;
+            foreach (DataGridViewRow dictRow in DictionaryForm.dataGridDictionaryList.Rows)
+            {
+                if (!Convert.ToString(dictRow.Cells["Status"].Value).Equals("–асторгнут") && Convert.ToBoolean(dictRow.Cells["DocTC"].Value))
+                {
+                    mgDataViewer.Rows.Add(idRow.ToString(), dictRow.Cells["Agreement"].Value,
+                        dictRow.Cells["FullName"].Value,
+                        dictRow.Cells["DateAgreement"].Value,
+                        dictRow.Cells["Type"].Value,
+                        dictRow.Cells["TariffZone"].Value,
+                        dictRow.Cells["NumCC"].Value);
+                    idRow++;
+                }
+            }
+        }
+
+        private void checkFolders()
+        {
+            if (mgSettings.mgFolderProject.fullPathProject == null)
+            {
+                if (!Directory.Exists(Environment.CurrentDirectory + "\\" + mgSettings.mgCodeName.propGTPname))
+                {
+                    Directory.CreateDirectory(Environment.CurrentDirectory + "\\" + mgSettings.mgCodeName.propGTPname);
+                    mgSettings.mgFolderProject.fullPathProject = Environment.CurrentDirectory + "\\" + mgSettings.mgCodeName.propGTPname;
+                }
+                else
+                {
+                    mgSettings.mgFolderProject.fullPathProject = Environment.CurrentDirectory + "\\" + mgSettings.mgCodeName.propGTPname;
+                }
+            }
+
+            if (mgSettings.mgFolderAgreeDict.fullPathAgreeDictionary == null)
+            {
+                if (!Directory.Exists(Environment.CurrentDirectory + "\\" + mgSettings.mgCodeName.propGTPname + "\\data"))
+                {
+                    Directory.CreateDirectory(Environment.CurrentDirectory + "\\" + mgSettings.mgCodeName.propGTPname + "\\data");
+                    mgSettings.mgFolderAgreeDict.fullPathAgreeDictionary = Environment.CurrentDirectory + "\\" + mgSettings.mgCodeName.propGTPname + "\\data";
+                }
+                else
+                {
+                    mgSettings.mgFolderAgreeDict.fullPathAgreeDictionary = Environment.CurrentDirectory + "\\" + mgSettings.mgCodeName.propGTPname + "\\data";
+                }
+            }
+
+            if (mgSettings.mgFolderBanksDict.fullPathBanksDictionary == null)
+            {
+                if (!Directory.Exists(Environment.CurrentDirectory + "\\" + mgSettings.mgCodeName.propGTPname + "\\data"))
+                {
+                    Directory.CreateDirectory(Environment.CurrentDirectory + "\\" + mgSettings.mgCodeName.propGTPname + "\\data");
+                    mgSettings.mgFolderBanksDict.fullPathBanksDictionary = Environment.CurrentDirectory + "\\" + mgSettings.mgCodeName.propGTPname + "\\data";
+                }
+                else
+                {
+                    mgSettings.mgFolderBanksDict.fullPathBanksDictionary = Environment.CurrentDirectory + "\\" + mgSettings.mgCodeName.propGTPname + "\\data";
+                }
+            }
+
+            if (mgSettings.mgFolderDonwloads.fullPathDownloads == null)
+            {
+                if (!Directory.Exists(Environment.CurrentDirectory + "\\" + mgSettings.mgCodeName.propGTPname + "\\Downloads"))
+                {
+                    Directory.CreateDirectory(Environment.CurrentDirectory + "\\" + mgSettings.mgCodeName.propGTPname + "\\Downloads");
+                    mgSettings.mgFolderDonwloads.fullPathDownloads = Environment.CurrentDirectory + "\\" + mgSettings.mgCodeName.propGTPname + "\\Downloads";
+                }
+                else
+                {
+                    mgSettings.mgFolderDonwloads.fullPathDownloads = Environment.CurrentDirectory + "\\" + mgSettings.mgCodeName.propGTPname + "\\Downloads";
+                }
+            }
+
+            SettingsForm.optionsGrid.Refresh();
+        }
+
+        private void mgDataViewer_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            ComponentResourceManager resources = new ComponentResourceManager(typeof(MainForm));
+            Image imgOpenFolder = ((Image)(resources.GetObject("mgBtnOpenFolder.Image")));
+            Image imgDataTable = ((Image)(resources.GetObject("mgOpenDataTable.Image")));
+            Image imgDataCalculation = ((Image)(resources.GetObject("mgData—alculation.Image")));
+            Image imgDataAct = ((Image)(resources.GetObject("mgDataAct.Image")));
+
+            if (e.RowIndex < 0)
+                return;
+
+            if (mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell" && e.ColumnIndex == mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"]))
+            {
+                e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+
+                var w = imgDataTable.Width;
+                var h = imgDataTable.Height;
+                var x = e.CellBounds.Left + (e.CellBounds.Width - w) / 2;
+                var y = e.CellBounds.Top + (e.CellBounds.Height - h) / 1;
+
+                e.Graphics.DrawImage(imgDataTable, new Rectangle(x, y - 2, w, h));
+                e.Handled = true;
+            }
+            if (mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell" && e.ColumnIndex == mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataCalculation"]))
+            {
+                e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+
+                var w = imgDataCalculation.Width;
+                var h = imgDataCalculation.Height;
+                var x = e.CellBounds.Left + (e.CellBounds.Width - w) / 2;
+                var y = e.CellBounds.Top + (e.CellBounds.Height - h) / 1;
+
+                e.Graphics.DrawImage(imgDataCalculation, new Rectangle(x, y - 3, w, h));
+                e.Handled = true;
+            }
+            if (mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell" && e.ColumnIndex == mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataAct"]))
+            {
+                e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+
+                var w = imgDataAct.Width;
+                var h = imgDataAct.Height;
+                var x = e.CellBounds.Left + (e.CellBounds.Width - w) / 2;
+                var y = e.CellBounds.Top + (e.CellBounds.Height - h) / 1;
+
+                e.Graphics.DrawImage(imgDataAct, new Rectangle(x, y - 3, w, h));
+                e.Handled = true;
+            }
+            if (mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell" && e.ColumnIndex == mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["OpenFolder"]))
+            {
+                e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+
+                var w = imgOpenFolder.Width;
+                var h = imgOpenFolder.Height;
+                var x = e.CellBounds.Left + (e.CellBounds.Width - w) / 2;
+                var y = e.CellBounds.Top + (e.CellBounds.Height - h) / 1;
+
+                e.Graphics.DrawImage(imgOpenFolder, new Rectangle(x, y - 3, w, h));
+                e.Handled = true;
+            }
+        }
+
+        private void mgBtnEntryDatFiles_ButtonClick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SettingsForm.Show();
         }
     }
     public static class ExtensionMethods
@@ -3317,6 +4574,8 @@ namespace dataEditor
         public static List<string> ProvidersList = new List<string>() { };
         public static List<string> AvailableMode = new List<string>() { };
         public static List<string> AvailablePages = new List<string>() { };
+        public static List<string> KnownGTPnames = new List<string>() { "KUBANESK", "ROSTOVEN", "YARENERG", "TULAENSK", "ENTREDIN", "NIGNOVEN", "MARIENER", "KARELENE", "VORNEGEN", "GARENERC" };
+        public static List<string> KnownGTPcode = new List<string>() { "PKUBANEN", "PROSTOVE", "PYARENER", "PTULENER", "PPENZAEN", "PNIGNOVE", "PMARIENE", "PKARELEN", "PVORNEGE", "PNOVGORE" };
 
         public static void CheckProviders()
         {

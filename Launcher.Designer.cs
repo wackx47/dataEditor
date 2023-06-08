@@ -36,6 +36,8 @@ namespace dataEditor
             this.labelVersion = new System.Windows.Forms.Label();
             this.ChangeLogBox = new System.Windows.Forms.TextBox();
             this.labelBuild = new System.Windows.Forms.Label();
+            this.groupBoxLauncher = new System.Windows.Forms.GroupBox();
+            this.groupBoxLauncher.SuspendLayout();
             this.SuspendLayout();
             // 
             // startUR
@@ -72,13 +74,14 @@ namespace dataEditor
             // 
             // ChangeLogBox
             // 
-            this.ChangeLogBox.Location = new System.Drawing.Point(12, 55);
+            this.ChangeLogBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.ChangeLogBox.Location = new System.Drawing.Point(3, 31);
             this.ChangeLogBox.MaxLength = 0;
             this.ChangeLogBox.Multiline = true;
             this.ChangeLogBox.Name = "ChangeLogBox";
             this.ChangeLogBox.ReadOnly = true;
             this.ChangeLogBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.ChangeLogBox.Size = new System.Drawing.Size(560, 233);
+            this.ChangeLogBox.Size = new System.Drawing.Size(554, 210);
             this.ChangeLogBox.TabIndex = 26;
             this.ChangeLogBox.WordWrap = false;
             // 
@@ -93,13 +96,23 @@ namespace dataEditor
             this.labelBuild.Text = "build";
             this.labelBuild.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // groupBoxLauncher
+            // 
+            this.groupBoxLauncher.Controls.Add(this.ChangeLogBox);
+            this.groupBoxLauncher.Location = new System.Drawing.Point(12, 44);
+            this.groupBoxLauncher.Name = "groupBoxLauncher";
+            this.groupBoxLauncher.Size = new System.Drawing.Size(560, 244);
+            this.groupBoxLauncher.TabIndex = 28;
+            this.groupBoxLauncher.TabStop = false;
+            this.groupBoxLauncher.Text = "Changelogs:";
+            // 
             // StartScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 361);
+            this.Controls.Add(this.groupBoxLauncher);
             this.Controls.Add(this.labelBuild);
-            this.Controls.Add(this.ChangeLogBox);
             this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.lblCaption);
             this.Controls.Add(this.startUR);
@@ -107,11 +120,14 @@ namespace dataEditor
             this.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "StartScreen";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "dataEditor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.StartScreen_FormClosing);
+            this.groupBoxLauncher.ResumeLayout(false);
+            this.groupBoxLauncher.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -123,5 +139,6 @@ namespace dataEditor
         private Label labelVersion;
         private TextBox ChangeLogBox;
         private Label labelBuild;
+        private GroupBox groupBoxLauncher;
     }
 }

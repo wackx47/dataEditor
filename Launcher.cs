@@ -23,6 +23,7 @@ namespace dataEditor
         {
             InitializeComponent();
 
+            //universalReaderForm.Text = ((AssemblyProductAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false)[0]).Product + "  ver." + Application.ProductVersion;
             this.labelVersion.Text = String.Format("version {0}", Application.ProductVersion);
             this.labelBuild.Text = String.Format("build: {0}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
             if (File.Exists(Environment.CurrentDirectory + "\\RELEASE-NOTES.txt"))
