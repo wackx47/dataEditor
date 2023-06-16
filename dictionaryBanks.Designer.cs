@@ -227,7 +227,7 @@
             this.dictBankID.Name = "dictBankID";
             this.dictBankID.ReadOnly = true;
             this.dictBankID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dictBankID.Width = 40;
+            this.dictBankID.Width = 35;
             // 
             // dictBankNAME
             // 

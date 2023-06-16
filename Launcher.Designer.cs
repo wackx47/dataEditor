@@ -75,13 +75,14 @@ namespace dataEditor
             // ChangeLogBox
             // 
             this.ChangeLogBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.ChangeLogBox.Location = new System.Drawing.Point(3, 31);
+            this.ChangeLogBox.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ChangeLogBox.Location = new System.Drawing.Point(3, 20);
             this.ChangeLogBox.MaxLength = 0;
             this.ChangeLogBox.Multiline = true;
             this.ChangeLogBox.Name = "ChangeLogBox";
             this.ChangeLogBox.ReadOnly = true;
             this.ChangeLogBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.ChangeLogBox.Size = new System.Drawing.Size(554, 210);
+            this.ChangeLogBox.Size = new System.Drawing.Size(554, 221);
             this.ChangeLogBox.TabIndex = 26;
             this.ChangeLogBox.WordWrap = false;
             // 
@@ -99,6 +100,8 @@ namespace dataEditor
             // groupBoxLauncher
             // 
             this.groupBoxLauncher.Controls.Add(this.ChangeLogBox);
+            this.groupBoxLauncher.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.groupBoxLauncher.ForeColor = System.Drawing.SystemColors.InfoText;
             this.groupBoxLauncher.Location = new System.Drawing.Point(12, 44);
             this.groupBoxLauncher.Name = "groupBoxLauncher";
             this.groupBoxLauncher.Size = new System.Drawing.Size(560, 244);

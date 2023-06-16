@@ -14,6 +14,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -86,15 +87,41 @@ namespace dataEditor
                         if (infoElement.Element("Agreement") != null)
                             dataGridDictionaryList.Rows[rwi].Cells["Agreement"].Value = infoElement.Element("Agreement").Value;
                         if (infoElement.Element("DateAgreement") != null)
-                            dataGridDictionaryList.Rows[rwi].Cells["Agreement"].Value = infoElement.Element("Agreement").Value;
-                        if (infoElement.Element("FullName") != null)
-                            dataGridDictionaryList.Rows[rwi].Cells["FullName"].Value = infoElement.Element("FullName").Value;
+                            dataGridDictionaryList.Rows[rwi].Cells["DateAgreement"].Value = DateOnly.Parse(infoElement.Element("DateAgreement").Value);
                         if (infoElement.Element("Type") != null)
                             dataGridDictionaryList.Rows[rwi].Cells["Type"].Value = infoElement.Element("Type").Value;
+                        if (infoElement.Element("DocTC") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["DocTC"].Value = infoElement.Element("DocTC").Value;
+                        if (infoElement.Element("FullName") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["FullName"].Value = infoElement.Element("FullName").Value;
                         if (infoElement.Element("INN") != null)
                             dataGridDictionaryList.Rows[rwi].Cells["INN"].Value = infoElement.Element("INN").Value;
+                        if (infoElement.Element("Address") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["Address"].Value = infoElement.Element("Address").Value;
                         if (infoElement.Element("NumCC") != null)
                             dataGridDictionaryList.Rows[rwi].Cells["NumCC"].Value = infoElement.Element("NumCC").Value;
+                        if (infoElement.Element("PhoneNumber") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["PhoneNumber"].Value = infoElement.Element("PhoneNumber").Value;
+                        if (infoElement.Element("Mail") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["Mail"].Value = infoElement.Element("Mail").Value;
+                        if (infoElement.Element("TariffZone") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["TariffZone"].Value = infoElement.Element("TariffZone").Value;
+                        if (infoElement.Element("Status") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["Status"].Value = infoElement.Element("Status").Value;
+                        if (infoElement.Element("PWR") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["PWR"].Value = infoElement.Element("PWR").Value;
+                        if (infoElement.Element("bankNAME") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["bankNAME"].Value = infoElement.Element("bankNAME").Value;
+                        if (infoElement.Element("KPP") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["KPP"].Value = infoElement.Element("KPP").Value;
+                        if (infoElement.Element("bankPayAcc") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["bankPayAcc"].Value = infoElement.Element("bankPayAcc").Value;
+                        if (infoElement.Element("bankBIK") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["bankBIK"].Value = infoElement.Element("bankBIK").Value;
+                        if (infoElement.Element("bankINN") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["bankINN"].Value = infoElement.Element("bankINN").Value;
+                        if (infoElement.Element("bankCorrAcc") != null)
+                            dataGridDictionaryList.Rows[rwi].Cells["bankCorrAcc"].Value = infoElement.Element("bankCorrAcc").Value;
                         rwi++;
                     }
 
@@ -209,6 +236,12 @@ namespace dataEditor
 
         private void dictBtnSave_Click(object sender, EventArgs e)
         {
+            main = StartScreen.universalReaderForm;
+            settingsForm = MainForm.SettingsForm;
+
+            main.prepareOptionsGridOthersForm();
+            MicrogenerationSettings mgSettings = (MicrogenerationSettings)settingsForm.optionsGrid.SelectedObject;
+
             DataSet DictionaryDataSet = new DataSet("ContractorsDictionary");
             DataTable exportTable = new DataTable();
 
@@ -218,13 +251,26 @@ namespace dataEditor
             exportTable.TableName = dictListGTP.Text;
             DictionaryDataSet.Tables.Add(exportTable);
 
-            //exportTable.Columns.Add("id");
             exportTable.Columns.Add("Agreement");
             exportTable.Columns.Add("DateAgreement");
-            exportTable.Columns.Add("FullName");
             exportTable.Columns.Add("Type");
+            exportTable.Columns.Add("DocTC");
+            exportTable.Columns.Add("FullName");
             exportTable.Columns.Add("INN");
+            exportTable.Columns.Add("Address");
             exportTable.Columns.Add("NumCC");
+            exportTable.Columns.Add("PhoneNumber");
+            exportTable.Columns.Add("Mail");
+            exportTable.Columns.Add("TariffZone");
+            exportTable.Columns.Add("Status");
+            exportTable.Columns.Add("PWR");
+            exportTable.Columns.Add("bankNAME");
+            exportTable.Columns.Add("KPP");
+            exportTable.Columns.Add("bankPayAcc");
+            exportTable.Columns.Add("bankBIK");
+            exportTable.Columns.Add("bankINN");
+            exportTable.Columns.Add("bankCorrAcc");
+
 
             foreach (DataGridViewRow rw in dataGridDictionaryList.Rows)
             {
@@ -232,15 +278,28 @@ namespace dataEditor
                 //row["id"] = rw.HeaderCell.Value.ToString();
                 row["Agreement"] = rw.Cells["Agreement"].Value;
                 row["DateAgreement"] = rw.Cells["DateAgreement"].Value;
-                row["FullName"] = rw.Cells["FullName"].Value;
                 row["Type"] = rw.Cells["Type"].Value;
+                row["DocTC"] = rw.Cells["DocTC"].Value;
+                row["FullName"] = rw.Cells["FullName"].Value;
                 row["INN"] = rw.Cells["INN"].Value;
+                row["Address"] = rw.Cells["Address"].Value;
                 row["NumCC"] = rw.Cells["NumCC"].Value;
+                row["PhoneNumber"] = rw.Cells["PhoneNumber"].Value;
+                row["Mail"] = rw.Cells["Mail"].Value;
+                row["TariffZone"] = rw.Cells["TariffZone"].Value;
+                row["Status"] = rw.Cells["Status"].Value;
+                row["PWR"] = rw.Cells["PWR"].Value;
+                row["bankNAME"] = rw.Cells["bankNAME"].Value;
+                row["KPP"] = rw.Cells["KPP"].Value;
+                row["bankPayAcc"] = rw.Cells["bankPayAcc"].Value;
+                row["bankBIK"] = rw.Cells["bankBIK"].Value;
+                row["bankINN"] = rw.Cells["bankINN"].Value;
+                row["bankCorrAcc"] = rw.Cells["bankCorrAcc"].Value;
 
                 DictionaryDataSet.Tables[dictListGTP.Text].Rows.Add(row);
             }
 
-            string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + dictListGTP.Text + ".xml";
+            string xmlFileName = mgSettings.mgFolderAgreeDict.fullPathAgreeDictionary + "\\contractors_" + dictListGTP.Text + ".xml";
             try
             {
                 DictionaryDataSet.WriteXml(xmlFileName.ToString());
@@ -254,7 +313,13 @@ namespace dataEditor
 
         private void dictBtnShowFolder_Click(object sender, EventArgs e)
         {
-            string filePath = Environment.CurrentDirectory + "\\contractors_" + dictListGTP.Text + ".xml";
+            main = StartScreen.universalReaderForm;
+            settingsForm = MainForm.SettingsForm;
+
+            main.prepareOptionsGridOthersForm();
+            MicrogenerationSettings mgSettings = (MicrogenerationSettings)settingsForm.optionsGrid.SelectedObject;
+
+            string filePath = mgSettings.mgFolderAgreeDict.fullPathAgreeDictionary + "\\contractors_" + dictListGTP.Text + ".xml";
             if (!File.Exists(filePath))
             {
                 Console.WriteLine("File not found");
@@ -316,15 +381,41 @@ namespace dataEditor
                 if (infoElement.Element("Agreement") != null)
                     dataGridDictionaryList.Rows[rwi].Cells["Agreement"].Value = infoElement.Element("Agreement").Value;
                 if (infoElement.Element("DateAgreement") != null)
-                    dataGridDictionaryList.Rows[rwi].Cells["DateAgreement"].Value = infoElement.Element("DateAgreement").Value;
-                if (infoElement.Element("FullName") != null)
-                    dataGridDictionaryList.Rows[rwi].Cells["FullName"].Value = infoElement.Element("FullName").Value;
+                    dataGridDictionaryList.Rows[rwi].Cells["DateAgreement"].Value = DateOnly.Parse(infoElement.Element("DateAgreement").Value);
                 if (infoElement.Element("Type") != null)
                     dataGridDictionaryList.Rows[rwi].Cells["Type"].Value = infoElement.Element("Type").Value;
+                if (infoElement.Element("DocTC") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["DocTC"].Value = infoElement.Element("DocTC").Value;
+                if (infoElement.Element("FullName") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["FullName"].Value = infoElement.Element("FullName").Value;
                 if (infoElement.Element("INN") != null)
                     dataGridDictionaryList.Rows[rwi].Cells["INN"].Value = infoElement.Element("INN").Value;
-                if (infoElement.Element("Other") != null)
-                    dataGridDictionaryList.Rows[rwi].Cells["Other"].Value = infoElement.Element("Other").Value;
+                if (infoElement.Element("Address") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["Address"].Value = infoElement.Element("Address").Value;
+                if (infoElement.Element("NumCC") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["NumCC"].Value = infoElement.Element("NumCC").Value;
+                if (infoElement.Element("PhoneNumber") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["PhoneNumber"].Value = infoElement.Element("PhoneNumber").Value;
+                if (infoElement.Element("Mail") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["Mail"].Value = infoElement.Element("Mail").Value;
+                if (infoElement.Element("TariffZone") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["TariffZone"].Value = infoElement.Element("TariffZone").Value;
+                if (infoElement.Element("Status") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["Status"].Value = infoElement.Element("Status").Value;
+                if (infoElement.Element("PWR") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["PWR"].Value = infoElement.Element("PWR").Value;
+                if (infoElement.Element("bankNAME") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["bankNAME"].Value = infoElement.Element("bankNAME").Value;
+                if (infoElement.Element("KPP") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["KPP"].Value = infoElement.Element("KPP").Value;
+                if (infoElement.Element("bankPayAcc") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["bankPayAcc"].Value = infoElement.Element("bankPayAcc").Value;
+                if (infoElement.Element("bankBIK") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["bankBIK"].Value = infoElement.Element("bankBIK").Value;
+                if (infoElement.Element("bankINN") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["bankINN"].Value = infoElement.Element("bankINN").Value;
+                if (infoElement.Element("bankCorrAcc") != null)
+                    dataGridDictionaryList.Rows[rwi].Cells["bankCorrAcc"].Value = infoElement.Element("bankCorrAcc").Value;
                 rwi++;
             }
             dataGridDictionaryList.Refresh();
@@ -367,17 +458,17 @@ namespace dataEditor
 
             public override void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
             {
-                // Set the value of the editing control to the current cell value.
                 base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
                 CalendarEditingControl ctl = DataGridView.EditingControl as CalendarEditingControl;
-                // Use the default row value when Value property is null.
                 if (this.Value == null)
                 {
                     ctl.Value = (DateTime)this.DefaultNewRowValue;
                 }
                 else
                 {
-                    //ctl.Value = (DateTime)this.Value;
+                    DateTime val = new DateTime();
+                    val = DateTime.Parse(Value.ToString());
+                    ctl.Value = val;
                 }
             }
 
@@ -779,16 +870,6 @@ namespace dataEditor
             
             DataTable dataExtraction = new DataTable();
             main.commonImportEXCL(this, new EventArgs(), dataExtraction, xlFileName);
-
-            //Console.WriteLine(xlFileName);
-            //foreach (DataRow row in dataExtraction.Rows)
-            //{
-            //    foreach (DataColumn column in dataExtraction.Columns)
-            //    {
-            //        Console.Write("\t{0}", row[column]);
-            //    }
-            //    Console.WriteLine();
-            //}
 
             dataGridDictionaryList.Rows.Clear();
 

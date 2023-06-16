@@ -219,6 +219,18 @@ namespace dataEditor
             set { m_rDateSVNC = value; }
         }
 
+        private bool m_deleteDownloadsFiles = true;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("Delete downloaded file")]
+        [DisplayName("DeleteDownloadedFile")]
+        [Category("Microgeneration")]
+        public bool deleteDownloadsFiles
+        {
+            get { return m_deleteDownloadsFiles; }
+            set { m_deleteDownloadsFiles = value; }
+        }
+
 
         mgFolderProject m_mgFolderProject = new mgFolderProject();
         [Browsable(true)]

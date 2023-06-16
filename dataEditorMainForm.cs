@@ -48,7 +48,7 @@ using System.Resources;
 using System.Drawing;
 using static NPOI.HSSF.Util.HSSFColor;
 using System.Security.Policy;
-
+using static System.Windows.Forms.LinkLabel;
 
 namespace dataEditor
 {
@@ -179,6 +179,7 @@ namespace dataEditor
             cmnSettings.ImportMode = ImportList.AvailableMode[0];
             mgSettings.mgCodeName.propGTPname = "KUBANESK";
             cmnSettings.GlobalInfoStandart = "ru-RU";
+            DictionaryForm.dictListGTP.Items.AddRange(ImportList.KnownGTPnames.ToArray());
             DictionaryForm.dictListGTP.Text = mgSettings.mgCodeName.propGTPname;
             appInfo.Text = "ver." + Application.ProductVersion + " (" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + ")";
         }
@@ -3590,6 +3591,12 @@ namespace dataEditor
             DictionaryForm.Show();
         }
 
+        private void openPDFviewer_Click(object sender, EventArgs e)
+        {
+             pdfDocument pdfViewerForm = new pdfDocument();
+             pdfViewerForm.Show();
+        }
+
         private void dataViewer_DragDrop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -4551,7 +4558,32 @@ namespace dataEditor
 
         private void mgBtnEntryDatFiles_ButtonClick(object sender, EventArgs e)
         {
+            string link = "https://penza.tns-e.ru/disclosure/reporting/sred-nereg-tsena/?PARAMS={%22YEAR%22:[%222023%22]}";
+            WebClient client = new WebClient();
+            client.Encoding = System.Text.Encoding.UTF8;
+            string page = client.DownloadString(link);
+            DumpHRefs(page);
+        }
 
+        public void DumpHRefs(string page)
+        {
+            System.Text.RegularExpressions.Match m;
+            string HRefPattern = "<a href=\"https://cdn.tns-e.ru/iblock/(.*?/.*?)/(.*?)\">.*?</a>";
+
+            try
+            {
+                m = Regex.Match(page, HRefPattern, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.Singleline, TimeSpan.FromSeconds(1));
+                while (m.Success)
+                {
+                    Console.WriteLine("https://cdn.tns-e.ru/iblock/" + Convert.ToString(m.Groups[1]) + "/" + Convert.ToString(m.Groups[2]));
+                    m = m.NextMatch();
+                }
+
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                Console.WriteLine("The matching operation timed out.");
+            }
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)

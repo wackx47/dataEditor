@@ -34,31 +34,16 @@ namespace dataEditor
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mgDatsList));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mgDatsList));
             this.mgRightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mgMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.mgLocalPhone = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridDictionaryList = new dataEditor.MainForm.DoubleBufferedDataGridView();
-            this.dictLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.urToolStrip = new System.Windows.Forms.ToolStrip();
-            this.dictBtnOpen = new System.Windows.Forms.ToolStripButton();
-            this.dictBtnSave = new System.Windows.Forms.ToolStripButton();
-            this.dictBtnShowFolder = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.dictListGTP = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.dictBtnAddElm = new System.Windows.Forms.ToolStripButton();
-            this.dictBtnDelElm = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.dictBtnImportFromExcel = new System.Windows.Forms.ToolStripButton();
-            this.dictBtnExportToExcel = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.dictBtnBankData = new System.Windows.Forms.ToolStripButton();
             this.editLink = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Agreement = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DateAgreement = new dataEditor.mgDatsList.CalendarColumn();
@@ -76,10 +61,28 @@ namespace dataEditor
             this.bankNAME = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.KPP = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bankPayAcc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bankBIK = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bankINN = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bankCorrAcc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Extra1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Extra2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Extra3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Extra4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dictLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.urToolStrip = new System.Windows.Forms.ToolStrip();
+            this.dictBtnOpen = new System.Windows.Forms.ToolStripButton();
+            this.dictBtnSave = new System.Windows.Forms.ToolStripButton();
+            this.dictBtnShowFolder = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.dictListGTP = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.dictBtnAddElm = new System.Windows.Forms.ToolStripButton();
+            this.dictBtnDelElm = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.dictBtnImportFromExcel = new System.Windows.Forms.ToolStripButton();
+            this.dictBtnExportToExcel = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.dictBtnBankData = new System.Windows.Forms.ToolStripButton();
             this.mgRightClickMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridDictionaryList)).BeginInit();
             this.dictLayoutPanel.SuspendLayout();
@@ -144,6 +147,9 @@ namespace dataEditor
             this.bankNAME,
             this.KPP,
             this.bankPayAcc,
+            this.bankBIK,
+            this.bankINN,
+            this.bankCorrAcc,
             this.Extra1,
             this.Extra2,
             this.Extra3,
@@ -168,156 +174,12 @@ namespace dataEditor
             dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridDictionaryList.RowsDefaultCellStyle = dataGridViewCellStyle8;
             this.dataGridDictionaryList.RowTemplate.Height = 20;
-            this.dataGridDictionaryList.Size = new System.Drawing.Size(1053, 571);
+            this.dataGridDictionaryList.Size = new System.Drawing.Size(1132, 571);
             this.dataGridDictionaryList.TabIndex = 0;
             this.dataGridDictionaryList.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridDictionaryList_CellMouseClick);
             this.dataGridDictionaryList.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.grid_CellPainting);
             this.dataGridDictionaryList.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridDictionary_EditingControlShowing);
             this.dataGridDictionaryList.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridDictionaryList_RowHeaderMouseClick);
-            // 
-            // dictLayoutPanel
-            // 
-            this.dictLayoutPanel.ColumnCount = 1;
-            this.dictLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.dictLayoutPanel.Controls.Add(this.dataGridDictionaryList, 0, 1);
-            this.dictLayoutPanel.Controls.Add(this.urToolStrip, 0, 0);
-            this.dictLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dictLayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this.dictLayoutPanel.Name = "dictLayoutPanel";
-            this.dictLayoutPanel.RowCount = 2;
-            this.dictLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.dictLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.dictLayoutPanel.Size = new System.Drawing.Size(1059, 602);
-            this.dictLayoutPanel.TabIndex = 4;
-            // 
-            // urToolStrip
-            // 
-            this.urToolStrip.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.urToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.dictBtnOpen,
-            this.dictBtnSave,
-            this.dictBtnShowFolder,
-            this.toolStripSeparator1,
-            this.dictListGTP,
-            this.toolStripSeparator2,
-            this.dictBtnAddElm,
-            this.dictBtnDelElm,
-            this.toolStripSeparator3,
-            this.dictBtnImportFromExcel,
-            this.dictBtnExportToExcel,
-            this.toolStripSeparator4,
-            this.dictBtnBankData});
-            this.urToolStrip.Location = new System.Drawing.Point(0, 0);
-            this.urToolStrip.Name = "urToolStrip";
-            this.urToolStrip.Size = new System.Drawing.Size(1059, 25);
-            this.urToolStrip.TabIndex = 77;
-            this.urToolStrip.Text = "mgTools";
-            // 
-            // dictBtnOpen
-            // 
-            this.dictBtnOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dictBtnOpen.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnOpen.Image")));
-            this.dictBtnOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dictBtnOpen.Name = "dictBtnOpen";
-            this.dictBtnOpen.Size = new System.Drawing.Size(23, 22);
-            this.dictBtnOpen.Text = "OpenFile";
-            this.dictBtnOpen.Click += new System.EventHandler(this.dictBtnOpen_ButtonClick);
-            // 
-            // dictBtnSave
-            // 
-            this.dictBtnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dictBtnSave.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnSave.Image")));
-            this.dictBtnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dictBtnSave.Name = "dictBtnSave";
-            this.dictBtnSave.Size = new System.Drawing.Size(23, 22);
-            this.dictBtnSave.Text = "Save";
-            this.dictBtnSave.Click += new System.EventHandler(this.dictBtnSave_Click);
-            // 
-            // dictBtnShowFolder
-            // 
-            this.dictBtnShowFolder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dictBtnShowFolder.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnShowFolder.Image")));
-            this.dictBtnShowFolder.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dictBtnShowFolder.Name = "dictBtnShowFolder";
-            this.dictBtnShowFolder.Size = new System.Drawing.Size(23, 22);
-            this.dictBtnShowFolder.Text = "Show in Windows";
-            this.dictBtnShowFolder.Click += new System.EventHandler(this.dictBtnShowFolder_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // dictListGTP
-            // 
-            this.dictListGTP.Items.AddRange(new object[] {
-            "KUBANESK"});
-            this.dictListGTP.Name = "dictListGTP";
-            this.dictListGTP.Size = new System.Drawing.Size(121, 25);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            // 
-            // dictBtnAddElm
-            // 
-            this.dictBtnAddElm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dictBtnAddElm.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnAddElm.Image")));
-            this.dictBtnAddElm.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dictBtnAddElm.Name = "dictBtnAddElm";
-            this.dictBtnAddElm.Size = new System.Drawing.Size(23, 22);
-            this.dictBtnAddElm.Text = "Add Element";
-            this.dictBtnAddElm.Click += new System.EventHandler(this.dictBtnAddElm_Click);
-            // 
-            // dictBtnDelElm
-            // 
-            this.dictBtnDelElm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dictBtnDelElm.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnDelElm.Image")));
-            this.dictBtnDelElm.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dictBtnDelElm.Name = "dictBtnDelElm";
-            this.dictBtnDelElm.Size = new System.Drawing.Size(23, 22);
-            this.dictBtnDelElm.Text = "Remove Element";
-            this.dictBtnDelElm.Click += new System.EventHandler(this.dictBtnDelElm_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
-            // 
-            // dictBtnImportFromExcel
-            // 
-            this.dictBtnImportFromExcel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dictBtnImportFromExcel.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnImportFromExcel.Image")));
-            this.dictBtnImportFromExcel.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dictBtnImportFromExcel.Name = "dictBtnImportFromExcel";
-            this.dictBtnImportFromExcel.Size = new System.Drawing.Size(23, 22);
-            this.dictBtnImportFromExcel.Text = "ImportFromExcel";
-            this.dictBtnImportFromExcel.Click += new System.EventHandler(this.dictBtnImportFromExcel_Click);
-            // 
-            // dictBtnExportToExcel
-            // 
-            this.dictBtnExportToExcel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dictBtnExportToExcel.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnExportToExcel.Image")));
-            this.dictBtnExportToExcel.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dictBtnExportToExcel.Name = "dictBtnExportToExcel";
-            this.dictBtnExportToExcel.Size = new System.Drawing.Size(23, 22);
-            this.dictBtnExportToExcel.Text = "CreateExcel";
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
-            // 
-            // dictBtnBankData
-            // 
-            this.dictBtnBankData.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dictBtnBankData.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnBankData.Image")));
-            this.dictBtnBankData.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dictBtnBankData.Name = "dictBtnBankData";
-            this.dictBtnBankData.Size = new System.Drawing.Size(23, 22);
-            this.dictBtnBankData.Text = "BankDictionary";
-            this.dictBtnBankData.Click += new System.EventHandler(this.dictBtnBankData_Click);
             // 
             // editLink
             // 
@@ -502,6 +364,24 @@ namespace dataEditor
             this.bankPayAcc.Name = "bankPayAcc";
             this.bankPayAcc.Width = 74;
             // 
+            // bankBIK
+            // 
+            this.bankBIK.HeaderText = "bankBIK";
+            this.bankBIK.Name = "bankBIK";
+            this.bankBIK.Visible = false;
+            // 
+            // bankINN
+            // 
+            this.bankINN.HeaderText = "bankINN";
+            this.bankINN.Name = "bankINN";
+            this.bankINN.Visible = false;
+            // 
+            // bankCorrAcc
+            // 
+            this.bankCorrAcc.HeaderText = "bankCorrAcc";
+            this.bankCorrAcc.Name = "bankCorrAcc";
+            this.bankCorrAcc.Visible = false;
+            // 
             // Extra1
             // 
             this.Extra1.HeaderText = "#1";
@@ -530,12 +410,154 @@ namespace dataEditor
             this.Extra4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Extra4.Visible = false;
             // 
+            // dictLayoutPanel
+            // 
+            this.dictLayoutPanel.ColumnCount = 1;
+            this.dictLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.dictLayoutPanel.Controls.Add(this.dataGridDictionaryList, 0, 1);
+            this.dictLayoutPanel.Controls.Add(this.urToolStrip, 0, 0);
+            this.dictLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dictLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.dictLayoutPanel.Name = "dictLayoutPanel";
+            this.dictLayoutPanel.RowCount = 2;
+            this.dictLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.dictLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.dictLayoutPanel.Size = new System.Drawing.Size(1138, 602);
+            this.dictLayoutPanel.TabIndex = 4;
+            // 
+            // urToolStrip
+            // 
+            this.urToolStrip.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.urToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dictBtnOpen,
+            this.dictBtnSave,
+            this.dictBtnShowFolder,
+            this.toolStripSeparator1,
+            this.dictBtnImportFromExcel,
+            this.dictBtnExportToExcel,
+            this.toolStripSeparator4,
+            this.dictListGTP,
+            this.toolStripSeparator2,
+            this.dictBtnAddElm,
+            this.dictBtnDelElm,
+            this.toolStripSeparator3,
+            this.dictBtnBankData});
+            this.urToolStrip.Location = new System.Drawing.Point(0, 0);
+            this.urToolStrip.Name = "urToolStrip";
+            this.urToolStrip.Size = new System.Drawing.Size(1138, 25);
+            this.urToolStrip.TabIndex = 77;
+            this.urToolStrip.Text = "mgTools";
+            // 
+            // dictBtnOpen
+            // 
+            this.dictBtnOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBtnOpen.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnOpen.Image")));
+            this.dictBtnOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dictBtnOpen.Name = "dictBtnOpen";
+            this.dictBtnOpen.Size = new System.Drawing.Size(23, 22);
+            this.dictBtnOpen.Text = "OpenFile";
+            this.dictBtnOpen.Click += new System.EventHandler(this.dictBtnOpen_ButtonClick);
+            // 
+            // dictBtnSave
+            // 
+            this.dictBtnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBtnSave.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnSave.Image")));
+            this.dictBtnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dictBtnSave.Name = "dictBtnSave";
+            this.dictBtnSave.Size = new System.Drawing.Size(23, 22);
+            this.dictBtnSave.Text = "Save";
+            this.dictBtnSave.Click += new System.EventHandler(this.dictBtnSave_Click);
+            // 
+            // dictBtnShowFolder
+            // 
+            this.dictBtnShowFolder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBtnShowFolder.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnShowFolder.Image")));
+            this.dictBtnShowFolder.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dictBtnShowFolder.Name = "dictBtnShowFolder";
+            this.dictBtnShowFolder.Size = new System.Drawing.Size(23, 22);
+            this.dictBtnShowFolder.Text = "Show in Windows";
+            this.dictBtnShowFolder.Click += new System.EventHandler(this.dictBtnShowFolder_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // dictListGTP
+            // 
+            this.dictListGTP.Name = "dictListGTP";
+            this.dictListGTP.Size = new System.Drawing.Size(121, 25);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // dictBtnAddElm
+            // 
+            this.dictBtnAddElm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBtnAddElm.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnAddElm.Image")));
+            this.dictBtnAddElm.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dictBtnAddElm.Name = "dictBtnAddElm";
+            this.dictBtnAddElm.Size = new System.Drawing.Size(23, 22);
+            this.dictBtnAddElm.Text = "Add Element";
+            this.dictBtnAddElm.Click += new System.EventHandler(this.dictBtnAddElm_Click);
+            // 
+            // dictBtnDelElm
+            // 
+            this.dictBtnDelElm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBtnDelElm.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnDelElm.Image")));
+            this.dictBtnDelElm.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dictBtnDelElm.Name = "dictBtnDelElm";
+            this.dictBtnDelElm.Size = new System.Drawing.Size(23, 22);
+            this.dictBtnDelElm.Text = "Remove Element";
+            this.dictBtnDelElm.Click += new System.EventHandler(this.dictBtnDelElm_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // dictBtnImportFromExcel
+            // 
+            this.dictBtnImportFromExcel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBtnImportFromExcel.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnImportFromExcel.Image")));
+            this.dictBtnImportFromExcel.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dictBtnImportFromExcel.Name = "dictBtnImportFromExcel";
+            this.dictBtnImportFromExcel.Size = new System.Drawing.Size(23, 22);
+            this.dictBtnImportFromExcel.Text = "ImportFromExcel";
+            this.dictBtnImportFromExcel.Click += new System.EventHandler(this.dictBtnImportFromExcel_Click);
+            // 
+            // dictBtnExportToExcel
+            // 
+            this.dictBtnExportToExcel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBtnExportToExcel.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnExportToExcel.Image")));
+            this.dictBtnExportToExcel.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dictBtnExportToExcel.Name = "dictBtnExportToExcel";
+            this.dictBtnExportToExcel.Size = new System.Drawing.Size(23, 22);
+            this.dictBtnExportToExcel.Text = "CreateExcel";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // dictBtnBankData
+            // 
+            this.dictBtnBankData.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBtnBankData.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnBankData.Image")));
+            this.dictBtnBankData.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dictBtnBankData.Name = "dictBtnBankData";
+            this.dictBtnBankData.Size = new System.Drawing.Size(23, 22);
+            this.dictBtnBankData.Text = "BankDictionary";
+            this.dictBtnBankData.Click += new System.EventHandler(this.dictBtnBankData_Click);
+            // 
             // mgDatsList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1059, 602);
+            this.ClientSize = new System.Drawing.Size(1138, 602);
             this.Controls.Add(this.dictLayoutPanel);
             this.DoubleBuffered = true;
             this.MinimumSize = new System.Drawing.Size(960, 500);
@@ -592,6 +614,9 @@ namespace dataEditor
         private DataGridViewComboBoxColumn bankNAME;
         private DataGridViewTextBoxColumn KPP;
         private DataGridViewTextBoxColumn bankPayAcc;
+        private DataGridViewTextBoxColumn bankBIK;
+        private DataGridViewTextBoxColumn bankINN;
+        private DataGridViewTextBoxColumn bankCorrAcc;
         private DataGridViewTextBoxColumn Extra1;
         private DataGridViewTextBoxColumn Extra2;
         private DataGridViewTextBoxColumn Extra3;

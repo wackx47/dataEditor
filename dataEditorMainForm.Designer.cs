@@ -530,12 +530,12 @@ namespace dataEditor
             // toolBtnConvertFile
             // 
             this.toolBtnConvertFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolBtnConvertFile.Enabled = false;
             this.toolBtnConvertFile.Image = ((System.Drawing.Image)(resources.GetObject("toolBtnConvertFile.Image")));
             this.toolBtnConvertFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolBtnConvertFile.Name = "toolBtnConvertFile";
             this.toolBtnConvertFile.Size = new System.Drawing.Size(23, 22);
             this.toolBtnConvertFile.Text = "ConvertFile";
+            this.toolBtnConvertFile.Click += new System.EventHandler(this.openPDFviewer_Click);
             // 
             // toolBtnDictionaryList
             // 
