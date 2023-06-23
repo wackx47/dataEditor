@@ -1248,11 +1248,15 @@ namespace dataEditor
                         }
                         DataTable headerTable = new DataTable("hrs_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" ÓÚ ").First() + "_Header");
                         DataTable newTable = new DataTable("hrs_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" ÓÚ ").First());
+
+                        newTable.TableName = checkSimilarNameInTableLayout(newTable.TableName);
+                        headerTable.TableName = newTable.TableName + "_Header";
                         PrepareHeaderTable(headerTable);
 
                         headerTable.Rows[0]["Values"] = DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString();
-                        headerTable.Rows[1]["Values"] = dataExtraction.Rows[0][extractCols].ToString();
-                        headerTable.Rows[2]["Values"] = resultString;
+                        headerTable.Rows[1]["Values"] = DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["FullName"].Value.ToString();
+                        headerTable.Rows[2]["Values"] = dataExtraction.Rows[0][extractCols].ToString();
+                        headerTable.Rows[3]["Values"] = resultString;
 
                         DataColumn Column1 = new DataColumn("date", Type.GetType("System.DateOnly"));
                         DataColumn Column2 = new DataColumn("time", Type.GetType("System.TimeOnly"));
@@ -1268,7 +1272,7 @@ namespace dataEditor
                         int kTC = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").First());
                         int kTV = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").Last());
 
-                        headerTable.Rows[3]["Values"] = dataExtraction.Rows[5][extractCols].ToString();
+                        headerTable.Rows[4]["Values"] = dataExtraction.Rows[5][extractCols].ToString();
 
                         decimal ConSumm = 0;
                         decimal GenSumm = 0;
@@ -1325,7 +1329,7 @@ namespace dataEditor
                         HoursDataSet.Tables.Add(headerTable);
 
                         Button newButton = new Button();
-                        createNewButtonOnTable(newButton, DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" ÓÚ ").First(), "hrs_");
+                        createNewButtonOnTable(newButton, newTable.TableName);
                         mgFlowPanelResult.Controls.Add(newButton);
 
                         //PrintValues(newTable, DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" ÓÚ ").First());
@@ -1334,15 +1338,35 @@ namespace dataEditor
                     else
                     {
                         int foundRow2 = withoutZeroNumCC(resultString);
+                        if(foundRow2 == -1)
+                        {
+                            string tempBtnName = resultString;
+                            foreach (char c in tempBtnName)
+                            {
+                                if (c.ToString() != "0")
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    tempBtnName = tempBtnName.Substring(1);
+                                }
+                            }
+                            foundRow2 = withoutZeroNumCC(tempBtnName);
+                        }
                         if (foundRow2 != -1)
                         {
                             DataTable headerTable = new DataTable("hrs_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow2].Cells["Agreement"].Value.ToString().Split(" ÓÚ ").First() + "_Header");
                             DataTable newTable = new DataTable("hrs_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow2].Cells["Agreement"].Value.ToString().Split(" ÓÚ ").First());
+
+                            newTable.TableName = checkSimilarNameInTableLayout(newTable.TableName);
+                            headerTable.TableName = newTable.TableName + "_Header";
                             PrepareHeaderTable(headerTable);
 
                             headerTable.Rows[0]["Values"] = DictionaryForm.dataGridDictionaryList.Rows[foundRow2].Cells["Agreement"].Value.ToString();
-                            headerTable.Rows[1]["Values"] = dataExtraction.Rows[0][extractCols].ToString();
-                            headerTable.Rows[2]["Values"] = resultString;
+                            headerTable.Rows[1]["Values"] = DictionaryForm.dataGridDictionaryList.Rows[foundRow2].Cells["FullName"].Value.ToString();
+                            headerTable.Rows[2]["Values"] = dataExtraction.Rows[0][extractCols].ToString();
+                            headerTable.Rows[3]["Values"] = resultString;
 
                             DataColumn Column1 = new DataColumn("date", Type.GetType("System.DateOnly"));
                             DataColumn Column2 = new DataColumn("time", Type.GetType("System.TimeOnly"));
@@ -1358,7 +1382,7 @@ namespace dataEditor
                             int kTC = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").First());
                             int kTV = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").Last());
 
-                            headerTable.Rows[3]["Values"] = dataExtraction.Rows[5][extractCols].ToString();
+                            headerTable.Rows[4]["Values"] = dataExtraction.Rows[5][extractCols].ToString();
 
                             decimal ConSumm = 0;
                             decimal GenSumm = 0;
@@ -1415,17 +1439,20 @@ namespace dataEditor
                             HoursDataSet.Tables.Add(headerTable);
 
                             Button newButton = new Button();
-                            createNewButtonOnTable(newButton, DictionaryForm.dataGridDictionaryList.Rows[foundRow2].Cells["Agreement"].Value.ToString().Split(" ÓÚ ").First(), "hrs_");
+                            createNewButtonOnTable(newButton, newTable.TableName);
                             mgFlowPanelResult.Controls.Add(newButton);
                         }
                         else
                         {
                             DataTable headerTable = new DataTable("hrs_" + resultString + "_Header");
                             DataTable newTable = new DataTable("hrs_" + resultString);
+
+                            newTable.TableName = checkSimilarNameInTableLayout(newTable.TableName);
+                            headerTable.TableName = newTable.TableName + "_Header";
                             PrepareHeaderTable(headerTable);
 
-                            headerTable.Rows[1]["Values"] = dataExtraction.Rows[0][extractCols].ToString();
-                            headerTable.Rows[2]["Values"] = resultString;
+                            headerTable.Rows[2]["Values"] = dataExtraction.Rows[0][extractCols].ToString();
+                            headerTable.Rows[3]["Values"] = resultString;
 
                             DataColumn Column1 = new DataColumn("date", Type.GetType("System.DateOnly"));
                             DataColumn Column2 = new DataColumn("time", Type.GetType("System.TimeOnly"));
@@ -1441,7 +1468,7 @@ namespace dataEditor
                             int kTC = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").First());
                             int kTV = Convert.ToInt32(dataExtraction.Rows[5][extractCols].ToString().Split("/").Last());
 
-                            headerTable.Rows[3]["Values"] = dataExtraction.Rows[5][extractCols].ToString();
+                            headerTable.Rows[4]["Values"] = dataExtraction.Rows[5][extractCols].ToString();
 
                             decimal ConSumm = 0;
                             decimal GenSumm = 0;
@@ -1496,7 +1523,7 @@ namespace dataEditor
                             HoursDataSet.Tables.Add(headerTable);
 
                             Button newButton = new Button();
-                            createNewButtonOnTable(newButton, resultString, "hrs_");
+                            createNewButtonOnTable(newButton, newTable.TableName);
                             mgFlowPanelResult.Controls.Add(newButton);
 
                             //PrintValues(newTable, dataExtraction.Rows[4][extractCols].ToString());
@@ -1516,7 +1543,7 @@ namespace dataEditor
             foreach (DataRow extractRows in dataExtraction.Rows)
             {
                 bool result = Int32.TryParse(extractRows[0].ToString(), out number);
-                if (result && extractRows[0].ToString != null)
+                if (extractRows[0] != DBNull.Value && result)
                 {
                     string resultString = null;
                     try
@@ -1524,12 +1551,10 @@ namespace dataEditor
                         Regex regexObj = new Regex(@"[^\d]");
                         resultString = regexObj.Replace(extractRows[3].ToString().Split(",").Last(), "");
 
-                        Console.WriteLine(number);
-
                         if (resultString == null | resultString == "")
                         {
                             unkn++;
-                            resultString = "unknown" + unkn;
+                            resultString = "unknown_" + unkn;
                         }
 
                         int foundRow = SearchDGV(DictionaryForm.dataGridDictionaryList, resultString, "NumCC");
@@ -1538,16 +1563,20 @@ namespace dataEditor
                             int i = dataExtraction.Rows.IndexOf(extractRows) + 1;
                             DataTable headerTable = new DataTable("intg_"+DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" ÓÚ ").First() + "_Header");
                             DataTable newTable = new DataTable("intg_"+DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" ÓÚ ").First());
-
+                            
+                            newTable.TableName = checkSimilarNameInTableLayout(newTable.TableName);
+                            headerTable.TableName = newTable.TableName + "_Header";
                             prepareNewIntegralTables(headerTable, newTable);
 
                             int kTC = Convert.ToInt32(extractRows[4].ToString());
                             int kTV = Convert.ToInt32(extractRows[5].ToString());
 
                             headerTable.Rows[0]["Values"] = DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString();
-                            headerTable.Rows[1]["Values"] = extractRows[1].ToString();
-                            headerTable.Rows[2]["Values"] = resultString;
-                            headerTable.Rows[3]["Values"] = kTC + "/" + kTV;
+                            if(DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["FullName"].Value.ToString() == extractRows[2].ToString().Split(",").First())
+                                headerTable.Rows[1]["Values"] = DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["FullName"].Value.ToString();
+                            headerTable.Rows[2]["Values"] = extractRows[1].ToString();
+                            headerTable.Rows[3]["Values"] = resultString;
+                            headerTable.Rows[4]["Values"] = kTC + "/" + kTV;
 
                             if (extractRows[7].ToString().Split(" ").Last() != "Í¬¿*˜")
                             {
@@ -1591,28 +1620,31 @@ namespace dataEditor
                             }
 
                             Button newButton = new Button();
-                            createNewButtonOnTable(newButton, DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" ÓÚ ").First(), "intg_");
+                            createNewButtonOnTable(newButton, newTable.TableName);
                             mgFlowPanelResult.Controls.Add(newButton);
 
                             IntegralsDataSet.Tables.Add(newTable);
                             IntegralsDataSet.Tables.Add(headerTable);
 
-                            PrintValues(newTable, extractRows[3].ToString());
+                            //PrintValues(newTable, extractRows[3].ToString());
                         }
                         else
                         {
                             int i = dataExtraction.Rows.IndexOf(extractRows) + 1;
                             DataTable headerTable = new DataTable("intg_" + resultString + "_Header");
                             DataTable newTable = new DataTable("intg_" + resultString);
-
+                            
+                            newTable.TableName = checkSimilarNameInTableLayout(newTable.TableName);
+                            headerTable.TableName = newTable.TableName + "_Header";
                             prepareNewIntegralTables(headerTable, newTable);
 
                             int kTC = Convert.ToInt32(extractRows[4].ToString());
                             int kTV = Convert.ToInt32(extractRows[5].ToString());
 
-                            headerTable.Rows[1]["Values"] = extractRows[1].ToString();
-                            headerTable.Rows[2]["Values"] = resultString;
-                            headerTable.Rows[3]["Values"] = kTC + "/" + kTV;
+                            headerTable.Rows[1]["Values"] = extractRows[2].ToString().Split(",").First();
+                            headerTable.Rows[2]["Values"] = extractRows[1].ToString();
+                            headerTable.Rows[3]["Values"] = resultString;
+                            headerTable.Rows[4]["Values"] = kTC + "/" + kTV;
 
                             if (extractRows[7].ToString() != "R+, Í¬¿*˜" | extractRows[7].ToString() != "R-, Í¬¿*˜")
                             {
@@ -1655,13 +1687,13 @@ namespace dataEditor
                             }
 
                             Button newButton = new Button();
-                            createNewButtonOnTable(newButton, resultString, "intg_");
+                            createNewButtonOnTable(newButton, newTable.TableName);
                             mgFlowPanelResult.Controls.Add(newButton);
 
                             IntegralsDataSet.Tables.Add(newTable);
                             IntegralsDataSet.Tables.Add(headerTable);
 
-                            PrintValues(newTable, extractRows[3].ToString());
+                            //PrintValues(newTable, extractRows[3].ToString());
                         }
                     }
                     catch
@@ -1674,17 +1706,22 @@ namespace dataEditor
                                 int i = dataExtraction.Rows.IndexOf(extractRows) + 1;
                                 DataTable headerTable = new DataTable("intg_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" ÓÚ ").First() + "_Header");
                                 DataTable newTable = new DataTable("intg_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" ÓÚ ").First());
-
+                               
+                                newTable.TableName = checkSimilarNameInTableLayout(newTable.TableName);
+                                headerTable.TableName = newTable.TableName + "_Header";
                                 prepareNewIntegralTables(headerTable, newTable);
 
                                 int kTC = Convert.ToInt32(extractRows[4].ToString());
                                 int kTV = Convert.ToInt32(extractRows[5].ToString());
 
                                 headerTable.Rows[0]["Values"] = DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString();
-                                headerTable.Rows[1]["Values"] = extractRows[1].ToString();
-                                headerTable.Rows[2]["Values"] = resultString;
-                                headerTable.Rows[3]["Values"] = kTC + "/" + kTV;
+                                if (DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["FullName"].Value.ToString() == extractRows[2].ToString().Split(",").First())
+                                    headerTable.Rows[1]["Values"] = DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["FullName"].Value.ToString();
+                                headerTable.Rows[2]["Values"] = extractRows[1].ToString();
+                                headerTable.Rows[3]["Values"] = resultString;
+                                headerTable.Rows[4]["Values"] = kTC + "/" + kTV;
 
+                                int mesStrID = i - 1;
                                 while (i < dataExtraction.Rows.Count && dataExtraction.Rows[i][0] == DBNull.Value)
                                 {
                                     if (dataExtraction.Rows[i][7].ToString().Split(" ").Last() == "Í¬¿*˜")
@@ -1694,7 +1731,7 @@ namespace dataEditor
                                     if (dataExtraction.Rows[i][8].ToString() == "—ÛÏÏ‡")
                                     {
                                         DataRow newTableRow = newTable.NewRow();
-                                        newTableRow["measure"] = dataExtraction.Rows[i][7].ToString();
+                                        newTableRow["measure"] = dataExtraction.Rows[mesStrID][7].ToString();
                                         newTableRow["zone"] = dataExtraction.Rows[i][8].ToString();
                                         newTableRow["initial"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
                                         newTableRow["final"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
@@ -1702,19 +1739,20 @@ namespace dataEditor
                                         {
                                             newTableRow["consumption"] = (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) - decimal.Parse(Convert.ToString(dataExtraction.Rows[i][9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)))*kTC*kTV;
                                         }
+                                        mesStrID = i + 1;
                                         newTable.Rows.Add(newTableRow);
                                     }
                                     i++;
                                 }
 
                                 Button newButton = new Button();
-                                createNewButtonOnTable(newButton, DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" ÓÚ ").First(), "intg_");
+                                createNewButtonOnTable(newButton, newTable.TableName);
                                 mgFlowPanelResult.Controls.Add(newButton);
 
                                 IntegralsDataSet.Tables.Add(newTable);
                                 IntegralsDataSet.Tables.Add(headerTable);
 
-                                PrintValues(newTable, extractRows[3].ToString());
+                                //PrintValues(newTable, extractRows[3].ToString());
                             }
                             else
                             {
@@ -1722,15 +1760,19 @@ namespace dataEditor
                                 DataTable headerTable = new DataTable("intg_" + resultString + "_Header");
                                 DataTable newTable = new DataTable("intg_" + resultString);
 
+                                newTable.TableName = checkSimilarNameInTableLayout(newTable.TableName);
+                                headerTable.TableName = newTable.TableName + "_Header";
                                 prepareNewIntegralTables(headerTable, newTable);
 
                                 int kTC = Convert.ToInt32(extractRows[4].ToString());
                                 int kTV = Convert.ToInt32(extractRows[5].ToString());
 
-                                headerTable.Rows[1]["Values"] = extractRows[1].ToString();
-                                headerTable.Rows[2]["Values"] = resultString;
-                                headerTable.Rows[3]["Values"] = kTC + "/" + kTV;
+                                headerTable.Rows[1]["Values"] = extractRows[2].ToString().Split(",").First();
+                                headerTable.Rows[2]["Values"] = extractRows[1].ToString();
+                                headerTable.Rows[3]["Values"] = resultString;
+                                headerTable.Rows[4]["Values"] = kTC + "/" + kTV;
 
+                                int mesStrID = i-1;
                                 while (i < dataExtraction.Rows.Count && dataExtraction.Rows[i][0] == DBNull.Value)
                                 {
                                     if (dataExtraction.Rows[i][7].ToString().Split(" ").Last() == "Í¬¿*˜")
@@ -1740,7 +1782,7 @@ namespace dataEditor
                                     if (dataExtraction.Rows[i][8].ToString() == "—ÛÏÏ‡")
                                     {
                                         DataRow newTableRow = newTable.NewRow();
-                                        newTableRow["measure"] = dataExtraction.Rows[i][7].ToString();
+                                        newTableRow["measure"] = dataExtraction.Rows[mesStrID][7].ToString();
                                         newTableRow["zone"] = dataExtraction.Rows[i][8].ToString();
                                         newTableRow["initial"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
                                         newTableRow["final"] = decimal.Parse(Convert.ToString(dataExtraction.Rows[i][10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
@@ -1748,19 +1790,20 @@ namespace dataEditor
                                         {
                                             newTableRow["consumption"] = (decimal.Parse(Convert.ToString(dataExtraction.Rows[i][10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)) - decimal.Parse(Convert.ToString(dataExtraction.Rows[i][9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart)))*kTC*kTV;
                                         }
+                                        mesStrID = i+1;
                                         newTable.Rows.Add(newTableRow);
                                     }
                                     i++;
                                 }
 
                                 Button newButton = new Button();
-                                createNewButtonOnTable(newButton, resultString, "intg_");
+                                createNewButtonOnTable(newButton, newTable.TableName);
                                 mgFlowPanelResult.Controls.Add(newButton);
 
                                 IntegralsDataSet.Tables.Add(newTable);
                                 IntegralsDataSet.Tables.Add(headerTable);
 
-                                PrintValues(newTable, extractRows[3].ToString());
+                                //PrintValues(newTable, extractRows[3].ToString());
                             }
                         }
                         catch
@@ -1772,13 +1815,31 @@ namespace dataEditor
             }
         }
 
-        private void createNewButtonOnTable(Button newButton, string name, string type)
+        private string checkSimilarNameInTableLayout(string newTableName)
+        {
+            int existCount = 0;
+            foreach (Button buttons in mgFlowPanelResult.Controls)
+            {
+                if(buttons.Text.Split("#").First() == newTableName)
+                {
+                    existCount++;
+                }
+            }
+            if (existCount > 0)
+            {
+                newTableName += "#" + (existCount + 1);
+            }
+            return newTableName;
+        }
+
+
+        private void createNewButtonOnTable(Button newButton, string name)
         {
             ComponentResourceManager resources = new ComponentResourceManager(typeof(MainForm));
 
-            newButton.Text = type + name;
+            newButton.Text = name;
             newButton.FlatStyle = FlatStyle.Flat;
-            newButton.Image = ((System.Drawing.Image)(resources.GetObject("mgOpenDataTable.Image")));
+            newButton.Image = (Image)resources.GetObject("mgOpenDataTable.Image");
             newButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             newButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             newButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -1807,19 +1868,52 @@ namespace dataEditor
                 {
                     case "intg":
                         SearchRowName = SearchDGV(mgDataViewer, IntegralsDataSet.Tables[buttons.Text + "_header"].Rows[0][1].ToString(), "Agreement");
+                        if (SearchRowName != -1)
+                        {
+                            if (mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].GetType().Name != "DataGridViewButtonCell")
+                            {
+                                DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
+                                btnCell.UseColumnTextForButtonValue = false;
+                                btnCell.ToolTipText = "intg_" + mgDataViewer.Rows[SearchRowName].Cells["Agreement"].Value.ToString().Split(" ÓÚ ").First();
+                                mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])] = btnCell;
+                                listOfButtons.Add(buttons);
+                            }
+                            else
+                            {
+                                if (!mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].ToolTipText.Contains('+') &&
+                                    !mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].ToolTipText.Contains("intg_"))
+                                {
+                                    mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].ToolTipText += "+" + buttons.Text;
+                                    listOfButtons.Add(buttons);
+                                }
+                            }
+                        }
                         break;
                     case "hrs":
                         SearchRowName = SearchDGV(mgDataViewer, HoursDataSet.Tables[buttons.Text + "_header"].Rows[0][1].ToString(), "Agreement");
+                        if (SearchRowName != -1)
+                        {
+                            if (mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].GetType().Name != "DataGridViewButtonCell")
+                            {
+                                DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
+                                btnCell.UseColumnTextForButtonValue = false;
+                                btnCell.ToolTipText = "hrs_" + mgDataViewer.Rows[SearchRowName].Cells["Agreement"].Value.ToString().Split(" ÓÚ ").First();
+                                mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])] = btnCell;
+                                listOfButtons.Add(buttons);
+                            }
+                            else
+                            {
+                                if (!mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].ToolTipText.Contains('+') &&
+                                    !mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].ToolTipText.Contains("hrs_"))
+                                {
+                                    mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].ToolTipText += "+" + buttons.Text;
+                                    listOfButtons.Add(buttons);
+                                }
+                            }
+                        }
                         break;
                 }
-                if(SearchRowName != -1)
-                {
-                    DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
-                    btnCell.UseColumnTextForButtonValue = false;
-                    btnCell.ToolTipText = "hrs_" + mgDataViewer.Rows[SearchRowName].Cells["Agreement"].Value.ToString().Split(" ÓÚ ").First();
-                    mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])] = btnCell;
-                    listOfButtons.Add(buttons);
-                }
+
 
                 string tempBtnName = buttons.Text.Split("_").Last();
                 foreach (char c in tempBtnName)
@@ -1837,18 +1931,31 @@ namespace dataEditor
                 int SearchRowNumCC = SearchDGV(mgDataViewer, tempBtnName, "NumCC");
                 if (SearchRowNumCC != -1)
                 {
-                    DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
-                    btnCell.UseColumnTextForButtonValue = false;
-                    btnCell.ToolTipText = buttons.Text;
-                    mgDataViewer.Rows[SearchRowNumCC].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])] = btnCell;
-                    listOfButtons.Add(buttons);
+                    if (mgDataViewer.Rows[SearchRowNumCC].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].GetType().Name != "DataGridViewButtonCell")
+                    {
+                        DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
+                        btnCell.UseColumnTextForButtonValue = false;
+                        btnCell.ToolTipText = buttons.Text;
+                        mgDataViewer.Rows[SearchRowNumCC].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])] = btnCell;
+                        listOfButtons.Add(buttons);
+                    }
+                    else
+                    {
+                        if (!mgDataViewer.Rows[SearchRowNumCC].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].ToolTipText.Contains('+'))
+                        {
+                            mgDataViewer.Rows[SearchRowNumCC].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].ToolTipText += "+" + buttons.Text;
+                            listOfButtons.Add(buttons);
+                        }
+                    }
                     switch (buttons.Text.Split("_").First())
                     {
                         case "intg":
                             IntegralsDataSet.Tables[buttons.Text + "_header"].Rows[0][1] = mgDataViewer.Rows[SearchRowNumCC].Cells["Agreement"].Value.ToString();
+                            IntegralsDataSet.Tables[buttons.Text + "_header"].Rows[0][1] = mgDataViewer.Rows[SearchRowNumCC].Cells["FullName"].Value.ToString();
                             break;
                         case "hrs":
                             HoursDataSet.Tables[buttons.Text + "_header"].Rows[0][1] = mgDataViewer.Rows[SearchRowNumCC].Cells["Agreement"].Value.ToString();
+                            HoursDataSet.Tables[buttons.Text + "_header"].Rows[0][1] = mgDataViewer.Rows[SearchRowNumCC].Cells["FullName"].Value.ToString();
                             break;
                     }
                 }
@@ -1859,8 +1966,9 @@ namespace dataEditor
                 mgFlowPanelResult.Controls.Remove(removed);
             }
 
-            splitContainer_inside_vertical.SplitterDistance = splitContainer_inside_vertical.SplitterDistance - (max/4);
-            splitContainer_inside_vertical.Panel2MinSize = max+50;
+            mgSplitContainer_inside_vertical.SplitterDistance = mgSplitContainer_inside_vertical.SplitterDistance - (max/4);
+            mgSplitContainer_inside_vertical.Panel2MinSize = max+50;
+            mgDataViewer.Refresh();
         }
 
         private static void prepareNewIntegralTables(DataTable headerTable, DataTable newTable)
@@ -1871,16 +1979,14 @@ namespace dataEditor
             headerTable.Columns.Add(hdrColumn1);
             headerTable.Columns.Add(hdrColumn2);
 
-            for (int i = 0; i < 4; i++)
+            List<string> headersRowName = new List<string>() { "ƒÓ„Ó‚Ó:", "¿·ÓÌÂÌÚ:", "“Ó˜Í‡ Û˜∏Ú‡:", "œ” π:", " ““/ “Õ:" };
+
+            for (int i = 0; i < 5; i++)
             {
                 DataRow newRow = headerTable.NewRow();
+                newRow["Header"] = headersRowName[i];
                 headerTable.Rows.Add(newRow);
             }
-
-            headerTable.Rows[0]["Header"] = "ƒÓ„Ó‚Ó:";
-            headerTable.Rows[1]["Header"] = "“Ó˜Í‡ Û˜∏Ú‡:";
-            headerTable.Rows[2]["Header"] = "œ” π:";
-            headerTable.Rows[3]["Header"] = " ““/ “Õ:";
 
             DataColumn Column1 = new DataColumn("measure");
             DataColumn Column2 = new DataColumn("zone");
@@ -1923,6 +2029,7 @@ namespace dataEditor
 
         private void mgDataViewer_MouseDown(object sender, MouseEventArgs e)
         {
+            tableRemove = null;
             DataGridView.HitTestInfo hittest = mgDataViewer.HitTest(e.X, e.Y);
             if (hittest.ColumnIndex == mgDataViewer.Columns["dataTable"].Index && hittest.RowIndex != -1)
             {
@@ -1944,6 +2051,8 @@ namespace dataEditor
             }
         }
 
+        string btnMoveName = null;
+
         private void mgDataViewer_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             if (mgDataViewer.RectangleToScreen(e.RowBounds).Contains(MousePosition))
@@ -1951,13 +2060,19 @@ namespace dataEditor
                 var r = e.RowBounds; r.Width -= 1; r.Height -= 2;
                 switch (mgDataViewer.Rows[e.RowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].GetType().Name)
                 {
-
                     case "DataGridViewButtonCell":
-                        //e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, Color.Red)), r);
-                        //e.Graphics.DrawRectangle(new Pen(Color.Red), r);
+                        
+                        if (!mgDataViewer.Rows[e.RowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].ToolTipText.Contains('+') &&
+                            mgDataViewer.Rows[e.RowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].ToolTipText.Split("_").First() != btnMoveName.Split("_").First())
+                        {
+                            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+                            e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, Color.Blue)), r);
+                            e.Graphics.DrawRectangle(new Pen(Color.Blue), r);
+                        }
                         break;
 
                     case "DataGridViewTextBoxCell":
+                        e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
                         e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, Color.Blue)), r);
                         e.Graphics.DrawRectangle(new Pen(Color.Blue), r);
                         break;
@@ -1996,6 +2111,8 @@ namespace dataEditor
             if (e.Data.GetDataPresent(typeof(Button)))
             {
                 e.Effect = DragDropEffects.Move;
+                var table = (Button)e.Data.GetData(typeof(Button));
+                btnMoveName = table.Text;
                 mgDataViewer.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
             }
         }
@@ -2010,7 +2127,7 @@ namespace dataEditor
             if (e.Data.GetDataPresent(typeof(DataGridViewButtonCell)))
             {
                 Button newButton = new Button();
-                createNewButtonOnTable(newButton, btnTable.ToolTipText, "");
+                createNewButtonOnTable(newButton, btnTable.ToolTipText);
                 _destination.Controls.Add(newButton);
 
                 DataGridViewTextBoxCell empty = new DataGridViewTextBoxCell();
@@ -2071,8 +2188,20 @@ namespace dataEditor
                     }
                     else
                     {
-                        mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
-                        mgDataViewer.Refresh();
+                        if (!mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].ToolTipText.Contains('+') &&
+                            mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].ToolTipText.Split("_").First() != table.Text.Split("_").First())
+                        {
+                            mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].ToolTipText += "+" + table.Text;
+                            mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+                            mgDataViewer.Refresh();
+
+                            mgFlowPanelResult.Controls.Remove((Button)e.Data.GetData(typeof(Button)));
+                        }
+                        else
+                        {
+                            mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+                            mgDataViewer.Refresh();
+                        }
                     }
                 }
 
@@ -2087,47 +2216,46 @@ namespace dataEditor
             headerTable.Columns.Add(Column1);
             headerTable.Columns.Add(Column2);
 
-            for (int i =0; i <4; i++)
+            List<string> headersRowName = new List<string>() { "ƒÓ„Ó‚Ó:", "¿·ÓÌÂÌÚ:", "“Ó˜Í‡ Û˜∏Ú‡:", "œ” π:", " ““/ “Õ:" };
+
+            for (int i =0; i <5; i++)
             {
                 DataRow newRow = headerTable.NewRow();
+                newRow["Header"] = headersRowName[i];
                 headerTable.Rows.Add(newRow);
             }
-
-            headerTable.Rows[0]["Header"] = "ƒÓ„Ó‚Ó:";
-            headerTable.Rows[1]["Header"] = "“Ó˜Í‡ Û˜∏Ú‡:";
-            headerTable.Rows[2]["Header"] = "œ” π:";
-            headerTable.Rows[3]["Header"] = " ““/ “Õ:";
         }
 
-        private void ShowTableInDataGridView(object sender, EventArgs e)
+        private void ShowTable(string text)
         {
             Form TableView = new Form();
             DataGridView headerDataGridView = new DataGridView();
             DoubleBufferedDataGridView tablesDataGridView = new DoubleBufferedDataGridView();
             SettingsNewFormTablesResult(TableView, tablesDataGridView, headerDataGridView);
 
-            var button = (Button)sender;
             int hSize = tablesDataGridView.Size.Height;
 
-            switch (button.Text.Split("_").First())
+            switch (text.Split("_").First())
             {
                 case "intg":
                     tablesDataGridView.DataSource = IntegralsDataSet;
                     headerDataGridView.DataSource = IntegralsDataSet;
-                    hSize = 150+(IntegralsDataSet.Tables[button.Text].Rows.Count*19);
+                    hSize = 147 + ((IntegralsDataSet.Tables[text].Rows.Count * tablesDataGridView.RowTemplate.Height) + tablesDataGridView.ColumnHeadersHeight);
+                    TableView.MinimumSize = new Size(TableView.Width, hSize);
                     break;
                 case "hrs":
                     tablesDataGridView.DataSource = HoursDataSet;
                     headerDataGridView.DataSource = HoursDataSet;
                     hSize = 860;
+                    TableView.MinimumSize = new Size(TableView.Width, hSize / 2);
                     break;
             }
 
 
-            tablesDataGridView.DataMember = button.Text;
+            tablesDataGridView.DataMember = text;
             tablesDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
 
-            headerDataGridView.DataMember = button.Text + "_Header";
+            headerDataGridView.DataMember = text + "_Header";
 
             headerDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             headerDataGridView.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -2141,7 +2269,7 @@ namespace dataEditor
             }
             else
             {
-                TableView.Text = button.Text.Split("_").Last() + " extracted data research";
+                TableView.Text = text.Split("_").Last() + " extracted data research";
             }
             TableView.Size = new Size(480, hSize);
 
@@ -2161,7 +2289,7 @@ namespace dataEditor
             int lim1 = 0;
             int lim2 = 0;
             int start = 0;
-            foreach  (DataGridViewRow rows in tablesDataGridView.Rows)
+            foreach (DataGridViewRow rows in tablesDataGridView.Rows)
             {
                 if (start >= 24)
                 {
@@ -2190,61 +2318,39 @@ namespace dataEditor
             tablesDataGridView.RowPrePaint -= new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.tablesDataGridView_RowPrePaint);
         }
 
+        private void ShowTableInDataGridView(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+            string text = button.Text;
+            ShowTable(text);
+        }
+
+        private void ShowSelectedTableInDataGridView(object sender, EventArgs e)
+        {
+            var button = (ToolStripItem)sender;
+            string text = button.Text;
+            ShowTable(text);
+        }
+
         private void mgDataViewer_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if(e.ColumnIndex == mgDataViewer.Columns["dataTable"].Index && mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell")
             {
-                Form TableView = new Form();
-                DoubleBufferedDataGridView tablesDataGridView = new DoubleBufferedDataGridView();
-                DataGridView headerDataGridView = new DataGridView();
-                SettingsNewFormTablesResult(TableView, tablesDataGridView, headerDataGridView);
+                contextMenuOpenTable.Items.Clear();
 
-                var button = (DataGridViewButtonCell)mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex];
-                int hSize = tablesDataGridView.Size.Height;
-
-                switch (button.ToolTipText.Split("_").First())
+                if (e.ColumnIndex == mgDataViewer.Columns["dataTable"].Index && mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText.Contains('+'))
                 {
-                    case "intg":
-                        tablesDataGridView.DataSource = IntegralsDataSet;
-                        headerDataGridView.DataSource = IntegralsDataSet;
-                        hSize = 150 + (IntegralsDataSet.Tables[button.ToolTipText].Rows.Count * 19);
-                        break;
-                    case "hrs":
-                        tablesDataGridView.DataSource = HoursDataSet;
-                        headerDataGridView.DataSource = HoursDataSet;
-                        hSize = 860;
-                        break;
-                }
-                       
-                tablesDataGridView.DataMember = button.ToolTipText;
-                tablesDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-                
-                headerDataGridView.DataMember = button.ToolTipText + "_Header";
-
-                headerDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-                headerDataGridView.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                headerDataGridView.Columns[0].Resizable = DataGridViewTriState.False;
-                headerDataGridView.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-
-
-                int SearchRowNumCC = SearchDGV(mgDataViewer, headerDataGridView.Rows[2].Cells[1].Value.ToString(), "NumCC");
-                if (SearchRowNumCC != -1)
-                {
-                    TableView.Text = mgDataViewer.Rows[SearchRowNumCC].Cells["FullName"].Value.ToString();
+                    var pos = mgDataViewer.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, false);
+                    contextMenuOpenTable.Items.Add(mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText.Split("+").First(), imgListData.Images["ShowDataPreview.png"], ShowSelectedTableInDataGridView);
+                    contextMenuOpenTable.Items.Add(mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText.Split("+").Last(), imgListData.Images["ShowDataPreview.png"], ShowSelectedTableInDataGridView);
+                    contextMenuOpenTable.Show(mgDataViewer, new Point(pos.X+10, pos.Y+10));
                 }
                 else
                 {
-                    TableView.Text = button.ToolTipText.Split("_").Last() + " extracted data research";
+                    var button = (DataGridViewButtonCell)mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                    string text = button.ToolTipText;
+                    ShowTable(text);
                 }
-
-                TableView.Size = new Size(480, hSize);
-
-                foreach (DataGridViewColumn cols in tablesDataGridView.Columns)
-                {
-                    cols.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-                }
-                tablesDataGridView.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.tablesDataGridView_RowPrePaint);
-                TableView.ShowDialog();
             }
         }
 
@@ -2314,7 +2420,7 @@ namespace dataEditor
             layoutPanel.Dock = DockStyle.Fill;
             layoutPanel.ColumnCount = 1;
             layoutPanel.RowCount = 2;
-            layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 82F));
+            layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             layoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
 
             TableView.Controls.Add(layoutPanel);
@@ -3593,8 +3699,8 @@ namespace dataEditor
 
         private void openPDFviewer_Click(object sender, EventArgs e)
         {
-             pdfDocument pdfViewerForm = new pdfDocument();
-             pdfViewerForm.Show();
+            FormType2 formType2 = new FormType2();
+            formType2.Show();
         }
 
         private void dataViewer_DragDrop(object sender, DragEventArgs e)
@@ -4427,7 +4533,10 @@ namespace dataEditor
             {
                 if (!Convert.ToString(dictRow.Cells["Status"].Value).Equals("–‡ÒÚÓ„ÌÛÚ") && Convert.ToBoolean(dictRow.Cells["DocTC"].Value))
                 {
-                    mgDataViewer.Rows.Add(idRow.ToString(), dictRow.Cells["Agreement"].Value,
+                    mgDataViewer.Rows.Add(
+                        idRow.ToString(),
+                        "",
+                        dictRow.Cells["Agreement"].Value,
                         dictRow.Cells["FullName"].Value,
                         dictRow.Cells["DateAgreement"].Value,
                         dictRow.Cells["Type"].Value,
@@ -4498,25 +4607,36 @@ namespace dataEditor
         private void mgDataViewer_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
             ComponentResourceManager resources = new ComponentResourceManager(typeof(MainForm));
-            Image imgOpenFolder = ((Image)(resources.GetObject("mgBtnOpenFolder.Image")));
-            Image imgDataTable = ((Image)(resources.GetObject("mgOpenDataTable.Image")));
-            Image imgDataCalculation = ((Image)(resources.GetObject("mgData—alculation.Image")));
-            Image imgDataAct = ((Image)(resources.GetObject("mgDataAct.Image")));
+            Image imgOpenFolder = (Image)resources.GetObject("mgBtnOpenFolder.Image");
+            //Image imgDataTable = (Image)resources.GetObject("mgOpenDataTable.Image");
+            Image imgDataCalculation = (Image)resources.GetObject("mgData—alculation.Image");
+            Image imgDataAct = (Image)resources.GetObject("mgDataAct.Image");
 
             if (e.RowIndex < 0)
                 return;
 
             if (mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell" && e.ColumnIndex == mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"]))
             {
-                e.Paint(e.CellBounds, DataGridViewPaintParts.All);
-
-                var w = imgDataTable.Width;
-                var h = imgDataTable.Height;
-                var x = e.CellBounds.Left + (e.CellBounds.Width - w) / 2;
-                var y = e.CellBounds.Top + (e.CellBounds.Height - h) / 1;
-
-                e.Graphics.DrawImage(imgDataTable, new Rectangle(x, y - 2, w, h));
-                e.Handled = true;
+                if (!mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText.Contains('+')) 
+                {
+                    e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+                    var w = imgListData.Images["ShowDataPreview.png"].Width;
+                    var h = imgListData.Images["ShowDataPreview.png"].Height;
+                    var x = e.CellBounds.Left + (e.CellBounds.Width - w) / 2;
+                    var y = e.CellBounds.Top + (e.CellBounds.Height - h) / 1;
+                    e.Graphics.DrawImage(imgListData.Images["ShowDataPreview.png"], new Rectangle(x, y - 2, w, h));
+                    e.Handled = true;
+                }
+                else
+                {
+                    e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+                    var w = imgListData.Images["TableGroup.png"].Width;
+                    var h = imgListData.Images["TableGroup.png"].Height;
+                    var x = e.CellBounds.Left + (e.CellBounds.Width - w) / 2;
+                    var y = e.CellBounds.Top + (e.CellBounds.Height - h) / 1;
+                    e.Graphics.DrawImage(imgListData.Images["TableGroup.png"], new Rectangle(x, y - 2, w, h));
+                    e.Handled = true;
+                }
             }
             if (mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell" && e.ColumnIndex == mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataCalculation"]))
             {
@@ -4589,6 +4709,64 @@ namespace dataEditor
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SettingsForm.Show();
+        }
+
+        private void mgData—alculation_Click(object sender, EventArgs e)
+        {
+            FormType1 formType1 = new FormType1();
+            formType1.Show();
+        }
+
+        private void createResultForType1()
+        {
+
+        }
+
+        private void mgDataAct_Click(object sender, EventArgs e)
+        {
+            pdfDocument pdfViewerForm = new pdfDocument();
+            pdfViewerForm.Show();
+        }
+
+        private void mgOpenDataTable_Click(object sender, EventArgs e)
+        {
+            FormType3 formType3 = new FormType3();
+            formType3.Show();
+        }
+
+        private void mgDataViewer_SelectionChanged(object sender, EventArgs e)
+        {
+            for (int i = 0; i < ResourcesTreeView.Nodes.Count; i++)
+                ResourcesTreeView.Nodes[i].Remove();
+
+            ResourcesTreeView.BeginUpdate();
+            ResourcesTreeView.Nodes.Add(mgDataViewer.Rows[mgDataViewer.CurrentCell.RowIndex].Cells["Agreement"].Value.ToString());
+            ResourcesTreeView.EndUpdate();
+
+            if (mgDataViewer.Rows[mgDataViewer.CurrentCell.RowIndex].Cells["dataTable"].GetType().Name == "DataGridViewButtonCell")
+            {
+                TreeNode parentNode = ResourcesTreeView.SelectedNode ?? ResourcesTreeView.Nodes[0];
+                if (parentNode != null)
+                {
+                    if (mgDataViewer.Rows[mgDataViewer.CurrentCell.RowIndex].Cells["dataTable"].ToolTipText.Contains('+'))
+                    {
+                        parentNode.Nodes.Add(mgDataViewer.Rows[mgDataViewer.CurrentCell.RowIndex].Cells["dataTable"].ToolTipText.Split("+").First());
+                        parentNode.Nodes[0].ImageIndex = 1;
+                        parentNode.Nodes[0].SelectedImageIndex = 1;
+                        parentNode.Nodes.Add(mgDataViewer.Rows[mgDataViewer.CurrentCell.RowIndex].Cells["dataTable"].ToolTipText.Split("+").Last());
+                        parentNode.Nodes[1].ImageIndex = 1;
+                        parentNode.Nodes[1].SelectedImageIndex = 1;
+                        ResourcesTreeView.ExpandAll();
+                    }
+                    else
+                    {
+                        parentNode.Nodes.Add(mgDataViewer.Rows[mgDataViewer.CurrentCell.RowIndex].Cells["dataTable"].ToolTipText);
+                        parentNode.Nodes[0].ImageIndex = 1;
+                        parentNode.Nodes[0].SelectedImageIndex = 1;
+                        ResourcesTreeView.ExpandAll();
+                    }
+                }
+            }
         }
     }
     public static class ExtensionMethods

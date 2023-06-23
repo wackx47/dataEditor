@@ -26,6 +26,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="RELEASE-NOTES.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="RELEASE-NOTES.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <COMReference Include="Microsoft.Office.Interop.Excel">
       <WrapperTool>tlbimp</WrapperTool>
       <VersionMinor>9</VersionMinor>

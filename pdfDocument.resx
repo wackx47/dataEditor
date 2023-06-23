@@ -110,7 +110,7 @@
 </value>
   </data>
   <data name="label9.Text" xml:space="preserve">
-    <value>              Настоящий Акт составлен о том, что согласно договору купли-продажи электрической энергии (мощности) с владельцем объекта микрогенерации Продавец передал Покупателю электрическую энергию (мощность) в количестве и на сумму:
+    <value>Настоящий Акт составлен о том, что согласно договору купли-продажи электрической энергии (мощности) с владельцем объекта микрогенерации Продавец передал Покупателю электрическую энергию (мощность) в количестве и на сумму:
 </value>
   </data>
   <metadata name="ID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -136,5 +136,8 @@
   </metadata>
   <metadata name="CostWithNDS.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>57</value>
   </metadata>
 </root>

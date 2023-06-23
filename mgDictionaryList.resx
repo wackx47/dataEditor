@@ -162,10 +162,11 @@
   <data name="dictBtnExportToExcel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACpSURBVDhPY6A6kJeXV4AySQdAzQ5A/IosQxQVFW2BGl8q
-        KSk5QYWIBxRpBgGgAVeB+D8e/EdBQeEOkG6UkZHhhGpDACS/O0CFUICWlhYbULMp0JAtQPoYWYbAANSQ
-        BigXFSAZgjMWgJrNgPK3oVxMgE8zCKirq/MC1fyAckkHUBfcgnJJB8Aw2ArE9VAucQAaC2ZQzUexxgI+
-        ANRUAwo4kM0ka6YxYGAAAIzWMrpMNLX+AAAAAElFTkSuQmCC
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD2SURBVDhPpVI7DoJAFNxrGBaWzzlMuIOxQhp7GxMLWz2J
+        tYW1eAYKE41WSk3nCXDeyiOugRXjJJPhbebN20dW9EEQBAVYtbCoLXa0NDasLXaQ0fO8QZvWFjvI2MXa
+        YgcZ/73Bfz/xK5RSseu6j5YJ5pTkEItJdtHKgGGIfUromPb6JIVoIzUlWSnSrNLKITQZxhFuMYU5D8PQ
+        831/h++5EZDuF7pJB5CiJpCBjI7jSDSeUG+gN1AZAQwKeAcHENE0oxpc8lkTQI2v6991zeCAKIpc6BGr
+        bHF2pVWMgC5wAHQFnqWUDjQH1z8FdLFPQNcrY1pemxBP+rmcCMZzkc0AAAAASUVORK5CYII=
 </value>
   </data>
   <data name="dictBtnAddElm.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

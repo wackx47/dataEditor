@@ -26,13 +26,22 @@ namespace dataEditor
             //universalReaderForm.Text = ((AssemblyProductAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false)[0]).Product + "  ver." + Application.ProductVersion;
             this.labelVersion.Text = String.Format("version {0}", Application.ProductVersion);
             this.labelBuild.Text = String.Format("build: {0}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-            if (File.Exists(Environment.CurrentDirectory + "\\RELEASE-NOTES.txt"))
-                this.ChangeLogBox.Text = File.ReadAllText(Environment.CurrentDirectory + "\\RELEASE-NOTES.txt");
+            this.navCmbxAccessList.Text = "MKG_REALESE_CLOSE";
+
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "dataEditor.RELEASE-NOTES.txt";
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                ChangeLogBox.Text = reader.ReadToEnd();
+            }
         }
 
 
         private void startUR_Click(object sender, EventArgs e)
         {
+            //universalReaderForm.SectionsControl.TabPages[0].Parent = null;
             universalReaderForm.Show();
             this.Hide();
         }
