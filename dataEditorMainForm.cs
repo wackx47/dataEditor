@@ -49,6 +49,7 @@ using System.Drawing;
 using static NPOI.HSSF.Util.HSSFColor;
 using System.Security.Policy;
 using static System.Windows.Forms.LinkLabel;
+using System.Drawing.Drawing2D;
 
 namespace dataEditor
 {
@@ -1162,6 +1163,7 @@ namespace dataEditor
             HoursFile_processing(dataExtraction);
             IntegralsFile_processing(dataExtraction);
             workWithButtonsIntoFlowPanel();
+            prepareDataRows();
         }
 
         private static int withoutZeroNumCC(string searchValue)
@@ -1960,7 +1962,6 @@ namespace dataEditor
                     }
                 }
             }
-
             foreach(Button removed in listOfButtons)
             {
                 mgFlowPanelResult.Controls.Remove(removed);
@@ -1970,6 +1971,25 @@ namespace dataEditor
             mgSplitContainer_inside_vertical.Panel2MinSize = max+50;
             mgDataViewer.Refresh();
         }
+
+        private void prepareDataRows()
+        {
+            foreach (DataGridViewRow rows in mgDataViewer.Rows)
+            {
+                if (rows.Cells["dataTable"].GetType().Name == "DataGridViewButtonCell")
+                {
+                    rows.Cells["SelectID"].Value = true;
+                    if (Convert.ToString(rows.Cells["TariffZone"].Value)[0].ToString() == "1" && rows.Cells["dataTable"].ToolTipText.Contains("intg"))
+                    {
+                        DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
+                        btnCell.UseColumnTextForButtonValue = false;
+                        btnCell.ToolTipText = "Preview File";
+                        rows.Cells["dataCalculation"] = btnCell;
+                    }
+                }
+            }
+        }
+
 
         private static void prepareNewIntegralTables(DataTable headerTable, DataTable newTable)
         {
@@ -2351,6 +2371,112 @@ namespace dataEditor
                     string text = button.ToolTipText;
                     ShowTable(text);
                 }
+            }
+
+            if (e.ColumnIndex == mgDataViewer.Columns["dataCalculation"].Index && mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell")
+            {
+                FormType1 formType1 = new FormType1();
+
+                DateTime date = DateTime.Now;
+                var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
+
+                int kTC = Convert.ToInt32(IntegralsDataSet.Tables[mgDataViewer.Rows[e.RowIndex].Cells["dataTable"].ToolTipText.ToString() + "_Header"].Rows[4][1].ToString().Split("/").First());
+                int kTV = Convert.ToInt32(IntegralsDataSet.Tables[mgDataViewer.Rows[e.RowIndex].Cells["dataTable"].ToolTipText.ToString() + "_Header"].Rows[4][1].ToString().Split("/").Last());
+                int kT = kTC * kTV;
+
+                int RowInDict = SearchDGV(DictionaryForm.dataGridDictionaryList, mgDataViewer.Rows[e.RowIndex].Cells["FullName"].Value.ToString(), "FullName");
+
+                formType1.lblAbonentName.Text = mgDataViewer.Rows[e.RowIndex].Cells["FullName"].Value.ToString();
+                formType1.lblAbonentINN.Text = DictionaryForm.dataGridDictionaryList.Rows[RowInDict].Cells["INN"].Value.ToString();
+                formType1.lblAbonentAddress.Text = DictionaryForm.dataGridDictionaryList.Rows[RowInDict].Cells["Address"].Value.ToString();
+                formType1.lblAbonentNumberCC.Text = mgDataViewer.Rows[e.RowIndex].Cells["NumCC"].Value.ToString();
+                formType1.lblAbonentType.Text = mgDataViewer.Rows[e.RowIndex].Cells["type"].Value.ToString();
+                formType1.lblAbonentKF.Text = (kT).ToString();
+                formType1.lblAbonentTarif.Text = mgDataViewer.Rows[e.RowIndex].Cells["TariffZone"].Value.ToString();
+                formType1.lblAbonentDateDay.Text = firstDayOfMonth.ToString("dd");
+                formType1.lblAbonentDateMonth.Text = date.ToString("MMMM");
+                formType1.lblAbonentDateYear.Text = date.ToString("yyyy");
+
+                formType1.txtConDateFirst.Text = firstDayOfMonth.ToString("d");
+                formType1.txtConDateLast.Text = lastDayOfMonth.ToString("d");
+
+                decimal SumConFirst = 0;
+                decimal SumConLast = 0;
+                decimal SumGenFirst = 0;
+                decimal SumGenLast = 0;
+
+                foreach (DataRow rows in IntegralsDataSet.Tables[mgDataViewer.Rows[e.RowIndex].Cells["dataTable"].ToolTipText.ToString()].Rows)
+                {
+                    if (rows[1].ToString() != "Ñóììà")
+                    {
+                        switch (rows[0].ToString())
+                        {
+                            case "A+, êÂò*÷":
+                                SumConFirst += decimal.Parse(rows[2].ToString());
+                                SumConLast += decimal.Parse(rows[3].ToString());
+                                break;
+
+                            case "A-, êÂò*÷":
+                                SumGenFirst += decimal.Parse(rows[2].ToString());
+                                SumGenLast += decimal.Parse(rows[3].ToString());
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        switch (rows[0].ToString())
+                        {
+                            case "A+, êÂò*÷":
+                                SumConFirst = decimal.Parse(rows[2].ToString());
+                                SumConLast = decimal.Parse(rows[3].ToString());
+                                break;
+
+                            case "A-, êÂò*÷":
+                                SumGenFirst = decimal.Parse(rows[2].ToString());
+                                SumGenLast = decimal.Parse(rows[3].ToString());
+                                break;
+                        }
+                    }
+                }
+
+                formType1.txtConFirst.Text = SumConFirst.ToString();
+                formType1.txtConLast.Text = SumConLast.ToString();
+                formType1.txtConSumm.Text = ((SumConLast - SumConFirst)* kT).ToString();
+                formType1.txtGenFirst.Text = SumGenFirst.ToString();
+                formType1.txtGenLast.Text = SumGenLast.ToString();
+                formType1.txtGenSumm.Text = ((SumGenLast - SumGenFirst)* kT).ToString();
+
+                formType1.lblsvncEEorem.Text = datsTreeView.Nodes["treeViewLine3"].Nodes["treeViewLine3e1val"].Text;
+                formType1.lblsvncPorem.Text = datsTreeView.Nodes["treeViewLine2"].Nodes["treeViewLine2e1val"].Text;
+                formType1.lblKF1.Text = datsTreeView.Nodes["treeViewLine1"].Nodes["treeViewLine1e1val"].Text;
+
+                decimal diffSell = ((SumConLast - SumConFirst) * kT) - ((SumGenLast - SumGenFirst) * kT);
+                decimal diffBuy = ((SumGenLast - SumGenFirst) * kT) - ((SumConLast - SumConFirst) * kT);
+
+                if (diffSell > 0)
+                {
+                    formType1.txtSELL.Text = diffSell.ToString();
+                    formType1.txtBUY.Text = "0";
+                }
+                else
+                {
+                    formType1.txtBUY.Text = diffBuy.ToString();
+                    formType1.txtSELL.Text = "0";
+                }
+
+                decimal k1 = decimal.Parse(formType1.lblsvncEEorem.Text);
+                decimal k2 = decimal.Parse(formType1.lblsvncPorem.Text);
+                decimal k3 = decimal.Parse(formType1.lblKF1.Text);
+
+                decimal Price = ((k1 + k2 * k3) / 1000);
+
+                formType1.lblResultPrice.Text = Price.ToString();
+
+                if (diffBuy > 0)
+                    formType1.lblResultCost.Text = (diffBuy * Price).ToString();
+
+                formType1.Show();
             }
         }
 
@@ -4535,7 +4661,11 @@ namespace dataEditor
                 {
                     mgDataViewer.Rows.Add(
                         idRow.ToString(),
-                        "",
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
                         dictRow.Cells["Agreement"].Value,
                         dictRow.Cells["FullName"].Value,
                         dictRow.Cells["DateAgreement"].Value,
@@ -4734,6 +4864,25 @@ namespace dataEditor
             formType3.Show();
         }
 
+        private void TitleInfoBorderColor(object sender, TableLayoutCellPaintEventArgs e)
+        {
+            var panel = sender as TableLayoutPanel;
+            e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+            var rectangle = e.CellBounds;
+            using (var pen = new Pen(Color.FromArgb(255,100,100,100), 1))
+            {
+                pen.Alignment = PenAlignment.Center;
+                pen.DashStyle = DashStyle.Solid;
+
+                if (e.Column == 0)
+                {
+                    var bottomLeft = new Point(e.CellBounds.Left, e.CellBounds.Bottom -11);
+                    var bottomRight = new Point(e.CellBounds.Right, e.CellBounds.Bottom -11);
+                    e.Graphics.DrawLine(pen, bottomLeft, bottomRight);
+                }
+            }
+        }
+
         private void mgDataViewer_SelectionChanged(object sender, EventArgs e)
         {
             for (int i = 0; i < ResourcesTreeView.Nodes.Count; i++)
@@ -4768,6 +4917,7 @@ namespace dataEditor
                 }
             }
         }
+
     }
     public static class ExtensionMethods
     {

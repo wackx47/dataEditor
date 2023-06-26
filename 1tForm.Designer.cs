@@ -32,23 +32,30 @@
             this.cpResultTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.label42 = new System.Windows.Forms.Label();
             this.label41 = new System.Windows.Forms.Label();
-            this.label54 = new System.Windows.Forms.Label();
-            this.label55 = new System.Windows.Forms.Label();
+            this.lblResultPrice = new System.Windows.Forms.Label();
+            this.lblResultCost = new System.Windows.Forms.Label();
             this.vResultTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.txtBUY = new System.Windows.Forms.TextBox();
+            this.txtSELL = new System.Windows.Forms.TextBox();
             this.label35 = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
             this.label37 = new System.Windows.Forms.Label();
-            this.label49 = new System.Windows.Forms.Label();
-            this.label50 = new System.Windows.Forms.Label();
             this.EntryDataTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.label38 = new System.Windows.Forms.Label();
             this.label39 = new System.Windows.Forms.Label();
             this.label40 = new System.Windows.Forms.Label();
-            this.label51 = new System.Windows.Forms.Label();
-            this.label52 = new System.Windows.Forms.Label();
-            this.label53 = new System.Windows.Forms.Label();
+            this.lblsvncEEorem = new System.Windows.Forms.Label();
+            this.lblsvncPorem = new System.Windows.Forms.Label();
+            this.lblKF1 = new System.Windows.Forms.Label();
             this.label34 = new System.Windows.Forms.Label();
             this.DataTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.txtGenSumm = new System.Windows.Forms.TextBox();
+            this.txtGenLast = new System.Windows.Forms.TextBox();
+            this.txtGenFirst = new System.Windows.Forms.TextBox();
+            this.txtConSumm = new System.Windows.Forms.TextBox();
+            this.txtConLast = new System.Windows.Forms.TextBox();
+            this.txtConFirst = new System.Windows.Forms.TextBox();
+            this.txtConDateLast = new System.Windows.Forms.TextBox();
             this.label23 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
@@ -58,14 +65,7 @@
             this.label29 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
-            this.label33 = new System.Windows.Forms.Label();
-            this.label43 = new System.Windows.Forms.Label();
-            this.label44 = new System.Windows.Forms.Label();
-            this.label45 = new System.Windows.Forms.Label();
-            this.label46 = new System.Windows.Forms.Label();
-            this.label47 = new System.Windows.Forms.Label();
-            this.label48 = new System.Windows.Forms.Label();
+            this.txtConDateFirst = new System.Windows.Forms.TextBox();
             this.InfoTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -79,16 +79,16 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
+            this.lblAbonentAddress = new System.Windows.Forms.Label();
+            this.lblAbonentNumberCC = new System.Windows.Forms.Label();
+            this.lblAbonentType = new System.Windows.Forms.Label();
+            this.lblAbonentKF = new System.Windows.Forms.Label();
+            this.lblAbonentTarif = new System.Windows.Forms.Label();
+            this.lblAbonentDateDay = new System.Windows.Forms.Label();
+            this.lblAbonentDateMonth = new System.Windows.Forms.Label();
+            this.lblAbonentDateYear = new System.Windows.Forms.Label();
+            this.lblAbonentName = new System.Windows.Forms.Label();
+            this.lblAbonentINN = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             this.cpResultTableLayout.SuspendLayout();
             this.vResultTableLayout.SuspendLayout();
@@ -108,11 +108,13 @@
             this.mainPanel.Controls.Add(this.DataTableLayout);
             this.mainPanel.Controls.Add(this.InfoTableLayout);
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainPanel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.mainPanel.Location = new System.Drawing.Point(5, 5);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Padding = new System.Windows.Forms.Padding(5);
-            this.mainPanel.Size = new System.Drawing.Size(577, 522);
+            this.mainPanel.Size = new System.Drawing.Size(577, 593);
             this.mainPanel.TabIndex = 0;
+            this.mainPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.mainPanel_Paint);
             // 
             // cpResultTableLayout
             // 
@@ -121,10 +123,10 @@
             this.cpResultTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.cpResultTableLayout.Controls.Add(this.label42, 0, 1);
             this.cpResultTableLayout.Controls.Add(this.label41, 0, 0);
-            this.cpResultTableLayout.Controls.Add(this.label54, 1, 0);
-            this.cpResultTableLayout.Controls.Add(this.label55, 1, 1);
+            this.cpResultTableLayout.Controls.Add(this.lblResultPrice, 1, 0);
+            this.cpResultTableLayout.Controls.Add(this.lblResultCost, 1, 1);
             this.cpResultTableLayout.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.cpResultTableLayout.Location = new System.Drawing.Point(5, 467);
+            this.cpResultTableLayout.Location = new System.Drawing.Point(5, 538);
             this.cpResultTableLayout.Name = "cpResultTableLayout";
             this.cpResultTableLayout.RowCount = 2;
             this.cpResultTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45F));
@@ -136,7 +138,7 @@
             // 
             this.label42.AutoSize = true;
             this.label42.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label42.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label42.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label42.Location = new System.Drawing.Point(1, 22);
             this.label42.Margin = new System.Windows.Forms.Padding(1);
             this.label42.Name = "label42";
@@ -149,7 +151,7 @@
             // 
             this.label41.AutoSize = true;
             this.label41.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label41.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label41.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label41.Location = new System.Drawing.Point(1, 1);
             this.label41.Margin = new System.Windows.Forms.Padding(1);
             this.label41.Name = "label41";
@@ -158,35 +160,35 @@
             this.label41.Text = "Цена, руб";
             this.label41.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label54
+            // lblResultPrice
             // 
-            this.label54.AutoSize = true;
-            this.label54.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label54.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label54.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label54.ForeColor = System.Drawing.Color.Firebrick;
-            this.label54.Location = new System.Drawing.Point(396, 1);
-            this.label54.Margin = new System.Windows.Forms.Padding(1);
-            this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(46, 19);
-            this.label54.TabIndex = 5;
-            this.label54.Text = "label54";
-            this.label54.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblResultPrice.AutoSize = true;
+            this.lblResultPrice.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblResultPrice.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblResultPrice.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblResultPrice.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblResultPrice.Location = new System.Drawing.Point(396, 1);
+            this.lblResultPrice.Margin = new System.Windows.Forms.Padding(1);
+            this.lblResultPrice.Name = "lblResultPrice";
+            this.lblResultPrice.Size = new System.Drawing.Size(105, 19);
+            this.lblResultPrice.TabIndex = 5;
+            this.lblResultPrice.Text = "lblResultPrice";
+            this.lblResultPrice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label55
+            // lblResultCost
             // 
-            this.label55.AutoSize = true;
-            this.label55.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label55.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label55.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label55.ForeColor = System.Drawing.Color.Firebrick;
-            this.label55.Location = new System.Drawing.Point(396, 22);
-            this.label55.Margin = new System.Windows.Forms.Padding(1);
-            this.label55.Name = "label55";
-            this.label55.Size = new System.Drawing.Size(52, 25);
-            this.label55.TabIndex = 6;
-            this.label55.Text = "label55";
-            this.label55.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblResultCost.AutoSize = true;
+            this.lblResultCost.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblResultCost.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblResultCost.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblResultCost.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblResultCost.Location = new System.Drawing.Point(396, 22);
+            this.lblResultCost.Margin = new System.Windows.Forms.Padding(1);
+            this.lblResultCost.Name = "lblResultCost";
+            this.lblResultCost.Size = new System.Drawing.Size(98, 25);
+            this.lblResultCost.TabIndex = 6;
+            this.lblResultCost.Text = "lblResultCost";
+            this.lblResultCost.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // vResultTableLayout
             // 
@@ -196,12 +198,12 @@
             this.vResultTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.vResultTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.vResultTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.vResultTableLayout.Controls.Add(this.txtBUY, 0, 1);
+            this.vResultTableLayout.Controls.Add(this.txtSELL, 0, 1);
             this.vResultTableLayout.Controls.Add(this.label35, 1, 0);
             this.vResultTableLayout.Controls.Add(this.label36, 2, 0);
             this.vResultTableLayout.Controls.Add(this.label37, 0, 1);
-            this.vResultTableLayout.Controls.Add(this.label49, 1, 1);
-            this.vResultTableLayout.Controls.Add(this.label50, 2, 1);
-            this.vResultTableLayout.Location = new System.Drawing.Point(5, 300);
+            this.vResultTableLayout.Location = new System.Drawing.Point(5, 351);
             this.vResultTableLayout.Name = "vResultTableLayout";
             this.vResultTableLayout.RowCount = 2;
             this.vResultTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65F));
@@ -210,11 +212,39 @@
             this.vResultTableLayout.TabIndex = 4;
             this.vResultTableLayout.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.mainTableLayoutGridBorder);
             // 
+            // txtBUY
+            // 
+            this.txtBUY.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtBUY.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtBUY.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtBUY.Location = new System.Drawing.Point(267, 47);
+            this.txtBUY.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtBUY.Name = "txtBUY";
+            this.txtBUY.ReadOnly = true;
+            this.txtBUY.Size = new System.Drawing.Size(117, 14);
+            this.txtBUY.TabIndex = 24;
+            this.txtBUY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtBUY.WordWrap = false;
+            // 
+            // txtSELL
+            // 
+            this.txtSELL.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtSELL.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSELL.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtSELL.Location = new System.Drawing.Point(130, 47);
+            this.txtSELL.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtSELL.Name = "txtSELL";
+            this.txtSELL.ReadOnly = true;
+            this.txtSELL.Size = new System.Drawing.Size(117, 14);
+            this.txtSELL.TabIndex = 23;
+            this.txtSELL.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtSELL.WordWrap = false;
+            // 
             // label35
             // 
             this.label35.AutoSize = true;
             this.label35.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label35.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label35.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label35.Location = new System.Drawing.Point(121, 1);
             this.label35.Margin = new System.Windows.Forms.Padding(1);
             this.label35.Name = "label35";
@@ -227,7 +257,7 @@
             // 
             this.label36.AutoSize = true;
             this.label36.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label36.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label36.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label36.Location = new System.Drawing.Point(258, 1);
             this.label36.Margin = new System.Windows.Forms.Padding(1);
             this.label36.Name = "label36";
@@ -240,7 +270,7 @@
             // 
             this.label37.AutoSize = true;
             this.label37.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label37.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label37.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label37.Location = new System.Drawing.Point(1, 43);
             this.label37.Margin = new System.Windows.Forms.Padding(1);
             this.label37.Name = "label37";
@@ -248,32 +278,6 @@
             this.label37.TabIndex = 2;
             this.label37.Text = "Итого";
             this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label49
-            // 
-            this.label49.AutoSize = true;
-            this.label49.BackColor = System.Drawing.Color.Transparent;
-            this.label49.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label49.Location = new System.Drawing.Point(121, 43);
-            this.label49.Margin = new System.Windows.Forms.Padding(1);
-            this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(135, 22);
-            this.label49.TabIndex = 3;
-            this.label49.Text = "label49";
-            this.label49.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label50
-            // 
-            this.label50.AutoSize = true;
-            this.label50.BackColor = System.Drawing.Color.Transparent;
-            this.label50.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label50.Location = new System.Drawing.Point(258, 43);
-            this.label50.Margin = new System.Windows.Forms.Padding(1);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(135, 22);
-            this.label50.TabIndex = 4;
-            this.label50.Text = "label50";
-            this.label50.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // EntryDataTableLayout
             // 
@@ -285,10 +289,10 @@
             this.EntryDataTableLayout.Controls.Add(this.label38, 0, 0);
             this.EntryDataTableLayout.Controls.Add(this.label39, 0, 1);
             this.EntryDataTableLayout.Controls.Add(this.label40, 0, 2);
-            this.EntryDataTableLayout.Controls.Add(this.label51, 1, 0);
-            this.EntryDataTableLayout.Controls.Add(this.label52, 1, 1);
-            this.EntryDataTableLayout.Controls.Add(this.label53, 1, 2);
-            this.EntryDataTableLayout.Location = new System.Drawing.Point(5, 372);
+            this.EntryDataTableLayout.Controls.Add(this.lblsvncEEorem, 1, 0);
+            this.EntryDataTableLayout.Controls.Add(this.lblsvncPorem, 1, 1);
+            this.EntryDataTableLayout.Controls.Add(this.lblKF1, 1, 2);
+            this.EntryDataTableLayout.Location = new System.Drawing.Point(5, 434);
             this.EntryDataTableLayout.Name = "EntryDataTableLayout";
             this.EntryDataTableLayout.RowCount = 3;
             this.EntryDataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
@@ -302,7 +306,7 @@
             // 
             this.label38.AutoSize = true;
             this.label38.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label38.Font = new System.Drawing.Font("Segoe UI", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label38.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label38.Location = new System.Drawing.Point(1, 1);
             this.label38.Margin = new System.Windows.Forms.Padding(1);
             this.label38.Name = "label38";
@@ -316,7 +320,7 @@
             // 
             this.label39.AutoSize = true;
             this.label39.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label39.Font = new System.Drawing.Font("Segoe UI", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label39.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label39.Location = new System.Drawing.Point(1, 30);
             this.label39.Margin = new System.Windows.Forms.Padding(1);
             this.label39.Name = "label39";
@@ -329,7 +333,7 @@
             // 
             this.label40.AutoSize = true;
             this.label40.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label40.Font = new System.Drawing.Font("Segoe UI", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label40.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label40.Location = new System.Drawing.Point(1, 59);
             this.label40.Margin = new System.Windows.Forms.Padding(1);
             this.label40.Name = "label40";
@@ -339,49 +343,52 @@
     " по первой ценовой категории, 1/час";
             this.label40.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label51
+            // lblsvncEEorem
             // 
-            this.label51.AutoSize = true;
-            this.label51.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label51.Location = new System.Drawing.Point(469, 1);
-            this.label51.Margin = new System.Windows.Forms.Padding(1);
-            this.label51.Name = "label51";
-            this.label51.Size = new System.Drawing.Size(95, 27);
-            this.label51.TabIndex = 3;
-            this.label51.Text = "label51";
-            this.label51.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblsvncEEorem.AutoSize = true;
+            this.lblsvncEEorem.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblsvncEEorem.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblsvncEEorem.Location = new System.Drawing.Point(469, 1);
+            this.lblsvncEEorem.Margin = new System.Windows.Forms.Padding(1);
+            this.lblsvncEEorem.Name = "lblsvncEEorem";
+            this.lblsvncEEorem.Size = new System.Drawing.Size(95, 27);
+            this.lblsvncEEorem.TabIndex = 3;
+            this.lblsvncEEorem.Text = "lblsvncEEorem";
+            this.lblsvncEEorem.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label52
+            // lblsvncPorem
             // 
-            this.label52.AutoSize = true;
-            this.label52.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label52.Location = new System.Drawing.Point(469, 30);
-            this.label52.Margin = new System.Windows.Forms.Padding(1);
-            this.label52.Name = "label52";
-            this.label52.Size = new System.Drawing.Size(95, 27);
-            this.label52.TabIndex = 4;
-            this.label52.Text = "label52";
-            this.label52.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblsvncPorem.AutoSize = true;
+            this.lblsvncPorem.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblsvncPorem.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblsvncPorem.Location = new System.Drawing.Point(469, 30);
+            this.lblsvncPorem.Margin = new System.Windows.Forms.Padding(1);
+            this.lblsvncPorem.Name = "lblsvncPorem";
+            this.lblsvncPorem.Size = new System.Drawing.Size(95, 27);
+            this.lblsvncPorem.TabIndex = 4;
+            this.lblsvncPorem.Text = "lblsvncPorem";
+            this.lblsvncPorem.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label53
+            // lblKF1
             // 
-            this.label53.AutoSize = true;
-            this.label53.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label53.Location = new System.Drawing.Point(469, 59);
-            this.label53.Margin = new System.Windows.Forms.Padding(1);
-            this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(95, 27);
-            this.label53.TabIndex = 5;
-            this.label53.Text = "label53";
-            this.label53.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblKF1.AutoSize = true;
+            this.lblKF1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblKF1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblKF1.Location = new System.Drawing.Point(469, 59);
+            this.lblKF1.Margin = new System.Windows.Forms.Padding(1);
+            this.lblKF1.Name = "lblKF1";
+            this.lblKF1.Size = new System.Drawing.Size(95, 27);
+            this.lblKF1.TabIndex = 5;
+            this.lblKF1.Text = "lblKF1";
+            this.lblKF1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label34
             // 
             this.label34.AutoSize = true;
-            this.label34.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label34.Location = new System.Drawing.Point(5, 181);
+            this.label34.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label34.Location = new System.Drawing.Point(5, 208);
             this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(164, 17);
+            this.label34.Size = new System.Drawing.Size(170, 16);
             this.label34.TabIndex = 2;
             this.label34.Text = "интервальные значения";
             // 
@@ -395,6 +402,13 @@
             this.DataTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.DataTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.DataTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.DataTableLayout.Controls.Add(this.txtGenSumm, 4, 3);
+            this.DataTableLayout.Controls.Add(this.txtGenLast, 3, 3);
+            this.DataTableLayout.Controls.Add(this.txtGenFirst, 2, 3);
+            this.DataTableLayout.Controls.Add(this.txtConSumm, 4, 2);
+            this.DataTableLayout.Controls.Add(this.txtConLast, 3, 2);
+            this.DataTableLayout.Controls.Add(this.txtConFirst, 2, 2);
+            this.DataTableLayout.Controls.Add(this.txtConDateLast, 3, 1);
             this.DataTableLayout.Controls.Add(this.label23, 0, 0);
             this.DataTableLayout.Controls.Add(this.label24, 1, 0);
             this.DataTableLayout.Controls.Add(this.label25, 2, 0);
@@ -404,34 +418,126 @@
             this.DataTableLayout.Controls.Add(this.label29, 0, 3);
             this.DataTableLayout.Controls.Add(this.label30, 1, 2);
             this.DataTableLayout.Controls.Add(this.label31, 1, 3);
-            this.DataTableLayout.Controls.Add(this.label32, 2, 1);
-            this.DataTableLayout.Controls.Add(this.label33, 3, 1);
-            this.DataTableLayout.Controls.Add(this.label43, 2, 2);
-            this.DataTableLayout.Controls.Add(this.label44, 3, 2);
-            this.DataTableLayout.Controls.Add(this.label45, 2, 3);
-            this.DataTableLayout.Controls.Add(this.label46, 3, 3);
-            this.DataTableLayout.Controls.Add(this.label47, 4, 2);
-            this.DataTableLayout.Controls.Add(this.label48, 4, 3);
-            this.DataTableLayout.Location = new System.Drawing.Point(5, 201);
+            this.DataTableLayout.Controls.Add(this.txtConDateFirst, 2, 1);
+            this.DataTableLayout.Location = new System.Drawing.Point(5, 228);
             this.DataTableLayout.Name = "DataTableLayout";
             this.DataTableLayout.RowCount = 4;
-            this.DataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.DataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.DataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.DataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.DataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.DataTableLayout.Size = new System.Drawing.Size(565, 93);
+            this.DataTableLayout.Size = new System.Drawing.Size(565, 104);
             this.DataTableLayout.TabIndex = 1;
             this.DataTableLayout.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.mainTableLayoutGridBorder);
+            // 
+            // txtGenSumm
+            // 
+            this.txtGenSumm.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtGenSumm.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtGenSumm.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtGenSumm.Location = new System.Drawing.Point(460, 85);
+            this.txtGenSumm.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtGenSumm.Name = "txtGenSumm";
+            this.txtGenSumm.ReadOnly = true;
+            this.txtGenSumm.Size = new System.Drawing.Size(95, 14);
+            this.txtGenSumm.TabIndex = 24;
+            this.txtGenSumm.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtGenSumm.WordWrap = false;
+            // 
+            // txtGenLast
+            // 
+            this.txtGenLast.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtGenLast.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtGenLast.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtGenLast.Location = new System.Drawing.Point(346, 85);
+            this.txtGenLast.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtGenLast.Name = "txtGenLast";
+            this.txtGenLast.ReadOnly = true;
+            this.txtGenLast.Size = new System.Drawing.Size(94, 14);
+            this.txtGenLast.TabIndex = 23;
+            this.txtGenLast.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtGenLast.WordWrap = false;
+            // 
+            // txtGenFirst
+            // 
+            this.txtGenFirst.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtGenFirst.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtGenFirst.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtGenFirst.Location = new System.Drawing.Point(232, 85);
+            this.txtGenFirst.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtGenFirst.Name = "txtGenFirst";
+            this.txtGenFirst.ReadOnly = true;
+            this.txtGenFirst.Size = new System.Drawing.Size(94, 14);
+            this.txtGenFirst.TabIndex = 22;
+            this.txtGenFirst.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtGenFirst.WordWrap = false;
+            // 
+            // txtConSumm
+            // 
+            this.txtConSumm.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtConSumm.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtConSumm.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtConSumm.Location = new System.Drawing.Point(460, 61);
+            this.txtConSumm.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtConSumm.Name = "txtConSumm";
+            this.txtConSumm.ReadOnly = true;
+            this.txtConSumm.Size = new System.Drawing.Size(95, 14);
+            this.txtConSumm.TabIndex = 21;
+            this.txtConSumm.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtConSumm.WordWrap = false;
+            // 
+            // txtConLast
+            // 
+            this.txtConLast.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtConLast.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtConLast.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtConLast.Location = new System.Drawing.Point(346, 61);
+            this.txtConLast.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtConLast.Name = "txtConLast";
+            this.txtConLast.ReadOnly = true;
+            this.txtConLast.Size = new System.Drawing.Size(94, 14);
+            this.txtConLast.TabIndex = 20;
+            this.txtConLast.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtConLast.WordWrap = false;
+            // 
+            // txtConFirst
+            // 
+            this.txtConFirst.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtConFirst.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtConFirst.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtConFirst.Location = new System.Drawing.Point(232, 61);
+            this.txtConFirst.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtConFirst.Name = "txtConFirst";
+            this.txtConFirst.ReadOnly = true;
+            this.txtConFirst.Size = new System.Drawing.Size(94, 14);
+            this.txtConFirst.TabIndex = 19;
+            this.txtConFirst.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtConFirst.WordWrap = false;
+            // 
+            // txtConDateLast
+            // 
+            this.txtConDateLast.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtConDateLast.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtConDateLast.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.txtConDateLast.Location = new System.Drawing.Point(346, 37);
+            this.txtConDateLast.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtConDateLast.Name = "txtConDateLast";
+            this.txtConDateLast.ReadOnly = true;
+            this.txtConDateLast.Size = new System.Drawing.Size(94, 14);
+            this.txtConDateLast.TabIndex = 18;
+            this.txtConDateLast.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtConDateLast.WordWrap = false;
             // 
             // label23
             // 
             this.label23.AutoSize = true;
             this.label23.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label23.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label23.Location = new System.Drawing.Point(1, 1);
             this.label23.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.label23.Name = "label23";
             this.DataTableLayout.SetRowSpan(this.label23, 2);
-            this.label23.Size = new System.Drawing.Size(119, 55);
+            this.label23.Size = new System.Drawing.Size(119, 54);
             this.label23.TabIndex = 0;
             this.label23.Text = "Измерение";
             this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -440,11 +546,12 @@
             // 
             this.label24.AutoSize = true;
             this.label24.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label24.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label24.Location = new System.Drawing.Point(121, 1);
             this.label24.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.label24.Name = "label24";
             this.DataTableLayout.SetRowSpan(this.label24, 2);
-            this.label24.Size = new System.Drawing.Size(101, 55);
+            this.label24.Size = new System.Drawing.Size(101, 54);
             this.label24.TabIndex = 1;
             this.label24.Text = "Тарифная зона";
             this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -453,10 +560,11 @@
             // 
             this.label25.AutoSize = true;
             this.label25.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label25.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label25.Location = new System.Drawing.Point(223, 1);
             this.label25.Margin = new System.Windows.Forms.Padding(1);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(112, 38);
+            this.label25.Size = new System.Drawing.Size(112, 30);
             this.label25.TabIndex = 2;
             this.label25.Text = "Показания на начало периода";
             this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -465,10 +573,11 @@
             // 
             this.label26.AutoSize = true;
             this.label26.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label26.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label26.Location = new System.Drawing.Point(337, 1);
             this.label26.Margin = new System.Windows.Forms.Padding(1);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(112, 38);
+            this.label26.Size = new System.Drawing.Size(112, 30);
             this.label26.TabIndex = 3;
             this.label26.Text = "Показания на конец периода";
             this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -477,11 +586,12 @@
             // 
             this.label27.AutoSize = true;
             this.label27.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label27.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label27.Location = new System.Drawing.Point(451, 1);
             this.label27.Margin = new System.Windows.Forms.Padding(1);
             this.label27.Name = "label27";
             this.DataTableLayout.SetRowSpan(this.label27, 2);
-            this.label27.Size = new System.Drawing.Size(113, 55);
+            this.label27.Size = new System.Drawing.Size(113, 54);
             this.label27.TabIndex = 4;
             this.label27.Text = "Потребление за период";
             this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -490,11 +600,11 @@
             // 
             this.label28.AutoSize = true;
             this.label28.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label28.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label28.Location = new System.Drawing.Point(1, 58);
+            this.label28.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label28.Location = new System.Drawing.Point(1, 57);
             this.label28.Margin = new System.Windows.Forms.Padding(1);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(118, 15);
+            this.label28.Size = new System.Drawing.Size(118, 22);
             this.label28.TabIndex = 5;
             this.label28.Text = "A+, кВт*ч";
             this.label28.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -503,11 +613,11 @@
             // 
             this.label29.AutoSize = true;
             this.label29.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label29.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label29.Location = new System.Drawing.Point(1, 75);
+            this.label29.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label29.Location = new System.Drawing.Point(1, 81);
             this.label29.Margin = new System.Windows.Forms.Padding(1);
             this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(118, 17);
+            this.label29.Size = new System.Drawing.Size(118, 22);
             this.label29.TabIndex = 6;
             this.label29.Text = "A-, кВт*ч";
             this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -516,10 +626,11 @@
             // 
             this.label30.AutoSize = true;
             this.label30.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label30.Location = new System.Drawing.Point(121, 58);
+            this.label30.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label30.Location = new System.Drawing.Point(121, 57);
             this.label30.Margin = new System.Windows.Forms.Padding(1);
             this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(100, 15);
+            this.label30.Size = new System.Drawing.Size(100, 22);
             this.label30.TabIndex = 7;
             this.label30.Text = "Сумма";
             this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -528,116 +639,32 @@
             // 
             this.label31.AutoSize = true;
             this.label31.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label31.Location = new System.Drawing.Point(121, 75);
+            this.label31.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label31.Location = new System.Drawing.Point(121, 81);
             this.label31.Margin = new System.Windows.Forms.Padding(1);
             this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(100, 17);
+            this.label31.Size = new System.Drawing.Size(100, 22);
             this.label31.TabIndex = 8;
             this.label31.Text = "Сумма";
             this.label31.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label32
+            // txtConDateFirst
             // 
-            this.label32.AutoSize = true;
-            this.label32.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label32.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label32.Location = new System.Drawing.Point(223, 41);
-            this.label32.Margin = new System.Windows.Forms.Padding(1);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(112, 15);
-            this.label32.TabIndex = 9;
-            this.label32.Text = "label32";
-            this.label32.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label33
-            // 
-            this.label33.AutoSize = true;
-            this.label33.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label33.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label33.Location = new System.Drawing.Point(337, 41);
-            this.label33.Margin = new System.Windows.Forms.Padding(1);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(112, 15);
-            this.label33.TabIndex = 10;
-            this.label33.Text = "label33";
-            this.label33.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label43
-            // 
-            this.label43.AutoSize = true;
-            this.label43.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label43.Location = new System.Drawing.Point(223, 58);
-            this.label43.Margin = new System.Windows.Forms.Padding(1);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(112, 15);
-            this.label43.TabIndex = 11;
-            this.label43.Text = "label43";
-            this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label44
-            // 
-            this.label44.AutoSize = true;
-            this.label44.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label44.Location = new System.Drawing.Point(337, 58);
-            this.label44.Margin = new System.Windows.Forms.Padding(1);
-            this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(112, 15);
-            this.label44.TabIndex = 12;
-            this.label44.Text = "label44";
-            this.label44.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label45
-            // 
-            this.label45.AutoSize = true;
-            this.label45.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label45.Location = new System.Drawing.Point(223, 75);
-            this.label45.Margin = new System.Windows.Forms.Padding(1);
-            this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(112, 17);
-            this.label45.TabIndex = 13;
-            this.label45.Text = "label45";
-            this.label45.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label46.Location = new System.Drawing.Point(337, 75);
-            this.label46.Margin = new System.Windows.Forms.Padding(1);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(112, 17);
-            this.label46.TabIndex = 14;
-            this.label46.Text = "label46";
-            this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.BackColor = System.Drawing.Color.Transparent;
-            this.label47.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label47.Location = new System.Drawing.Point(451, 58);
-            this.label47.Margin = new System.Windows.Forms.Padding(1);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(113, 15);
-            this.label47.TabIndex = 15;
-            this.label47.Text = "label47";
-            this.label47.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label48
-            // 
-            this.label48.AutoSize = true;
-            this.label48.BackColor = System.Drawing.Color.Transparent;
-            this.label48.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label48.Location = new System.Drawing.Point(451, 75);
-            this.label48.Margin = new System.Windows.Forms.Padding(1);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(113, 17);
-            this.label48.TabIndex = 16;
-            this.label48.Text = "label48";
-            this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.txtConDateFirst.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtConDateFirst.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtConDateFirst.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.txtConDateFirst.Location = new System.Drawing.Point(232, 37);
+            this.txtConDateFirst.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtConDateFirst.Name = "txtConDateFirst";
+            this.txtConDateFirst.ReadOnly = true;
+            this.txtConDateFirst.Size = new System.Drawing.Size(94, 14);
+            this.txtConDateFirst.TabIndex = 17;
+            this.txtConDateFirst.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtConDateFirst.WordWrap = false;
             // 
             // InfoTableLayout
             // 
+            this.InfoTableLayout.AutoSize = true;
             this.InfoTableLayout.ColumnCount = 3;
             this.InfoTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
             this.InfoTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
@@ -654,16 +681,16 @@
             this.InfoTableLayout.Controls.Add(this.label10, 1, 9);
             this.InfoTableLayout.Controls.Add(this.label11, 1, 0);
             this.InfoTableLayout.Controls.Add(this.label12, 1, 1);
-            this.InfoTableLayout.Controls.Add(this.label13, 2, 2);
-            this.InfoTableLayout.Controls.Add(this.label14, 2, 3);
-            this.InfoTableLayout.Controls.Add(this.label15, 2, 4);
-            this.InfoTableLayout.Controls.Add(this.label16, 2, 5);
-            this.InfoTableLayout.Controls.Add(this.label17, 2, 6);
-            this.InfoTableLayout.Controls.Add(this.label18, 2, 7);
-            this.InfoTableLayout.Controls.Add(this.label19, 2, 8);
-            this.InfoTableLayout.Controls.Add(this.label20, 2, 9);
-            this.InfoTableLayout.Controls.Add(this.label21, 2, 0);
-            this.InfoTableLayout.Controls.Add(this.label22, 2, 1);
+            this.InfoTableLayout.Controls.Add(this.lblAbonentAddress, 2, 2);
+            this.InfoTableLayout.Controls.Add(this.lblAbonentNumberCC, 2, 3);
+            this.InfoTableLayout.Controls.Add(this.lblAbonentType, 2, 4);
+            this.InfoTableLayout.Controls.Add(this.lblAbonentKF, 2, 5);
+            this.InfoTableLayout.Controls.Add(this.lblAbonentTarif, 2, 6);
+            this.InfoTableLayout.Controls.Add(this.lblAbonentDateDay, 2, 7);
+            this.InfoTableLayout.Controls.Add(this.lblAbonentDateMonth, 2, 8);
+            this.InfoTableLayout.Controls.Add(this.lblAbonentDateYear, 2, 9);
+            this.InfoTableLayout.Controls.Add(this.lblAbonentName, 2, 0);
+            this.InfoTableLayout.Controls.Add(this.lblAbonentINN, 2, 1);
             this.InfoTableLayout.Dock = System.Windows.Forms.DockStyle.Top;
             this.InfoTableLayout.Location = new System.Drawing.Point(5, 5);
             this.InfoTableLayout.Name = "InfoTableLayout";
@@ -686,7 +713,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label1.Location = new System.Drawing.Point(1, 1);
             this.label1.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.label1.Name = "label1";
@@ -701,7 +728,7 @@
             this.label2.AutoSize = true;
             this.InfoTableLayout.SetColumnSpan(this.label2, 2);
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label2.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label2.Location = new System.Drawing.Point(1, 35);
             this.label2.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
             this.label2.Name = "label2";
@@ -715,7 +742,7 @@
             this.label3.AutoSize = true;
             this.InfoTableLayout.SetColumnSpan(this.label3, 2);
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label3.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label3.Location = new System.Drawing.Point(1, 52);
             this.label3.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
             this.label3.Name = "label3";
@@ -729,7 +756,7 @@
             this.label4.AutoSize = true;
             this.InfoTableLayout.SetColumnSpan(this.label4, 2);
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label4.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label4.Location = new System.Drawing.Point(1, 69);
             this.label4.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
             this.label4.Name = "label4";
@@ -743,7 +770,7 @@
             this.label5.AutoSize = true;
             this.InfoTableLayout.SetColumnSpan(this.label5, 2);
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label5.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label5.Location = new System.Drawing.Point(1, 86);
             this.label5.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
             this.label5.Name = "label5";
@@ -757,7 +784,7 @@
             this.label6.AutoSize = true;
             this.InfoTableLayout.SetColumnSpan(this.label6, 2);
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label6.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label6.Location = new System.Drawing.Point(1, 103);
             this.label6.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
             this.label6.Name = "label6";
@@ -770,7 +797,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label7.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label7.Location = new System.Drawing.Point(1, 120);
             this.label7.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.label7.Name = "label7";
@@ -784,7 +811,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label8.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label8.Location = new System.Drawing.Point(76, 120);
             this.label8.Margin = new System.Windows.Forms.Padding(1);
             this.label8.Name = "label8";
@@ -797,7 +824,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label9.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label9.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label9.Location = new System.Drawing.Point(76, 137);
             this.label9.Margin = new System.Windows.Forms.Padding(1);
             this.label9.Name = "label9";
@@ -810,7 +837,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label10.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label10.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label10.Location = new System.Drawing.Point(76, 154);
             this.label10.Margin = new System.Windows.Forms.Padding(1);
             this.label10.Name = "label10";
@@ -823,7 +850,7 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label11.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label11.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label11.Location = new System.Drawing.Point(76, 1);
             this.label11.Margin = new System.Windows.Forms.Padding(1);
             this.label11.Name = "label11";
@@ -836,7 +863,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label12.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label12.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label12.Location = new System.Drawing.Point(76, 18);
             this.label12.Margin = new System.Windows.Forms.Padding(1);
             this.label12.Name = "label12";
@@ -845,161 +872,161 @@
             this.label12.Text = "ИНН";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label13
+            // lblAbonentAddress
             // 
-            this.label13.AutoSize = true;
-            this.label13.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label13.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label13.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label13.ForeColor = System.Drawing.Color.Firebrick;
-            this.label13.Location = new System.Drawing.Point(176, 35);
-            this.label13.Margin = new System.Windows.Forms.Padding(1);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(44, 15);
-            this.label13.TabIndex = 12;
-            this.label13.Text = "label13";
-            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblAbonentAddress.AutoSize = true;
+            this.lblAbonentAddress.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentAddress.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblAbonentAddress.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblAbonentAddress.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentAddress.Location = new System.Drawing.Point(176, 35);
+            this.lblAbonentAddress.Margin = new System.Windows.Forms.Padding(1);
+            this.lblAbonentAddress.Name = "lblAbonentAddress";
+            this.lblAbonentAddress.Size = new System.Drawing.Size(126, 15);
+            this.lblAbonentAddress.TabIndex = 12;
+            this.lblAbonentAddress.Text = "lblAbonentAddress";
+            this.lblAbonentAddress.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label14
+            // lblAbonentNumberCC
             // 
-            this.label14.AutoSize = true;
-            this.label14.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label14.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label14.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label14.ForeColor = System.Drawing.Color.Firebrick;
-            this.label14.Location = new System.Drawing.Point(176, 52);
-            this.label14.Margin = new System.Windows.Forms.Padding(1);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(44, 15);
-            this.label14.TabIndex = 13;
-            this.label14.Text = "label14";
-            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblAbonentNumberCC.AutoSize = true;
+            this.lblAbonentNumberCC.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentNumberCC.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblAbonentNumberCC.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblAbonentNumberCC.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentNumberCC.Location = new System.Drawing.Point(176, 52);
+            this.lblAbonentNumberCC.Margin = new System.Windows.Forms.Padding(1);
+            this.lblAbonentNumberCC.Name = "lblAbonentNumberCC";
+            this.lblAbonentNumberCC.Size = new System.Drawing.Size(133, 15);
+            this.lblAbonentNumberCC.TabIndex = 13;
+            this.lblAbonentNumberCC.Text = "lblAbonentNumberCC";
+            this.lblAbonentNumberCC.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label15
+            // lblAbonentType
             // 
-            this.label15.AutoSize = true;
-            this.label15.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label15.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label15.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label15.ForeColor = System.Drawing.Color.Firebrick;
-            this.label15.Location = new System.Drawing.Point(176, 69);
-            this.label15.Margin = new System.Windows.Forms.Padding(1);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(44, 15);
-            this.label15.TabIndex = 14;
-            this.label15.Text = "label15";
-            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblAbonentType.AutoSize = true;
+            this.lblAbonentType.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentType.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblAbonentType.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblAbonentType.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentType.Location = new System.Drawing.Point(176, 69);
+            this.lblAbonentType.Margin = new System.Windows.Forms.Padding(1);
+            this.lblAbonentType.Name = "lblAbonentType";
+            this.lblAbonentType.Size = new System.Drawing.Size(105, 15);
+            this.lblAbonentType.TabIndex = 14;
+            this.lblAbonentType.Text = "lblAbonentType";
+            this.lblAbonentType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label16
+            // lblAbonentKF
             // 
-            this.label16.AutoSize = true;
-            this.label16.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label16.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label16.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label16.ForeColor = System.Drawing.Color.Firebrick;
-            this.label16.Location = new System.Drawing.Point(176, 86);
-            this.label16.Margin = new System.Windows.Forms.Padding(1);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(44, 15);
-            this.label16.TabIndex = 15;
-            this.label16.Text = "label16";
-            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblAbonentKF.AutoSize = true;
+            this.lblAbonentKF.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentKF.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblAbonentKF.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblAbonentKF.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentKF.Location = new System.Drawing.Point(176, 86);
+            this.lblAbonentKF.Margin = new System.Windows.Forms.Padding(1);
+            this.lblAbonentKF.Name = "lblAbonentKF";
+            this.lblAbonentKF.Size = new System.Drawing.Size(91, 15);
+            this.lblAbonentKF.TabIndex = 15;
+            this.lblAbonentKF.Text = "lblAbonentKF";
+            this.lblAbonentKF.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label17
+            // lblAbonentTarif
             // 
-            this.label17.AutoSize = true;
-            this.label17.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label17.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label17.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label17.ForeColor = System.Drawing.Color.Firebrick;
-            this.label17.Location = new System.Drawing.Point(176, 103);
-            this.label17.Margin = new System.Windows.Forms.Padding(1);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(44, 15);
-            this.label17.TabIndex = 16;
-            this.label17.Text = "label17";
-            this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblAbonentTarif.AutoSize = true;
+            this.lblAbonentTarif.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentTarif.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblAbonentTarif.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblAbonentTarif.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentTarif.Location = new System.Drawing.Point(176, 103);
+            this.lblAbonentTarif.Margin = new System.Windows.Forms.Padding(1);
+            this.lblAbonentTarif.Name = "lblAbonentTarif";
+            this.lblAbonentTarif.Size = new System.Drawing.Size(112, 15);
+            this.lblAbonentTarif.TabIndex = 16;
+            this.lblAbonentTarif.Text = "lblAbonentTarif";
+            this.lblAbonentTarif.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label18
+            // lblAbonentDateDay
             // 
-            this.label18.AutoSize = true;
-            this.label18.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label18.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label18.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label18.ForeColor = System.Drawing.Color.Firebrick;
-            this.label18.Location = new System.Drawing.Point(176, 120);
-            this.label18.Margin = new System.Windows.Forms.Padding(1);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(44, 15);
-            this.label18.TabIndex = 17;
-            this.label18.Text = "label18";
-            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblAbonentDateDay.AutoSize = true;
+            this.lblAbonentDateDay.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentDateDay.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblAbonentDateDay.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblAbonentDateDay.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentDateDay.Location = new System.Drawing.Point(176, 120);
+            this.lblAbonentDateDay.Margin = new System.Windows.Forms.Padding(1);
+            this.lblAbonentDateDay.Name = "lblAbonentDateDay";
+            this.lblAbonentDateDay.Size = new System.Drawing.Size(126, 15);
+            this.lblAbonentDateDay.TabIndex = 17;
+            this.lblAbonentDateDay.Text = "lblAbonentDateDay";
+            this.lblAbonentDateDay.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label19
+            // lblAbonentDateMonth
             // 
-            this.label19.AutoSize = true;
-            this.label19.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label19.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label19.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label19.ForeColor = System.Drawing.Color.Firebrick;
-            this.label19.Location = new System.Drawing.Point(176, 137);
-            this.label19.Margin = new System.Windows.Forms.Padding(1);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(44, 15);
-            this.label19.TabIndex = 18;
-            this.label19.Text = "label19";
-            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblAbonentDateMonth.AutoSize = true;
+            this.lblAbonentDateMonth.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentDateMonth.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblAbonentDateMonth.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblAbonentDateMonth.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentDateMonth.Location = new System.Drawing.Point(176, 137);
+            this.lblAbonentDateMonth.Margin = new System.Windows.Forms.Padding(1);
+            this.lblAbonentDateMonth.Name = "lblAbonentDateMonth";
+            this.lblAbonentDateMonth.Size = new System.Drawing.Size(140, 15);
+            this.lblAbonentDateMonth.TabIndex = 18;
+            this.lblAbonentDateMonth.Text = "lblAbonentDateMonth";
+            this.lblAbonentDateMonth.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label20
+            // lblAbonentDateYear
             // 
-            this.label20.AutoSize = true;
-            this.label20.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label20.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label20.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label20.ForeColor = System.Drawing.Color.Firebrick;
-            this.label20.Location = new System.Drawing.Point(176, 154);
-            this.label20.Margin = new System.Windows.Forms.Padding(1);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(44, 15);
-            this.label20.TabIndex = 19;
-            this.label20.Text = "label20";
-            this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblAbonentDateYear.AutoSize = true;
+            this.lblAbonentDateYear.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentDateYear.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblAbonentDateYear.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblAbonentDateYear.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentDateYear.Location = new System.Drawing.Point(176, 154);
+            this.lblAbonentDateYear.Margin = new System.Windows.Forms.Padding(1);
+            this.lblAbonentDateYear.Name = "lblAbonentDateYear";
+            this.lblAbonentDateYear.Size = new System.Drawing.Size(133, 15);
+            this.lblAbonentDateYear.TabIndex = 19;
+            this.lblAbonentDateYear.Text = "lblAbonentDateYear";
+            this.lblAbonentDateYear.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label21
+            // lblAbonentName
             // 
-            this.label21.AutoSize = true;
-            this.label21.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label21.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label21.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label21.ForeColor = System.Drawing.Color.Firebrick;
-            this.label21.Location = new System.Drawing.Point(176, 1);
-            this.label21.Margin = new System.Windows.Forms.Padding(1);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(44, 15);
-            this.label21.TabIndex = 20;
-            this.label21.Text = "label21";
-            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblAbonentName.AutoSize = true;
+            this.lblAbonentName.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentName.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblAbonentName.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblAbonentName.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentName.Location = new System.Drawing.Point(176, 1);
+            this.lblAbonentName.Margin = new System.Windows.Forms.Padding(1);
+            this.lblAbonentName.Name = "lblAbonentName";
+            this.lblAbonentName.Size = new System.Drawing.Size(105, 15);
+            this.lblAbonentName.TabIndex = 20;
+            this.lblAbonentName.Text = "lblAbonentName";
+            this.lblAbonentName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label22
+            // lblAbonentINN
             // 
-            this.label22.AutoSize = true;
-            this.label22.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label22.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label22.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label22.ForeColor = System.Drawing.Color.Firebrick;
-            this.label22.Location = new System.Drawing.Point(176, 18);
-            this.label22.Margin = new System.Windows.Forms.Padding(1);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(44, 15);
-            this.label22.TabIndex = 21;
-            this.label22.Text = "label22";
-            this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblAbonentINN.AutoSize = true;
+            this.lblAbonentINN.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentINN.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblAbonentINN.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblAbonentINN.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentINN.Location = new System.Drawing.Point(176, 18);
+            this.lblAbonentINN.Margin = new System.Windows.Forms.Padding(1);
+            this.lblAbonentINN.Name = "lblAbonentINN";
+            this.lblAbonentINN.Size = new System.Drawing.Size(98, 15);
+            this.lblAbonentINN.TabIndex = 21;
+            this.lblAbonentINN.Text = "lblAbonentINN";
+            this.lblAbonentINN.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // FormType1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(587, 532);
+            this.ClientSize = new System.Drawing.Size(587, 603);
             this.Controls.Add(this.mainPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -1040,16 +1067,6 @@
         private Label label10;
         private Label label11;
         private Label label12;
-        private Label label13;
-        private Label label14;
-        private Label label15;
-        private Label label16;
-        private Label label17;
-        private Label label18;
-        private Label label19;
-        private Label label20;
-        private Label label21;
-        private Label label22;
         private TableLayoutPanel DataTableLayout;
         private Label label23;
         private Label label24;
@@ -1060,8 +1077,6 @@
         private Label label29;
         private Label label30;
         private Label label31;
-        private Label label32;
-        private Label label33;
         private Label label34;
         private TableLayoutPanel EntryDataTableLayout;
         private Label label38;
@@ -1074,18 +1089,30 @@
         private Label label36;
         private Label label37;
         private TableLayoutPanel cpResultTableLayout;
-        private Label label54;
-        private Label label55;
-        private Label label49;
-        private Label label50;
-        private Label label51;
-        private Label label52;
-        private Label label53;
-        private Label label43;
-        private Label label44;
-        private Label label45;
-        private Label label46;
-        private Label label47;
-        private Label label48;
+        public TextBox txtBUY;
+        public TextBox txtSELL;
+        public TextBox txtGenSumm;
+        public TextBox txtGenLast;
+        public TextBox txtGenFirst;
+        public TextBox txtConSumm;
+        public TextBox txtConLast;
+        public TextBox txtConFirst;
+        public TextBox txtConDateLast;
+        public TextBox txtConDateFirst;
+        public Label lblAbonentAddress;
+        public Label lblAbonentNumberCC;
+        public Label lblAbonentType;
+        public Label lblAbonentKF;
+        public Label lblAbonentTarif;
+        public Label lblAbonentDateDay;
+        public Label lblAbonentDateMonth;
+        public Label lblAbonentDateYear;
+        public Label lblAbonentName;
+        public Label lblAbonentINN;
+        public Label lblResultPrice;
+        public Label lblResultCost;
+        public Label lblsvncEEorem;
+        public Label lblsvncPorem;
+        public Label lblKF1;
     }
 }

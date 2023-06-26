@@ -20,8 +20,8 @@ namespace dataEditor
 
         private void FormType1_Load(object sender, EventArgs e)
         {
-            DataTableLayout.CellPaint += new TableLayoutCellPaintEventHandler(paintDataTableLayout);
-            vResultTableLayout.CellPaint += new TableLayoutCellPaintEventHandler(paintVResultDataTableLayout);
+            //DataTableLayout.CellPaint += new TableLayoutCellPaintEventHandler(paintDataTableLayout);
+            //vResultTableLayout.CellPaint += new TableLayoutCellPaintEventHandler(paintVResultDataTableLayout);
         }
 
         private void mainTableLayoutGridBorder(object sender, TableLayoutCellPaintEventArgs e)
@@ -73,6 +73,11 @@ namespace dataEditor
                 rectangle.X += 2;
                 e.Graphics.FillRectangle(Brushes.PaleGreen, rectangle);
             }
+        }
+
+        private void mainPanel_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 

@@ -125,6 +125,45 @@ namespace dataEditor
             this.MenuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tabMicrogeneration = new System.Windows.Forms.TabPage();
+            this.MainPanel = new System.Windows.Forms.Panel();
+            this.MainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.groupBoxData = new System.Windows.Forms.GroupBox();
+            this.mgFlowPanelResult = new System.Windows.Forms.FlowLayoutPanel();
+            this.lblMainName = new System.Windows.Forms.Label();
+            this.mgSplitContainer_insideHorizontal = new System.Windows.Forms.SplitContainer();
+            this.mgSplitContainer_inside_vertical = new System.Windows.Forms.SplitContainer();
+            this.mgDataViewer = new dataEditor.MainForm.DoubleBufferedDataGridView();
+            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SelectID = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.dataTable = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataCalculation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataAct = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.OpenFolder = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Agreement = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DateAgreement = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TariffZone = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NumCC = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.REC = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GEN = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SELL = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BUY = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cost = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.inputTableLoyaut = new System.Windows.Forms.TableLayoutPanel();
+            this.datsTreeView = new System.Windows.Forms.TreeView();
+            this.mgToolStripInputData = new System.Windows.Forms.ToolStrip();
+            this.mgBtnEntryDatFiles = new System.Windows.Forms.ToolStripSplitButton();
+            this.mgFileSPUNC = new System.Windows.Forms.ToolStripMenuItem();
+            this.mgFileSVNC = new System.Windows.Forms.ToolStripMenuItem();
+            this.mgFileKF = new System.Windows.Forms.ToolStripMenuItem();
+            this.mgFileSPUNCbtn = new System.Windows.Forms.ToolStripButton();
+            this.mgFileSVNCbtn = new System.Windows.Forms.ToolStripButton();
+            this.mgFileKFbtn = new System.Windows.Forms.ToolStripButton();
+            this.imgStatusOk = new System.Windows.Forms.ToolStripButton();
+            this.imgStatusDwnld = new System.Windows.Forms.ToolStripButton();
+            this.imgStatusFailed = new System.Windows.Forms.ToolStripButton();
             this.g = new System.Windows.Forms.ToolStrip();
             this.mgBtnNewProject = new System.Windows.Forms.ToolStripButton();
             this.mgBtnOpenFile = new System.Windows.Forms.ToolStripButton();
@@ -143,58 +182,19 @@ namespace dataEditor
             this.mgOpenDataTable = new System.Windows.Forms.ToolStripButton();
             this.mgDataСalculation = new System.Windows.Forms.ToolStripButton();
             this.mgDataAct = new System.Windows.Forms.ToolStripButton();
-            this.mgSplitContainer_vertical = new System.Windows.Forms.SplitContainer();
-            this.mgSplitContainer_horizontal = new System.Windows.Forms.SplitContainer();
-            this.upperTableLayoutMainData = new System.Windows.Forms.TableLayoutPanel();
-            this.lblMainName = new System.Windows.Forms.Label();
-            this.textBoxNameGP = new System.Windows.Forms.TextBox();
-            this.lblSubject = new System.Windows.Forms.Label();
-            this.textBoxGTPcode = new System.Windows.Forms.TextBox();
-            this.lblNameGP = new System.Windows.Forms.Label();
-            this.textBoxSubject = new System.Windows.Forms.TextBox();
-            this.lblGTPcode = new System.Windows.Forms.Label();
             this.tabControlCurrentProject = new System.Windows.Forms.TabControl();
             this.tabBasic = new System.Windows.Forms.TabPage();
+            this.upperTableLayoutMainData = new System.Windows.Forms.TableLayoutPanel();
+            this.textBoxSubject = new System.Windows.Forms.TextBox();
+            this.textBoxGTPcode = new System.Windows.Forms.TextBox();
+            this.textBoxNameGP = new System.Windows.Forms.TextBox();
+            this.lblSubject = new System.Windows.Forms.Label();
+            this.lblGTPcode = new System.Windows.Forms.Label();
+            this.lblNameGP = new System.Windows.Forms.Label();
             this.tabDetail = new System.Windows.Forms.TabPage();
-            this.mgSplitContainer_insideHorizontal = new System.Windows.Forms.SplitContainer();
-            this.mgSplitContainer_inside_vertical = new System.Windows.Forms.SplitContainer();
-            this.mgDataViewer = new dataEditor.MainForm.DoubleBufferedDataGridView();
-            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataTable = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Agreement = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FullName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DateAgreement = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TariffZone = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NumCC = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.REC = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GEN = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.SELL = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.BUY = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cost = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataCalculation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataAct = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.OpenFolder = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mgSplitContainer_insideRight = new System.Windows.Forms.SplitContainer();
             this.groupBoxRes = new System.Windows.Forms.GroupBox();
             this.ResourcesTreeView = new System.Windows.Forms.TreeView();
             this.imgList = new System.Windows.Forms.ImageList(this.components);
-            this.groupBoxData = new System.Windows.Forms.GroupBox();
-            this.mgFlowPanelResult = new System.Windows.Forms.FlowLayoutPanel();
-            this.inputTableLoyaut = new System.Windows.Forms.TableLayoutPanel();
-            this.datsTreeView = new System.Windows.Forms.TreeView();
-            this.mgToolStripInputData = new System.Windows.Forms.ToolStrip();
-            this.mgBtnEntryDatFiles = new System.Windows.Forms.ToolStripSplitButton();
-            this.mgFileSPUNC = new System.Windows.Forms.ToolStripMenuItem();
-            this.mgFileSVNC = new System.Windows.Forms.ToolStripMenuItem();
-            this.mgFileKF = new System.Windows.Forms.ToolStripMenuItem();
-            this.mgFileSPUNCbtn = new System.Windows.Forms.ToolStripButton();
-            this.mgFileSVNCbtn = new System.Windows.Forms.ToolStripButton();
-            this.mgFileKFbtn = new System.Windows.Forms.ToolStripButton();
-            this.imgStatusOk = new System.Windows.Forms.ToolStripButton();
-            this.imgStatusDwnld = new System.Windows.Forms.ToolStripButton();
-            this.imgStatusFailed = new System.Windows.Forms.ToolStripButton();
             this.appInfo = new System.Windows.Forms.Label();
             this.tabExcel = new System.Windows.Forms.TabPage();
             this.urToolStrip = new System.Windows.Forms.ToolStrip();
@@ -222,34 +222,25 @@ namespace dataEditor
             this.ColumnContext.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabMicrogeneration.SuspendLayout();
-            this.g.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mgSplitContainer_vertical)).BeginInit();
-            this.mgSplitContainer_vertical.Panel2.SuspendLayout();
-            this.mgSplitContainer_vertical.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mgSplitContainer_horizontal)).BeginInit();
-            this.mgSplitContainer_horizontal.Panel1.SuspendLayout();
-            this.mgSplitContainer_horizontal.Panel2.SuspendLayout();
-            this.mgSplitContainer_horizontal.SuspendLayout();
-            this.upperTableLayoutMainData.SuspendLayout();
-            this.tabControlCurrentProject.SuspendLayout();
-            this.tabDetail.SuspendLayout();
+            this.MainPanel.SuspendLayout();
+            this.MainTableLayoutPanel.SuspendLayout();
+            this.groupBoxData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mgSplitContainer_insideHorizontal)).BeginInit();
             this.mgSplitContainer_insideHorizontal.Panel1.SuspendLayout();
             this.mgSplitContainer_insideHorizontal.Panel2.SuspendLayout();
             this.mgSplitContainer_insideHorizontal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mgSplitContainer_inside_vertical)).BeginInit();
             this.mgSplitContainer_inside_vertical.Panel1.SuspendLayout();
-            this.mgSplitContainer_inside_vertical.Panel2.SuspendLayout();
             this.mgSplitContainer_inside_vertical.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mgDataViewer)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mgSplitContainer_insideRight)).BeginInit();
-            this.mgSplitContainer_insideRight.Panel1.SuspendLayout();
-            this.mgSplitContainer_insideRight.Panel2.SuspendLayout();
-            this.mgSplitContainer_insideRight.SuspendLayout();
-            this.groupBoxRes.SuspendLayout();
-            this.groupBoxData.SuspendLayout();
             this.inputTableLoyaut.SuspendLayout();
             this.mgToolStripInputData.SuspendLayout();
+            this.g.SuspendLayout();
+            this.tabControlCurrentProject.SuspendLayout();
+            this.tabBasic.SuspendLayout();
+            this.upperTableLayoutMainData.SuspendLayout();
+            this.tabDetail.SuspendLayout();
+            this.groupBoxRes.SuspendLayout();
             this.tabExcel.SuspendLayout();
             this.urToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_bigMain)).BeginInit();
@@ -456,405 +447,94 @@ namespace dataEditor
             // 
             // tabMicrogeneration
             // 
-            this.tabMicrogeneration.Controls.Add(this.g);
-            this.tabMicrogeneration.Controls.Add(this.mgSplitContainer_vertical);
+            this.tabMicrogeneration.Controls.Add(this.MainPanel);
             this.tabMicrogeneration.Location = new System.Drawing.Point(4, 23);
             this.tabMicrogeneration.Name = "tabMicrogeneration";
-            this.tabMicrogeneration.Padding = new System.Windows.Forms.Padding(3, 3, 3, 15);
+            this.tabMicrogeneration.Padding = new System.Windows.Forms.Padding(1);
             this.tabMicrogeneration.Size = new System.Drawing.Size(1203, 590);
             this.tabMicrogeneration.TabIndex = 1;
             this.tabMicrogeneration.Text = "Microgeneration";
             // 
-            // g
+            // MainPanel
             // 
-            this.g.BackColor = System.Drawing.SystemColors.Control;
-            this.g.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.g.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mgBtnNewProject,
-            this.mgBtnOpenFile,
-            this.mgBtnSaveDats,
-            this.toolStripSeparator5,
-            this.mgBtnImportFile,
-            this.toolStripSeparator4,
-            this.toolBtnConvertFile,
-            this.toolBtnDictionaryList,
-            this.toolBtnDictionaryEditor,
-            this.mgBtnOpenFolder,
-            this.toolStripButton3,
-            this.toolBtnMounth,
-            this.toolBtnYear,
-            this.toolStripButton4,
-            this.mgOpenDataTable,
-            this.mgDataСalculation,
-            this.mgDataAct});
-            this.g.Location = new System.Drawing.Point(3, 3);
-            this.g.Name = "g";
-            this.g.Size = new System.Drawing.Size(1197, 25);
-            this.g.TabIndex = 4;
-            this.g.Text = "mgTools";
+            this.MainPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MainPanel.Controls.Add(this.MainTableLayoutPanel);
+            this.MainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainPanel.Location = new System.Drawing.Point(1, 1);
+            this.MainPanel.Margin = new System.Windows.Forms.Padding(1);
+            this.MainPanel.Name = "MainPanel";
+            this.MainPanel.Size = new System.Drawing.Size(1201, 588);
+            this.MainPanel.TabIndex = 6;
             // 
-            // mgBtnNewProject
+            // MainTableLayoutPanel
             // 
-            this.mgBtnNewProject.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.mgBtnNewProject.Image = ((System.Drawing.Image)(resources.GetObject("mgBtnNewProject.Image")));
-            this.mgBtnNewProject.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.mgBtnNewProject.Name = "mgBtnNewProject";
-            this.mgBtnNewProject.Size = new System.Drawing.Size(23, 22);
-            this.mgBtnNewProject.Text = "New Project";
-            this.mgBtnNewProject.Click += new System.EventHandler(this.mgBtnNewProject_Click);
+            this.MainTableLayoutPanel.ColumnCount = 2;
+            this.MainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 724F));
+            this.MainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.MainTableLayoutPanel.Controls.Add(this.groupBoxData, 1, 2);
+            this.MainTableLayoutPanel.Controls.Add(this.lblMainName, 0, 0);
+            this.MainTableLayoutPanel.Controls.Add(this.mgSplitContainer_insideHorizontal, 0, 3);
+            this.MainTableLayoutPanel.Controls.Add(this.g, 0, 1);
+            this.MainTableLayoutPanel.Controls.Add(this.tabControlCurrentProject, 0, 2);
+            this.MainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.MainTableLayoutPanel.Margin = new System.Windows.Forms.Padding(1);
+            this.MainTableLayoutPanel.Name = "MainTableLayoutPanel";
+            this.MainTableLayoutPanel.RowCount = 4;
+            this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
+            this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 128F));
+            this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 324F));
+            this.MainTableLayoutPanel.Size = new System.Drawing.Size(1199, 586);
+            this.MainTableLayoutPanel.TabIndex = 5;
             // 
-            // mgBtnOpenFile
+            // groupBoxData
             // 
-            this.mgBtnOpenFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.mgBtnOpenFile.Image = ((System.Drawing.Image)(resources.GetObject("mgBtnOpenFile.Image")));
-            this.mgBtnOpenFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.mgBtnOpenFile.Name = "mgBtnOpenFile";
-            this.mgBtnOpenFile.Size = new System.Drawing.Size(23, 22);
-            this.mgBtnOpenFile.Text = "Open File";
+            this.groupBoxData.Controls.Add(this.mgFlowPanelResult);
+            this.groupBoxData.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.groupBoxData.Location = new System.Drawing.Point(727, 57);
+            this.groupBoxData.Name = "groupBoxData";
+            this.groupBoxData.Size = new System.Drawing.Size(466, 122);
+            this.groupBoxData.TabIndex = 2;
+            this.groupBoxData.TabStop = false;
+            this.groupBoxData.Text = "Extracted data";
             // 
-            // mgBtnSaveDats
+            // mgFlowPanelResult
             // 
-            this.mgBtnSaveDats.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.mgBtnSaveDats.Enabled = false;
-            this.mgBtnSaveDats.Image = ((System.Drawing.Image)(resources.GetObject("mgBtnSaveDats.Image")));
-            this.mgBtnSaveDats.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.mgBtnSaveDats.Name = "mgBtnSaveDats";
-            this.mgBtnSaveDats.Size = new System.Drawing.Size(23, 22);
-            this.mgBtnSaveDats.Text = "Save Data";
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
-            // 
-            // mgBtnImportFile
-            // 
-            this.mgBtnImportFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.mgBtnImportFile.Enabled = false;
-            this.mgBtnImportFile.Image = ((System.Drawing.Image)(resources.GetObject("mgBtnImportFile.Image")));
-            this.mgBtnImportFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.mgBtnImportFile.Name = "mgBtnImportFile";
-            this.mgBtnImportFile.Size = new System.Drawing.Size(32, 22);
-            this.mgBtnImportFile.Text = "ImportFile";
-            this.mgBtnImportFile.ButtonClick += new System.EventHandler(this.mgBtnImportFile_ButtonClick);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolBtnConvertFile
-            // 
-            this.toolBtnConvertFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolBtnConvertFile.Image = ((System.Drawing.Image)(resources.GetObject("toolBtnConvertFile.Image")));
-            this.toolBtnConvertFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolBtnConvertFile.Name = "toolBtnConvertFile";
-            this.toolBtnConvertFile.Size = new System.Drawing.Size(23, 22);
-            this.toolBtnConvertFile.Text = "ConvertFile";
-            this.toolBtnConvertFile.Click += new System.EventHandler(this.openPDFviewer_Click);
-            // 
-            // toolBtnDictionaryList
-            // 
-            this.toolBtnDictionaryList.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolBtnDictionaryList.Enabled = false;
-            this.toolBtnDictionaryList.Image = ((System.Drawing.Image)(resources.GetObject("toolBtnDictionaryList.Image")));
-            this.toolBtnDictionaryList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.toolBtnDictionaryList.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolBtnDictionaryList.Name = "toolBtnDictionaryList";
-            this.toolBtnDictionaryList.Size = new System.Drawing.Size(23, 22);
-            this.toolBtnDictionaryList.Text = "DictionaryList";
-            this.toolBtnDictionaryList.Click += new System.EventHandler(this.OpenDictionaryList_Click);
-            // 
-            // toolBtnDictionaryEditor
-            // 
-            this.toolBtnDictionaryEditor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolBtnDictionaryEditor.Enabled = false;
-            this.toolBtnDictionaryEditor.Image = ((System.Drawing.Image)(resources.GetObject("toolBtnDictionaryEditor.Image")));
-            this.toolBtnDictionaryEditor.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolBtnDictionaryEditor.Name = "toolBtnDictionaryEditor";
-            this.toolBtnDictionaryEditor.Size = new System.Drawing.Size(23, 22);
-            this.toolBtnDictionaryEditor.Text = "DictionaryEditor";
-            this.toolBtnDictionaryEditor.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.toolBtnDictionaryEditor.Click += new System.EventHandler(this.toolBtnDictionaryEditor_Click);
-            // 
-            // mgBtnOpenFolder
-            // 
-            this.mgBtnOpenFolder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.mgBtnOpenFolder.Enabled = false;
-            this.mgBtnOpenFolder.Image = ((System.Drawing.Image)(resources.GetObject("mgBtnOpenFolder.Image")));
-            this.mgBtnOpenFolder.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.mgBtnOpenFolder.Name = "mgBtnOpenFolder";
-            this.mgBtnOpenFolder.Size = new System.Drawing.Size(23, 22);
-            this.mgBtnOpenFolder.Text = "Show in Windows";
-            this.mgBtnOpenFolder.Click += new System.EventHandler(this.mgBtnOpenFolder_Click);
-            // 
-            // toolStripButton3
-            // 
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolBtnMounth
-            // 
-            this.toolBtnMounth.Items.AddRange(new object[] {
-            "Январь",
-            "Февраль",
-            "Март",
-            "Апрель",
-            "Май",
-            "Июнь",
-            "Июль",
-            "Август",
-            "Сентябрь",
-            "Октябрь",
-            "Ноябрь",
-            "Декабрь"});
-            this.toolBtnMounth.Name = "toolBtnMounth";
-            this.toolBtnMounth.Size = new System.Drawing.Size(75, 25);
-            this.toolBtnMounth.Text = "Mounth";
-            // 
-            // toolBtnYear
-            // 
-            this.toolBtnYear.Items.AddRange(new object[] {
-            "2022",
-            "2023",
-            "2024"});
-            this.toolBtnYear.Name = "toolBtnYear";
-            this.toolBtnYear.Size = new System.Drawing.Size(75, 25);
-            this.toolBtnYear.Text = "Year";
-            // 
-            // toolStripButton4
-            // 
-            this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(6, 25);
-            // 
-            // mgOpenDataTable
-            // 
-            this.mgOpenDataTable.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.mgOpenDataTable.Image = ((System.Drawing.Image)(resources.GetObject("mgOpenDataTable.Image")));
-            this.mgOpenDataTable.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.mgOpenDataTable.Name = "mgOpenDataTable";
-            this.mgOpenDataTable.Size = new System.Drawing.Size(23, 22);
-            this.mgOpenDataTable.Text = "OpenDataTable";
-            this.mgOpenDataTable.Click += new System.EventHandler(this.mgOpenDataTable_Click);
-            // 
-            // mgDataСalculation
-            // 
-            this.mgDataСalculation.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.mgDataСalculation.Image = ((System.Drawing.Image)(resources.GetObject("mgDataСalculation.Image")));
-            this.mgDataСalculation.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.mgDataСalculation.Name = "mgDataСalculation";
-            this.mgDataСalculation.Size = new System.Drawing.Size(23, 22);
-            this.mgDataСalculation.Text = "OpenСalculation";
-            this.mgDataСalculation.Click += new System.EventHandler(this.mgDataСalculation_Click);
-            // 
-            // mgDataAct
-            // 
-            this.mgDataAct.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.mgDataAct.Image = ((System.Drawing.Image)(resources.GetObject("mgDataAct.Image")));
-            this.mgDataAct.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.mgDataAct.Name = "mgDataAct";
-            this.mgDataAct.Size = new System.Drawing.Size(23, 22);
-            this.mgDataAct.Text = "OpenAct";
-            this.mgDataAct.Click += new System.EventHandler(this.mgDataAct_Click);
-            // 
-            // mgSplitContainer_vertical
-            // 
-            this.mgSplitContainer_vertical.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.mgSplitContainer_vertical.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.mgSplitContainer_vertical.Location = new System.Drawing.Point(3, 31);
-            this.mgSplitContainer_vertical.Name = "mgSplitContainer_vertical";
-            this.mgSplitContainer_vertical.Panel1Collapsed = true;
-            this.mgSplitContainer_vertical.Panel1MinSize = 250;
-            // 
-            // mgSplitContainer_vertical.Panel2
-            // 
-            this.mgSplitContainer_vertical.Panel2.Controls.Add(this.mgSplitContainer_horizontal);
-            this.mgSplitContainer_vertical.Panel2MinSize = 300;
-            this.mgSplitContainer_vertical.Size = new System.Drawing.Size(1197, 564);
-            this.mgSplitContainer_vertical.SplitterDistance = 250;
-            this.mgSplitContainer_vertical.TabIndex = 0;
-            // 
-            // mgSplitContainer_horizontal
-            // 
-            this.mgSplitContainer_horizontal.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mgSplitContainer_horizontal.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.mgSplitContainer_horizontal.IsSplitterFixed = true;
-            this.mgSplitContainer_horizontal.Location = new System.Drawing.Point(0, 0);
-            this.mgSplitContainer_horizontal.Name = "mgSplitContainer_horizontal";
-            this.mgSplitContainer_horizontal.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // mgSplitContainer_horizontal.Panel1
-            // 
-            this.mgSplitContainer_horizontal.Panel1.Controls.Add(this.upperTableLayoutMainData);
-            this.mgSplitContainer_horizontal.Panel1MinSize = 60;
-            // 
-            // mgSplitContainer_horizontal.Panel2
-            // 
-            this.mgSplitContainer_horizontal.Panel2.Controls.Add(this.tabControlCurrentProject);
-            this.mgSplitContainer_horizontal.Panel2.Margin = new System.Windows.Forms.Padding(3);
-            this.mgSplitContainer_horizontal.Panel2MinSize = 100;
-            this.mgSplitContainer_horizontal.Size = new System.Drawing.Size(1197, 564);
-            this.mgSplitContainer_horizontal.SplitterDistance = 85;
-            this.mgSplitContainer_horizontal.TabIndex = 3;
-            // 
-            // upperTableLayoutMainData
-            // 
-            this.upperTableLayoutMainData.ColumnCount = 2;
-            this.upperTableLayoutMainData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.95155F));
-            this.upperTableLayoutMainData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 86.04845F));
-            this.upperTableLayoutMainData.Controls.Add(this.lblMainName, 0, 0);
-            this.upperTableLayoutMainData.Controls.Add(this.textBoxNameGP, 1, 3);
-            this.upperTableLayoutMainData.Controls.Add(this.lblSubject, 0, 1);
-            this.upperTableLayoutMainData.Controls.Add(this.textBoxGTPcode, 1, 2);
-            this.upperTableLayoutMainData.Controls.Add(this.lblNameGP, 0, 3);
-            this.upperTableLayoutMainData.Controls.Add(this.textBoxSubject, 1, 1);
-            this.upperTableLayoutMainData.Controls.Add(this.lblGTPcode, 0, 2);
-            this.upperTableLayoutMainData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.upperTableLayoutMainData.Location = new System.Drawing.Point(0, 0);
-            this.upperTableLayoutMainData.Margin = new System.Windows.Forms.Padding(1);
-            this.upperTableLayoutMainData.Name = "upperTableLayoutMainData";
-            this.upperTableLayoutMainData.RowCount = 4;
-            this.upperTableLayoutMainData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 27.67857F));
-            this.upperTableLayoutMainData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 24.10714F));
-            this.upperTableLayoutMainData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 24.10714F));
-            this.upperTableLayoutMainData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 24.10714F));
-            this.upperTableLayoutMainData.Size = new System.Drawing.Size(1197, 85);
-            this.upperTableLayoutMainData.TabIndex = 0;
+            this.mgFlowPanelResult.AllowDrop = true;
+            this.mgFlowPanelResult.AutoScroll = true;
+            this.mgFlowPanelResult.AutoSize = true;
+            this.mgFlowPanelResult.BackColor = System.Drawing.SystemColors.Control;
+            this.mgFlowPanelResult.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mgFlowPanelResult.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.mgFlowPanelResult.Location = new System.Drawing.Point(3, 18);
+            this.mgFlowPanelResult.Name = "mgFlowPanelResult";
+            this.mgFlowPanelResult.Size = new System.Drawing.Size(460, 101);
+            this.mgFlowPanelResult.TabIndex = 1;
+            this.mgFlowPanelResult.DragDrop += new System.Windows.Forms.DragEventHandler(this.mgFlowPanelResult_DragDrop);
+            this.mgFlowPanelResult.DragEnter += new System.Windows.Forms.DragEventHandler(this.mgFlowPanelResult_DragEnter);
             // 
             // lblMainName
             // 
             this.lblMainName.AutoSize = true;
-            this.upperTableLayoutMainData.SetColumnSpan(this.lblMainName, 2);
-            this.lblMainName.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblMainName.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.MainTableLayoutPanel.SetColumnSpan(this.lblMainName, 2);
+            this.lblMainName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblMainName.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblMainName.Location = new System.Drawing.Point(1, 1);
             this.lblMainName.Margin = new System.Windows.Forms.Padding(1);
             this.lblMainName.Name = "lblMainName";
-            this.lblMainName.Size = new System.Drawing.Size(359, 21);
+            this.lblMainName.Size = new System.Drawing.Size(1197, 25);
             this.lblMainName.TabIndex = 1;
-            this.lblMainName.Text = "Transaction MKG_REALESE_CLOSE: april 2023";
-            this.lblMainName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // textBoxNameGP
-            // 
-            this.textBoxNameGP.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.textBoxNameGP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxNameGP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxNameGP.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.textBoxNameGP.Location = new System.Drawing.Point(167, 63);
-            this.textBoxNameGP.Margin = new System.Windows.Forms.Padding(0);
-            this.textBoxNameGP.Name = "textBoxNameGP";
-            this.textBoxNameGP.Size = new System.Drawing.Size(1030, 21);
-            this.textBoxNameGP.TabIndex = 6;
-            this.textBoxNameGP.WordWrap = false;
-            // 
-            // lblSubject
-            // 
-            this.lblSubject.AutoSize = true;
-            this.lblSubject.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lblSubject.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblSubject.Location = new System.Drawing.Point(1, 24);
-            this.lblSubject.Margin = new System.Windows.Forms.Padding(1);
-            this.lblSubject.Name = "lblSubject";
-            this.lblSubject.Size = new System.Drawing.Size(78, 18);
-            this.lblSubject.TabIndex = 0;
-            this.lblSubject.Text = "Субъект РФ:";
-            this.lblSubject.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // textBoxGTPcode
-            // 
-            this.textBoxGTPcode.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.textBoxGTPcode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxGTPcode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxGTPcode.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.textBoxGTPcode.Location = new System.Drawing.Point(167, 43);
-            this.textBoxGTPcode.Margin = new System.Windows.Forms.Padding(0);
-            this.textBoxGTPcode.Name = "textBoxGTPcode";
-            this.textBoxGTPcode.Size = new System.Drawing.Size(1030, 21);
-            this.textBoxGTPcode.TabIndex = 5;
-            this.textBoxGTPcode.WordWrap = false;
-            // 
-            // lblNameGP
-            // 
-            this.lblNameGP.AutoSize = true;
-            this.lblNameGP.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lblNameGP.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblNameGP.Location = new System.Drawing.Point(1, 64);
-            this.lblNameGP.Margin = new System.Windows.Forms.Padding(1);
-            this.lblNameGP.Name = "lblNameGP";
-            this.lblNameGP.Size = new System.Drawing.Size(155, 20);
-            this.lblNameGP.TabIndex = 1;
-            this.lblNameGP.Text = "Наименование участника:";
-            this.lblNameGP.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // textBoxSubject
-            // 
-            this.textBoxSubject.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.textBoxSubject.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxSubject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxSubject.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.textBoxSubject.Location = new System.Drawing.Point(167, 23);
-            this.textBoxSubject.Margin = new System.Windows.Forms.Padding(0);
-            this.textBoxSubject.Name = "textBoxSubject";
-            this.textBoxSubject.Size = new System.Drawing.Size(1030, 21);
-            this.textBoxSubject.TabIndex = 4;
-            this.textBoxSubject.WordWrap = false;
-            // 
-            // lblGTPcode
-            // 
-            this.lblGTPcode.AutoSize = true;
-            this.lblGTPcode.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lblGTPcode.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblGTPcode.Location = new System.Drawing.Point(1, 44);
-            this.lblGTPcode.Margin = new System.Windows.Forms.Padding(1);
-            this.lblGTPcode.Name = "lblGTPcode";
-            this.lblGTPcode.Size = new System.Drawing.Size(58, 18);
-            this.lblGTPcode.TabIndex = 2;
-            this.lblGTPcode.Text = "Код ГТП:";
-            this.lblGTPcode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // tabControlCurrentProject
-            // 
-            this.tabControlCurrentProject.Controls.Add(this.tabBasic);
-            this.tabControlCurrentProject.Controls.Add(this.tabDetail);
-            this.tabControlCurrentProject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControlCurrentProject.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tabControlCurrentProject.Location = new System.Drawing.Point(0, 0);
-            this.tabControlCurrentProject.Margin = new System.Windows.Forms.Padding(0);
-            this.tabControlCurrentProject.Name = "tabControlCurrentProject";
-            this.tabControlCurrentProject.Padding = new System.Drawing.Point(10, 3);
-            this.tabControlCurrentProject.SelectedIndex = 0;
-            this.tabControlCurrentProject.Size = new System.Drawing.Size(1197, 475);
-            this.tabControlCurrentProject.TabIndex = 4;
-            // 
-            // tabBasic
-            // 
-            this.tabBasic.BackColor = System.Drawing.SystemColors.Control;
-            this.tabBasic.Location = new System.Drawing.Point(4, 23);
-            this.tabBasic.Margin = new System.Windows.Forms.Padding(0);
-            this.tabBasic.Name = "tabBasic";
-            this.tabBasic.Size = new System.Drawing.Size(1189, 448);
-            this.tabBasic.TabIndex = 0;
-            this.tabBasic.Text = "Basic data";
-            // 
-            // tabDetail
-            // 
-            this.tabDetail.BackColor = System.Drawing.SystemColors.Control;
-            this.tabDetail.Controls.Add(this.mgSplitContainer_insideHorizontal);
-            this.tabDetail.Location = new System.Drawing.Point(4, 23);
-            this.tabDetail.Margin = new System.Windows.Forms.Padding(0);
-            this.tabDetail.Name = "tabDetail";
-            this.tabDetail.Size = new System.Drawing.Size(1189, 447);
-            this.tabDetail.TabIndex = 1;
-            this.tabDetail.Text = "Detail";
+            this.lblMainName.Text = "Transaction MKG_REALESE_CLOSE: june 2023";
+            this.lblMainName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // mgSplitContainer_insideHorizontal
             // 
+            this.MainTableLayoutPanel.SetColumnSpan(this.mgSplitContainer_insideHorizontal, 2);
             this.mgSplitContainer_insideHorizontal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mgSplitContainer_insideHorizontal.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.mgSplitContainer_insideHorizontal.Location = new System.Drawing.Point(0, 0);
+            this.mgSplitContainer_insideHorizontal.Location = new System.Drawing.Point(3, 185);
             this.mgSplitContainer_insideHorizontal.Name = "mgSplitContainer_insideHorizontal";
             this.mgSplitContainer_insideHorizontal.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -865,8 +545,8 @@ namespace dataEditor
             // mgSplitContainer_insideHorizontal.Panel2
             // 
             this.mgSplitContainer_insideHorizontal.Panel2.Controls.Add(this.inputTableLoyaut);
-            this.mgSplitContainer_insideHorizontal.Size = new System.Drawing.Size(1189, 447);
-            this.mgSplitContainer_insideHorizontal.SplitterDistance = 418;
+            this.mgSplitContainer_insideHorizontal.Size = new System.Drawing.Size(1193, 398);
+            this.mgSplitContainer_insideHorizontal.SplitterDistance = 369;
             this.mgSplitContainer_insideHorizontal.TabIndex = 3;
             // 
             // mgSplitContainer_inside_vertical
@@ -880,13 +560,10 @@ namespace dataEditor
             // 
             this.mgSplitContainer_inside_vertical.Panel1.Controls.Add(this.mgDataViewer);
             this.mgSplitContainer_inside_vertical.Panel1MinSize = 500;
-            // 
-            // mgSplitContainer_inside_vertical.Panel2
-            // 
-            this.mgSplitContainer_inside_vertical.Panel2.Controls.Add(this.mgSplitContainer_insideRight);
-            this.mgSplitContainer_inside_vertical.Panel2MinSize = 125;
-            this.mgSplitContainer_inside_vertical.Size = new System.Drawing.Size(1189, 418);
-            this.mgSplitContainer_inside_vertical.SplitterDistance = 971;
+            this.mgSplitContainer_inside_vertical.Panel2Collapsed = true;
+            this.mgSplitContainer_inside_vertical.Panel2MinSize = 200;
+            this.mgSplitContainer_inside_vertical.Size = new System.Drawing.Size(1193, 369);
+            this.mgSplitContainer_inside_vertical.SplitterDistance = 500;
             this.mgSplitContainer_inside_vertical.TabIndex = 0;
             // 
             // mgDataViewer
@@ -912,7 +589,11 @@ namespace dataEditor
             this.mgDataViewer.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.mgDataViewer.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id,
+            this.SelectID,
             this.dataTable,
+            this.dataCalculation,
+            this.dataAct,
+            this.OpenFolder,
             this.Agreement,
             this.FullName,
             this.DateAgreement,
@@ -924,10 +605,7 @@ namespace dataEditor
             this.SELL,
             this.BUY,
             this.Price,
-            this.Cost,
-            this.dataCalculation,
-            this.dataAct,
-            this.OpenFolder});
+            this.Cost});
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.ControlLight;
             dataGridViewCellStyle6.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -939,13 +617,12 @@ namespace dataEditor
             dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.mgDataViewer.DefaultCellStyle = dataGridViewCellStyle6;
             this.mgDataViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mgDataViewer.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.mgDataViewer.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.mgDataViewer.EnableHeadersVisualStyles = false;
             this.mgDataViewer.GridColor = System.Drawing.SystemColors.ControlDarkDark;
             this.mgDataViewer.Location = new System.Drawing.Point(0, 0);
             this.mgDataViewer.MultiSelect = false;
             this.mgDataViewer.Name = "mgDataViewer";
-            this.mgDataViewer.ReadOnly = true;
             this.mgDataViewer.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -961,7 +638,7 @@ namespace dataEditor
             this.mgDataViewer.RowTemplate.Height = 20;
             this.mgDataViewer.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.mgDataViewer.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.mgDataViewer.Size = new System.Drawing.Size(971, 418);
+            this.mgDataViewer.Size = new System.Drawing.Size(1193, 369);
             this.mgDataViewer.TabIndex = 2;
             this.mgDataViewer.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.mgDataViewer_CellClick);
             this.mgDataViewer.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.mgDataViewer_CellPainting);
@@ -984,16 +661,57 @@ namespace dataEditor
             this.id.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.id.Width = 25;
             // 
+            // SelectID
+            // 
+            this.SelectID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.SelectID.HeaderText = "Select";
+            this.SelectID.MinimumWidth = 25;
+            this.SelectID.Name = "SelectID";
+            this.SelectID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.SelectID.Width = 25;
+            // 
             // dataTable
             // 
             this.dataTable.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.dataTable.HeaderText = "R";
+            this.dataTable.HeaderText = "Resources";
             this.dataTable.MinimumWidth = 25;
             this.dataTable.Name = "dataTable";
             this.dataTable.ReadOnly = true;
             this.dataTable.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.dataTable.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.dataTable.Width = 25;
+            // 
+            // dataCalculation
+            // 
+            this.dataCalculation.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataCalculation.HeaderText = "Excel";
+            this.dataCalculation.MinimumWidth = 25;
+            this.dataCalculation.Name = "dataCalculation";
+            this.dataCalculation.ReadOnly = true;
+            this.dataCalculation.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataCalculation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataCalculation.Width = 25;
+            // 
+            // dataAct
+            // 
+            this.dataAct.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataAct.HeaderText = "Doc";
+            this.dataAct.MinimumWidth = 25;
+            this.dataAct.Name = "dataAct";
+            this.dataAct.ReadOnly = true;
+            this.dataAct.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataAct.Width = 25;
+            // 
+            // OpenFolder
+            // 
+            this.OpenFolder.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.OpenFolder.HeaderText = "Folder";
+            this.OpenFolder.MinimumWidth = 25;
+            this.OpenFolder.Name = "OpenFolder";
+            this.OpenFolder.ReadOnly = true;
+            this.OpenFolder.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.OpenFolder.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.OpenFolder.Width = 25;
             // 
             // Agreement
             // 
@@ -1102,120 +820,6 @@ namespace dataEditor
             this.Cost.ReadOnly = true;
             this.Cost.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // dataCalculation
-            // 
-            this.dataCalculation.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.dataCalculation.HeaderText = "S";
-            this.dataCalculation.MinimumWidth = 25;
-            this.dataCalculation.Name = "dataCalculation";
-            this.dataCalculation.ReadOnly = true;
-            this.dataCalculation.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataCalculation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataCalculation.Width = 25;
-            // 
-            // dataAct
-            // 
-            this.dataAct.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.dataAct.HeaderText = "D";
-            this.dataAct.MinimumWidth = 25;
-            this.dataAct.Name = "dataAct";
-            this.dataAct.ReadOnly = true;
-            this.dataAct.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataAct.Width = 25;
-            // 
-            // OpenFolder
-            // 
-            this.OpenFolder.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.OpenFolder.HeaderText = "F";
-            this.OpenFolder.MinimumWidth = 25;
-            this.OpenFolder.Name = "OpenFolder";
-            this.OpenFolder.ReadOnly = true;
-            this.OpenFolder.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.OpenFolder.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.OpenFolder.Width = 25;
-            // 
-            // mgSplitContainer_insideRight
-            // 
-            this.mgSplitContainer_insideRight.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mgSplitContainer_insideRight.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.mgSplitContainer_insideRight.Location = new System.Drawing.Point(0, 0);
-            this.mgSplitContainer_insideRight.Name = "mgSplitContainer_insideRight";
-            this.mgSplitContainer_insideRight.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // mgSplitContainer_insideRight.Panel1
-            // 
-            this.mgSplitContainer_insideRight.Panel1.Controls.Add(this.groupBoxRes);
-            this.mgSplitContainer_insideRight.Panel1MinSize = 80;
-            // 
-            // mgSplitContainer_insideRight.Panel2
-            // 
-            this.mgSplitContainer_insideRight.Panel2.Controls.Add(this.groupBoxData);
-            this.mgSplitContainer_insideRight.Panel2MinSize = 100;
-            this.mgSplitContainer_insideRight.Size = new System.Drawing.Size(214, 418);
-            this.mgSplitContainer_insideRight.SplitterDistance = 80;
-            this.mgSplitContainer_insideRight.TabIndex = 2;
-            // 
-            // groupBoxRes
-            // 
-            this.groupBoxRes.Controls.Add(this.ResourcesTreeView);
-            this.groupBoxRes.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxRes.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBoxRes.Location = new System.Drawing.Point(0, 0);
-            this.groupBoxRes.Name = "groupBoxRes";
-            this.groupBoxRes.Size = new System.Drawing.Size(214, 80);
-            this.groupBoxRes.TabIndex = 0;
-            this.groupBoxRes.TabStop = false;
-            this.groupBoxRes.Text = "Resources manager";
-            // 
-            // ResourcesTreeView
-            // 
-            this.ResourcesTreeView.BackColor = System.Drawing.SystemColors.Control;
-            this.ResourcesTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ResourcesTreeView.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ResourcesTreeView.ImageKey = "FolderOpened.png";
-            this.ResourcesTreeView.ImageList = this.imgList;
-            this.ResourcesTreeView.Location = new System.Drawing.Point(3, 18);
-            this.ResourcesTreeView.Name = "ResourcesTreeView";
-            this.ResourcesTreeView.SelectedImageIndex = 0;
-            this.ResourcesTreeView.Size = new System.Drawing.Size(208, 59);
-            this.ResourcesTreeView.TabIndex = 2;
-            // 
-            // imgList
-            // 
-            this.imgList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imgList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgList.ImageStream")));
-            this.imgList.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgList.Images.SetKeyName(0, "FolderOpened.png");
-            this.imgList.Images.SetKeyName(1, "ShowDataPreview.png");
-            // 
-            // groupBoxData
-            // 
-            this.groupBoxData.Controls.Add(this.mgFlowPanelResult);
-            this.groupBoxData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxData.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBoxData.Location = new System.Drawing.Point(0, 0);
-            this.groupBoxData.Name = "groupBoxData";
-            this.groupBoxData.Size = new System.Drawing.Size(214, 334);
-            this.groupBoxData.TabIndex = 2;
-            this.groupBoxData.TabStop = false;
-            this.groupBoxData.Text = "Extracted data";
-            // 
-            // mgFlowPanelResult
-            // 
-            this.mgFlowPanelResult.AllowDrop = true;
-            this.mgFlowPanelResult.AutoScroll = true;
-            this.mgFlowPanelResult.AutoSize = true;
-            this.mgFlowPanelResult.BackColor = System.Drawing.SystemColors.Control;
-            this.mgFlowPanelResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.mgFlowPanelResult.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mgFlowPanelResult.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.mgFlowPanelResult.Location = new System.Drawing.Point(3, 18);
-            this.mgFlowPanelResult.Name = "mgFlowPanelResult";
-            this.mgFlowPanelResult.Size = new System.Drawing.Size(208, 313);
-            this.mgFlowPanelResult.TabIndex = 1;
-            this.mgFlowPanelResult.DragDrop += new System.Windows.Forms.DragEventHandler(this.mgFlowPanelResult_DragDrop);
-            this.mgFlowPanelResult.DragEnter += new System.Windows.Forms.DragEventHandler(this.mgFlowPanelResult_DragEnter);
-            // 
             // inputTableLoyaut
             // 
             this.inputTableLoyaut.ColumnCount = 1;
@@ -1228,7 +832,7 @@ namespace dataEditor
             this.inputTableLoyaut.RowCount = 2;
             this.inputTableLoyaut.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.inputTableLoyaut.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.inputTableLoyaut.Size = new System.Drawing.Size(1189, 25);
+            this.inputTableLoyaut.Size = new System.Drawing.Size(1193, 25);
             this.inputTableLoyaut.TabIndex = 0;
             // 
             // datsTreeView
@@ -1338,7 +942,7 @@ namespace dataEditor
             treeNode18,
             treeNode25,
             treeNode30});
-            this.datsTreeView.Size = new System.Drawing.Size(1183, 1);
+            this.datsTreeView.Size = new System.Drawing.Size(1187, 1);
             this.datsTreeView.TabIndex = 2;
             // 
             // mgToolStripInputData
@@ -1355,7 +959,7 @@ namespace dataEditor
             this.imgStatusFailed});
             this.mgToolStripInputData.Location = new System.Drawing.Point(0, 0);
             this.mgToolStripInputData.Name = "mgToolStripInputData";
-            this.mgToolStripInputData.Size = new System.Drawing.Size(1189, 25);
+            this.mgToolStripInputData.Size = new System.Drawing.Size(1193, 25);
             this.mgToolStripInputData.TabIndex = 3;
             // 
             // mgBtnEntryDatFiles
@@ -1463,6 +1067,375 @@ namespace dataEditor
             this.imgStatusFailed.Size = new System.Drawing.Size(23, 22);
             this.imgStatusFailed.Visible = false;
             // 
+            // g
+            // 
+            this.g.BackColor = System.Drawing.SystemColors.Control;
+            this.g.Dock = System.Windows.Forms.DockStyle.None;
+            this.g.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.g.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mgBtnNewProject,
+            this.mgBtnOpenFile,
+            this.mgBtnSaveDats,
+            this.toolStripSeparator5,
+            this.mgBtnImportFile,
+            this.toolStripSeparator4,
+            this.toolBtnConvertFile,
+            this.toolBtnDictionaryList,
+            this.toolBtnDictionaryEditor,
+            this.mgBtnOpenFolder,
+            this.toolStripButton3,
+            this.toolBtnMounth,
+            this.toolBtnYear,
+            this.toolStripButton4,
+            this.mgOpenDataTable,
+            this.mgDataСalculation,
+            this.mgDataAct});
+            this.g.Location = new System.Drawing.Point(5, 28);
+            this.g.Margin = new System.Windows.Forms.Padding(5, 1, 1, 1);
+            this.g.Name = "g";
+            this.g.Size = new System.Drawing.Size(443, 25);
+            this.g.TabIndex = 4;
+            this.g.Text = "mgTools";
+            // 
+            // mgBtnNewProject
+            // 
+            this.mgBtnNewProject.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.mgBtnNewProject.Image = ((System.Drawing.Image)(resources.GetObject("mgBtnNewProject.Image")));
+            this.mgBtnNewProject.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.mgBtnNewProject.Name = "mgBtnNewProject";
+            this.mgBtnNewProject.Size = new System.Drawing.Size(23, 22);
+            this.mgBtnNewProject.Text = "New Project";
+            this.mgBtnNewProject.Click += new System.EventHandler(this.mgBtnNewProject_Click);
+            // 
+            // mgBtnOpenFile
+            // 
+            this.mgBtnOpenFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.mgBtnOpenFile.Image = ((System.Drawing.Image)(resources.GetObject("mgBtnOpenFile.Image")));
+            this.mgBtnOpenFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.mgBtnOpenFile.Name = "mgBtnOpenFile";
+            this.mgBtnOpenFile.Size = new System.Drawing.Size(23, 22);
+            this.mgBtnOpenFile.Text = "Open File";
+            // 
+            // mgBtnSaveDats
+            // 
+            this.mgBtnSaveDats.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.mgBtnSaveDats.Enabled = false;
+            this.mgBtnSaveDats.Image = ((System.Drawing.Image)(resources.GetObject("mgBtnSaveDats.Image")));
+            this.mgBtnSaveDats.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.mgBtnSaveDats.Name = "mgBtnSaveDats";
+            this.mgBtnSaveDats.Size = new System.Drawing.Size(23, 22);
+            this.mgBtnSaveDats.Text = "Save Data";
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+            // 
+            // mgBtnImportFile
+            // 
+            this.mgBtnImportFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.mgBtnImportFile.Enabled = false;
+            this.mgBtnImportFile.Image = ((System.Drawing.Image)(resources.GetObject("mgBtnImportFile.Image")));
+            this.mgBtnImportFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.mgBtnImportFile.Name = "mgBtnImportFile";
+            this.mgBtnImportFile.Size = new System.Drawing.Size(32, 22);
+            this.mgBtnImportFile.Text = "ImportFile";
+            this.mgBtnImportFile.ButtonClick += new System.EventHandler(this.mgBtnImportFile_ButtonClick);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolBtnConvertFile
+            // 
+            this.toolBtnConvertFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolBtnConvertFile.Image = ((System.Drawing.Image)(resources.GetObject("toolBtnConvertFile.Image")));
+            this.toolBtnConvertFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolBtnConvertFile.Name = "toolBtnConvertFile";
+            this.toolBtnConvertFile.Size = new System.Drawing.Size(23, 22);
+            this.toolBtnConvertFile.Text = "ConvertFile";
+            // 
+            // toolBtnDictionaryList
+            // 
+            this.toolBtnDictionaryList.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolBtnDictionaryList.Enabled = false;
+            this.toolBtnDictionaryList.Image = ((System.Drawing.Image)(resources.GetObject("toolBtnDictionaryList.Image")));
+            this.toolBtnDictionaryList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolBtnDictionaryList.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolBtnDictionaryList.Name = "toolBtnDictionaryList";
+            this.toolBtnDictionaryList.Size = new System.Drawing.Size(23, 22);
+            this.toolBtnDictionaryList.Text = "DictionaryList";
+            this.toolBtnDictionaryList.Click += new System.EventHandler(this.OpenDictionaryList_Click);
+            // 
+            // toolBtnDictionaryEditor
+            // 
+            this.toolBtnDictionaryEditor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolBtnDictionaryEditor.Enabled = false;
+            this.toolBtnDictionaryEditor.Image = ((System.Drawing.Image)(resources.GetObject("toolBtnDictionaryEditor.Image")));
+            this.toolBtnDictionaryEditor.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolBtnDictionaryEditor.Name = "toolBtnDictionaryEditor";
+            this.toolBtnDictionaryEditor.Size = new System.Drawing.Size(23, 22);
+            this.toolBtnDictionaryEditor.Text = "DictionaryEditor";
+            this.toolBtnDictionaryEditor.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolBtnDictionaryEditor.Click += new System.EventHandler(this.toolBtnDictionaryEditor_Click);
+            // 
+            // mgBtnOpenFolder
+            // 
+            this.mgBtnOpenFolder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.mgBtnOpenFolder.Enabled = false;
+            this.mgBtnOpenFolder.Image = ((System.Drawing.Image)(resources.GetObject("mgBtnOpenFolder.Image")));
+            this.mgBtnOpenFolder.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.mgBtnOpenFolder.Name = "mgBtnOpenFolder";
+            this.mgBtnOpenFolder.Size = new System.Drawing.Size(23, 22);
+            this.mgBtnOpenFolder.Text = "Show in Windows";
+            this.mgBtnOpenFolder.Click += new System.EventHandler(this.mgBtnOpenFolder_Click);
+            // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolBtnMounth
+            // 
+            this.toolBtnMounth.Items.AddRange(new object[] {
+            "Январь",
+            "Февраль",
+            "Март",
+            "Апрель",
+            "Май",
+            "Июнь",
+            "Июль",
+            "Август",
+            "Сентябрь",
+            "Октябрь",
+            "Ноябрь",
+            "Декабрь"});
+            this.toolBtnMounth.Name = "toolBtnMounth";
+            this.toolBtnMounth.Size = new System.Drawing.Size(75, 25);
+            this.toolBtnMounth.Text = "Mounth";
+            // 
+            // toolBtnYear
+            // 
+            this.toolBtnYear.Items.AddRange(new object[] {
+            "2022",
+            "2023",
+            "2024"});
+            this.toolBtnYear.Name = "toolBtnYear";
+            this.toolBtnYear.Size = new System.Drawing.Size(75, 25);
+            this.toolBtnYear.Text = "Year";
+            // 
+            // toolStripButton4
+            // 
+            this.toolStripButton4.Name = "toolStripButton4";
+            this.toolStripButton4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // mgOpenDataTable
+            // 
+            this.mgOpenDataTable.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.mgOpenDataTable.Image = ((System.Drawing.Image)(resources.GetObject("mgOpenDataTable.Image")));
+            this.mgOpenDataTable.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.mgOpenDataTable.Name = "mgOpenDataTable";
+            this.mgOpenDataTable.Size = new System.Drawing.Size(23, 22);
+            this.mgOpenDataTable.Text = "OpenDataTable";
+            this.mgOpenDataTable.Click += new System.EventHandler(this.mgOpenDataTable_Click);
+            // 
+            // mgDataСalculation
+            // 
+            this.mgDataСalculation.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.mgDataСalculation.Image = ((System.Drawing.Image)(resources.GetObject("mgDataСalculation.Image")));
+            this.mgDataСalculation.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.mgDataСalculation.Name = "mgDataСalculation";
+            this.mgDataСalculation.Size = new System.Drawing.Size(23, 22);
+            this.mgDataСalculation.Text = "OpenСalculation";
+            this.mgDataСalculation.Click += new System.EventHandler(this.mgDataСalculation_Click);
+            // 
+            // mgDataAct
+            // 
+            this.mgDataAct.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.mgDataAct.Image = ((System.Drawing.Image)(resources.GetObject("mgDataAct.Image")));
+            this.mgDataAct.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.mgDataAct.Name = "mgDataAct";
+            this.mgDataAct.Size = new System.Drawing.Size(23, 22);
+            this.mgDataAct.Text = "OpenAct";
+            this.mgDataAct.Click += new System.EventHandler(this.mgDataAct_Click);
+            // 
+            // tabControlCurrentProject
+            // 
+            this.tabControlCurrentProject.Controls.Add(this.tabBasic);
+            this.tabControlCurrentProject.Controls.Add(this.tabDetail);
+            this.tabControlCurrentProject.Dock = System.Windows.Forms.DockStyle.Left;
+            this.tabControlCurrentProject.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.tabControlCurrentProject.Location = new System.Drawing.Point(1, 55);
+            this.tabControlCurrentProject.Margin = new System.Windows.Forms.Padding(1);
+            this.tabControlCurrentProject.Name = "tabControlCurrentProject";
+            this.tabControlCurrentProject.Padding = new System.Drawing.Point(10, 3);
+            this.tabControlCurrentProject.SelectedIndex = 0;
+            this.tabControlCurrentProject.Size = new System.Drawing.Size(719, 126);
+            this.tabControlCurrentProject.TabIndex = 4;
+            // 
+            // tabBasic
+            // 
+            this.tabBasic.BackColor = System.Drawing.SystemColors.Control;
+            this.tabBasic.Controls.Add(this.upperTableLayoutMainData);
+            this.tabBasic.Location = new System.Drawing.Point(4, 23);
+            this.tabBasic.Margin = new System.Windows.Forms.Padding(0);
+            this.tabBasic.Name = "tabBasic";
+            this.tabBasic.Padding = new System.Windows.Forms.Padding(1, 4, 1, 1);
+            this.tabBasic.Size = new System.Drawing.Size(711, 99);
+            this.tabBasic.TabIndex = 0;
+            this.tabBasic.Text = "Basic data";
+            // 
+            // upperTableLayoutMainData
+            // 
+            this.upperTableLayoutMainData.ColumnCount = 2;
+            this.upperTableLayoutMainData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.78481F));
+            this.upperTableLayoutMainData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 77.21519F));
+            this.upperTableLayoutMainData.Controls.Add(this.textBoxSubject, 1, 0);
+            this.upperTableLayoutMainData.Controls.Add(this.textBoxGTPcode, 1, 1);
+            this.upperTableLayoutMainData.Controls.Add(this.textBoxNameGP, 1, 2);
+            this.upperTableLayoutMainData.Controls.Add(this.lblSubject, 0, 0);
+            this.upperTableLayoutMainData.Controls.Add(this.lblGTPcode, 0, 1);
+            this.upperTableLayoutMainData.Controls.Add(this.lblNameGP, 0, 2);
+            this.upperTableLayoutMainData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.upperTableLayoutMainData.Location = new System.Drawing.Point(1, 4);
+            this.upperTableLayoutMainData.Margin = new System.Windows.Forms.Padding(1);
+            this.upperTableLayoutMainData.Name = "upperTableLayoutMainData";
+            this.upperTableLayoutMainData.RowCount = 3;
+            this.upperTableLayoutMainData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.upperTableLayoutMainData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.upperTableLayoutMainData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.upperTableLayoutMainData.Size = new System.Drawing.Size(709, 94);
+            this.upperTableLayoutMainData.TabIndex = 0;
+            this.upperTableLayoutMainData.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.TitleInfoBorderColor);
+            // 
+            // textBoxSubject
+            // 
+            this.textBoxSubject.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.textBoxSubject.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxSubject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxSubject.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.textBoxSubject.Location = new System.Drawing.Point(161, 0);
+            this.textBoxSubject.Margin = new System.Windows.Forms.Padding(0);
+            this.textBoxSubject.Name = "textBoxSubject";
+            this.textBoxSubject.Size = new System.Drawing.Size(548, 21);
+            this.textBoxSubject.TabIndex = 4;
+            this.textBoxSubject.WordWrap = false;
+            // 
+            // textBoxGTPcode
+            // 
+            this.textBoxGTPcode.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.textBoxGTPcode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxGTPcode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxGTPcode.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.textBoxGTPcode.Location = new System.Drawing.Point(161, 31);
+            this.textBoxGTPcode.Margin = new System.Windows.Forms.Padding(0);
+            this.textBoxGTPcode.Name = "textBoxGTPcode";
+            this.textBoxGTPcode.Size = new System.Drawing.Size(548, 21);
+            this.textBoxGTPcode.TabIndex = 5;
+            this.textBoxGTPcode.WordWrap = false;
+            // 
+            // textBoxNameGP
+            // 
+            this.textBoxNameGP.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.textBoxNameGP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxNameGP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxNameGP.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.textBoxNameGP.Location = new System.Drawing.Point(161, 63);
+            this.textBoxNameGP.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
+            this.textBoxNameGP.Name = "textBoxNameGP";
+            this.textBoxNameGP.Size = new System.Drawing.Size(548, 21);
+            this.textBoxNameGP.TabIndex = 6;
+            this.textBoxNameGP.WordWrap = false;
+            // 
+            // lblSubject
+            // 
+            this.lblSubject.AutoSize = true;
+            this.lblSubject.BackColor = System.Drawing.Color.Transparent;
+            this.lblSubject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSubject.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblSubject.Location = new System.Drawing.Point(1, 2);
+            this.lblSubject.Margin = new System.Windows.Forms.Padding(1, 2, 0, 10);
+            this.lblSubject.Name = "lblSubject";
+            this.lblSubject.Size = new System.Drawing.Size(160, 19);
+            this.lblSubject.TabIndex = 0;
+            this.lblSubject.Text = "Субъект РФ:";
+            this.lblSubject.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblGTPcode
+            // 
+            this.lblGTPcode.AutoSize = true;
+            this.lblGTPcode.BackColor = System.Drawing.Color.Transparent;
+            this.lblGTPcode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblGTPcode.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblGTPcode.Location = new System.Drawing.Point(1, 33);
+            this.lblGTPcode.Margin = new System.Windows.Forms.Padding(1, 2, 0, 10);
+            this.lblGTPcode.Name = "lblGTPcode";
+            this.lblGTPcode.Size = new System.Drawing.Size(160, 19);
+            this.lblGTPcode.TabIndex = 2;
+            this.lblGTPcode.Text = "Код ГТП:";
+            this.lblGTPcode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblNameGP
+            // 
+            this.lblNameGP.AutoSize = true;
+            this.lblNameGP.BackColor = System.Drawing.Color.Transparent;
+            this.lblNameGP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblNameGP.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblNameGP.Location = new System.Drawing.Point(1, 64);
+            this.lblNameGP.Margin = new System.Windows.Forms.Padding(1, 2, 0, 10);
+            this.lblNameGP.Name = "lblNameGP";
+            this.lblNameGP.Size = new System.Drawing.Size(160, 20);
+            this.lblNameGP.TabIndex = 1;
+            this.lblNameGP.Text = "Наименование участника:";
+            this.lblNameGP.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // tabDetail
+            // 
+            this.tabDetail.BackColor = System.Drawing.SystemColors.Control;
+            this.tabDetail.Controls.Add(this.groupBoxRes);
+            this.tabDetail.Location = new System.Drawing.Point(4, 23);
+            this.tabDetail.Margin = new System.Windows.Forms.Padding(0);
+            this.tabDetail.Name = "tabDetail";
+            this.tabDetail.Padding = new System.Windows.Forms.Padding(1);
+            this.tabDetail.Size = new System.Drawing.Size(711, 99);
+            this.tabDetail.TabIndex = 1;
+            this.tabDetail.Text = "Detail";
+            // 
+            // groupBoxRes
+            // 
+            this.groupBoxRes.Controls.Add(this.ResourcesTreeView);
+            this.groupBoxRes.Dock = System.Windows.Forms.DockStyle.Left;
+            this.groupBoxRes.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.groupBoxRes.Location = new System.Drawing.Point(1, 1);
+            this.groupBoxRes.Name = "groupBoxRes";
+            this.groupBoxRes.Size = new System.Drawing.Size(251, 97);
+            this.groupBoxRes.TabIndex = 0;
+            this.groupBoxRes.TabStop = false;
+            this.groupBoxRes.Text = "Resources manager";
+            // 
+            // ResourcesTreeView
+            // 
+            this.ResourcesTreeView.BackColor = System.Drawing.SystemColors.Control;
+            this.ResourcesTreeView.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.ResourcesTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ResourcesTreeView.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ResourcesTreeView.ImageKey = "FolderOpened.png";
+            this.ResourcesTreeView.ImageList = this.imgList;
+            this.ResourcesTreeView.Location = new System.Drawing.Point(3, 18);
+            this.ResourcesTreeView.Name = "ResourcesTreeView";
+            this.ResourcesTreeView.SelectedImageIndex = 0;
+            this.ResourcesTreeView.Size = new System.Drawing.Size(245, 76);
+            this.ResourcesTreeView.TabIndex = 2;
+            // 
+            // imgList
+            // 
+            this.imgList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imgList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgList.ImageStream")));
+            this.imgList.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgList.Images.SetKeyName(0, "FolderOpened.png");
+            this.imgList.Images.SetKeyName(1, "ShowDataPreview.png");
+            // 
             // appInfo
             // 
             this.appInfo.AutoSize = true;
@@ -1484,7 +1457,7 @@ namespace dataEditor
             this.tabExcel.Controls.Add(this.splitContainer_bigMain);
             this.tabExcel.Location = new System.Drawing.Point(4, 23);
             this.tabExcel.Name = "tabExcel";
-            this.tabExcel.Padding = new System.Windows.Forms.Padding(3);
+            this.tabExcel.Padding = new System.Windows.Forms.Padding(1);
             this.tabExcel.Size = new System.Drawing.Size(1203, 590);
             this.tabExcel.TabIndex = 0;
             this.tabExcel.Text = "ExcelReader";
@@ -1496,19 +1469,18 @@ namespace dataEditor
             this.toolStripSeparator2,
             this.urBtnSaveXML,
             this.urBtnConvert2Tree});
-            this.urToolStrip.Location = new System.Drawing.Point(3, 3);
+            this.urToolStrip.Location = new System.Drawing.Point(1, 1);
             this.urToolStrip.Name = "urToolStrip";
-            this.urToolStrip.Size = new System.Drawing.Size(1197, 25);
+            this.urToolStrip.Size = new System.Drawing.Size(1201, 25);
             this.urToolStrip.TabIndex = 76;
             this.urToolStrip.Text = "mgTools";
             // 
             // urBtnImportFile
             // 
             this.urBtnImportFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.urBtnImportFile.Image = ((System.Drawing.Image)(resources.GetObject("urBtnImportFile.Image")));
             this.urBtnImportFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.urBtnImportFile.Name = "urBtnImportFile";
-            this.urBtnImportFile.Size = new System.Drawing.Size(32, 22);
+            this.urBtnImportFile.Size = new System.Drawing.Size(16, 22);
             this.urBtnImportFile.Text = "ImportFile";
             this.urBtnImportFile.ButtonClick += new System.EventHandler(this.urBtnImportFile_ButtonClick);
             // 
@@ -1521,7 +1493,6 @@ namespace dataEditor
             // 
             this.urBtnSaveXML.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.urBtnSaveXML.Enabled = false;
-            this.urBtnSaveXML.Image = ((System.Drawing.Image)(resources.GetObject("urBtnSaveXML.Image")));
             this.urBtnSaveXML.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.urBtnSaveXML.Name = "urBtnSaveXML";
             this.urBtnSaveXML.Size = new System.Drawing.Size(23, 22);
@@ -1532,7 +1503,6 @@ namespace dataEditor
             // 
             this.urBtnConvert2Tree.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.urBtnConvert2Tree.Enabled = false;
-            this.urBtnConvert2Tree.Image = ((System.Drawing.Image)(resources.GetObject("urBtnConvert2Tree.Image")));
             this.urBtnConvert2Tree.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.urBtnConvert2Tree.Name = "urBtnConvert2Tree";
             this.urBtnConvert2Tree.Size = new System.Drawing.Size(23, 22);
@@ -1813,28 +1783,7 @@ namespace dataEditor
             this.imgListData.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgListData.ImageStream")));
             this.imgListData.TransparentColor = System.Drawing.Color.Transparent;
             this.imgListData.Images.SetKeyName(0, "ShowDataPreview.png");
-            this.imgListData.Images.SetKeyName(1, "SummaryView.png");
-            this.imgListData.Images.SetKeyName(2, "SwitchToPreview.png");
-            this.imgListData.Images.SetKeyName(3, "DataSourceView.png");
-            this.imgListData.Images.SetKeyName(4, "GridDetailView.png");
-            this.imgListData.Images.SetKeyName(5, "TableGroup.png");
-            this.imgListData.Images.SetKeyName(6, "ResultsToGrid.png");
-            this.imgListData.Images.SetKeyName(7, "GridDetailView.png");
-            this.imgListData.Images.SetKeyName(8, "SaveTable.png");
-            this.imgListData.Images.SetKeyName(9, "TableOK.png");
-            this.imgListData.Images.SetKeyName(10, "TableMissing.png");
-            this.imgListData.Images.SetKeyName(11, "TableGroupError.png");
-            this.imgListData.Images.SetKeyName(12, "TableError.png");
-            this.imgListData.Images.SetKeyName(13, "AddTable.png");
-            this.imgListData.Images.SetKeyName(14, "DeleteTable.png");
-            this.imgListData.Images.SetKeyName(15, "SelectTable.png");
-            this.imgListData.Images.SetKeyName(16, "OpenFolder.png");
-            this.imgListData.Images.SetKeyName(17, "OpenProjectFolder.png");
-            this.imgListData.Images.SetKeyName(18, "FolderOpened.png");
-            this.imgListData.Images.SetKeyName(19, "SearchFolderOpened.png");
-            this.imgListData.Images.SetKeyName(20, "SamplesFolder.png");
-            this.imgListData.Images.SetKeyName(21, "StorageContainer.png");
-            this.imgListData.Images.SetKeyName(22, "StorageContainerGroup.png");
+            this.imgListData.Images.SetKeyName(1, "TableGroup.png");
             // 
             // MainForm
             // 
@@ -1860,40 +1809,31 @@ namespace dataEditor
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabMicrogeneration.ResumeLayout(false);
-            this.tabMicrogeneration.PerformLayout();
-            this.g.ResumeLayout(false);
-            this.g.PerformLayout();
-            this.mgSplitContainer_vertical.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.mgSplitContainer_vertical)).EndInit();
-            this.mgSplitContainer_vertical.ResumeLayout(false);
-            this.mgSplitContainer_horizontal.Panel1.ResumeLayout(false);
-            this.mgSplitContainer_horizontal.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.mgSplitContainer_horizontal)).EndInit();
-            this.mgSplitContainer_horizontal.ResumeLayout(false);
-            this.upperTableLayoutMainData.ResumeLayout(false);
-            this.upperTableLayoutMainData.PerformLayout();
-            this.tabControlCurrentProject.ResumeLayout(false);
-            this.tabDetail.ResumeLayout(false);
+            this.MainPanel.ResumeLayout(false);
+            this.MainTableLayoutPanel.ResumeLayout(false);
+            this.MainTableLayoutPanel.PerformLayout();
+            this.groupBoxData.ResumeLayout(false);
+            this.groupBoxData.PerformLayout();
             this.mgSplitContainer_insideHorizontal.Panel1.ResumeLayout(false);
             this.mgSplitContainer_insideHorizontal.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mgSplitContainer_insideHorizontal)).EndInit();
             this.mgSplitContainer_insideHorizontal.ResumeLayout(false);
             this.mgSplitContainer_inside_vertical.Panel1.ResumeLayout(false);
-            this.mgSplitContainer_inside_vertical.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mgSplitContainer_inside_vertical)).EndInit();
             this.mgSplitContainer_inside_vertical.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mgDataViewer)).EndInit();
-            this.mgSplitContainer_insideRight.Panel1.ResumeLayout(false);
-            this.mgSplitContainer_insideRight.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.mgSplitContainer_insideRight)).EndInit();
-            this.mgSplitContainer_insideRight.ResumeLayout(false);
-            this.groupBoxRes.ResumeLayout(false);
-            this.groupBoxData.ResumeLayout(false);
-            this.groupBoxData.PerformLayout();
             this.inputTableLoyaut.ResumeLayout(false);
             this.inputTableLoyaut.PerformLayout();
             this.mgToolStripInputData.ResumeLayout(false);
             this.mgToolStripInputData.PerformLayout();
+            this.g.ResumeLayout(false);
+            this.g.PerformLayout();
+            this.tabControlCurrentProject.ResumeLayout(false);
+            this.tabBasic.ResumeLayout(false);
+            this.upperTableLayoutMainData.ResumeLayout(false);
+            this.upperTableLayoutMainData.PerformLayout();
+            this.tabDetail.ResumeLayout(false);
+            this.groupBoxRes.ResumeLayout(false);
             this.tabExcel.ResumeLayout(false);
             this.tabExcel.PerformLayout();
             this.urToolStrip.ResumeLayout(false);
@@ -1953,8 +1893,6 @@ namespace dataEditor
         private ToolStripComboBox toolBtnMounth;
         private ToolStripComboBox toolBtnYear;
         private ToolStripSeparator toolStripButton4;
-        private SplitContainer mgSplitContainer_vertical;
-        private SplitContainer mgSplitContainer_horizontal;
         private TextBox textBoxNameGP;
         private Label lblNameGP;
         private TextBox textBoxGTPcode;
@@ -2007,7 +1945,6 @@ namespace dataEditor
         private ToolStripButton imgStatusOk;
         private ToolStripButton imgStatusDwnld;
         private ToolStripButton imgStatusFailed;
-        private SplitContainer mgSplitContainer_insideRight;
         private TreeView ResourcesTreeView;
         private GroupBox groupBoxRes;
         private GroupBox groupBoxData;
@@ -2015,8 +1952,19 @@ namespace dataEditor
         private ImageList imgList;
         public TabControl SectionsControl;
         private ImageList imgListData;
+        private TabControl tabControlCurrentProject;
+        private TabPage tabBasic;
+        private TabPage tabDetail;
+        private TableLayoutPanel upperTableLayoutMainData;
+        private Label lblMainName;
+        private Panel MainPanel;
+        private TableLayoutPanel MainTableLayoutPanel;
         private DataGridViewTextBoxColumn id;
+        private DataGridViewCheckBoxColumn SelectID;
         private DataGridViewTextBoxColumn dataTable;
+        private DataGridViewTextBoxColumn dataCalculation;
+        private DataGridViewTextBoxColumn dataAct;
+        private DataGridViewTextBoxColumn OpenFolder;
         private DataGridViewTextBoxColumn Agreement;
         private DataGridViewTextBoxColumn FullName;
         private DataGridViewTextBoxColumn DateAgreement;
@@ -2029,13 +1977,5 @@ namespace dataEditor
         private DataGridViewTextBoxColumn BUY;
         private DataGridViewTextBoxColumn Price;
         private DataGridViewTextBoxColumn Cost;
-        private DataGridViewTextBoxColumn dataCalculation;
-        private DataGridViewTextBoxColumn dataAct;
-        private DataGridViewTextBoxColumn OpenFolder;
-        private TabControl tabControlCurrentProject;
-        private TabPage tabBasic;
-        private TabPage tabDetail;
-        private TableLayoutPanel upperTableLayoutMainData;
-        private Label lblMainName;
     }
 }
