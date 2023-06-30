@@ -11,10 +11,13 @@ using System.Windows.Forms;
 namespace dataEditor
 {
     public partial class Settings : Form
-    {      
+    {
+        MainForm main = (MainForm)Application.OpenForms["MainForm"];
+        
         public Settings()
         {
             InitializeComponent();
+            optionsGrid.PropertyValueChanged += new PropertyValueChangedEventHandler(optionsGrid_PropertyValueChanged);
         }
 
         private void Settings_FormClosing(object sender, FormClosingEventArgs e)
@@ -25,7 +28,6 @@ namespace dataEditor
 
         private void SettingsTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            MainForm main = (MainForm)Application.OpenForms["MainForm"];
             main = StartScreen.universalReaderForm;
             main.switchOptionsGridSettingsGroup();
         }
@@ -35,5 +37,12 @@ namespace dataEditor
             TreeNode startNode = SettingsTreeView.Nodes[0];
             SettingsTreeView.SelectedNode = startNode;
         }
+
+        private void optionsGrid_PropertyValueChanged(Object sender, PropertyValueChangedEventArgs e)
+        {
+            main = StartScreen.universalReaderForm;
+            main.settingsPropertyValueChanged();
+        }
+
     }
 }

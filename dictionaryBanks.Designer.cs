@@ -34,6 +34,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(bankDictionary));
             this.dictLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.dataGridBanksList = new System.Windows.Forms.DataGridView();
+            this.dictBankID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dictBankNAME = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dictBankBIK = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dictBankCorrAcc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dictBankINN = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.urToolStrip = new System.Windows.Forms.ToolStrip();
             this.dictBankBtnOpen = new System.Windows.Forms.ToolStripButton();
             this.dictBankBtnSave = new System.Windows.Forms.ToolStripButton();
@@ -45,11 +50,6 @@
             this.dictBankBtnImportFromExcel = new System.Windows.Forms.ToolStripButton();
             this.dictBankBtnExportToExcel = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.dictBankID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dictBankNAME = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dictBankBIK = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dictBankCorrAcc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dictBankINN = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dictLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridBanksList)).BeginInit();
             this.urToolStrip.SuspendLayout();
@@ -65,9 +65,9 @@
             this.dictLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.dictLayoutPanel.Name = "dictLayoutPanel";
             this.dictLayoutPanel.RowCount = 2;
-            this.dictLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.dictLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
             this.dictLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.dictLayoutPanel.Size = new System.Drawing.Size(684, 450);
+            this.dictLayoutPanel.Size = new System.Drawing.Size(684, 420);
             this.dictLayoutPanel.TabIndex = 5;
             // 
             // dataGridBanksList
@@ -79,7 +79,7 @@
             this.dataGridBanksList.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ControlDark;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
@@ -97,7 +97,7 @@
             this.dataGridBanksList.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
             this.dataGridBanksList.EnableHeadersVisualStyles = false;
             this.dataGridBanksList.GridColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.dataGridBanksList.Location = new System.Drawing.Point(3, 28);
+            this.dataGridBanksList.Location = new System.Drawing.Point(3, 26);
             this.dataGridBanksList.Name = "dataGridBanksList";
             this.dataGridBanksList.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -111,114 +111,13 @@
             this.dataGridBanksList.RowHeadersWidth = 20;
             this.dataGridBanksList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridBanksList.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridBanksList.RowTemplate.Height = 20;
             this.dataGridBanksList.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridBanksList.Size = new System.Drawing.Size(678, 419);
+            this.dataGridBanksList.Size = new System.Drawing.Size(678, 391);
             this.dataGridBanksList.TabIndex = 0;
-            // 
-            // urToolStrip
-            // 
-            this.urToolStrip.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.urToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.dictBankBtnOpen,
-            this.dictBankBtnSave,
-            this.dictBankBtnShowFolder,
-            this.toolStripSeparator1,
-            this.dictBankBtnAddElm,
-            this.dictBankBtnDelElm,
-            this.toolStripSeparator3,
-            this.dictBankBtnImportFromExcel,
-            this.dictBankBtnExportToExcel,
-            this.toolStripSeparator4});
-            this.urToolStrip.Location = new System.Drawing.Point(0, 0);
-            this.urToolStrip.Name = "urToolStrip";
-            this.urToolStrip.Size = new System.Drawing.Size(684, 25);
-            this.urToolStrip.TabIndex = 77;
-            this.urToolStrip.Text = "mgTools";
-            // 
-            // dictBankBtnOpen
-            // 
-            this.dictBankBtnOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dictBankBtnOpen.Image = ((System.Drawing.Image)(resources.GetObject("dictBankBtnOpen.Image")));
-            this.dictBankBtnOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dictBankBtnOpen.Name = "dictBankBtnOpen";
-            this.dictBankBtnOpen.Size = new System.Drawing.Size(23, 22);
-            this.dictBankBtnOpen.Text = "OpenFile";
-            // 
-            // dictBankBtnSave
-            // 
-            this.dictBankBtnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dictBankBtnSave.Image = ((System.Drawing.Image)(resources.GetObject("dictBankBtnSave.Image")));
-            this.dictBankBtnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dictBankBtnSave.Name = "dictBankBtnSave";
-            this.dictBankBtnSave.Size = new System.Drawing.Size(23, 22);
-            this.dictBankBtnSave.Text = "Save";
-            this.dictBankBtnSave.Click += new System.EventHandler(this.dictBankBtnSave_Click);
-            // 
-            // dictBankBtnShowFolder
-            // 
-            this.dictBankBtnShowFolder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dictBankBtnShowFolder.Image = ((System.Drawing.Image)(resources.GetObject("dictBankBtnShowFolder.Image")));
-            this.dictBankBtnShowFolder.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dictBankBtnShowFolder.Name = "dictBankBtnShowFolder";
-            this.dictBankBtnShowFolder.Size = new System.Drawing.Size(23, 22);
-            this.dictBankBtnShowFolder.Text = "Show in Windows";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // dictBankBtnAddElm
-            // 
-            this.dictBankBtnAddElm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dictBankBtnAddElm.Image = ((System.Drawing.Image)(resources.GetObject("dictBankBtnAddElm.Image")));
-            this.dictBankBtnAddElm.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dictBankBtnAddElm.Name = "dictBankBtnAddElm";
-            this.dictBankBtnAddElm.Size = new System.Drawing.Size(23, 22);
-            this.dictBankBtnAddElm.Text = "Add Element";
-            this.dictBankBtnAddElm.Click += new System.EventHandler(this.dictBankBtnAddElm_Click);
-            // 
-            // dictBankBtnDelElm
-            // 
-            this.dictBankBtnDelElm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dictBankBtnDelElm.Image = ((System.Drawing.Image)(resources.GetObject("dictBankBtnDelElm.Image")));
-            this.dictBankBtnDelElm.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dictBankBtnDelElm.Name = "dictBankBtnDelElm";
-            this.dictBankBtnDelElm.Size = new System.Drawing.Size(23, 22);
-            this.dictBankBtnDelElm.Text = "Remove Element";
-            this.dictBankBtnDelElm.Click += new System.EventHandler(this.dictBankBtnDelElm_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
-            // 
-            // dictBankBtnImportFromExcel
-            // 
-            this.dictBankBtnImportFromExcel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dictBankBtnImportFromExcel.Image = ((System.Drawing.Image)(resources.GetObject("dictBankBtnImportFromExcel.Image")));
-            this.dictBankBtnImportFromExcel.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dictBankBtnImportFromExcel.Name = "dictBankBtnImportFromExcel";
-            this.dictBankBtnImportFromExcel.Size = new System.Drawing.Size(23, 22);
-            this.dictBankBtnImportFromExcel.Text = "ImportFromExcel";
-            // 
-            // dictBankBtnExportToExcel
-            // 
-            this.dictBankBtnExportToExcel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dictBankBtnExportToExcel.Image = ((System.Drawing.Image)(resources.GetObject("dictBankBtnExportToExcel.Image")));
-            this.dictBankBtnExportToExcel.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dictBankBtnExportToExcel.Name = "dictBankBtnExportToExcel";
-            this.dictBankBtnExportToExcel.Size = new System.Drawing.Size(23, 22);
-            this.dictBankBtnExportToExcel.Text = "CreateExcel";
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
             // dictBankID
             // 
@@ -241,28 +140,130 @@
             this.dictBankBIK.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.dictBankBIK.HeaderText = "BIK";
             this.dictBankBIK.Name = "dictBankBIK";
-            this.dictBankBIK.Width = 50;
+            this.dictBankBIK.Width = 49;
             // 
             // dictBankCorrAcc
             // 
             this.dictBankCorrAcc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.dictBankCorrAcc.HeaderText = "corrAcc";
             this.dictBankCorrAcc.Name = "dictBankCorrAcc";
-            this.dictBankCorrAcc.Width = 77;
+            this.dictBankCorrAcc.Width = 72;
             // 
             // dictBankINN
             // 
             this.dictBankINN.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.dictBankINN.HeaderText = "INN";
             this.dictBankINN.Name = "dictBankINN";
-            this.dictBankINN.Width = 50;
+            this.dictBankINN.Width = 51;
+            // 
+            // urToolStrip
+            // 
+            this.urToolStrip.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.urToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dictBankBtnOpen,
+            this.dictBankBtnSave,
+            this.dictBankBtnShowFolder,
+            this.toolStripSeparator1,
+            this.dictBankBtnAddElm,
+            this.dictBankBtnDelElm,
+            this.toolStripSeparator3,
+            this.dictBankBtnImportFromExcel,
+            this.dictBankBtnExportToExcel,
+            this.toolStripSeparator4});
+            this.urToolStrip.Location = new System.Drawing.Point(0, 0);
+            this.urToolStrip.Name = "urToolStrip";
+            this.urToolStrip.Size = new System.Drawing.Size(684, 23);
+            this.urToolStrip.TabIndex = 77;
+            this.urToolStrip.Text = "mgTools";
+            // 
+            // dictBankBtnOpen
+            // 
+            this.dictBankBtnOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBankBtnOpen.Image = ((System.Drawing.Image)(resources.GetObject("dictBankBtnOpen.Image")));
+            this.dictBankBtnOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dictBankBtnOpen.Name = "dictBankBtnOpen";
+            this.dictBankBtnOpen.Size = new System.Drawing.Size(23, 20);
+            this.dictBankBtnOpen.Text = "OpenFile";
+            // 
+            // dictBankBtnSave
+            // 
+            this.dictBankBtnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBankBtnSave.Image = ((System.Drawing.Image)(resources.GetObject("dictBankBtnSave.Image")));
+            this.dictBankBtnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dictBankBtnSave.Name = "dictBankBtnSave";
+            this.dictBankBtnSave.Size = new System.Drawing.Size(23, 20);
+            this.dictBankBtnSave.Text = "Save";
+            this.dictBankBtnSave.Click += new System.EventHandler(this.dictBankBtnSave_Click);
+            // 
+            // dictBankBtnShowFolder
+            // 
+            this.dictBankBtnShowFolder.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBankBtnShowFolder.Image = ((System.Drawing.Image)(resources.GetObject("dictBankBtnShowFolder.Image")));
+            this.dictBankBtnShowFolder.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dictBankBtnShowFolder.Name = "dictBankBtnShowFolder";
+            this.dictBankBtnShowFolder.Size = new System.Drawing.Size(23, 20);
+            this.dictBankBtnShowFolder.Text = "Show in Windows";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 23);
+            // 
+            // dictBankBtnAddElm
+            // 
+            this.dictBankBtnAddElm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBankBtnAddElm.Image = ((System.Drawing.Image)(resources.GetObject("dictBankBtnAddElm.Image")));
+            this.dictBankBtnAddElm.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dictBankBtnAddElm.Name = "dictBankBtnAddElm";
+            this.dictBankBtnAddElm.Size = new System.Drawing.Size(23, 20);
+            this.dictBankBtnAddElm.Text = "Add Element";
+            this.dictBankBtnAddElm.Click += new System.EventHandler(this.dictBankBtnAddElm_Click);
+            // 
+            // dictBankBtnDelElm
+            // 
+            this.dictBankBtnDelElm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBankBtnDelElm.Image = ((System.Drawing.Image)(resources.GetObject("dictBankBtnDelElm.Image")));
+            this.dictBankBtnDelElm.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dictBankBtnDelElm.Name = "dictBankBtnDelElm";
+            this.dictBankBtnDelElm.Size = new System.Drawing.Size(23, 20);
+            this.dictBankBtnDelElm.Text = "Remove Element";
+            this.dictBankBtnDelElm.Click += new System.EventHandler(this.dictBankBtnDelElm_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 23);
+            // 
+            // dictBankBtnImportFromExcel
+            // 
+            this.dictBankBtnImportFromExcel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBankBtnImportFromExcel.Image = ((System.Drawing.Image)(resources.GetObject("dictBankBtnImportFromExcel.Image")));
+            this.dictBankBtnImportFromExcel.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dictBankBtnImportFromExcel.Name = "dictBankBtnImportFromExcel";
+            this.dictBankBtnImportFromExcel.Size = new System.Drawing.Size(23, 20);
+            this.dictBankBtnImportFromExcel.Text = "ImportFromExcel";
+            // 
+            // dictBankBtnExportToExcel
+            // 
+            this.dictBankBtnExportToExcel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBankBtnExportToExcel.Image = ((System.Drawing.Image)(resources.GetObject("dictBankBtnExportToExcel.Image")));
+            this.dictBankBtnExportToExcel.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dictBankBtnExportToExcel.Name = "dictBankBtnExportToExcel";
+            this.dictBankBtnExportToExcel.Size = new System.Drawing.Size(23, 20);
+            this.dictBankBtnExportToExcel.Text = "CreateExcel";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 23);
             // 
             // bankDictionary
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(684, 450);
+            this.ClientSize = new System.Drawing.Size(684, 420);
             this.Controls.Add(this.dictLayoutPanel);
+            this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.Name = "bankDictionary";
             this.Text = "bankDictionary";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.bankDictionary_FormClosing);

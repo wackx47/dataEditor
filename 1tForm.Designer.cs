@@ -55,7 +55,7 @@
             this.txtConSumm = new System.Windows.Forms.TextBox();
             this.txtConLast = new System.Windows.Forms.TextBox();
             this.txtConFirst = new System.Windows.Forms.TextBox();
-            this.txtConDateLast = new System.Windows.Forms.TextBox();
+            this.txtDateLast = new System.Windows.Forms.TextBox();
             this.label23 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
@@ -65,7 +65,7 @@
             this.label29 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
-            this.txtConDateFirst = new System.Windows.Forms.TextBox();
+            this.txtDateFirst = new System.Windows.Forms.TextBox();
             this.InfoTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -163,10 +163,10 @@
             // lblResultPrice
             // 
             this.lblResultPrice.AutoSize = true;
-            this.lblResultPrice.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblResultPrice.BackColor = System.Drawing.SystemColors.Control;
             this.lblResultPrice.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblResultPrice.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblResultPrice.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblResultPrice.ForeColor = System.Drawing.SystemColors.WindowText;
             this.lblResultPrice.Location = new System.Drawing.Point(396, 1);
             this.lblResultPrice.Margin = new System.Windows.Forms.Padding(1);
             this.lblResultPrice.Name = "lblResultPrice";
@@ -178,10 +178,10 @@
             // lblResultCost
             // 
             this.lblResultCost.AutoSize = true;
-            this.lblResultCost.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblResultCost.BackColor = System.Drawing.SystemColors.Control;
             this.lblResultCost.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblResultCost.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblResultCost.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblResultCost.ForeColor = System.Drawing.SystemColors.WindowText;
             this.lblResultCost.Location = new System.Drawing.Point(396, 22);
             this.lblResultCost.Margin = new System.Windows.Forms.Padding(1);
             this.lblResultCost.Name = "lblResultCost";
@@ -408,7 +408,7 @@
             this.DataTableLayout.Controls.Add(this.txtConSumm, 4, 2);
             this.DataTableLayout.Controls.Add(this.txtConLast, 3, 2);
             this.DataTableLayout.Controls.Add(this.txtConFirst, 2, 2);
-            this.DataTableLayout.Controls.Add(this.txtConDateLast, 3, 1);
+            this.DataTableLayout.Controls.Add(this.txtDateLast, 3, 1);
             this.DataTableLayout.Controls.Add(this.label23, 0, 0);
             this.DataTableLayout.Controls.Add(this.label24, 1, 0);
             this.DataTableLayout.Controls.Add(this.label25, 2, 0);
@@ -418,7 +418,7 @@
             this.DataTableLayout.Controls.Add(this.label29, 0, 3);
             this.DataTableLayout.Controls.Add(this.label30, 1, 2);
             this.DataTableLayout.Controls.Add(this.label31, 1, 3);
-            this.DataTableLayout.Controls.Add(this.txtConDateFirst, 2, 1);
+            this.DataTableLayout.Controls.Add(this.txtDateFirst, 2, 1);
             this.DataTableLayout.Location = new System.Drawing.Point(5, 228);
             this.DataTableLayout.Name = "DataTableLayout";
             this.DataTableLayout.RowCount = 4;
@@ -514,19 +514,19 @@
             this.txtConFirst.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtConFirst.WordWrap = false;
             // 
-            // txtConDateLast
+            // txtDateLast
             // 
-            this.txtConDateLast.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtConDateLast.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtConDateLast.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.txtConDateLast.Location = new System.Drawing.Point(346, 37);
-            this.txtConDateLast.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
-            this.txtConDateLast.Name = "txtConDateLast";
-            this.txtConDateLast.ReadOnly = true;
-            this.txtConDateLast.Size = new System.Drawing.Size(94, 14);
-            this.txtConDateLast.TabIndex = 18;
-            this.txtConDateLast.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtConDateLast.WordWrap = false;
+            this.txtDateLast.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtDateLast.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtDateLast.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.txtDateLast.Location = new System.Drawing.Point(346, 37);
+            this.txtDateLast.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtDateLast.Name = "txtDateLast";
+            this.txtDateLast.ReadOnly = true;
+            this.txtDateLast.Size = new System.Drawing.Size(94, 14);
+            this.txtDateLast.TabIndex = 18;
+            this.txtDateLast.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtDateLast.WordWrap = false;
             // 
             // label23
             // 
@@ -648,19 +648,19 @@
             this.label31.Text = "Сумма";
             this.label31.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // txtConDateFirst
+            // txtDateFirst
             // 
-            this.txtConDateFirst.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtConDateFirst.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtConDateFirst.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.txtConDateFirst.Location = new System.Drawing.Point(232, 37);
-            this.txtConDateFirst.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
-            this.txtConDateFirst.Name = "txtConDateFirst";
-            this.txtConDateFirst.ReadOnly = true;
-            this.txtConDateFirst.Size = new System.Drawing.Size(94, 14);
-            this.txtConDateFirst.TabIndex = 17;
-            this.txtConDateFirst.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtConDateFirst.WordWrap = false;
+            this.txtDateFirst.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtDateFirst.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtDateFirst.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.txtDateFirst.Location = new System.Drawing.Point(232, 37);
+            this.txtDateFirst.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtDateFirst.Name = "txtDateFirst";
+            this.txtDateFirst.ReadOnly = true;
+            this.txtDateFirst.Size = new System.Drawing.Size(94, 14);
+            this.txtDateFirst.TabIndex = 17;
+            this.txtDateFirst.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtDateFirst.WordWrap = false;
             // 
             // InfoTableLayout
             // 
@@ -668,7 +668,7 @@
             this.InfoTableLayout.ColumnCount = 3;
             this.InfoTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75F));
             this.InfoTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.InfoTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.InfoTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
             this.InfoTableLayout.Controls.Add(this.label1, 0, 0);
             this.InfoTableLayout.Controls.Add(this.label2, 0, 2);
             this.InfoTableLayout.Controls.Add(this.label3, 0, 3);
@@ -691,7 +691,6 @@
             this.InfoTableLayout.Controls.Add(this.lblAbonentDateYear, 2, 9);
             this.InfoTableLayout.Controls.Add(this.lblAbonentName, 2, 0);
             this.InfoTableLayout.Controls.Add(this.lblAbonentINN, 2, 1);
-            this.InfoTableLayout.Dock = System.Windows.Forms.DockStyle.Top;
             this.InfoTableLayout.Location = new System.Drawing.Point(5, 5);
             this.InfoTableLayout.Name = "InfoTableLayout";
             this.InfoTableLayout.RowCount = 10;
@@ -705,7 +704,7 @@
             this.InfoTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.InfoTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.InfoTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.InfoTableLayout.Size = new System.Drawing.Size(565, 170);
+            this.InfoTableLayout.Size = new System.Drawing.Size(565, 172);
             this.InfoTableLayout.TabIndex = 0;
             this.InfoTableLayout.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.mainTableLayoutGridBorder);
             // 
@@ -802,7 +801,7 @@
             this.label7.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.label7.Name = "label7";
             this.InfoTableLayout.SetRowSpan(this.label7, 3);
-            this.label7.Size = new System.Drawing.Size(74, 49);
+            this.label7.Size = new System.Drawing.Size(74, 51);
             this.label7.TabIndex = 6;
             this.label7.Text = "Период";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -841,7 +840,7 @@
             this.label10.Location = new System.Drawing.Point(76, 154);
             this.label10.Margin = new System.Windows.Forms.Padding(1);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(98, 15);
+            this.label10.Size = new System.Drawing.Size(98, 17);
             this.label10.TabIndex = 9;
             this.label10.Text = "год";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -875,10 +874,10 @@
             // lblAbonentAddress
             // 
             this.lblAbonentAddress.AutoSize = true;
-            this.lblAbonentAddress.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentAddress.BackColor = System.Drawing.SystemColors.Control;
             this.lblAbonentAddress.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentAddress.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblAbonentAddress.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentAddress.ForeColor = System.Drawing.SystemColors.WindowText;
             this.lblAbonentAddress.Location = new System.Drawing.Point(176, 35);
             this.lblAbonentAddress.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentAddress.Name = "lblAbonentAddress";
@@ -890,10 +889,10 @@
             // lblAbonentNumberCC
             // 
             this.lblAbonentNumberCC.AutoSize = true;
-            this.lblAbonentNumberCC.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentNumberCC.BackColor = System.Drawing.SystemColors.Control;
             this.lblAbonentNumberCC.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentNumberCC.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblAbonentNumberCC.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentNumberCC.ForeColor = System.Drawing.SystemColors.WindowText;
             this.lblAbonentNumberCC.Location = new System.Drawing.Point(176, 52);
             this.lblAbonentNumberCC.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentNumberCC.Name = "lblAbonentNumberCC";
@@ -905,10 +904,10 @@
             // lblAbonentType
             // 
             this.lblAbonentType.AutoSize = true;
-            this.lblAbonentType.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentType.BackColor = System.Drawing.SystemColors.Control;
             this.lblAbonentType.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentType.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblAbonentType.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentType.ForeColor = System.Drawing.SystemColors.WindowText;
             this.lblAbonentType.Location = new System.Drawing.Point(176, 69);
             this.lblAbonentType.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentType.Name = "lblAbonentType";
@@ -920,10 +919,10 @@
             // lblAbonentKF
             // 
             this.lblAbonentKF.AutoSize = true;
-            this.lblAbonentKF.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentKF.BackColor = System.Drawing.SystemColors.Control;
             this.lblAbonentKF.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentKF.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblAbonentKF.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentKF.ForeColor = System.Drawing.SystemColors.WindowText;
             this.lblAbonentKF.Location = new System.Drawing.Point(176, 86);
             this.lblAbonentKF.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentKF.Name = "lblAbonentKF";
@@ -935,10 +934,10 @@
             // lblAbonentTarif
             // 
             this.lblAbonentTarif.AutoSize = true;
-            this.lblAbonentTarif.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentTarif.BackColor = System.Drawing.SystemColors.Control;
             this.lblAbonentTarif.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentTarif.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblAbonentTarif.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentTarif.ForeColor = System.Drawing.SystemColors.WindowText;
             this.lblAbonentTarif.Location = new System.Drawing.Point(176, 103);
             this.lblAbonentTarif.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentTarif.Name = "lblAbonentTarif";
@@ -950,10 +949,10 @@
             // lblAbonentDateDay
             // 
             this.lblAbonentDateDay.AutoSize = true;
-            this.lblAbonentDateDay.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentDateDay.BackColor = System.Drawing.SystemColors.Control;
             this.lblAbonentDateDay.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentDateDay.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblAbonentDateDay.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentDateDay.ForeColor = System.Drawing.SystemColors.WindowText;
             this.lblAbonentDateDay.Location = new System.Drawing.Point(176, 120);
             this.lblAbonentDateDay.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentDateDay.Name = "lblAbonentDateDay";
@@ -965,10 +964,10 @@
             // lblAbonentDateMonth
             // 
             this.lblAbonentDateMonth.AutoSize = true;
-            this.lblAbonentDateMonth.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentDateMonth.BackColor = System.Drawing.SystemColors.Control;
             this.lblAbonentDateMonth.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentDateMonth.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblAbonentDateMonth.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentDateMonth.ForeColor = System.Drawing.SystemColors.WindowText;
             this.lblAbonentDateMonth.Location = new System.Drawing.Point(176, 137);
             this.lblAbonentDateMonth.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentDateMonth.Name = "lblAbonentDateMonth";
@@ -980,14 +979,14 @@
             // lblAbonentDateYear
             // 
             this.lblAbonentDateYear.AutoSize = true;
-            this.lblAbonentDateYear.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentDateYear.BackColor = System.Drawing.SystemColors.Control;
             this.lblAbonentDateYear.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentDateYear.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblAbonentDateYear.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentDateYear.ForeColor = System.Drawing.SystemColors.WindowText;
             this.lblAbonentDateYear.Location = new System.Drawing.Point(176, 154);
             this.lblAbonentDateYear.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentDateYear.Name = "lblAbonentDateYear";
-            this.lblAbonentDateYear.Size = new System.Drawing.Size(133, 15);
+            this.lblAbonentDateYear.Size = new System.Drawing.Size(133, 17);
             this.lblAbonentDateYear.TabIndex = 19;
             this.lblAbonentDateYear.Text = "lblAbonentDateYear";
             this.lblAbonentDateYear.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -995,10 +994,10 @@
             // lblAbonentName
             // 
             this.lblAbonentName.AutoSize = true;
-            this.lblAbonentName.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentName.BackColor = System.Drawing.SystemColors.Control;
             this.lblAbonentName.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentName.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblAbonentName.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentName.ForeColor = System.Drawing.SystemColors.WindowText;
             this.lblAbonentName.Location = new System.Drawing.Point(176, 1);
             this.lblAbonentName.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentName.Name = "lblAbonentName";
@@ -1010,10 +1009,10 @@
             // lblAbonentINN
             // 
             this.lblAbonentINN.AutoSize = true;
-            this.lblAbonentINN.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAbonentINN.BackColor = System.Drawing.SystemColors.Control;
             this.lblAbonentINN.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentINN.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblAbonentINN.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblAbonentINN.ForeColor = System.Drawing.SystemColors.WindowText;
             this.lblAbonentINN.Location = new System.Drawing.Point(176, 18);
             this.lblAbonentINN.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentINN.Name = "lblAbonentINN";
@@ -1097,8 +1096,8 @@
         public TextBox txtConSumm;
         public TextBox txtConLast;
         public TextBox txtConFirst;
-        public TextBox txtConDateLast;
-        public TextBox txtConDateFirst;
+        public TextBox txtDateLast;
+        public TextBox txtDateFirst;
         public Label lblAbonentAddress;
         public Label lblAbonentNumberCC;
         public Label lblAbonentType;

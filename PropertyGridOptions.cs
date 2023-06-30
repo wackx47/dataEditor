@@ -26,6 +26,7 @@ using System.Drawing.Imaging;
 using System.Runtime.Serialization;
 using System.Xml;
 using static System.ComponentModel.TypeConverter;
+using static NPOI.SS.Formula.PTG.ArrayPtg;
 
 namespace dataEditor
 {
@@ -42,6 +43,17 @@ namespace dataEditor
         {
             get { return m_ImportMode; }
             set { m_ImportMode = value; }
+        }
+
+        private bool m_showListExcelSheets = true;
+        [Browsable(true)]
+        [Description("Выводить диалоговое окно для выбора извлекаемого из Excel листа")]
+        [DisplayName("ShowAvailableExcelSheets")]
+        [Category("ImportSettings")]
+        public bool showListExcelSheets
+        {
+            get { return m_showListExcelSheets; }
+            set { m_showListExcelSheets = value; }
         }
 
         public EmptyRowsCheckSettings m_CheckEmptyRows = new EmptyRowsCheckSettings(true, 10, 10);
@@ -282,6 +294,44 @@ namespace dataEditor
         {
             get { return m_mgFolderDonwloads; }
             set { m_mgFolderDonwloads = value; }
+        }
+
+        private string m_siteLinkSPUNC;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("Ссылка на сайт энергосбыта, где публикуются средневзвешенные нерегулируемые цены на электроэнергию")]
+        [DisplayName("defaultLinkSite")]
+        [Category("Microgeneration")]
+        public string defaultSiteLink
+        {
+            get { return m_siteLinkSPUNC; }
+            set { m_siteLinkSPUNC = value; }
+        }
+
+        doubleTariffZone m_mgHoursDoubleTariffZone = new doubleTariffZone();
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("")]
+        [DisplayName("DoubleTariffZone")]
+        [Category("HoursSettings")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public doubleTariffZone mgHoursDoubleTariffZone
+        {
+            get { return m_mgHoursDoubleTariffZone; }
+            set { m_mgHoursDoubleTariffZone = value; }
+        }
+
+        tripleTariffZone m_mgHoursTripleTariffZone = new tripleTariffZone();
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("")]
+        [DisplayName("TripleTariffZone")]
+        [Category("HoursSettings")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public tripleTariffZone mgHoursTripleTariffZone
+        {
+            get { return m_mgHoursTripleTariffZone; }
+            set { m_mgHoursTripleTariffZone = value; }
         }
     }
 
@@ -555,6 +605,287 @@ namespace dataEditor
                 return SwitchChecks + " (RLim=" + EmptyRowsLimit + " CLim="  + EmptyColmLimit + ")";
         }
     }
+
+    class doubleTariffZone
+    {
+        public doubleTariffZone()
+        {
+
+        }
+
+        day _day = new day(7,23);
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("day")]
+        [Description("")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public day day
+        {
+            get { return _day; }
+            set { _day = value; }
+        }
+
+        night _night = new night(23,7);
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("night")]
+        [Description("")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public night night
+        {
+            get { return _night; }
+            set { _night = value; }
+        }
+
+        public override string ToString()
+        {
+            return "День: " + day.ToString() + " Ночь: " + night.ToString();
+        }
+    }
+
+    class tripleTariffZone
+    {
+        public tripleTariffZone()
+        {
+
+        }
+
+        Peak _peak = new Peak(7,10,17,21);
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("peak")]
+        [Description("")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public Peak peak
+        {
+            get { return _peak; }
+            set { _peak = value; }
+        }
+
+        semiPeak _semiPeak = new semiPeak(10,17,21,23);
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("semiPeak")]
+        [Description("")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public semiPeak semiPeak
+        {
+            get { return _semiPeak; }
+            set { _semiPeak = value; }
+        }
+
+        night _night = new night(23,7);
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("night")]
+        [Description("")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public night night
+        {
+            get { return _night; }
+            set { _night = value; }
+        }
+
+        public override string ToString()
+        {
+            return "Пик: " + peak.ToString() + " Полупик: " + semiPeak.ToString() + " Ночь: " + night.ToString();
+        }
+    }
+
+    class day
+    {
+        public day(int i1, int f1)
+        {
+            _initial = i1;
+            _final = f1;
+        }
+
+        private int _initial;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("initial")]
+        [Description("")]
+        public int initial
+        {
+            get { return _initial; }
+            set { _initial = value; }
+        }
+
+        private int _final;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("final")]
+        [Description("")]
+        public int final
+        {
+            get { return _final; }
+            set { _final = value; }
+        }
+
+
+        public override string ToString()
+        {
+            return "с " + initial + " до " + final + ";";
+        }
+    }
+
+    class night
+    {
+        public night(int i1, int f1)
+        {
+            _initial = i1;
+            _final = f1;
+        }
+
+        private int _initial;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("initial")]
+        [Description("")]
+        public int initial
+        {
+            get { return _initial; }
+            set { _initial = value; }
+        }
+
+        private int _final;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("final")]
+        [Description("")]
+        public int final
+        {
+            get { return _final; }
+            set { _final = value; }
+        }
+
+
+        public override string ToString()
+        {
+            return "с " + initial + " до " + final + ";";
+        }
+    }
+
+    class semiPeak
+    {
+        public semiPeak(int i1, int i2, int f1, int f2)
+        {
+            _initial1 = i1;
+            _final1 = f1;
+            _initial2 = i2;
+            _final2 = f2;
+        }
+
+        private int _initial1;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("initial")]
+        [Description("")]
+        public int initial1
+        {
+            get { return _initial1; }
+            set { _initial1 = value; }
+        }
+
+        private int _final1;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("final")]
+        [Description("")]
+        public int final1
+        {
+            get { return _final1; }
+            set { _final1 = value; }
+        }
+
+        private int _initial2;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("initial")]
+        [Description("")]
+        public int initial2
+        {
+            get { return _initial2; }
+            set { _initial2 = value; }
+        }
+
+        private int _final2;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("final")]
+        [Description("")]
+        public int final2
+        {
+            get { return _final2; }
+            set { _final2 = value; }
+        }
+
+        public override string ToString()
+        {
+            return "с " + initial1 + " до " + final1 + "; c " + initial2 + " до " + final2 + ";";
+        }
+    }
+
+    class Peak
+    {
+        public Peak(int i1, int i2, int f1, int f2)
+        {
+            _initial1 = i1;
+            _final1 = f1;
+            _initial2 = i2;
+            _final2 = f2;
+        }
+
+        private int _initial1;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("initial")]
+        [Description("")]
+        public int initial1
+        {
+            get { return _initial1; }
+            set { _initial1 = value; }
+        }
+
+        private int _final1;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("final")]
+        [Description("")]
+        public int final1
+        {
+            get { return _final1; }
+            set { _final1 = value; }
+        }
+
+        private int _initial2;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("initial")]
+        [Description("")]
+        public int initial2
+        {
+            get { return _initial2; }
+            set { _initial2 = value; }
+        }
+
+        private int _final2;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("final")]
+        [Description("")]
+        public int final2
+        {
+            get { return _final2; }
+            set { _final2 = value; }
+        }
+
+        public override string ToString()
+        {
+            return "с " + initial1 + " до " + final1 + "; c " + initial2 + " до " + final2 + ";";
+        }
+    }
+
     class mgRegions
     {
         public mgRegions(string GTPName, string GTPcode)
@@ -563,7 +894,7 @@ namespace dataEditor
             _GTPcode = GTPcode;
         }
 
-        private static List<string> mgGTPnameList = ImportList.KnownGTPnames;
+        public static List<string> mgGTPnameList = ImportList.KnownGTPnames;
         private string _GTPName;
         [Browsable(true)]
         [ReadOnly(false)]

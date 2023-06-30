@@ -1,4 +1,6 @@
-﻿namespace dataEditor
+﻿using System.Windows.Forms;
+
+namespace dataEditor
 {
     partial class Settings
     {
@@ -45,13 +47,13 @@
             this.optionsGrid.CommandsBorderColor = System.Drawing.SystemColors.ControlDarkDark;
             this.optionsGrid.CommandsVisibleIfAvailable = false;
             this.optionsGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.optionsGrid.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.optionsGrid.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.optionsGrid.HelpBorderColor = System.Drawing.SystemColors.ActiveBorder;
             this.optionsGrid.LineColor = System.Drawing.SystemColors.ControlLight;
             this.optionsGrid.Location = new System.Drawing.Point(173, 3);
             this.optionsGrid.Name = "optionsGrid";
             this.optionsGrid.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.optionsGrid.Size = new System.Drawing.Size(508, 424);
+            this.optionsGrid.Size = new System.Drawing.Size(508, 395);
             this.optionsGrid.TabIndex = 65;
             this.optionsGrid.ToolbarVisible = false;
             this.optionsGrid.UseCompatibleTextRendering = true;
@@ -69,15 +71,15 @@
             this.SettingsLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.SettingsLayoutPanel.Name = "SettingsLayoutPanel";
             this.SettingsLayoutPanel.RowCount = 2;
-            this.SettingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 430F));
+            this.SettingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 401F));
             this.SettingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.SettingsLayoutPanel.Size = new System.Drawing.Size(684, 432);
+            this.SettingsLayoutPanel.Size = new System.Drawing.Size(684, 403);
             this.SettingsLayoutPanel.TabIndex = 66;
             // 
             // SettingsTreeView
             // 
             this.SettingsTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SettingsTreeView.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.SettingsTreeView.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.SettingsTreeView.Location = new System.Drawing.Point(3, 3);
             this.SettingsTreeView.Name = "SettingsTreeView";
             treeNode1.Name = "setCommon";
@@ -90,41 +92,42 @@
             treeNode1,
             treeNode2,
             treeNode3});
-            this.SettingsTreeView.Size = new System.Drawing.Size(164, 424);
+            this.SettingsTreeView.Size = new System.Drawing.Size(164, 395);
             this.SettingsTreeView.TabIndex = 66;
             this.SettingsTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.SettingsTreeView_AfterSelect);
             // 
             // setBtnSave
             // 
-            this.setBtnSave.Location = new System.Drawing.Point(525, 433);
+            this.setBtnSave.Location = new System.Drawing.Point(525, 404);
             this.setBtnSave.Name = "setBtnSave";
-            this.setBtnSave.Size = new System.Drawing.Size(75, 28);
+            this.setBtnSave.Size = new System.Drawing.Size(75, 26);
             this.setBtnSave.TabIndex = 67;
             this.setBtnSave.Text = "Save";
             this.setBtnSave.UseVisualStyleBackColor = true;
             // 
             // setBtnCancel
             // 
-            this.setBtnCancel.Location = new System.Drawing.Point(606, 433);
+            this.setBtnCancel.Location = new System.Drawing.Point(606, 404);
             this.setBtnCancel.Name = "setBtnCancel";
-            this.setBtnCancel.Size = new System.Drawing.Size(75, 28);
+            this.setBtnCancel.Size = new System.Drawing.Size(75, 26);
             this.setBtnCancel.TabIndex = 68;
             this.setBtnCancel.Text = "Cancel";
             this.setBtnCancel.UseVisualStyleBackColor = true;
             // 
             // Settings
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(684, 466);
+            this.ClientSize = new System.Drawing.Size(684, 435);
             this.Controls.Add(this.SettingsLayoutPanel);
             this.Controls.Add(this.setBtnSave);
             this.Controls.Add(this.setBtnCancel);
             this.DoubleBuffered = true;
+            this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(430, 500);
+            this.MinimumSize = new System.Drawing.Size(430, 469);
             this.Name = "Settings";
             this.Text = "Settings";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Settings_FormClosing);

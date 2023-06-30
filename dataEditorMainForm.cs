@@ -50,6 +50,7 @@ using static NPOI.HSSF.Util.HSSFColor;
 using System.Security.Policy;
 using static System.Windows.Forms.LinkLabel;
 using System.Drawing.Drawing2D;
+using System.IO.Packaging;
 
 namespace dataEditor
 {
@@ -70,6 +71,7 @@ namespace dataEditor
 
         public static mgDatsList DictionaryForm = new mgDatsList();
         public static Settings SettingsForm = new Settings();
+        
 
         int cntShows = 0;
         int HFR = 0;
@@ -99,6 +101,7 @@ namespace dataEditor
         List<int> tempPropVal = new List<int>() { };
         List<Color> tempPropColors = new List<Color>() { };
         List<String> SQLdata = new List<string>() { };
+        List<object> urlLinksData = new List<object>() { };
         String[] SQLdbTemp = { };
         String[] SQLdbTempB = { };
         String[] SQLdbTempC = { };
@@ -178,6 +181,7 @@ namespace dataEditor
             addAvailableProviders(this, new EventArgs());
             TypeDescriptor.GetProperties(urOptionsGrid.SelectedObject)["ExtraColCnt"].SetReadOnlyAttribute(true);
             cmnSettings.ImportMode = ImportList.AvailableMode[0];
+
             mgSettings.mgCodeName.propGTPname = "KUBANESK";
             cmnSettings.GlobalInfoStandart = "ru-RU";
             DictionaryForm.dictListGTP.Items.AddRange(ImportList.KnownGTPnames.ToArray());
@@ -213,13 +217,6 @@ namespace dataEditor
             {
                 Column.Width = (int)Math.Round(Column.Width * ScaleFactor.Width);
             }
-        }
-
-        protected override void ScaleControl(SizeF ScalingFactor, BoundsSpecified Bounds)
-        {
-            base.ScaleControl(ScalingFactor, Bounds);
-            ScaleControlElements(dataViewer, ScalingFactor);
-            Console.WriteLine("DPI scaling enabled");
         }
 
         private void addAvailableProviders(object sender, EventArgs e)
@@ -1103,18 +1100,65 @@ namespace dataEditor
                         using (var stream = File.OpenRead(xlFileName))
                         {
                             ISheet wSheet;
+                            int selectedIndexSht = 0;
                             if (Path.GetExtension(xlFileName) == ".xlsx")
                             {
                                 XSSFWorkbook xssWorkbook = new XSSFWorkbook(stream);
                                 XSSFFormulaEvaluator xsseva = new XSSFFormulaEvaluator(xssWorkbook);
-                                wSheet = xssWorkbook.GetSheetAt(0);
+
+                                if (cmnSettings.showListExcelSheets)
+                                {
+                                    using (ItemSelector extractedListForm = new ItemSelector())
+                                    {
+                                        for (int i =0;  i <xssWorkbook.NumberOfSheets; i++)
+                                        {
+                                            extractedListForm.sheetsList.Items.Add(xssWorkbook.GetSheetName(i));
+                                        }
+                                        if (extractedListForm.sheetsList.Items.Count > 1)
+                                        {
+                                            if (extractedListForm.ShowDialog() == DialogResult.OK)
+                                            {
+                                                selectedIndexSht = extractedListForm.selectedIndexSheet;
+                                            }
+                                            else
+                                            {
+                                                return;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                wSheet = xssWorkbook.GetSheetAt(selectedIndexSht);
                                 NPOIModeImport(dataExtraction, xlFileName, wSheet, xsseva, null);
                             }
                             else
                             {
                                 HSSFWorkbook hssWorkbook = new HSSFWorkbook(stream);
                                 HSSFFormulaEvaluator hsseva = new HSSFFormulaEvaluator(hssWorkbook);
-                                wSheet = hssWorkbook.GetSheetAt(0);
+
+                                if (cmnSettings.showListExcelSheets)
+                                {
+                                    using (ItemSelector extractedListForm = new ItemSelector())
+                                    {
+                                        for (int i = 0; i < hssWorkbook.NumberOfSheets; i++)
+                                        {
+                                            extractedListForm.sheetsList.Items.Add(hssWorkbook.GetSheetName(i));
+                                        }
+                                        if (extractedListForm.sheetsList.Items.Count > 1)
+                                        {
+                                            if (extractedListForm.ShowDialog() == DialogResult.OK)
+                                            {
+                                                selectedIndexSht = extractedListForm.selectedIndexSheet;
+                                            }
+                                            else
+                                            {
+                                                return;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                wSheet = hssWorkbook.GetSheetAt(selectedIndexSht);
                                 NPOIModeImport(dataExtraction, xlFileName, wSheet, null, hsseva);
                             }
                         }
@@ -1986,6 +2030,13 @@ namespace dataEditor
                         btnCell.ToolTipText = "Preview File";
                         rows.Cells["dataCalculation"] = btnCell;
                     }
+                    if (Convert.ToString(rows.Cells["TariffZone"].Value)[0].ToString() == "2" && rows.Cells["dataTable"].ToolTipText.Contains("hrs"))
+                    {
+                        DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
+                        btnCell.UseColumnTextForButtonValue = false;
+                        btnCell.ToolTipText = "Preview File";
+                        rows.Cells["dataCalculation"] = btnCell;
+                    }
                 }
             }
         }
@@ -2299,6 +2350,7 @@ namespace dataEditor
                 cols.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             }
             tablesDataGridView.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.tablesDataGridView_RowPrePaint);
+            TableView.StartPosition = FormStartPosition.CenterParent;
             TableView.ShowDialog();
         }
 
@@ -2375,111 +2427,166 @@ namespace dataEditor
 
             if (e.ColumnIndex == mgDataViewer.Columns["dataCalculation"].Index && mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell")
             {
-                FormType1 formType1 = new FormType1();
-
-                DateTime date = DateTime.Now;
-                var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
-                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
-
-                int kTC = Convert.ToInt32(IntegralsDataSet.Tables[mgDataViewer.Rows[e.RowIndex].Cells["dataTable"].ToolTipText.ToString() + "_Header"].Rows[4][1].ToString().Split("/").First());
-                int kTV = Convert.ToInt32(IntegralsDataSet.Tables[mgDataViewer.Rows[e.RowIndex].Cells["dataTable"].ToolTipText.ToString() + "_Header"].Rows[4][1].ToString().Split("/").Last());
-                int kT = kTC * kTV;
-
-                int RowInDict = SearchDGV(DictionaryForm.dataGridDictionaryList, mgDataViewer.Rows[e.RowIndex].Cells["FullName"].Value.ToString(), "FullName");
-
-                formType1.lblAbonentName.Text = mgDataViewer.Rows[e.RowIndex].Cells["FullName"].Value.ToString();
-                formType1.lblAbonentINN.Text = DictionaryForm.dataGridDictionaryList.Rows[RowInDict].Cells["INN"].Value.ToString();
-                formType1.lblAbonentAddress.Text = DictionaryForm.dataGridDictionaryList.Rows[RowInDict].Cells["Address"].Value.ToString();
-                formType1.lblAbonentNumberCC.Text = mgDataViewer.Rows[e.RowIndex].Cells["NumCC"].Value.ToString();
-                formType1.lblAbonentType.Text = mgDataViewer.Rows[e.RowIndex].Cells["type"].Value.ToString();
-                formType1.lblAbonentKF.Text = (kT).ToString();
-                formType1.lblAbonentTarif.Text = mgDataViewer.Rows[e.RowIndex].Cells["TariffZone"].Value.ToString();
-                formType1.lblAbonentDateDay.Text = firstDayOfMonth.ToString("dd");
-                formType1.lblAbonentDateMonth.Text = date.ToString("MMMM");
-                formType1.lblAbonentDateYear.Text = date.ToString("yyyy");
-
-                formType1.txtConDateFirst.Text = firstDayOfMonth.ToString("d");
-                formType1.txtConDateLast.Text = lastDayOfMonth.ToString("d");
-
-                decimal SumConFirst = 0;
-                decimal SumConLast = 0;
-                decimal SumGenFirst = 0;
-                decimal SumGenLast = 0;
-
-                foreach (DataRow rows in IntegralsDataSet.Tables[mgDataViewer.Rows[e.RowIndex].Cells["dataTable"].ToolTipText.ToString()].Rows)
-                {
-                    if (rows[1].ToString() != "—умма")
-                    {
-                        switch (rows[0].ToString())
-                        {
-                            case "A+, к¬т*ч":
-                                SumConFirst += decimal.Parse(rows[2].ToString());
-                                SumConLast += decimal.Parse(rows[3].ToString());
-                                break;
-
-                            case "A-, к¬т*ч":
-                                SumGenFirst += decimal.Parse(rows[2].ToString());
-                                SumGenLast += decimal.Parse(rows[3].ToString());
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        switch (rows[0].ToString())
-                        {
-                            case "A+, к¬т*ч":
-                                SumConFirst = decimal.Parse(rows[2].ToString());
-                                SumConLast = decimal.Parse(rows[3].ToString());
-                                break;
-
-                            case "A-, к¬т*ч":
-                                SumGenFirst = decimal.Parse(rows[2].ToString());
-                                SumGenLast = decimal.Parse(rows[3].ToString());
-                                break;
-                        }
-                    }
-                }
-
-                formType1.txtConFirst.Text = SumConFirst.ToString();
-                formType1.txtConLast.Text = SumConLast.ToString();
-                formType1.txtConSumm.Text = ((SumConLast - SumConFirst)* kT).ToString();
-                formType1.txtGenFirst.Text = SumGenFirst.ToString();
-                formType1.txtGenLast.Text = SumGenLast.ToString();
-                formType1.txtGenSumm.Text = ((SumGenLast - SumGenFirst)* kT).ToString();
-
-                formType1.lblsvncEEorem.Text = datsTreeView.Nodes["treeViewLine3"].Nodes["treeViewLine3e1val"].Text;
-                formType1.lblsvncPorem.Text = datsTreeView.Nodes["treeViewLine2"].Nodes["treeViewLine2e1val"].Text;
-                formType1.lblKF1.Text = datsTreeView.Nodes["treeViewLine1"].Nodes["treeViewLine1e1val"].Text;
-
-                decimal diffSell = ((SumConLast - SumConFirst) * kT) - ((SumGenLast - SumGenFirst) * kT);
-                decimal diffBuy = ((SumGenLast - SumGenFirst) * kT) - ((SumConLast - SumConFirst) * kT);
-
-                if (diffSell > 0)
-                {
-                    formType1.txtSELL.Text = diffSell.ToString();
-                    formType1.txtBUY.Text = "0";
-                }
-                else
-                {
-                    formType1.txtBUY.Text = diffBuy.ToString();
-                    formType1.txtSELL.Text = "0";
-                }
-
-                decimal k1 = decimal.Parse(formType1.lblsvncEEorem.Text);
-                decimal k2 = decimal.Parse(formType1.lblsvncPorem.Text);
-                decimal k3 = decimal.Parse(formType1.lblKF1.Text);
-
-                decimal Price = ((k1 + k2 * k3) / 1000);
-
-                formType1.lblResultPrice.Text = Price.ToString();
-
-                if (diffBuy > 0)
-                    formType1.lblResultCost.Text = (diffBuy * Price).ToString();
-
-                formType1.Show();
+                openFormType2(e.RowIndex);
             }
         }
 
+        private void openFormType1(int eRowIndex)
+        {
+            FormType1 formType1 = new FormType1();
+
+            DateTime date = DateTime.Now;
+            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
+
+            int kTC = Convert.ToInt32(IntegralsDataSet.Tables[mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.ToString() + "_Header"].Rows[4][1].ToString().Split("/").First());
+            int kTV = Convert.ToInt32(IntegralsDataSet.Tables[mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.ToString() + "_Header"].Rows[4][1].ToString().Split("/").Last());
+            int kT = kTC * kTV;
+
+            int RowInDict = SearchDGV(DictionaryForm.dataGridDictionaryList, mgDataViewer.Rows[eRowIndex].Cells["FullName"].Value.ToString(), "FullName");
+
+            formType1.lblAbonentName.Text = mgDataViewer.Rows[eRowIndex].Cells["FullName"].Value.ToString();
+            formType1.lblAbonentINN.Text = DictionaryForm.dataGridDictionaryList.Rows[RowInDict].Cells["INN"].Value.ToString();
+            formType1.lblAbonentAddress.Text = DictionaryForm.dataGridDictionaryList.Rows[RowInDict].Cells["Address"].Value.ToString();
+            formType1.lblAbonentNumberCC.Text = mgDataViewer.Rows[eRowIndex].Cells["NumCC"].Value.ToString();
+            formType1.lblAbonentType.Text = mgDataViewer.Rows[eRowIndex].Cells["type"].Value.ToString();
+            formType1.lblAbonentKF.Text = (kT).ToString();
+            formType1.lblAbonentTarif.Text = mgDataViewer.Rows[eRowIndex].Cells["TariffZone"].Value.ToString();
+            formType1.lblAbonentDateDay.Text = firstDayOfMonth.ToString("dd");
+            formType1.lblAbonentDateMonth.Text = date.ToString("MMMM");
+            formType1.lblAbonentDateYear.Text = date.ToString("yyyy");
+
+            formType1.txtDateFirst.Text = firstDayOfMonth.ToString("d");
+            formType1.txtDateLast.Text = lastDayOfMonth.ToString("d");
+
+            decimal SumConFirst = 0;
+            decimal SumConLast = 0;
+            decimal SumGenFirst = 0;
+            decimal SumGenLast = 0;
+
+            foreach (DataRow rows in IntegralsDataSet.Tables[mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.ToString()].Rows)
+            {
+                if (rows[1].ToString() != "—умма")
+                {
+                    switch (rows[0].ToString())
+                    {
+                        case "A+, к¬т*ч":
+                            SumConFirst += decimal.Parse(rows[2].ToString());
+                            SumConLast += decimal.Parse(rows[3].ToString());
+                            break;
+
+                        case "A-, к¬т*ч":
+                            SumGenFirst += decimal.Parse(rows[2].ToString());
+                            SumGenLast += decimal.Parse(rows[3].ToString());
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (rows[0].ToString())
+                    {
+                        case "A+, к¬т*ч":
+                            SumConFirst = decimal.Parse(rows[2].ToString());
+                            SumConLast = decimal.Parse(rows[3].ToString());
+                            break;
+
+                        case "A-, к¬т*ч":
+                            SumGenFirst = decimal.Parse(rows[2].ToString());
+                            SumGenLast = decimal.Parse(rows[3].ToString());
+                            break;
+                    }
+                }
+            }
+
+            formType1.txtConFirst.Text = SumConFirst.ToString();
+            formType1.txtConLast.Text = SumConLast.ToString();
+            formType1.txtConSumm.Text = ((SumConLast - SumConFirst) * kT).ToString();
+            formType1.txtGenFirst.Text = SumGenFirst.ToString();
+            formType1.txtGenLast.Text = SumGenLast.ToString();
+            formType1.txtGenSumm.Text = ((SumGenLast - SumGenFirst) * kT).ToString();
+
+            formType1.lblsvncEEorem.Text = datsTreeView.Nodes["treeViewLine3"].Nodes["treeViewLine3e1val"].Text;
+            formType1.lblsvncPorem.Text = datsTreeView.Nodes["treeViewLine2"].Nodes["treeViewLine2e1val"].Text;
+            formType1.lblKF1.Text = datsTreeView.Nodes["treeViewLine1"].Nodes["treeViewLine1e1val"].Text;
+
+            decimal diffSell = ((SumConLast - SumConFirst) * kT) - ((SumGenLast - SumGenFirst) * kT);
+            decimal diffBuy = ((SumGenLast - SumGenFirst) * kT) - ((SumConLast - SumConFirst) * kT);
+
+            if (diffSell > 0)
+            {
+                formType1.txtSELL.Text = diffSell.ToString();
+                formType1.txtBUY.Text = "0";
+            }
+            else
+            {
+                formType1.txtBUY.Text = diffBuy.ToString();
+                formType1.txtSELL.Text = "0";
+            }
+
+            decimal k1 = decimal.Parse(formType1.lblsvncEEorem.Text);
+            decimal k2 = decimal.Parse(formType1.lblsvncPorem.Text);
+            decimal k3 = decimal.Parse(formType1.lblKF1.Text);
+
+            decimal Price = ((k1 + k2 * k3) / 1000);
+
+            formType1.lblResultPrice.Text = Price.ToString();
+
+            if (diffBuy > 0)
+                formType1.lblResultCost.Text = (diffBuy * Price).ToString();
+
+            formType1.Show();
+        }
+
+        private void openFormType2(int eRowIndex)
+        {
+            FormType2 formType2 = new FormType2();
+
+            DateTime date = DateTime.Now;
+            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
+
+            int hrs = 1;
+            decimal ConSummDay = 0;
+            decimal ConSummNight = 0;
+            decimal GenSummDay = 0;
+            decimal GenSummNight = 0;
+            foreach (DataRow rows in HoursDataSet.Tables[mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.ToString()].Rows)
+            {
+                if (hrs <= 24)
+                {
+                    string duration = (hrs-1).ToString() + ":00-" + hrs.ToString() +":00";
+                    if (hrs > mgSettings.mgHoursDoubleTariffZone.day.initial && hrs <= mgSettings.mgHoursDoubleTariffZone.day.final)
+                    {
+                        formType2.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, rows[3], null);
+                        ConSummDay += Convert.ToDecimal(rows[2].ToString());
+                        GenSummDay += Convert.ToDecimal(rows[3].ToString());
+                    }
+                    else
+                    {
+                        formType2.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, rows[3]);
+                        ConSummNight += Convert.ToDecimal(rows[2].ToString());
+                        GenSummNight += Convert.ToDecimal(rows[3].ToString());
+                    }
+                }
+                else
+                {
+                    hrs = 1;
+                }
+                hrs++;
+            }
+
+            formType2.txtConSummDayHH.Text = ConSummDay.ToString();
+            formType2.txtGenSummDayHH.Text = GenSummDay.ToString();
+            formType2.txtConSummNightHH.Text = ConSummNight.ToString();
+            formType2.txtGenSummNightHH.Text = GenSummNight.ToString();
+
+            formType2.Show();
+        }
+
+        private void openFormType3(int eRowIndex)
+        {
+
+        }
 
         private void SettingsNewFormTablesResult(Form TableView, DataGridView tablesDataGridView, DataGridView headerDataGridView)
         {
@@ -2623,9 +2730,33 @@ namespace dataEditor
             Excel.Application xlApp = new Excel.Application();
             Excel.Workbook xlWB;
             Excel.Worksheet xlSht;
-            
+
             xlWB = xlApp.Workbooks.Open(xlFileName);
-            xlSht = xlWB.Worksheets[1];
+
+            int selectedIndexSht = 1;
+            if (cmnSettings.showListExcelSheets)
+            {
+                using (ItemSelector extractedListForm = new ItemSelector())
+                {
+                    foreach (Excel.Worksheet wSheet in xlWB.Worksheets)
+                    {
+                        extractedListForm.sheetsList.Items.Add(wSheet.Name);
+                    }
+                    if (extractedListForm.sheetsList.Items.Count > 1)
+                    {
+                        if (extractedListForm.ShowDialog() == DialogResult.OK)
+                        {
+                            selectedIndexSht = extractedListForm.selectedIndexSheet + 1;
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
+
+            xlSht = xlWB.Worksheets[selectedIndexSht];
 
             Excel.Range ExcelRange = xlSht.UsedRange;
             int xlRowCount = ExcelRange.Rows.Count;
@@ -2694,86 +2825,136 @@ namespace dataEditor
 
              int xlColCount = 0;
 
-                    using (OleDbConnection connect = new OleDbConnection(strConnect))
+            using (OleDbConnection connect = new OleDbConnection(strConnect))
+            {
+                connect.Open();
+                DataTable schemaTable = connect.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
+
+                int selectedIndexSht = 0;
+                if (cmnSettings.showListExcelSheets)
+                {
+                    using (ItemSelector extractedListForm = new ItemSelector())
                     {
-                        connect.Open();
-                        DataTable schemaTable = connect.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
-                        string sheetName = schemaTable.Rows[0]["TABLE_NAME"].ToString();
-                        OleDbCommand cmd = connect.CreateCommand();
-                        cmd.CommandText = "SELECT * FROM [" + sheetName + "]";
-                        OleDbDataReader reader = cmd.ExecuteReader();
-
-
-
-                        dataVariantOLEDB.Load(reader);
-                        connect.Close();
-                        connect.Dispose();
+                        foreach (DataRow row in schemaTable.Rows)
+                        {
+                            if (!row["TABLE_NAME"].ToString().EndsWith("$") && !row["TABLE_NAME"].ToString().EndsWith("$'"))
+                                continue;
+                            extractedListForm.sheetsList.Items.Add(row["TABLE_NAME"].ToString());
+                        }
+                        if (extractedListForm.sheetsList.Items.Count > 1)
+                        {
+                            if (extractedListForm.ShowDialog() == DialogResult.OK)
+                            {
+                                selectedIndexSht = extractedListForm.selectedIndexSheet;
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        }
                     }
+                }
 
-             xlColCount = dataVariantOLEDB.Columns.Count;
-             RowsCnt = dataVariantOLEDB.Rows.Count;
+                string sheetName = schemaTable.Rows[selectedIndexSht]["TABLE_NAME"].ToString();
+                OleDbCommand cmd = connect.CreateCommand();
+                cmd.CommandText = "SELECT * FROM [" + sheetName + "]";
+                OleDbDataReader reader = cmd.ExecuteReader();
+
+
+
+                dataVariantOLEDB.Load(reader);
+                connect.Close();
+                connect.Dispose();
+            }
+
+            xlColCount = dataVariantOLEDB.Columns.Count;
+            RowsCnt = dataVariantOLEDB.Rows.Count;
         }
 
         public void EPPlusModeImport(DataTable dataExport, string xlFileName)
         {
             ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
-                    FileInfo existingFile = new FileInfo(xlFileName);
-                    using (ExcelPackage package = new ExcelPackage(existingFile))
+            FileInfo existingFile = new FileInfo(xlFileName);
+            using (ExcelPackage package = new ExcelPackage(existingFile))
+            {
+                try
+                {
+                    using (var stream = File.OpenRead(xlFileName))
                     {
-                        try
+                        package.Load(stream);
+                    }
+
+                    int selectedIndexSht = 0;
+                    if (cmnSettings.showListExcelSheets)
+                    {
+                        using (ItemSelector extractedListForm = new ItemSelector())
                         {
-                            using (var stream = File.OpenRead(xlFileName))
+                            foreach (ExcelWorksheet ws in package.Workbook.Worksheets)
                             {
-                                package.Load(stream);
+                                extractedListForm.sheetsList.Items.Add(ws.Name);
                             }
-                            ExcelWorksheet worksheet = package.Workbook.Worksheets.First();
-                            string ErrorMessage = string.Empty;
-                            int xlColCount = worksheet.Dimension.End.Column;  //get Column Count
-                            int xlRowCount = worksheet.Dimension.End.Row;     //get row count
-                            RowsCnt = xlRowCount;
-                            ColsCnt = xlColCount;
-
-                            List<object> arguments = new List<object>();
-                            arguments.Add(dataExport);
-                            arguments.Add(xlRowCount);
-                            arguments.Add(xlColCount);
-                            arguments.Add(worksheet);
-
-                            bgWorker = new BackgroundWorker();
-                            bgWorker.WorkerReportsProgress = true;
-                            bgWorker.WorkerSupportsCancellation = true;
-                            bgWorker.DoWork += new DoWorkEventHandler(bgWorker_EEPlus);
-
-                            bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
-                            bgWorker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
-
-                            bgWorker.RunWorkerAsync(arguments);
-
-                            progressDlg = new ProgressDialog();
-                            progressDlg.stopProgress = new EventHandler((s, e1) => {
-                                switch (progressDlg.DialogResult)
+                            if (extractedListForm.sheetsList.Items.Count > 1)
+                            {
+                                if (extractedListForm.ShowDialog() == DialogResult.OK)
                                 {
-                                    case DialogResult.Cancel:
-                                        bgWorker.CancelAsync();
-                                        progressDlg.Close();
-                                        break;
+                                    selectedIndexSht = extractedListForm.selectedIndexSheet;
                                 }
-                            });
-                            progressDlg.ShowDialog();
-
-                            if (cmnSettings.CheckEmptyRows.SwitchChecks == true)
-                            {
-                                CheckingRealDat(dataExport);
-                                xlRowCount = dataExport.Rows.Count;
-                                xlColCount = dataExport.Columns.Count;
+                                else
+                                {
+                                    return;
+                                }
                             }
-                        }
-                        catch (Exception exp)
-                        {
-                            Console.WriteLine("Not working");
                         }
                     }
+
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[selectedIndexSht];
+                    string ErrorMessage = string.Empty;
+                    int xlColCount = worksheet.Dimension.End.Column;  //get Column Count
+                    int xlRowCount = worksheet.Dimension.End.Row;     //get row count
+                    RowsCnt = xlRowCount;
+                    ColsCnt = xlColCount;
+
+                    List<object> arguments = new List<object>();
+                    arguments.Add(dataExport);
+                    arguments.Add(xlRowCount);
+                    arguments.Add(xlColCount);
+                    arguments.Add(worksheet);
+
+                    bgWorker = new BackgroundWorker();
+                    bgWorker.WorkerReportsProgress = true;
+                    bgWorker.WorkerSupportsCancellation = true;
+                    bgWorker.DoWork += new DoWorkEventHandler(bgWorker_EEPlus);
+
+                    bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
+                    bgWorker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
+
+                    bgWorker.RunWorkerAsync(arguments);
+
+                    progressDlg = new ProgressDialog();
+                    progressDlg.stopProgress = new EventHandler((s, e1) => {
+                        switch (progressDlg.DialogResult)
+                        {
+                            case DialogResult.Cancel:
+                                bgWorker.CancelAsync();
+                                progressDlg.Close();
+                                break;
+                        }
+                    });
+                    progressDlg.ShowDialog();
+
+                    if (cmnSettings.CheckEmptyRows.SwitchChecks == true)
+                    {
+                        CheckingRealDat(dataExport);
+                        xlRowCount = dataExport.Rows.Count;
+                        xlColCount = dataExport.Columns.Count;
+                    }
+                }
+                catch (Exception exp)
+                {
+                    Console.WriteLine("Not working");
+                }
+            }
         }
 
         public void NPOIModeImport(DataTable dataExport, string xlFileName, ISheet wSheet, XSSFFormulaEvaluator xsseva, HSSFFormulaEvaluator hsseva)
@@ -3302,14 +3483,14 @@ namespace dataEditor
                 helpToolStripMenuItem.Checked = !helpToolStripMenuItem.Checked;
         }
 
-        private void optionsGrid_PropertyValueChanged(Object sender, PropertyValueChangedEventArgs e)
+        public void oldUpdateOptionsGrid()
         {
 
             if (urProperty.useExtraCol == true)
             {
                 TypeDescriptor.GetProperties(urOptionsGrid.SelectedObject)["ExtraColCnt"].SetReadOnlyAttribute(false);
             }
-            
+
             if (urProperty.useExtraCol == false)
             {
                 TypeDescriptor.GetProperties(urOptionsGrid.SelectedObject)["ExtraColCnt"].SetReadOnlyAttribute(true);
@@ -3328,19 +3509,12 @@ namespace dataEditor
                 urProperty.cntHeadsRows = 1;
             }
 
-            switch (mgSettings.mgCodeName.propGTPname)
-            {
-                case "KUBANESK":
-                    textBoxSubject.PlaceholderText = " раснодарский край";
-                    textBoxGTPcode.PlaceholderText = "PKUBANEN";
-                    textBoxNameGP.PlaceholderText = "ѕјќ “Ќ— энерго  убань";
-                    break;
-            }
+
 
             if (urProperty.ExtraColCnt > 10)
                 urProperty.ExtraColCnt = 10;
 
-            
+
 
             if (urProperty.cntHeadsRows != prvCntHedRw)
             {
@@ -3356,7 +3530,7 @@ namespace dataEditor
 
             if (temp != memSQLlist)
                 AutoFillList();
-            
+
             autoFontColor();
             ConfigUpdater();
             updateDataGridColors();
@@ -3368,7 +3542,24 @@ namespace dataEditor
                 updateStatusGrid(urProperty.cntHeadsRows);
             }
             SettingsForm.optionsGrid.Refresh();
+
+            
         }
+
+        public void settingsPropertyValueChanged()
+        {
+            switch (mgSettings.mgCodeName.propGTPname)
+            {
+                case "KUBANESK":
+                    textBoxSubject.PlaceholderText = " раснодарский край";
+                    textBoxGTPcode.PlaceholderText = "PKUBANEN";
+                    textBoxNameGP.PlaceholderText = "ѕјќ “Ќ— энерго  убань";
+                    break;
+            }
+
+            mgSettings.defaultSiteLink = ImportList.defaultSiteLinks[ImportList.KnownGTPnames.IndexOf(mgSettings.mgCodeName.propGTPname)];
+        }
+
 
         private void updateDataGridColors()
         {
@@ -3899,164 +4090,6 @@ namespace dataEditor
             mgImportEXCL(this, new EventArgs());
         }
 
-        private void toolBtnConvertFile_ButtonClick(object sender, EventArgs e)
-        {
-            int BigCycle = 0;
-            int SmallCycle = 0;
-            int number;
-            decimal ConsumptionValue;
-            decimal GenerationValue;
-            DataTable mgDictionaryTable = new DataTable();
-
-
-            if (File.Exists(Environment.CurrentDirectory + "\\contractors_" + mgSettings.mgCodeName.propGTPname + ".xml"))
-            {
-                string xmlFileName = Environment.CurrentDirectory + "\\contractors_" + mgSettings.mgCodeName.propGTPname + ".xml";
-
-                DataSet ExportsDats = new DataSet();
-                ExportsDats.ReadXml(xmlFileName);
-
-                mgDictionaryTable = ExportsDats.Tables[0];
-                DataRow[] results = mgDictionaryTable.Select("Agreement like '%" + "MG003" + "%'");
-                int residx = mgDictionaryTable.Rows.IndexOf(results[0]);
-                Console.WriteLine(residx);
-            }
-            else
-            {
-                Console.WriteLine("Failed to upload counterparty data");
-            }
-
-
-
-
-            DataTable ConvertExcel = new DataTable();
-            ConvertExcel.Clear();
-            //ConvertExcel.Columns.Add("id");
-            ConvertExcel.Columns.Add(new DataColumn("Agreement", typeof(string)));
-            ConvertExcel.Columns.Add(new DataColumn("DateIntoForce", typeof(DateOnly)));
-            ConvertExcel.Columns.Add(new DataColumn("Name", typeof(string)));
-            ConvertExcel.Columns.Add(new DataColumn("Type", typeof(string)));
-            ConvertExcel.Columns.Add(new DataColumn("inn", typeof(int)));
-            ConvertExcel.Columns.Add(new DataColumn("ConsumptionSumm", typeof(decimal)));
-            ConvertExcel.Columns.Add(new DataColumn("GenerationSumm", typeof(decimal)));
-            ConvertExcel.Columns.Add(new DataColumn("Sell", typeof(decimal)));
-            ConvertExcel.Columns.Add(new DataColumn("Buy", typeof(decimal)));
-            ConvertExcel.Columns.Add(new DataColumn("Price", typeof(decimal)));
-            ConvertExcel.Columns.Add(new DataColumn("Cost", typeof(decimal)));
-
-
-            for (int i = 0; i < mgDataViewer.RowCount; i++)
-            {
-                bool result = Int32.TryParse(mgDataViewer.Rows[i].Cells[0].Value.ToString(), out number);
-                if (mgDataViewer.Rows[i].Cells[0].Value != DBNull.Value && result)
-                {
-                    BigCycle = i;
-
-                    DataRow row = ConvertExcel.NewRow();
-                    //row["id"] = number;
-                    Console.WriteLine("AddToTableRowWithID: " + number);
-                    row["Name"] = mgDataViewer.Rows[i].Cells[2].Value.ToString().Split(',').First();
-
-                    if (mgDataViewer.Rows[i].Cells[7].Value.ToString() == "A+, к¬т*ч" && mgDataViewer.Rows[i + 1].Cells[7].Value.ToString() == "A-, к¬т*ч")
-                    {
-                        decimal.TryParse(mgDataViewer.Rows[i].Cells[11].Value.ToString(), out ConsumptionValue);
-                        row["ConsumptionSumm"] = Math.Round(ConsumptionValue, 0);
-                        Console.WriteLine("ConsumptionSumm: " + mgDataViewer.Rows[i].Cells[11].Value.ToString());
-
-                        decimal.TryParse(mgDataViewer.Rows[i + 1].Cells[11].Value.ToString(), out GenerationValue);
-                        row["GenerationSumm"] = Math.Round(GenerationValue, 0);
-                        Console.WriteLine("GenerationSumm: " + mgDataViewer.Rows[i + 1].Cells[11].Value.ToString() + "\n");
-                    }
-                    else
-                    {
-                        BigCycle++;
-                        while (BigCycle < mgDataViewer.Rows.Count && mgDataViewer.Rows[BigCycle].Cells[0].Value == DBNull.Value)
-                        {
-                            if (BigCycle < mgDataViewer.Rows.Count && mgDataViewer.Rows[BigCycle].Cells[7].Value.ToString() == "A-, к¬т*ч")
-                            {
-                                decimal.TryParse(mgDataViewer.Rows[BigCycle - 1].Cells[11].Value.ToString(), out ConsumptionValue);
-                                row["ConsumptionSumm"] = Math.Round(ConsumptionValue, 0);
-                                Console.WriteLine("ConsumptionSumm: " + mgDataViewer.Rows[BigCycle - 1].Cells[11].Value.ToString());
-
-                                SmallCycle = BigCycle + 1;
-
-                                while (SmallCycle < mgDataViewer.Rows.Count && mgDataViewer.Rows[SmallCycle].Cells[7].Value == DBNull.Value)
-                                {
-                                    if (mgDataViewer.Rows[SmallCycle].Cells[8].Value.ToString() == "—умма")
-                                    {
-                                        decimal.TryParse(mgDataViewer.Rows[SmallCycle].Cells[11].Value.ToString(), out GenerationValue);
-                                        row["GenerationSumm"] = Math.Round(GenerationValue, 0);
-                                        Console.WriteLine("GenerationSumm: " + mgDataViewer.Rows[SmallCycle].Cells[11].Value.ToString() + "\n");
-                                        BigCycle = SmallCycle;
-                                    }
-                                    SmallCycle++;
-                                }
-                            }
-                            BigCycle++;
-                        }
-                    }
-                    ConvertExcel.Rows.Add(row);
-                }
-            }
-
-            mgDataViewer.DataSource = null;
-            DataTable DT = (DataTable)mgDataViewer.DataSource;
-            if (DT != null)
-                DT.Clear();
-
-            mgDataViewer.Rows.Clear();
-            mgDataViewer.Refresh();
-            int count = this.mgDataViewer.Columns.Count;
-            for (int i = 0; i < count; i++)
-                this.mgDataViewer.Columns.RemoveAt(0);
-
-
-            mgDataViewer.DataSource = ConvertExcel;
-
-            mgDataViewer.Columns["Agreement"].Width = 120;
-            mgDataViewer.Columns["DateIntoForce"].Width = 60;
-            mgDataViewer.Columns["Name"].Width = 300;
-            mgDataViewer.Columns["Type"].Width = 40;
-            mgDataViewer.Columns["inn"].Width = 100;
-            mgDataViewer.Columns["ConsumptionSumm"].Width = 50;
-            mgDataViewer.Columns["GenerationSumm"].Width = 50;
-            mgDataViewer.Columns["Sell"].Width = 50;
-            mgDataViewer.Columns["Buy"].Width = 50;
-            mgDataViewer.Columns["Price"].Width = 50;
-            mgDataViewer.Columns["Cost"].Width = 100;
-
-            this.Width = 1300;
-
-            foreach (DataGridViewRow dr in mgDataViewer.Rows)
-            {
-                dr.HeaderCell.Value = (dr.Index + 1).ToString();
-                try
-                {
-                    if (Convert.ToInt32(dr.Cells["GenerationSumm"].Value) > Convert.ToInt32(dr.Cells["ConsumptionSumm"].Value))
-                    {
-                        dr.Cells["Sell"].Value = 0;
-                        dr.Cells["Buy"].Value = Convert.ToInt32(dr.Cells["GenerationSumm"].Value) - Convert.ToInt32(dr.Cells["ConsumptionSumm"].Value);
-                    }
-                    else
-                    {
-                        dr.Cells["Sell"].Value = Convert.ToInt32(dr.Cells["ConsumptionSumm"].Value) - Convert.ToInt32(dr.Cells["GenerationSumm"].Value);
-                        dr.Cells["Buy"].Value = 0;
-                    }
-                }
-                catch
-                {
-
-                }
-            }
-
-            foreach (DataGridViewColumn cl in mgDataViewer.Columns)
-            {
-                cl.SortMode = DataGridViewColumnSortMode.NotSortable;
-            }
-
-            mgDataViewer.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            mgDataViewer.Columns["Agreement"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-        }
     
         private void StartPage()
         {
@@ -4068,7 +4101,7 @@ namespace dataEditor
             SectionsControl.SelectedTab = SectionsControl.TabPages["tab"+ cmnSettings.StartPage];
         }
 
-        private void mgImportEntryDats(object sender, EventArgs e, string type, string path)
+        private void mgImportEntryDats(object sender, EventArgs e, string type, string path, string fileTypeTarget)
         {
             string xlFileName = "";
             if (type == "ofd")
@@ -4098,88 +4131,74 @@ namespace dataEditor
             commonImportEXCL(this, new EventArgs(), dataExtraction, xlFileName);
 
 
-            string[] components = Path.GetFileNameWithoutExtension(xlFileName).Split("_");
+            //string[] components = Path.GetFileNameWithoutExtension(xlFileName).Split("_");
 
-            foreach (string fileTypeTarget in components)
+            switch (fileTypeTarget)
             {
-                switch (fileTypeTarget)
-                {
-                    case "koeff":
+                case "KOEFF":
 
-                        if (toolBtnMounth.SelectedIndex == -1 && toolBtnYear.SelectedIndex == -1)
-                        {
-                            toolBtnMounth.Text = dataExtraction.Rows[1][5].ToString().Split(" ").First();
-                            toolBtnYear.Text = dataExtraction.Rows[1][5].ToString().Split(" ").Last();
-                        }
-                        else
-                        {
-                            if (DateTime.ParseExact(toolBtnMounth.SelectedItem.ToString(), "MMMM", CultureInfo.CurrentCulture).Month != DateTime.ParseExact(dataExtraction.Rows[1][5].ToString().Split(" ").First(), "MMMM", CultureInfo.CurrentCulture).Month)
-                            {
-                                MessageBox.Show("¬ыбранный мес€ц не совпадает с указанным расчетным периодом в загружаемом файле.");
-                            }
-                            if (toolBtnYear.SelectedItem.ToString() != dataExtraction.Rows[1][5].ToString().Split(" ").Last())
-                            {
-                                MessageBox.Show("¬ыбранный год не совпадает с указанным расчетным периодом в загружаемом файле.");
-                            }
-                        }
+                    if (DateTime.ParseExact(txtProjectMonth.Text, "MMMM", CultureInfo.CurrentCulture).Month != DateTime.ParseExact(dataExtraction.Rows[1][5].ToString().Split(" ").First(), "MMMM", CultureInfo.CurrentCulture).Month)
+                    {
+                        MessageBox.Show("¬ыбранный мес€ц не совпадает с указанным расчетным периодом в загружаемом файле.");
+                    }
+                    if (txtProjectYear.Text != dataExtraction.Rows[1][5].ToString().Split(" ").Last())
+                    {
+                        MessageBox.Show("¬ыбранный год не совпадает с указанным расчетным периодом в загружаемом файле.");
+                    }
 
-                        DataRow[] filteredRows = dataExtraction.Select(string.Format("{0} LIKE '%{1}%'", dataExtraction.Columns[3].ColumnName.ToString(), mgSettings.mgCodeName.propGTPcode));
+                    DataRow[] filteredRows = dataExtraction.Select(string.Format("{0} LIKE '%{1}%'", dataExtraction.Columns[3].ColumnName.ToString(), mgSettings.mgCodeName.propGTPcode));
 
-                        foreach (DataRow row in filteredRows)
-                        {
-                            textBoxSubject.Text = row[1].ToString();
-                            textBoxGTPcode.Text = row[3].ToString();
-                            textBoxNameGP.Text = row[2].ToString();
+                    foreach (DataRow row in filteredRows)
+                    {
+                        textBoxSubject.Text = row[1].ToString();
+                        textBoxGTPcode.Text = row[3].ToString();
+                        textBoxNameGP.Text = row[2].ToString();
 
-                            datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e1"].Nodes["treeViewLine6e1val"].Text = row[4].ToString();
-                            datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e2"].Nodes["treeViewLine6e2val"].Text = row[5].ToString();
-                            datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e3"].Nodes["treeViewLine6e3val"].Text = row[6].ToString();
+                        datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e1"].Nodes["treeViewLine6e1val"].Text = row[4].ToString();
+                        datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e2"].Nodes["treeViewLine6e2val"].Text = row[5].ToString();
+                        datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e3"].Nodes["treeViewLine6e3val"].Text = row[6].ToString();
 
-                            datsTreeView.Nodes["treeViewLine7"].Nodes["treeViewLine7e1"].Nodes["treeViewLine7e1val"].Text = row[7].ToString();
-                            datsTreeView.Nodes["treeViewLine7"].Nodes["treeViewLine7e2"].Nodes["treeViewLine7e2val"].Text = row[8].ToString();
-                        }
+                        datsTreeView.Nodes["treeViewLine7"].Nodes["treeViewLine7e1"].Nodes["treeViewLine7e1val"].Text = row[7].ToString();
+                        datsTreeView.Nodes["treeViewLine7"].Nodes["treeViewLine7e2"].Nodes["treeViewLine7e2val"].Text = row[8].ToString();
+                    }
 
-                        mgFileKF.Checked = true;
+                    mgFileKF.Checked = true;
 
-                        break;
+                    break;
 
-                    case "stage":
+                case "SVNC":
 
-                        textBoxGTPcode.Text = dataExtraction.Rows[3][1].ToString();
-                        textBoxNameGP.Text = dataExtraction.Rows[4][1].ToString();
+                    textBoxGTPcode.Text = dataExtraction.Rows[3][1].ToString();
+                    textBoxNameGP.Text = dataExtraction.Rows[4][1].ToString();
 
-                        if (toolBtnMounth.SelectedIndex == -1 && toolBtnYear.SelectedIndex == -1)
-                        {
-                            toolBtnMounth.Text = dataExtraction.Rows[2][1].ToString().Split(" ").First();
-                            toolBtnYear.Text = dataExtraction.Rows[2][1].ToString().Split(" ").Last();
-                        }
-                        else
-                        {
-                            if (DateTime.ParseExact(toolBtnMounth.SelectedItem.ToString(), "MMMM", CultureInfo.CurrentCulture).Month != DateTime.ParseExact(dataExtraction.Rows[2][1].ToString().Split(" ").First(), "MMMM", CultureInfo.CurrentCulture).Month)
-                            {
-                                MessageBox.Show("¬ыбранный мес€ц не совпадает с указанным расчетным периодом в загружаемом файле.");
-                            }
-                            if (toolBtnYear.SelectedItem.ToString() != dataExtraction.Rows[2][1].ToString().Split(" ").Last())
-                            {
-                                MessageBox.Show("¬ыбранный год не совпадает с указанным расчетным периодом в загружаемом файле.");
-                            }
-                        }
+                    if (DateTime.ParseExact(txtProjectMonth.Text, "MMMM", CultureInfo.CurrentCulture).Month != DateTime.ParseExact(dataExtraction.Rows[2][1].ToString().Split(" ").First(), "MMMM", CultureInfo.CurrentCulture).Month)
+                    {
+                        MessageBox.Show("¬ыбранный мес€ц не совпадает с указанным расчетным периодом в загружаемом файле.");
+                    }
+                    if (txtProjectYear.Text != dataExtraction.Rows[2][1].ToString().Split(" ").Last())
+                    {
+                        MessageBox.Show("¬ыбранный год не совпадает с указанным расчетным периодом в загружаемом файле.");
+                    }
 
-                        datsTreeView.Nodes["treeViewLine2"].Nodes["treeViewLine2e1val"].Text = dataExtraction.Rows[31][1].ToString();
-                        datsTreeView.Nodes["treeViewLine3"].Nodes["treeViewLine3e1val"].Text = dataExtraction.Rows[33][1].ToString();
+                    datsTreeView.Nodes["treeViewLine2"].Nodes["treeViewLine2e1val"].Text = dataExtraction.Rows[31][1].ToString();
+                    datsTreeView.Nodes["treeViewLine3"].Nodes["treeViewLine3e1val"].Text = dataExtraction.Rows[33][1].ToString();
 
-                        datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e1"].Nodes["treeViewLine4e1val"].Text = dataExtraction.Rows[25][1].ToString();
-                        datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e2"].Nodes["treeViewLine4e2val"].Text = dataExtraction.Rows[26][1].ToString();
-                        datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e3"].Nodes["treeViewLine4e3val"].Text = dataExtraction.Rows[27][1].ToString();
+                    datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e1"].Nodes["treeViewLine4e1val"].Text = dataExtraction.Rows[25][1].ToString();
+                    datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e2"].Nodes["treeViewLine4e2val"].Text = dataExtraction.Rows[26][1].ToString();
+                    datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e3"].Nodes["treeViewLine4e3val"].Text = dataExtraction.Rows[27][1].ToString();
 
-                        datsTreeView.Nodes["treeViewLine5"].Nodes["treeViewLine5e1"].Nodes["treeViewLine5e1val"].Text = dataExtraction.Rows[29][1].ToString();
-                        datsTreeView.Nodes["treeViewLine5"].Nodes["treeViewLine5e2"].Nodes["treeViewLine5e2val"].Text = dataExtraction.Rows[30][1].ToString();
+                    datsTreeView.Nodes["treeViewLine5"].Nodes["treeViewLine5e1"].Nodes["treeViewLine5e1val"].Text = dataExtraction.Rows[29][1].ToString();
+                    datsTreeView.Nodes["treeViewLine5"].Nodes["treeViewLine5e2"].Nodes["treeViewLine5e2val"].Text = dataExtraction.Rows[30][1].ToString();
 
-                        mgFileSVNC.Checked = true;
+                    mgFileSVNC.Checked = true;
 
-                        break;
-                }
+                    break;
+
+                case "SPUNC":
+                    datsTreeView.Nodes["treeViewLine1"].Nodes["treeViewLine1e1val"].Text = "0,001913033";
+                    break;
             }
+
         }
 
         private void urBtnSaveXML_Click(object sender, EventArgs e)
@@ -4358,17 +4377,118 @@ namespace dataEditor
             TreeColViewer.ClearSelection();
         }
 
-        private void getURLlinks(List<object> arguments)
+        private void getURLlinks()
         {
             string firstDate = mgSettings.rDateSVNC.Year + ((mgSettings.rDateSVNC.Month - 1).ToString("00")) + "01/";
             string secondDate = mgSettings.rDateSVNC.Year + mgSettings.rDateSVNC.Month.ToString("00") + mgSettings.rDateSVNC.Day.ToString("00") + "_";
             string thridDate = "_" + ((mgSettings.rDateSVNC.Month - 1).ToString("00")) + mgSettings.rDateSVNC.Year;
             string fileNameSVNC = mgSettings.mgCodeName.propGTPname + "_" + mgSettings.mgCodeName.propGTPcode + thridDate + "_gtp_1st_stage.xls";
             string urlLinkSVNC = "https://www.atsenergo.ru/dload/retail/" + firstDate + secondDate + fileNameSVNC;
-            arguments.Add(urlLinkSVNC);
+            urlLinksData.Add(urlLinkSVNC);
             string fileNameKF = mgSettings.rDateSVNC.Year + mgSettings.rDateSVNC.Month.ToString("00") + mgSettings.rDateSVNC.Day.ToString("00") + "_" + ((mgSettings.rDateSVNC.Month - 1).ToString("00")) + mgSettings.rDateSVNC.Year + "_koeff.xls";
             string urlLinkKF = "https://www.atsenergo.ru/sites/default/files/uchfsk/" + fileNameKF;
-            arguments.Add(urlLinkKF);
+            urlLinksData.Add(urlLinkKF);
+            getPageForExtractLinks();
+        }
+
+        private void mgFileSPUNCbtn_Click(object sender, EventArgs e)
+        {
+            ComponentResourceManager resources = new ComponentResourceManager(typeof(MainForm));
+            Image statusOK = ((System.Drawing.Image)(resources.GetObject("imgStatusOk.Image")));
+            Image statusDwnld = ((System.Drawing.Image)(resources.GetObject("imgStatusDwnld.Image")));
+            Image statusFailed = ((System.Drawing.Image)(resources.GetObject("imgStatusFailed.Image")));
+            string Status = null;
+
+            List<object> arguments = new List<object>();
+
+            int selectedIndexItem = 0;
+            object[] array = new object[mgFileSPUNCselector.Items.Count];
+            using (ItemSelector extractedListForm = new ItemSelector())
+            {
+                mgFileSPUNCselector.Items.CopyTo(array,0);
+                extractedListForm.sheetsList.Items.AddRange(array);
+
+                if (extractedListForm.sheetsList.Items.Count > 1)
+                {
+                    extractedListForm.Size = new Size(DropDownWidth(mgFileSPUNCselector) + 120, extractedListForm.Size.Height);
+                    if (extractedListForm.ShowDialog() == DialogResult.OK)
+                    {
+                        selectedIndexItem = extractedListForm.selectedIndexSheet;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+            }
+
+            string urlLink = (string)urlLinksData[selectedIndexItem + 2];
+            arguments.Add(urlLink);
+
+            Uri url = new Uri(urlLink);
+            string sFileName = Path.GetFileName(url.LocalPath);
+
+            bgWorker = new BackgroundWorker();
+            bgWorker.WorkerReportsProgress = true;
+            bgWorker.WorkerSupportsCancellation = true;
+            bgWorker.DoWork += new DoWorkEventHandler(DownloadFile);
+
+            bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
+            bgWorker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_DownloadProgressChanged);
+
+            bgWorker.RunWorkerAsync(arguments);
+
+            progressDlg = new ProgressDialog();
+            progressDlg.stopProgress = new EventHandler((s, e1) => {
+                switch (progressDlg.DialogResult)
+                {
+                    case DialogResult.Cancel:
+                        bgWorker.CancelAsync();
+                        progressDlg.Close();
+                        break;
+                }
+            });
+            progressDlg.ShowDialog();
+
+
+            if (File.Exists(mgSettings.mgFolderDonwloads.fullPathDownloads + "\\" + sFileName))
+            {
+                mgFileSPUNCbtn.Image = statusDwnld;
+                string path = mgSettings.mgFolderDonwloads.fullPathDownloads + "\\" + sFileName;
+                try
+                {
+                    mgImportEntryDats(this, new EventArgs(), "dwn", path, "SPUNC");
+                    mgFileSPUNCbtn.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                    mgFileSPUNCselector.Visible = false;
+                    Status = "Completed";
+                }
+                catch
+                {
+                    Status = "Downloaded";
+                }
+            }
+            else
+            {
+                Status = "Failed";
+            }
+
+            switch (Status)
+            {
+                case "Completed":
+                    mgFileSPUNCbtn.Image = statusOK;
+                    mgFileSPUNCbtn.ToolTipText = "‘айл обработан";
+                    mgFileSPUNCselector.Visible = false;
+                    break;
+                case "Downloaded":
+                    mgFileSPUNCbtn.Image = statusDwnld;
+                    mgFileSPUNCbtn.ToolTipText = "‘айл загружен";
+                    mgFileSPUNCselector.Visible = false;
+                    break;
+                case "Failed":
+                    mgFileSPUNCbtn.Image = statusFailed;
+                    mgFileSPUNCbtn.ToolTipText = "ќшибка";
+                    break;
+            }
         }
 
         private void mgFileSVNC_Click(object sender, EventArgs e)
@@ -4384,7 +4504,7 @@ namespace dataEditor
             string secondDate = mgSettings.rDateSVNC.Year + mgSettings.rDateSVNC.Month.ToString("00") + mgSettings.rDateSVNC.Day.ToString("00") + "_";
             string thridDate = "_" + ((mgSettings.rDateSVNC.Month - 1).ToString("00")) + mgSettings.rDateSVNC.Year;
             string fileName = mgSettings.mgCodeName.propGTPname + "_" + mgSettings.mgCodeName.propGTPcode + thridDate + "_gtp_1st_stage.xls";
-            string urlLink = "https://www.atsenergo.ru/dload/retail/" + firstDate + secondDate + fileName;
+            string urlLink = (string)urlLinksData[0];
             arguments.Add(urlLink);
 
             bgWorker = new BackgroundWorker();
@@ -4416,7 +4536,7 @@ namespace dataEditor
                 string path = mgSettings.mgFolderDonwloads.fullPathDownloads + "\\" + secondDate+fileName;
                 try
                 {
-                    mgImportEntryDats(this, new EventArgs(), "dwn", path);
+                    mgImportEntryDats(this, new EventArgs(), "dwn", path, "SVNC");
                     mgFileSVNCbtn.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
                     Status = "Completed";
                 }
@@ -4457,7 +4577,8 @@ namespace dataEditor
 
             List<object> arguments = new List<object>();
             string fileName = mgSettings.rDateSVNC.Year + mgSettings.rDateSVNC.Month.ToString("00") + mgSettings.rDateSVNC.Day.ToString("00") + "_" + ((mgSettings.rDateSVNC.Month - 1).ToString("00")) + mgSettings.rDateSVNC.Year + "_koeff.xls";
-            string urlLink = "https://www.atsenergo.ru/sites/default/files/uchfsk/" + fileName;
+            
+            string urlLink = (string)urlLinksData[1];
             arguments.Add(urlLink);
 
             bgWorker = new BackgroundWorker();
@@ -4489,7 +4610,7 @@ namespace dataEditor
                 string path = mgSettings.mgFolderDonwloads.fullPathDownloads + "\\" + fileName;
                 try
                 {
-                    mgImportEntryDats(this, new EventArgs(), "dwn", path);
+                    mgImportEntryDats(this, new EventArgs(), "dwn", path, "KOEFF");
                     mgFileKFbtn.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
                     Status = "Completed";
                 }
@@ -4601,15 +4722,25 @@ namespace dataEditor
             bool rFileKF;
             bool rFileSVNC;
             bool rFileSPUNC;
-
-
-            List<object> genericlist = new List<object>();
-            getURLlinks(genericlist);
-            string urlLinkSVNC = (string)genericlist[0];
-            string urlLinkKF = (string)genericlist[1];
+            DateTime date = DateTime.Now;
 
             checkFolders();
-            
+            settingsPropertyValueChanged();
+
+            txtProjectInfoName.Text = "mkg_" + mgSettings.mgCodeName.propGTPcode + "_" + date.ToString("MM") + date.ToString("yyyy");
+            txtProjectMonth.Text = date.ToString("MMMM");
+            txtProjectYear.Text = date.ToString("yyyy");
+
+            getURLlinks();
+            string urlLinkSVNC = (string)urlLinksData[0];
+            string urlLinkKF = (string)urlLinksData[1];
+
+            string urlLinkSPUNC = null;
+            if(urlLinksData.Count >2)
+            {
+                urlLinkSPUNC = (string)urlLinksData[3];
+            }
+
             rFileKF = checkRealeseFiles(urlLinkKF);
             if (rFileKF)
             {
@@ -4635,6 +4766,20 @@ namespace dataEditor
             {
                 mgFileSVNCbtn.Visible = false;
                 mgFileSVNCbtn.DisplayStyle = ToolStripItemDisplayStyle.Text;
+                mgToolStripInputData.Refresh();
+            }
+
+            rFileSPUNC = checkRealeseFiles(urlLinkSPUNC);
+            if (rFileSPUNC)
+            {
+                mgFileSPUNCbtn.Visible = true;
+                mgFileSPUNCbtn.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                mgToolStripInputData.Refresh();
+            }
+            else
+            {
+                mgFileSPUNCbtn.Visible = false;
+                mgFileSPUNCbtn.DisplayStyle = ToolStripItemDisplayStyle.Text;
                 mgToolStripInputData.Refresh();
             }
 
@@ -4734,11 +4879,46 @@ namespace dataEditor
             SettingsForm.optionsGrid.Refresh();
         }
 
+        private void groupBox_Paint(object sender, PaintEventArgs e)
+        {
+            GroupBox box = sender as GroupBox;
+            DrawGroupBox(box, e.Graphics, Color.Black, Color.FromArgb(255,100,100,100));
+        }
+        private void DrawGroupBox(GroupBox box, Graphics g, Color textColor, Color borderColor)
+        {
+            if (box != null)
+            {
+                Brush textBrush = new SolidBrush(textColor);
+                Brush borderBrush = new SolidBrush(borderColor);
+                Pen borderPen = new Pen(borderBrush);
+                SizeF strSize = g.MeasureString(box.Text, box.Font);
+                Rectangle rect = new Rectangle(box.ClientRectangle.X,
+                                               box.ClientRectangle.Y + (int)(strSize.Height / 2),
+                                               box.ClientRectangle.Width - 1,
+                                               box.ClientRectangle.Height - (int)(strSize.Height / 2) - 1);
+                // Clear text and border
+                g.Clear(box.BackColor);
+                // Draw text
+                g.DrawString(box.Text, box.Font, textBrush, box.Padding.Left, 0);
+                // Drawing Border
+                //Left
+                g.DrawLine(borderPen, rect.Location, new Point(rect.X, rect.Y + rect.Height));
+                //Right
+                g.DrawLine(borderPen, new Point(rect.X + rect.Width, rect.Y), new Point(rect.X + rect.Width, rect.Y + rect.Height));
+                //Bottom
+                g.DrawLine(borderPen, new Point(rect.X, rect.Y + rect.Height), new Point(rect.X + rect.Width, rect.Y + rect.Height));
+                //Top1
+                g.DrawLine(borderPen, new Point(rect.X, rect.Y), new Point(rect.X + box.Padding.Left, rect.Y));
+                //Top2
+                g.DrawLine(borderPen, new Point(rect.X + box.Padding.Left + (int)(strSize.Width), rect.Y), new Point(rect.X + rect.Width, rect.Y));
+            }
+        }
+
+
         private void mgDataViewer_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
             ComponentResourceManager resources = new ComponentResourceManager(typeof(MainForm));
             Image imgOpenFolder = (Image)resources.GetObject("mgBtnOpenFolder.Image");
-            //Image imgDataTable = (Image)resources.GetObject("mgOpenDataTable.Image");
             Image imgDataCalculation = (Image)resources.GetObject("mgData—alculation.Image");
             Image imgDataAct = (Image)resources.GetObject("mgDataAct.Image");
 
@@ -4806,9 +4986,25 @@ namespace dataEditor
             }
         }
 
+
+
         private void mgBtnEntryDatFiles_ButtonClick(object sender, EventArgs e)
         {
-            string link = "https://penza.tns-e.ru/disclosure/reporting/sred-nereg-tsena/?PARAMS={%22YEAR%22:[%222023%22]}";
+            
+        }
+
+        private void getPageForExtractLinks()
+        {
+            string link = null;
+            if (!mgSettings.defaultSiteLink.Contains("{%22YEAR%22:[%22"))
+            {
+                link = mgSettings.defaultSiteLink + "{%22YEAR%22:[%22" + txtProjectYear.Text + "%22]}";
+            }
+            else
+            {
+                link = mgSettings.defaultSiteLink;
+            }
+
             WebClient client = new WebClient();
             client.Encoding = System.Text.Encoding.UTF8;
             string page = client.DownloadString(link);
@@ -4817,6 +5013,7 @@ namespace dataEditor
 
         public void DumpHRefs(string page)
         {
+            mgFileSPUNCselector.Items.Clear();
             System.Text.RegularExpressions.Match m;
             string HRefPattern = "<a href=\"https://cdn.tns-e.ru/iblock/(.*?/.*?)/(.*?)\">.*?</a>";
 
@@ -4825,7 +5022,8 @@ namespace dataEditor
                 m = Regex.Match(page, HRefPattern, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.Singleline, TimeSpan.FromSeconds(1));
                 while (m.Success)
                 {
-                    Console.WriteLine("https://cdn.tns-e.ru/iblock/" + Convert.ToString(m.Groups[1]) + "/" + Convert.ToString(m.Groups[2]));
+                    urlLinksData.Add("https://cdn.tns-e.ru/iblock/" + Convert.ToString(m.Groups[1]) + "/" + Convert.ToString(m.Groups[2]));
+                    mgFileSPUNCselector.Items.Add(Convert.ToString(m.Groups[2]));
                     m = m.NextMatch();
                 }
 
@@ -4834,10 +5032,38 @@ namespace dataEditor
             {
                 Console.WriteLine("The matching operation timed out.");
             }
+            if(mgFileSPUNCselector.Items.Count != 0)
+            {
+                mgFileSPUNCselector.Visible = false;
+                mgFileSPUNCselector.SelectedIndex = 0;
+                mgFileSPUNCselector.Size = new Size(DropDownWidth(mgFileSPUNCselector)+ 20, 25);
+                mgFileSPUNCselector.DropDownWidth = DropDownWidth(mgFileSPUNCselector) + 20;
+                mgToolStripInputData.Refresh();
+            }
+        }
+
+        private void mgFileSPUNCselector_DropDownClosed(object sender, EventArgs e)
+        {
+            mgToolStripInputData.Focus();
+        }
+
+        int DropDownWidth(ToolStripComboBox myCombo)
+        {
+            int maxWidth = 0, temp = 0;
+            foreach (var obj in myCombo.Items)
+            {
+                temp = TextRenderer.MeasureText(obj.ToString(), myCombo.Font).Width;
+                if (temp > maxWidth)
+                {
+                    maxWidth = temp;
+                }
+            }
+            return maxWidth;
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            SettingsForm.Owner = this;
             SettingsForm.Show();
         }
 
@@ -4845,11 +5071,6 @@ namespace dataEditor
         {
             FormType1 formType1 = new FormType1();
             formType1.Show();
-        }
-
-        private void createResultForType1()
-        {
-
         }
 
         private void mgDataAct_Click(object sender, EventArgs e)
@@ -4864,8 +5085,16 @@ namespace dataEditor
             formType3.Show();
         }
 
+        private int GetTextHeight(TextBox tBox)
+        {
+            return TextRenderer.MeasureText(tBox.Text, tBox.Font, tBox.ClientSize,
+                     TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height;
+        }
+
         private void TitleInfoBorderColor(object sender, TableLayoutCellPaintEventArgs e)
         {
+            TableLayoutRowStyleCollection styles = upperTableLayoutMainData.RowStyles;
+
             var panel = sender as TableLayoutPanel;
             e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
             var rectangle = e.CellBounds;
@@ -4876,8 +5105,29 @@ namespace dataEditor
 
                 if (e.Column == 0)
                 {
-                    var bottomLeft = new Point(e.CellBounds.Left, e.CellBounds.Bottom -11);
-                    var bottomRight = new Point(e.CellBounds.Right, e.CellBounds.Bottom -11);
+                    var bottomLeft = new Point(e.CellBounds.Left+2, e.CellBounds.Bottom - (Convert.ToInt32(styles[e.Row].Height)- 20));
+                    var bottomRight = new Point(e.CellBounds.Right, e.CellBounds.Bottom - (Convert.ToInt32(styles[e.Row].Height) - 20));
+                    e.Graphics.DrawLine(pen, bottomLeft, bottomRight);
+                }
+            }
+        }
+
+        private void ProjectInfoBorderColor(object sender, TableLayoutCellPaintEventArgs e)
+        {
+            TableLayoutRowStyleCollection styles = ProjectInfoTableLayoutPanel.RowStyles;
+
+            var panel = sender as TableLayoutPanel;
+            e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+            var rectangle = e.CellBounds;
+            using (var pen = new Pen(Color.FromArgb(255, 100, 100, 100), 1))
+            {
+                pen.Alignment = PenAlignment.Center;
+                pen.DashStyle = DashStyle.Solid;
+
+                if (e.Column == 0 || e.Column == 2)
+                {
+                    var bottomLeft = new Point(e.CellBounds.Left+2, e.CellBounds.Bottom - (Convert.ToInt32(styles[e.Row].Height) - 20));
+                    var bottomRight = new Point(e.CellBounds.Right, e.CellBounds.Bottom - (Convert.ToInt32(styles[e.Row].Height) - 20));
                     e.Graphics.DrawLine(pen, bottomLeft, bottomRight);
                 }
             }
@@ -4917,7 +5167,6 @@ namespace dataEditor
                 }
             }
         }
-
     }
     public static class ExtensionMethods
     {
@@ -4936,6 +5185,17 @@ namespace dataEditor
         public static List<string> AvailablePages = new List<string>() { };
         public static List<string> KnownGTPnames = new List<string>() { "KUBANESK", "ROSTOVEN", "YARENERG", "TULAENSK", "ENTREDIN", "NIGNOVEN", "MARIENER", "KARELENE", "VORNEGEN", "GARENERC" };
         public static List<string> KnownGTPcode = new List<string>() { "PKUBANEN", "PROSTOVE", "PYARENER", "PTULENER", "PPENZAEN", "PNIGNOVE", "PMARIENE", "PKARELEN", "PVORNEGE", "PNOVGORE" };
+        public static List<string> defaultSiteLinks = new List<string>() {
+            "https://kuban.tns-e.ru/disclosure/reporting/predelnye-urovni-nereguliruemykh-tsen-na-elektroenergiyu-moshchnost-postavlyaemuyu-potrebitelyam-pok/?PARAMS=",
+            "https://rostov.tns-e.ru/disclosure/reporting/nereguliruem-tsen/?PARAMS=",
+            "https://yar.tns-e.ru/disclosure/reporting/sredn-nereguliruemaya-tsena/?PARAMS=",
+            "https://tula.tns-e.ru/disclosure/reporting/nereguliruem-tsen/?PARAMS=",
+            "https://penza.tns-e.ru/disclosure/reporting/sred-nereg-tsena/?PARAMS=",
+            "https://nn.tns-e.ru/disclosure/reporting/predelnye-urovni/?PARAMS=",
+            "https://mari-el.tns-e.ru/disclosure/reporting/sostavlyayushchie-tseny-na-elektricheskuyu-energiyu-moshchnost-differentsirovannoy-v-zavisimosti-ot-/?PARAMS=",
+            "https://karelia.tns-e.ru/disclosure/reporting/nereg-sostav-pokupki-poter/?PARAMS=",
+            "https://voronezh.tns-e.ru/disclosure/reporting/predelnye-urovni-nereguliruemykh-tsen/?PARAMS=",
+            "https://novgorod.tns-e.ru/disclosure/reporting/predelnye-urovni-nereguliruemykh-tsen-na-elektricheskuyu-energiyu-moshchnost/?PARAMS=" };
 
         public static void CheckProviders()
         {
