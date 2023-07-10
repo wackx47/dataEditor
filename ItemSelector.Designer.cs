@@ -42,19 +42,19 @@
             this.MainGroupBox.Location = new System.Drawing.Point(10, 10);
             this.MainGroupBox.Name = "MainGroupBox";
             this.MainGroupBox.Padding = new System.Windows.Forms.Padding(8);
-            this.MainGroupBox.Size = new System.Drawing.Size(259, 177);
+            this.MainGroupBox.Size = new System.Drawing.Size(259, 164);
             this.MainGroupBox.TabIndex = 0;
             this.MainGroupBox.TabStop = false;
             this.MainGroupBox.Text = "Select item";
             // 
             // sheetsList
             // 
-            this.sheetsList.Dock = System.Windows.Forms.DockStyle.Top;
+            this.sheetsList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sheetsList.FormattingEnabled = true;
             this.sheetsList.ItemHeight = 14;
             this.sheetsList.Location = new System.Drawing.Point(8, 23);
             this.sheetsList.Name = "sheetsList";
-            this.sheetsList.Size = new System.Drawing.Size(243, 144);
+            this.sheetsList.Size = new System.Drawing.Size(243, 133);
             this.sheetsList.TabIndex = 0;
             this.sheetsList.SelectedIndexChanged += new System.EventHandler(this.sheetsList_SelectedIndexChanged);
             // 
@@ -63,9 +63,9 @@
             this.btnSelect.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.btnSelect.Enabled = false;
             this.btnSelect.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnSelect.Location = new System.Drawing.Point(10, 192);
+            this.btnSelect.Location = new System.Drawing.Point(10, 180);
             this.btnSelect.Name = "btnSelect";
-            this.btnSelect.Size = new System.Drawing.Size(259, 25);
+            this.btnSelect.Size = new System.Drawing.Size(259, 37);
             this.btnSelect.TabIndex = 1;
             this.btnSelect.Text = "Select";
             this.btnSelect.UseVisualStyleBackColor = true;

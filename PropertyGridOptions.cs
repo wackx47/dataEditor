@@ -674,7 +674,7 @@ namespace dataEditor
             set { _semiPeak = value; }
         }
 
-        night _night = new night(23,7);
+        night _night = new night(23,6);
         [Browsable(true)]
         [ReadOnly(false)]
         [DisplayName("night")]
@@ -768,7 +768,7 @@ namespace dataEditor
 
     class semiPeak
     {
-        public semiPeak(int i1, int i2, int f1, int f2)
+        public semiPeak(int i1, int f1, int i2, int f2)
         {
             _initial1 = i1;
             _final1 = f1;
@@ -828,7 +828,7 @@ namespace dataEditor
 
     class Peak
     {
-        public Peak(int i1, int i2, int f1, int f2)
+        public Peak(int i1, int f1, int i2, int f2)
         {
             _initial1 = i1;
             _final1 = f1;

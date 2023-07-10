@@ -29,25 +29,28 @@
         private void InitializeComponent()
         {
             this.mainPanel = new System.Windows.Forms.Panel();
+            this.groupBoxResult = new System.Windows.Forms.GroupBox();
             this.cpResultTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.txtResultCost = new System.Windows.Forms.TextBox();
+            this.txtResultPrice = new System.Windows.Forms.TextBox();
             this.label42 = new System.Windows.Forms.Label();
             this.label41 = new System.Windows.Forms.Label();
-            this.lblResultPrice = new System.Windows.Forms.Label();
-            this.lblResultCost = new System.Windows.Forms.Label();
+            this.groupBoxAmounts = new System.Windows.Forms.GroupBox();
             this.vResultTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.txtBUY = new System.Windows.Forms.TextBox();
             this.txtSELL = new System.Windows.Forms.TextBox();
             this.label35 = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
             this.label37 = new System.Windows.Forms.Label();
+            this.groupBoxEntryDat = new System.Windows.Forms.GroupBox();
             this.EntryDataTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.txtKF1 = new System.Windows.Forms.TextBox();
+            this.txtsvncPorem = new System.Windows.Forms.TextBox();
+            this.txtsvncEEorem = new System.Windows.Forms.TextBox();
             this.label38 = new System.Windows.Forms.Label();
             this.label39 = new System.Windows.Forms.Label();
             this.label40 = new System.Windows.Forms.Label();
-            this.lblsvncEEorem = new System.Windows.Forms.Label();
-            this.lblsvncPorem = new System.Windows.Forms.Label();
-            this.lblKF1 = new System.Windows.Forms.Label();
-            this.label34 = new System.Windows.Forms.Label();
+            this.groupBoxIntervals = new System.Windows.Forms.GroupBox();
             this.DataTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.txtGenSumm = new System.Windows.Forms.TextBox();
             this.txtGenLast = new System.Windows.Forms.TextBox();
@@ -66,6 +69,7 @@
             this.label30 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
             this.txtDateFirst = new System.Windows.Forms.TextBox();
+            this.groupBoxMainInfo = new System.Windows.Forms.GroupBox();
             this.InfoTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -90,10 +94,15 @@
             this.lblAbonentName = new System.Windows.Forms.Label();
             this.lblAbonentINN = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
+            this.groupBoxResult.SuspendLayout();
             this.cpResultTableLayout.SuspendLayout();
+            this.groupBoxAmounts.SuspendLayout();
             this.vResultTableLayout.SuspendLayout();
+            this.groupBoxEntryDat.SuspendLayout();
             this.EntryDataTableLayout.SuspendLayout();
+            this.groupBoxIntervals.SuspendLayout();
             this.DataTableLayout.SuspendLayout();
+            this.groupBoxMainInfo.SuspendLayout();
             this.InfoTableLayout.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -101,48 +110,87 @@
             // 
             this.mainPanel.BackColor = System.Drawing.SystemColors.ControlLight;
             this.mainPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.mainPanel.Controls.Add(this.cpResultTableLayout);
-            this.mainPanel.Controls.Add(this.vResultTableLayout);
-            this.mainPanel.Controls.Add(this.EntryDataTableLayout);
-            this.mainPanel.Controls.Add(this.label34);
-            this.mainPanel.Controls.Add(this.DataTableLayout);
-            this.mainPanel.Controls.Add(this.InfoTableLayout);
+            this.mainPanel.Controls.Add(this.groupBoxResult);
+            this.mainPanel.Controls.Add(this.groupBoxAmounts);
+            this.mainPanel.Controls.Add(this.groupBoxEntryDat);
+            this.mainPanel.Controls.Add(this.groupBoxIntervals);
+            this.mainPanel.Controls.Add(this.groupBoxMainInfo);
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.mainPanel.Location = new System.Drawing.Point(5, 5);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Padding = new System.Windows.Forms.Padding(5);
-            this.mainPanel.Size = new System.Drawing.Size(577, 593);
+            this.mainPanel.Size = new System.Drawing.Size(552, 653);
             this.mainPanel.TabIndex = 0;
             this.mainPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.mainPanel_Paint);
+            // 
+            // groupBoxResult
+            // 
+            this.groupBoxResult.Controls.Add(this.cpResultTableLayout);
+            this.groupBoxResult.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.groupBoxResult.Location = new System.Drawing.Point(8, 574);
+            this.groupBoxResult.Name = "groupBoxResult";
+            this.groupBoxResult.Size = new System.Drawing.Size(534, 68);
+            this.groupBoxResult.TabIndex = 15;
+            this.groupBoxResult.TabStop = false;
+            this.groupBoxResult.Text = "Расчет цены и стоимости";
             // 
             // cpResultTableLayout
             // 
             this.cpResultTableLayout.ColumnCount = 2;
-            this.cpResultTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.cpResultTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.cpResultTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70.64394F));
+            this.cpResultTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.35606F));
+            this.cpResultTableLayout.Controls.Add(this.txtResultCost, 1, 1);
+            this.cpResultTableLayout.Controls.Add(this.txtResultPrice, 1, 0);
             this.cpResultTableLayout.Controls.Add(this.label42, 0, 1);
             this.cpResultTableLayout.Controls.Add(this.label41, 0, 0);
-            this.cpResultTableLayout.Controls.Add(this.lblResultPrice, 1, 0);
-            this.cpResultTableLayout.Controls.Add(this.lblResultCost, 1, 1);
-            this.cpResultTableLayout.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.cpResultTableLayout.Location = new System.Drawing.Point(5, 538);
+            this.cpResultTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cpResultTableLayout.Location = new System.Drawing.Point(3, 18);
             this.cpResultTableLayout.Name = "cpResultTableLayout";
             this.cpResultTableLayout.RowCount = 2;
-            this.cpResultTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45F));
-            this.cpResultTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55F));
-            this.cpResultTableLayout.Size = new System.Drawing.Size(565, 48);
+            this.cpResultTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.cpResultTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.cpResultTableLayout.Size = new System.Drawing.Size(528, 47);
             this.cpResultTableLayout.TabIndex = 5;
+            this.cpResultTableLayout.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.mainTableLayoutGridBorder);
+            // 
+            // txtResultCost
+            // 
+            this.txtResultCost.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtResultCost.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtResultCost.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtResultCost.Location = new System.Drawing.Point(383, 28);
+            this.txtResultCost.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtResultCost.Name = "txtResultCost";
+            this.txtResultCost.ReadOnly = true;
+            this.txtResultCost.Size = new System.Drawing.Size(135, 14);
+            this.txtResultCost.TabIndex = 20;
+            this.txtResultCost.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtResultCost.WordWrap = false;
+            // 
+            // txtResultPrice
+            // 
+            this.txtResultPrice.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtResultPrice.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtResultPrice.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtResultPrice.Location = new System.Drawing.Point(383, 5);
+            this.txtResultPrice.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtResultPrice.Name = "txtResultPrice";
+            this.txtResultPrice.ReadOnly = true;
+            this.txtResultPrice.Size = new System.Drawing.Size(135, 14);
+            this.txtResultPrice.TabIndex = 19;
+            this.txtResultPrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtResultPrice.WordWrap = false;
             // 
             // label42
             // 
             this.label42.AutoSize = true;
             this.label42.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label42.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label42.Location = new System.Drawing.Point(1, 22);
+            this.label42.Location = new System.Drawing.Point(1, 24);
             this.label42.Margin = new System.Windows.Forms.Padding(1);
             this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(393, 25);
+            this.label42.Size = new System.Drawing.Size(371, 22);
             this.label42.TabIndex = 4;
             this.label42.Text = "Стоимость по ДКП";
             this.label42.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -155,45 +203,24 @@
             this.label41.Location = new System.Drawing.Point(1, 1);
             this.label41.Margin = new System.Windows.Forms.Padding(1);
             this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(393, 19);
+            this.label41.Size = new System.Drawing.Size(371, 21);
             this.label41.TabIndex = 3;
             this.label41.Text = "Цена, руб";
             this.label41.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblResultPrice
+            // groupBoxAmounts
             // 
-            this.lblResultPrice.AutoSize = true;
-            this.lblResultPrice.BackColor = System.Drawing.SystemColors.Control;
-            this.lblResultPrice.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lblResultPrice.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblResultPrice.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblResultPrice.Location = new System.Drawing.Point(396, 1);
-            this.lblResultPrice.Margin = new System.Windows.Forms.Padding(1);
-            this.lblResultPrice.Name = "lblResultPrice";
-            this.lblResultPrice.Size = new System.Drawing.Size(105, 19);
-            this.lblResultPrice.TabIndex = 5;
-            this.lblResultPrice.Text = "lblResultPrice";
-            this.lblResultPrice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblResultCost
-            // 
-            this.lblResultCost.AutoSize = true;
-            this.lblResultCost.BackColor = System.Drawing.SystemColors.Control;
-            this.lblResultCost.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lblResultCost.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblResultCost.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblResultCost.Location = new System.Drawing.Point(396, 22);
-            this.lblResultCost.Margin = new System.Windows.Forms.Padding(1);
-            this.lblResultCost.Name = "lblResultCost";
-            this.lblResultCost.Size = new System.Drawing.Size(98, 25);
-            this.lblResultCost.TabIndex = 6;
-            this.lblResultCost.Text = "lblResultCost";
-            this.lblResultCost.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.groupBoxAmounts.Controls.Add(this.vResultTableLayout);
+            this.groupBoxAmounts.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.groupBoxAmounts.Location = new System.Drawing.Point(8, 474);
+            this.groupBoxAmounts.Name = "groupBoxAmounts";
+            this.groupBoxAmounts.Size = new System.Drawing.Size(379, 94);
+            this.groupBoxAmounts.TabIndex = 14;
+            this.groupBoxAmounts.TabStop = false;
+            this.groupBoxAmounts.Text = "Данные по объемам продажи/покупки";
             // 
             // vResultTableLayout
             // 
-            this.vResultTableLayout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.vResultTableLayout.ColumnCount = 3;
             this.vResultTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.vResultTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -203,12 +230,13 @@
             this.vResultTableLayout.Controls.Add(this.label35, 1, 0);
             this.vResultTableLayout.Controls.Add(this.label36, 2, 0);
             this.vResultTableLayout.Controls.Add(this.label37, 0, 1);
-            this.vResultTableLayout.Location = new System.Drawing.Point(5, 351);
+            this.vResultTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.vResultTableLayout.Location = new System.Drawing.Point(3, 18);
             this.vResultTableLayout.Name = "vResultTableLayout";
             this.vResultTableLayout.RowCount = 2;
             this.vResultTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65F));
             this.vResultTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.vResultTableLayout.Size = new System.Drawing.Size(394, 66);
+            this.vResultTableLayout.Size = new System.Drawing.Size(373, 73);
             this.vResultTableLayout.TabIndex = 4;
             this.vResultTableLayout.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.mainTableLayoutGridBorder);
             // 
@@ -217,11 +245,11 @@
             this.txtBUY.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtBUY.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBUY.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtBUY.Location = new System.Drawing.Point(267, 47);
+            this.txtBUY.Location = new System.Drawing.Point(256, 52);
             this.txtBUY.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.txtBUY.Name = "txtBUY";
             this.txtBUY.ReadOnly = true;
-            this.txtBUY.Size = new System.Drawing.Size(117, 14);
+            this.txtBUY.Size = new System.Drawing.Size(107, 14);
             this.txtBUY.TabIndex = 24;
             this.txtBUY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtBUY.WordWrap = false;
@@ -231,11 +259,11 @@
             this.txtSELL.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtSELL.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSELL.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtSELL.Location = new System.Drawing.Point(130, 47);
+            this.txtSELL.Location = new System.Drawing.Point(130, 52);
             this.txtSELL.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.txtSELL.Name = "txtSELL";
             this.txtSELL.ReadOnly = true;
-            this.txtSELL.Size = new System.Drawing.Size(117, 14);
+            this.txtSELL.Size = new System.Drawing.Size(106, 14);
             this.txtSELL.TabIndex = 23;
             this.txtSELL.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtSELL.WordWrap = false;
@@ -248,7 +276,7 @@
             this.label35.Location = new System.Drawing.Point(121, 1);
             this.label35.Margin = new System.Windows.Forms.Padding(1);
             this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(135, 40);
+            this.label35.Size = new System.Drawing.Size(124, 45);
             this.label35.TabIndex = 0;
             this.label35.Text = "Договор энергоснабжения";
             this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -258,10 +286,10 @@
             this.label36.AutoSize = true;
             this.label36.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label36.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label36.Location = new System.Drawing.Point(258, 1);
+            this.label36.Location = new System.Drawing.Point(247, 1);
             this.label36.Margin = new System.Windows.Forms.Padding(1);
             this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(135, 40);
+            this.label36.Size = new System.Drawing.Size(125, 45);
             this.label36.TabIndex = 1;
             this.label36.Text = "Договор купли-продажи";
             this.label36.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -271,36 +299,88 @@
             this.label37.AutoSize = true;
             this.label37.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label37.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label37.Location = new System.Drawing.Point(1, 43);
+            this.label37.Location = new System.Drawing.Point(1, 48);
             this.label37.Margin = new System.Windows.Forms.Padding(1);
             this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(118, 22);
+            this.label37.Size = new System.Drawing.Size(118, 24);
             this.label37.TabIndex = 2;
             this.label37.Text = "Итого";
             this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // groupBoxEntryDat
+            // 
+            this.groupBoxEntryDat.Controls.Add(this.EntryDataTableLayout);
+            this.groupBoxEntryDat.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.groupBoxEntryDat.Location = new System.Drawing.Point(8, 374);
+            this.groupBoxEntryDat.Name = "groupBoxEntryDat";
+            this.groupBoxEntryDat.Size = new System.Drawing.Size(534, 94);
+            this.groupBoxEntryDat.TabIndex = 13;
+            this.groupBoxEntryDat.TabStop = false;
+            this.groupBoxEntryDat.Text = "Данные";
+            // 
             // EntryDataTableLayout
             // 
-            this.EntryDataTableLayout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.EntryDataTableLayout.ColumnCount = 2;
-            this.EntryDataTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 82.84229F));
-            this.EntryDataTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 17.15771F));
+            this.EntryDataTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.37878F));
+            this.EntryDataTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.62121F));
+            this.EntryDataTableLayout.Controls.Add(this.txtKF1, 1, 2);
+            this.EntryDataTableLayout.Controls.Add(this.txtsvncPorem, 1, 1);
+            this.EntryDataTableLayout.Controls.Add(this.txtsvncEEorem, 1, 0);
             this.EntryDataTableLayout.Controls.Add(this.label38, 0, 0);
             this.EntryDataTableLayout.Controls.Add(this.label39, 0, 1);
             this.EntryDataTableLayout.Controls.Add(this.label40, 0, 2);
-            this.EntryDataTableLayout.Controls.Add(this.lblsvncEEorem, 1, 0);
-            this.EntryDataTableLayout.Controls.Add(this.lblsvncPorem, 1, 1);
-            this.EntryDataTableLayout.Controls.Add(this.lblKF1, 1, 2);
-            this.EntryDataTableLayout.Location = new System.Drawing.Point(5, 434);
+            this.EntryDataTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EntryDataTableLayout.Location = new System.Drawing.Point(3, 18);
             this.EntryDataTableLayout.Name = "EntryDataTableLayout";
             this.EntryDataTableLayout.RowCount = 3;
             this.EntryDataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.EntryDataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.EntryDataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.EntryDataTableLayout.Size = new System.Drawing.Size(565, 87);
+            this.EntryDataTableLayout.Size = new System.Drawing.Size(528, 73);
             this.EntryDataTableLayout.TabIndex = 3;
             this.EntryDataTableLayout.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.mainTableLayoutGridBorder);
+            // 
+            // txtKF1
+            // 
+            this.txtKF1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtKF1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtKF1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtKF1.Location = new System.Drawing.Point(408, 53);
+            this.txtKF1.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtKF1.Name = "txtKF1";
+            this.txtKF1.ReadOnly = true;
+            this.txtKF1.Size = new System.Drawing.Size(110, 14);
+            this.txtKF1.TabIndex = 20;
+            this.txtKF1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtKF1.WordWrap = false;
+            // 
+            // txtsvncPorem
+            // 
+            this.txtsvncPorem.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtsvncPorem.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtsvncPorem.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtsvncPorem.Location = new System.Drawing.Point(408, 29);
+            this.txtsvncPorem.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtsvncPorem.Name = "txtsvncPorem";
+            this.txtsvncPorem.ReadOnly = true;
+            this.txtsvncPorem.Size = new System.Drawing.Size(110, 14);
+            this.txtsvncPorem.TabIndex = 19;
+            this.txtsvncPorem.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtsvncPorem.WordWrap = false;
+            // 
+            // txtsvncEEorem
+            // 
+            this.txtsvncEEorem.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtsvncEEorem.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtsvncEEorem.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtsvncEEorem.Location = new System.Drawing.Point(408, 5);
+            this.txtsvncEEorem.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtsvncEEorem.Name = "txtsvncEEorem";
+            this.txtsvncEEorem.ReadOnly = true;
+            this.txtsvncEEorem.Size = new System.Drawing.Size(110, 14);
+            this.txtsvncEEorem.TabIndex = 18;
+            this.txtsvncEEorem.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtsvncEEorem.WordWrap = false;
             // 
             // label38
             // 
@@ -310,7 +390,7 @@
             this.label38.Location = new System.Drawing.Point(1, 1);
             this.label38.Margin = new System.Windows.Forms.Padding(1);
             this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(466, 27);
+            this.label38.Size = new System.Drawing.Size(396, 22);
             this.label38.TabIndex = 0;
             this.label38.Text = "Средневзвешенная нерегулируемая цена на электрическую энергию на оптовом рынке, о" +
     "пределяемая по результатам конкурентных отборов на сутки вперед, руб/МВтч";
@@ -321,10 +401,10 @@
             this.label39.AutoSize = true;
             this.label39.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label39.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label39.Location = new System.Drawing.Point(1, 30);
+            this.label39.Location = new System.Drawing.Point(1, 25);
             this.label39.Margin = new System.Windows.Forms.Padding(1);
             this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(466, 27);
+            this.label39.Size = new System.Drawing.Size(396, 22);
             this.label39.TabIndex = 1;
             this.label39.Text = "Средневзвешенная нерегулируемая цена на мощность на оптовом рынке, руб/МВт";
             this.label39.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -334,68 +414,29 @@
             this.label40.AutoSize = true;
             this.label40.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label40.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label40.Location = new System.Drawing.Point(1, 59);
+            this.label40.Location = new System.Drawing.Point(1, 49);
             this.label40.Margin = new System.Windows.Forms.Padding(1);
             this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(466, 27);
+            this.label40.Size = new System.Drawing.Size(396, 23);
             this.label40.TabIndex = 2;
             this.label40.Text = "Коэффициент оплаты мощности потребителями (покупателями), осуществляющими расчеты" +
     " по первой ценовой категории, 1/час";
             this.label40.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblsvncEEorem
+            // groupBoxIntervals
             // 
-            this.lblsvncEEorem.AutoSize = true;
-            this.lblsvncEEorem.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblsvncEEorem.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblsvncEEorem.Location = new System.Drawing.Point(469, 1);
-            this.lblsvncEEorem.Margin = new System.Windows.Forms.Padding(1);
-            this.lblsvncEEorem.Name = "lblsvncEEorem";
-            this.lblsvncEEorem.Size = new System.Drawing.Size(95, 27);
-            this.lblsvncEEorem.TabIndex = 3;
-            this.lblsvncEEorem.Text = "lblsvncEEorem";
-            this.lblsvncEEorem.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblsvncPorem
-            // 
-            this.lblsvncPorem.AutoSize = true;
-            this.lblsvncPorem.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblsvncPorem.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblsvncPorem.Location = new System.Drawing.Point(469, 30);
-            this.lblsvncPorem.Margin = new System.Windows.Forms.Padding(1);
-            this.lblsvncPorem.Name = "lblsvncPorem";
-            this.lblsvncPorem.Size = new System.Drawing.Size(95, 27);
-            this.lblsvncPorem.TabIndex = 4;
-            this.lblsvncPorem.Text = "lblsvncPorem";
-            this.lblsvncPorem.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblKF1
-            // 
-            this.lblKF1.AutoSize = true;
-            this.lblKF1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblKF1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblKF1.Location = new System.Drawing.Point(469, 59);
-            this.lblKF1.Margin = new System.Windows.Forms.Padding(1);
-            this.lblKF1.Name = "lblKF1";
-            this.lblKF1.Size = new System.Drawing.Size(95, 27);
-            this.lblKF1.TabIndex = 5;
-            this.lblKF1.Text = "lblKF1";
-            this.lblKF1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label34.Location = new System.Drawing.Point(5, 208);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(170, 16);
-            this.label34.TabIndex = 2;
-            this.label34.Text = "интервальные значения";
+            this.groupBoxIntervals.AutoSize = true;
+            this.groupBoxIntervals.Controls.Add(this.DataTableLayout);
+            this.groupBoxIntervals.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.groupBoxIntervals.Location = new System.Drawing.Point(8, 240);
+            this.groupBoxIntervals.Name = "groupBoxIntervals";
+            this.groupBoxIntervals.Size = new System.Drawing.Size(534, 128);
+            this.groupBoxIntervals.TabIndex = 10;
+            this.groupBoxIntervals.TabStop = false;
+            this.groupBoxIntervals.Text = "Интервальные значения";
             // 
             // DataTableLayout
             // 
-            this.DataTableLayout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.DataTableLayout.ColumnCount = 5;
             this.DataTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.DataTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 102F));
@@ -419,14 +460,15 @@
             this.DataTableLayout.Controls.Add(this.label30, 1, 2);
             this.DataTableLayout.Controls.Add(this.label31, 1, 3);
             this.DataTableLayout.Controls.Add(this.txtDateFirst, 2, 1);
-            this.DataTableLayout.Location = new System.Drawing.Point(5, 228);
+            this.DataTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DataTableLayout.Location = new System.Drawing.Point(3, 18);
             this.DataTableLayout.Name = "DataTableLayout";
             this.DataTableLayout.RowCount = 4;
             this.DataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.DataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.DataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.DataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.DataTableLayout.Size = new System.Drawing.Size(565, 104);
+            this.DataTableLayout.Size = new System.Drawing.Size(528, 107);
             this.DataTableLayout.TabIndex = 1;
             this.DataTableLayout.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.mainTableLayoutGridBorder);
             // 
@@ -435,11 +477,11 @@
             this.txtGenSumm.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtGenSumm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtGenSumm.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtGenSumm.Location = new System.Drawing.Point(460, 85);
+            this.txtGenSumm.Location = new System.Drawing.Point(434, 88);
             this.txtGenSumm.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.txtGenSumm.Name = "txtGenSumm";
             this.txtGenSumm.ReadOnly = true;
-            this.txtGenSumm.Size = new System.Drawing.Size(95, 14);
+            this.txtGenSumm.Size = new System.Drawing.Size(84, 14);
             this.txtGenSumm.TabIndex = 24;
             this.txtGenSumm.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtGenSumm.WordWrap = false;
@@ -449,11 +491,11 @@
             this.txtGenLast.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtGenLast.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtGenLast.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtGenLast.Location = new System.Drawing.Point(346, 85);
+            this.txtGenLast.Location = new System.Drawing.Point(333, 88);
             this.txtGenLast.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.txtGenLast.Name = "txtGenLast";
             this.txtGenLast.ReadOnly = true;
-            this.txtGenLast.Size = new System.Drawing.Size(94, 14);
+            this.txtGenLast.Size = new System.Drawing.Size(81, 14);
             this.txtGenLast.TabIndex = 23;
             this.txtGenLast.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtGenLast.WordWrap = false;
@@ -463,11 +505,11 @@
             this.txtGenFirst.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtGenFirst.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtGenFirst.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtGenFirst.Location = new System.Drawing.Point(232, 85);
+            this.txtGenFirst.Location = new System.Drawing.Point(232, 88);
             this.txtGenFirst.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.txtGenFirst.Name = "txtGenFirst";
             this.txtGenFirst.ReadOnly = true;
-            this.txtGenFirst.Size = new System.Drawing.Size(94, 14);
+            this.txtGenFirst.Size = new System.Drawing.Size(81, 14);
             this.txtGenFirst.TabIndex = 22;
             this.txtGenFirst.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtGenFirst.WordWrap = false;
@@ -477,11 +519,11 @@
             this.txtConSumm.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtConSumm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtConSumm.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtConSumm.Location = new System.Drawing.Point(460, 61);
+            this.txtConSumm.Location = new System.Drawing.Point(434, 64);
             this.txtConSumm.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.txtConSumm.Name = "txtConSumm";
             this.txtConSumm.ReadOnly = true;
-            this.txtConSumm.Size = new System.Drawing.Size(95, 14);
+            this.txtConSumm.Size = new System.Drawing.Size(84, 14);
             this.txtConSumm.TabIndex = 21;
             this.txtConSumm.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtConSumm.WordWrap = false;
@@ -491,11 +533,11 @@
             this.txtConLast.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtConLast.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtConLast.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtConLast.Location = new System.Drawing.Point(346, 61);
+            this.txtConLast.Location = new System.Drawing.Point(333, 64);
             this.txtConLast.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.txtConLast.Name = "txtConLast";
             this.txtConLast.ReadOnly = true;
-            this.txtConLast.Size = new System.Drawing.Size(94, 14);
+            this.txtConLast.Size = new System.Drawing.Size(81, 14);
             this.txtConLast.TabIndex = 20;
             this.txtConLast.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtConLast.WordWrap = false;
@@ -505,11 +547,11 @@
             this.txtConFirst.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtConFirst.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtConFirst.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtConFirst.Location = new System.Drawing.Point(232, 61);
+            this.txtConFirst.Location = new System.Drawing.Point(232, 64);
             this.txtConFirst.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.txtConFirst.Name = "txtConFirst";
             this.txtConFirst.ReadOnly = true;
-            this.txtConFirst.Size = new System.Drawing.Size(94, 14);
+            this.txtConFirst.Size = new System.Drawing.Size(81, 14);
             this.txtConFirst.TabIndex = 19;
             this.txtConFirst.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtConFirst.WordWrap = false;
@@ -519,11 +561,11 @@
             this.txtDateLast.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtDateLast.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtDateLast.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.txtDateLast.Location = new System.Drawing.Point(346, 37);
+            this.txtDateLast.Location = new System.Drawing.Point(333, 40);
             this.txtDateLast.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.txtDateLast.Name = "txtDateLast";
             this.txtDateLast.ReadOnly = true;
-            this.txtDateLast.Size = new System.Drawing.Size(94, 14);
+            this.txtDateLast.Size = new System.Drawing.Size(81, 14);
             this.txtDateLast.TabIndex = 18;
             this.txtDateLast.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtDateLast.WordWrap = false;
@@ -537,7 +579,7 @@
             this.label23.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.label23.Name = "label23";
             this.DataTableLayout.SetRowSpan(this.label23, 2);
-            this.label23.Size = new System.Drawing.Size(119, 54);
+            this.label23.Size = new System.Drawing.Size(119, 57);
             this.label23.TabIndex = 0;
             this.label23.Text = "Измерение";
             this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -551,7 +593,7 @@
             this.label24.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.label24.Name = "label24";
             this.DataTableLayout.SetRowSpan(this.label24, 2);
-            this.label24.Size = new System.Drawing.Size(101, 54);
+            this.label24.Size = new System.Drawing.Size(101, 57);
             this.label24.TabIndex = 1;
             this.label24.Text = "Тарифная зона";
             this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -564,7 +606,7 @@
             this.label25.Location = new System.Drawing.Point(223, 1);
             this.label25.Margin = new System.Windows.Forms.Padding(1);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(112, 30);
+            this.label25.Size = new System.Drawing.Size(99, 33);
             this.label25.TabIndex = 2;
             this.label25.Text = "Показания на начало периода";
             this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -574,10 +616,10 @@
             this.label26.AutoSize = true;
             this.label26.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label26.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label26.Location = new System.Drawing.Point(337, 1);
+            this.label26.Location = new System.Drawing.Point(324, 1);
             this.label26.Margin = new System.Windows.Forms.Padding(1);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(112, 30);
+            this.label26.Size = new System.Drawing.Size(99, 33);
             this.label26.TabIndex = 3;
             this.label26.Text = "Показания на конец периода";
             this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -587,11 +629,11 @@
             this.label27.AutoSize = true;
             this.label27.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label27.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label27.Location = new System.Drawing.Point(451, 1);
+            this.label27.Location = new System.Drawing.Point(425, 1);
             this.label27.Margin = new System.Windows.Forms.Padding(1);
             this.label27.Name = "label27";
             this.DataTableLayout.SetRowSpan(this.label27, 2);
-            this.label27.Size = new System.Drawing.Size(113, 54);
+            this.label27.Size = new System.Drawing.Size(102, 57);
             this.label27.TabIndex = 4;
             this.label27.Text = "Потребление за период";
             this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -601,7 +643,7 @@
             this.label28.AutoSize = true;
             this.label28.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label28.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label28.Location = new System.Drawing.Point(1, 57);
+            this.label28.Location = new System.Drawing.Point(1, 60);
             this.label28.Margin = new System.Windows.Forms.Padding(1);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(118, 22);
@@ -614,7 +656,7 @@
             this.label29.AutoSize = true;
             this.label29.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label29.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label29.Location = new System.Drawing.Point(1, 81);
+            this.label29.Location = new System.Drawing.Point(1, 84);
             this.label29.Margin = new System.Windows.Forms.Padding(1);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(118, 22);
@@ -627,7 +669,7 @@
             this.label30.AutoSize = true;
             this.label30.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label30.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label30.Location = new System.Drawing.Point(121, 57);
+            this.label30.Location = new System.Drawing.Point(121, 60);
             this.label30.Margin = new System.Windows.Forms.Padding(1);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(100, 22);
@@ -640,7 +682,7 @@
             this.label31.AutoSize = true;
             this.label31.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label31.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label31.Location = new System.Drawing.Point(121, 81);
+            this.label31.Location = new System.Drawing.Point(121, 84);
             this.label31.Margin = new System.Windows.Forms.Padding(1);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(100, 22);
@@ -653,14 +695,26 @@
             this.txtDateFirst.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtDateFirst.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtDateFirst.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.txtDateFirst.Location = new System.Drawing.Point(232, 37);
+            this.txtDateFirst.Location = new System.Drawing.Point(232, 40);
             this.txtDateFirst.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.txtDateFirst.Name = "txtDateFirst";
             this.txtDateFirst.ReadOnly = true;
-            this.txtDateFirst.Size = new System.Drawing.Size(94, 14);
+            this.txtDateFirst.Size = new System.Drawing.Size(81, 14);
             this.txtDateFirst.TabIndex = 17;
             this.txtDateFirst.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtDateFirst.WordWrap = false;
+            // 
+            // groupBoxMainInfo
+            // 
+            this.groupBoxMainInfo.AutoSize = true;
+            this.groupBoxMainInfo.Controls.Add(this.InfoTableLayout);
+            this.groupBoxMainInfo.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.groupBoxMainInfo.Location = new System.Drawing.Point(8, 8);
+            this.groupBoxMainInfo.Name = "groupBoxMainInfo";
+            this.groupBoxMainInfo.Size = new System.Drawing.Size(534, 226);
+            this.groupBoxMainInfo.TabIndex = 12;
+            this.groupBoxMainInfo.TabStop = false;
+            this.groupBoxMainInfo.Text = "Данные абонента";
             // 
             // InfoTableLayout
             // 
@@ -691,11 +745,13 @@
             this.InfoTableLayout.Controls.Add(this.lblAbonentDateYear, 2, 9);
             this.InfoTableLayout.Controls.Add(this.lblAbonentName, 2, 0);
             this.InfoTableLayout.Controls.Add(this.lblAbonentINN, 2, 1);
-            this.InfoTableLayout.Location = new System.Drawing.Point(5, 5);
+            this.InfoTableLayout.Dock = System.Windows.Forms.DockStyle.Top;
+            this.InfoTableLayout.Location = new System.Drawing.Point(3, 18);
             this.InfoTableLayout.Name = "InfoTableLayout";
             this.InfoTableLayout.RowCount = 10;
             this.InfoTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.InfoTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.InfoTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.InfoTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.InfoTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.InfoTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -703,8 +759,7 @@
             this.InfoTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.InfoTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.InfoTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.InfoTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.InfoTableLayout.Size = new System.Drawing.Size(565, 172);
+            this.InfoTableLayout.Size = new System.Drawing.Size(528, 173);
             this.InfoTableLayout.TabIndex = 0;
             this.InfoTableLayout.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.mainTableLayoutGridBorder);
             // 
@@ -731,7 +786,7 @@
             this.label2.Location = new System.Drawing.Point(1, 35);
             this.label2.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(173, 16);
+            this.label2.Size = new System.Drawing.Size(173, 19);
             this.label2.TabIndex = 1;
             this.label2.Text = "Точка учёта";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -742,7 +797,7 @@
             this.InfoTableLayout.SetColumnSpan(this.label3, 2);
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label3.Location = new System.Drawing.Point(1, 52);
+            this.label3.Location = new System.Drawing.Point(1, 55);
             this.label3.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(173, 16);
@@ -756,7 +811,7 @@
             this.InfoTableLayout.SetColumnSpan(this.label4, 2);
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label4.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label4.Location = new System.Drawing.Point(1, 69);
+            this.label4.Location = new System.Drawing.Point(1, 72);
             this.label4.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(173, 16);
@@ -770,7 +825,7 @@
             this.InfoTableLayout.SetColumnSpan(this.label5, 2);
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label5.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label5.Location = new System.Drawing.Point(1, 86);
+            this.label5.Location = new System.Drawing.Point(1, 89);
             this.label5.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(173, 16);
@@ -784,7 +839,7 @@
             this.InfoTableLayout.SetColumnSpan(this.label6, 2);
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label6.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label6.Location = new System.Drawing.Point(1, 103);
+            this.label6.Location = new System.Drawing.Point(1, 106);
             this.label6.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(173, 16);
@@ -797,11 +852,11 @@
             this.label7.AutoSize = true;
             this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label7.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label7.Location = new System.Drawing.Point(1, 120);
+            this.label7.Location = new System.Drawing.Point(1, 123);
             this.label7.Margin = new System.Windows.Forms.Padding(1, 1, 0, 1);
             this.label7.Name = "label7";
             this.InfoTableLayout.SetRowSpan(this.label7, 3);
-            this.label7.Size = new System.Drawing.Size(74, 51);
+            this.label7.Size = new System.Drawing.Size(74, 49);
             this.label7.TabIndex = 6;
             this.label7.Text = "Период";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -811,7 +866,7 @@
             this.label8.AutoSize = true;
             this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label8.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label8.Location = new System.Drawing.Point(76, 120);
+            this.label8.Location = new System.Drawing.Point(76, 123);
             this.label8.Margin = new System.Windows.Forms.Padding(1);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(98, 15);
@@ -824,7 +879,7 @@
             this.label9.AutoSize = true;
             this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label9.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label9.Location = new System.Drawing.Point(76, 137);
+            this.label9.Location = new System.Drawing.Point(76, 140);
             this.label9.Margin = new System.Windows.Forms.Padding(1);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(98, 15);
@@ -837,10 +892,10 @@
             this.label10.AutoSize = true;
             this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label10.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label10.Location = new System.Drawing.Point(76, 154);
+            this.label10.Location = new System.Drawing.Point(76, 157);
             this.label10.Margin = new System.Windows.Forms.Padding(1);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(98, 17);
+            this.label10.Size = new System.Drawing.Size(98, 15);
             this.label10.TabIndex = 9;
             this.label10.Text = "год";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -881,7 +936,7 @@
             this.lblAbonentAddress.Location = new System.Drawing.Point(176, 35);
             this.lblAbonentAddress.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentAddress.Name = "lblAbonentAddress";
-            this.lblAbonentAddress.Size = new System.Drawing.Size(126, 15);
+            this.lblAbonentAddress.Size = new System.Drawing.Size(126, 18);
             this.lblAbonentAddress.TabIndex = 12;
             this.lblAbonentAddress.Text = "lblAbonentAddress";
             this.lblAbonentAddress.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -893,7 +948,7 @@
             this.lblAbonentNumberCC.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentNumberCC.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblAbonentNumberCC.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblAbonentNumberCC.Location = new System.Drawing.Point(176, 52);
+            this.lblAbonentNumberCC.Location = new System.Drawing.Point(176, 55);
             this.lblAbonentNumberCC.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentNumberCC.Name = "lblAbonentNumberCC";
             this.lblAbonentNumberCC.Size = new System.Drawing.Size(133, 15);
@@ -908,7 +963,7 @@
             this.lblAbonentType.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentType.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblAbonentType.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblAbonentType.Location = new System.Drawing.Point(176, 69);
+            this.lblAbonentType.Location = new System.Drawing.Point(176, 72);
             this.lblAbonentType.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentType.Name = "lblAbonentType";
             this.lblAbonentType.Size = new System.Drawing.Size(105, 15);
@@ -923,7 +978,7 @@
             this.lblAbonentKF.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentKF.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblAbonentKF.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblAbonentKF.Location = new System.Drawing.Point(176, 86);
+            this.lblAbonentKF.Location = new System.Drawing.Point(176, 89);
             this.lblAbonentKF.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentKF.Name = "lblAbonentKF";
             this.lblAbonentKF.Size = new System.Drawing.Size(91, 15);
@@ -938,7 +993,7 @@
             this.lblAbonentTarif.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentTarif.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblAbonentTarif.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblAbonentTarif.Location = new System.Drawing.Point(176, 103);
+            this.lblAbonentTarif.Location = new System.Drawing.Point(176, 106);
             this.lblAbonentTarif.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentTarif.Name = "lblAbonentTarif";
             this.lblAbonentTarif.Size = new System.Drawing.Size(112, 15);
@@ -953,7 +1008,7 @@
             this.lblAbonentDateDay.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentDateDay.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblAbonentDateDay.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblAbonentDateDay.Location = new System.Drawing.Point(176, 120);
+            this.lblAbonentDateDay.Location = new System.Drawing.Point(176, 123);
             this.lblAbonentDateDay.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentDateDay.Name = "lblAbonentDateDay";
             this.lblAbonentDateDay.Size = new System.Drawing.Size(126, 15);
@@ -968,7 +1023,7 @@
             this.lblAbonentDateMonth.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentDateMonth.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblAbonentDateMonth.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblAbonentDateMonth.Location = new System.Drawing.Point(176, 137);
+            this.lblAbonentDateMonth.Location = new System.Drawing.Point(176, 140);
             this.lblAbonentDateMonth.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentDateMonth.Name = "lblAbonentDateMonth";
             this.lblAbonentDateMonth.Size = new System.Drawing.Size(140, 15);
@@ -983,10 +1038,10 @@
             this.lblAbonentDateYear.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblAbonentDateYear.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblAbonentDateYear.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblAbonentDateYear.Location = new System.Drawing.Point(176, 154);
+            this.lblAbonentDateYear.Location = new System.Drawing.Point(176, 157);
             this.lblAbonentDateYear.Margin = new System.Windows.Forms.Padding(1);
             this.lblAbonentDateYear.Name = "lblAbonentDateYear";
-            this.lblAbonentDateYear.Size = new System.Drawing.Size(133, 17);
+            this.lblAbonentDateYear.Size = new System.Drawing.Size(133, 15);
             this.lblAbonentDateYear.TabIndex = 19;
             this.lblAbonentDateYear.Text = "lblAbonentDateYear";
             this.lblAbonentDateYear.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1025,7 +1080,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(587, 603);
+            this.ClientSize = new System.Drawing.Size(562, 663);
             this.Controls.Add(this.mainPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -1036,14 +1091,20 @@
             this.Load += new System.EventHandler(this.FormType1_Load);
             this.mainPanel.ResumeLayout(false);
             this.mainPanel.PerformLayout();
+            this.groupBoxResult.ResumeLayout(false);
             this.cpResultTableLayout.ResumeLayout(false);
             this.cpResultTableLayout.PerformLayout();
+            this.groupBoxAmounts.ResumeLayout(false);
             this.vResultTableLayout.ResumeLayout(false);
             this.vResultTableLayout.PerformLayout();
+            this.groupBoxEntryDat.ResumeLayout(false);
             this.EntryDataTableLayout.ResumeLayout(false);
             this.EntryDataTableLayout.PerformLayout();
+            this.groupBoxIntervals.ResumeLayout(false);
             this.DataTableLayout.ResumeLayout(false);
             this.DataTableLayout.PerformLayout();
+            this.groupBoxMainInfo.ResumeLayout(false);
+            this.groupBoxMainInfo.PerformLayout();
             this.InfoTableLayout.ResumeLayout(false);
             this.InfoTableLayout.PerformLayout();
             this.ResumeLayout(false);
@@ -1053,7 +1114,6 @@
         #endregion
 
         private Panel mainPanel;
-        private TableLayoutPanel InfoTableLayout;
         private Label label1;
         private Label label2;
         private Label label3;
@@ -1076,7 +1136,6 @@
         private Label label29;
         private Label label30;
         private Label label31;
-        private Label label34;
         private TableLayoutPanel EntryDataTableLayout;
         private Label label38;
         private Label label39;
@@ -1108,10 +1167,16 @@
         public Label lblAbonentDateYear;
         public Label lblAbonentName;
         public Label lblAbonentINN;
-        public Label lblResultPrice;
-        public Label lblResultCost;
-        public Label lblsvncEEorem;
-        public Label lblsvncPorem;
-        public Label lblKF1;
+        private GroupBox groupBoxMainInfo;
+        private GroupBox groupBoxIntervals;
+        private GroupBox groupBoxEntryDat;
+        private GroupBox groupBoxAmounts;
+        private GroupBox groupBoxResult;
+        public TextBox txtResultCost;
+        public TextBox txtResultPrice;
+        public TextBox txtKF1;
+        public TextBox txtsvncPorem;
+        public TextBox txtsvncEEorem;
+        public TableLayoutPanel InfoTableLayout;
     }
 }
