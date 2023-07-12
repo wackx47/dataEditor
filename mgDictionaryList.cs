@@ -127,11 +127,11 @@ namespace dataEditor
 
                     dataGridDictionaryList.Refresh();
                     isLoaded = true;
-                    Console.WriteLine("DictionaryLoaded, path to Dictionary: " + mgSettings.mgFolderAgreeDict.fullPathAgreeDictionary + "\\contractors_" + dictListGTP.Text + ".xml");
+                    //Console.WriteLine("DictionaryLoaded, path to Dictionary: " + mgSettings.mgFolderAgreeDict.fullPathAgreeDictionary + "\\contractors_" + dictListGTP.Text + ".xml");
                 }
                 else
                 {
-                    Console.WriteLine("Dictionary is not Loaded, path to Dictionary: " + mgSettings.mgFolderAgreeDict.fullPathAgreeDictionary + "\\contractors_" + dictListGTP.Text + ".xml");
+                    //Console.WriteLine("Dictionary is not Loaded, path to Dictionary: " + mgSettings.mgFolderAgreeDict.fullPathAgreeDictionary + "\\contractors_" + dictListGTP.Text + ".xml");
                 }
             }
         }

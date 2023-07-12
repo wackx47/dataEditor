@@ -127,7 +127,7 @@
   <metadata name="dataTable.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="dataCalculation.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="dataExcel.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <metadata name="dataAct.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -190,6 +190,29 @@
   <metadata name="hrsStatusError.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <metadata name="FlowPanelTools.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>407, 56</value>
+  </metadata>
+  <data name="FlowPanelButtonAddTable.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB5SURBVDhPxZJRCsAgDEO9xn4Ub7qj7iaO2Mi6TnEdwh4E
+        bDXJj0GT9lR4/MY/ATCNhPuccxnoqAGaZtLEGLeeEMInFy9ab6omTQtoDbbRztXUY2SwM58LWHhFq4CF
+        bZjNtApLAryiVcDCNsxmWoUVAQeWDj2/sp8QTjvZnKPgpWLsAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="datsTreeView.Nodes" xml:space="preserve">
+    <value>Дифференцированная по зонам суток расчетного периода средневзвешенная нерегулируемая цена на электрическую энергию на оптовом рынке, определяемая по результатам конкурентного отбора ценовых заявок на сутки вперед по трем зонам суток</value>
+  </data>
+  <data name="treeNode13.Text" xml:space="preserve">
+    <value>Дифференцированная по зонам суток расчетного периода средневзвешенная нерегулируемая цена на электрическую энергию на оптовом рынке, определяемая по результатам конкурентного отбора ценовых заявок на сутки вперед по трем зонам суток</value>
+  </data>
+  <data name="datsTreeView.Nodes1" xml:space="preserve">
+    <value>Дифференцированная по зонам суток расчетного периода средневзвешенная нерегулируемая цена на электрическую энергию на оптовом рынке, определяемая по результатам конкурентного отбора ценовых заявок на сутки вперед по двум зонам суток</value>
+  </data>
+  <data name="treeNode18.Text" xml:space="preserve">
+    <value>Дифференцированная по зонам суток расчетного периода средневзвешенная нерегулируемая цена на электрическую энергию на оптовом рынке, определяемая по результатам конкурентного отбора ценовых заявок на сутки вперед по двум зонам суток</value>
+  </data>
   <metadata name="mgToolStripInputData.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1043, 17</value>
   </metadata>
@@ -377,7 +400,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAEZTeXN0ZW0uV2luZG93cy5Gb3JtcywgQ3VsdHVyZT1uZXV0cmFs
         LCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5BQEAAAAmU3lzdGVtLldpbmRvd3MuRm9ybXMu
         SW1hZ2VMaXN0U3RyZWFtZXIBAAAABERhdGEHAgIAAAAJAwAAAA8DAAAAPD0AAAJNU0Z0AUkBTAIBARcB
-        AAF4AQkBeAEJARABAAEQAQAE/wERAQAI/wFCAU0BNgcAATYDAAEoAwABQAMAAWADAAEBAQABEAYAATBE
+        AAFwAQ8BcAEPARABAAEQAQAE/wERAQAI/wFCAU0BNgcAATYDAAEoAwABQAMAAWADAAEBAQABEAYAATBE
         AAH/AX8B8gFKASYBGgEmARoB8gFKAf8BfxAAAYwBXgGgAU0BoAFNAaABTQEEAVYBoAFNAaABTQGgAU0B
         jAFeUAAB3gF7AScBHgEDAQ4BAwEOAQMBDgEDAQ4BJwEeAf8Bfw4AATUBbwGgAU0BoAFNAQQBVgH/AX8B
         BAFWAaABTQGgAU0BNgFvKAABvQF7ATIBbgHoAWQBQwFgAegBZAEyAW4BvQF7DAABKQElAYQBEAGEARAB
@@ -641,6 +664,9 @@
         Hwr/Cw==
 </value>
   </data>
+  <metadata name="tabExcel.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <metadata name="urToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>862, 18</value>
   </metadata>

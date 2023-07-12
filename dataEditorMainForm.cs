@@ -51,6 +51,7 @@ using System.Security.Policy;
 using static System.Windows.Forms.LinkLabel;
 using System.Drawing.Drawing2D;
 using System.IO.Packaging;
+using System.Net.Security;
 
 namespace dataEditor
 {
@@ -172,6 +173,8 @@ namespace dataEditor
             AllocConsole();
             Magician.DisappearConsole();
             ReadINI();
+
+            ServicePointManager.ServerCertificateValidationCallback = new System.Net.Security.RemoteCertificateValidationCallback(AcceptAllCertifications);
 
             urOptionsGrid.SelectedObject = urProperty;
             splitContainer_rightProps.Panel1Collapsed = true;
@@ -1207,7 +1210,6 @@ namespace dataEditor
             HoursFile_processing(dataExtraction);
             IntegralsFile_processing(dataExtraction);
             workWithButtonsIntoFlowPanel();
-            prepareDataRows();
         }
 
         private static int withoutZeroNumCC(string searchValue)
@@ -1916,6 +1918,7 @@ namespace dataEditor
                         SearchRowName = SearchDGV(mgDataViewer, IntegralsDataSet.Tables[buttons.Text + "_header"].Rows[0][1].ToString(), "Agreement");
                         if (SearchRowName != -1)
                         {
+                            var methodCell = (DataGridViewComboBoxCell)mgDataViewer.Rows[SearchRowName].Cells["Method"];
                             string validatedStatus = validateTable(buttons.Text, Convert.ToInt32(Convert.ToString(mgDataViewer.Rows[SearchRowName].Cells["TariffZone"].Value)[0].ToString()));
                             if (validatedStatus != "TableError")
                             {
@@ -1927,6 +1930,8 @@ namespace dataEditor
                                     btnCell.ToolTipText = "intg_" + mgDataViewer.Rows[SearchRowName].Cells["Agreement"].Value.ToString().Split(" îò ").First();
                                     mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])] = btnCell;
                                     mgDataViewer.Rows[SearchRowName].Cells["GlobalStatus"].ToolTipText = validatedStatus;
+                                    methodCell.Items.Add("intg");
+                                    createExcelButton(SearchRowName);
                                     listOfButtons.Add(buttons);
                                 }
                                 else
@@ -1935,7 +1940,9 @@ namespace dataEditor
                                         !mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].ToolTipText.Contains("intg_"))
                                     {
                                         mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].ToolTipText += "+" + buttons.Text;
-                                        mgDataViewer.Rows[SearchRowName].Cells["GlobalStatus"].ToolTipText = validatedStatus;
+                                        //mgDataViewer.Rows[SearchRowName].Cells["GlobalStatus"].ToolTipText = validatedStatus;
+                                        methodCell.Items.Add("intg");
+                                        createExcelButton(SearchRowName);
                                         listOfButtons.Add(buttons);
                                     }
                                 }
@@ -1946,6 +1953,7 @@ namespace dataEditor
                         SearchRowName = SearchDGV(mgDataViewer, HoursDataSet.Tables[buttons.Text + "_header"].Rows[0][1].ToString(), "Agreement");
                         if (SearchRowName != -1)
                         {
+                            var methodCell = (DataGridViewComboBoxCell)mgDataViewer.Rows[SearchRowName].Cells["Method"];
                             string validatedStatus = validateTable(buttons.Text, Convert.ToInt32(Convert.ToString(mgDataViewer.Rows[SearchRowName].Cells["TariffZone"].Value)[0].ToString()));
                             if (mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].GetType().Name != "DataGridViewButtonCell")
                             {
@@ -1954,6 +1962,8 @@ namespace dataEditor
                                 btnCell.ToolTipText = "hrs_" + mgDataViewer.Rows[SearchRowName].Cells["Agreement"].Value.ToString().Split(" îò ").First();
                                 mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])] = btnCell;
                                 mgDataViewer.Rows[SearchRowName].Cells["GlobalStatus"].ToolTipText = validatedStatus;
+                                methodCell.Items.Add("hrs");
+                                createExcelButton(SearchRowName);
                                 listOfButtons.Add(buttons);
                             }
                             else
@@ -1962,7 +1972,9 @@ namespace dataEditor
                                     !mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].ToolTipText.Contains("hrs_"))
                                 {
                                     mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].ToolTipText += "+" + buttons.Text;
-                                    mgDataViewer.Rows[SearchRowName].Cells["GlobalStatus"].ToolTipText = validatedStatus;
+                                    //mgDataViewer.Rows[SearchRowName].Cells["GlobalStatus"].ToolTipText = validatedStatus;
+                                    methodCell.Items.Add("hrs");
+                                    createExcelButton(SearchRowName);
                                     listOfButtons.Add(buttons);
                                 }
                             }
@@ -1988,6 +2000,7 @@ namespace dataEditor
                 if (SearchRowNumCC != -1)
                 {
                     string validatedStatus = validateTable(buttons.Text, Convert.ToInt32(Convert.ToString(mgDataViewer.Rows[SearchRowNumCC].Cells["TariffZone"].Value)[0].ToString()));
+                    var methodCell = (DataGridViewComboBoxCell)mgDataViewer.Rows[SearchRowNumCC].Cells["Method"];
 
                     switch (buttons.Text.Split("_").First())
                     {
@@ -2002,6 +2015,8 @@ namespace dataEditor
                                     btnCell.ToolTipText = buttons.Text;
                                     mgDataViewer.Rows[SearchRowNumCC].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])] = btnCell;
                                     mgDataViewer.Rows[SearchRowNumCC].Cells["GlobalStatus"].ToolTipText = validatedStatus;
+                                    methodCell.Items.Add("intg");
+                                    createExcelButton(SearchRowNumCC);
                                     listOfButtons.Add(buttons);
                                 }
                                 else
@@ -2009,7 +2024,8 @@ namespace dataEditor
                                     if (!mgDataViewer.Rows[SearchRowNumCC].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].ToolTipText.Contains('+'))
                                     {
                                         mgDataViewer.Rows[SearchRowNumCC].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].ToolTipText += "+" + buttons.Text;
-                                        mgDataViewer.Rows[SearchRowNumCC].Cells["GlobalStatus"].ToolTipText = validatedStatus;
+                                        methodCell.Items.Add("intg");
+                                        createExcelButton(SearchRowNumCC);
                                         listOfButtons.Add(buttons);
                                     }
                                 }
@@ -2027,6 +2043,8 @@ namespace dataEditor
                                 btnCell.ToolTipText = buttons.Text;
                                 mgDataViewer.Rows[SearchRowNumCC].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])] = btnCell;
                                 mgDataViewer.Rows[SearchRowNumCC].Cells["GlobalStatus"].ToolTipText = validatedStatus;
+                                methodCell.Items.Add("hrs");
+                                createExcelButton(SearchRowNumCC);
                                 listOfButtons.Add(buttons);
                             }
                             else
@@ -2034,7 +2052,8 @@ namespace dataEditor
                                 if (!mgDataViewer.Rows[SearchRowNumCC].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].ToolTipText.Contains('+'))
                                 {
                                     mgDataViewer.Rows[SearchRowNumCC].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].ToolTipText += "+" + buttons.Text;
-                                    mgDataViewer.Rows[SearchRowNumCC].Cells["GlobalStatus"].ToolTipText = validatedStatus;
+                                    methodCell.Items.Add("hrs");
+                                    createExcelButton(SearchRowNumCC);
                                     listOfButtons.Add(buttons);
                                 }
                             }
@@ -2042,6 +2061,7 @@ namespace dataEditor
                             HoursDataSet.Tables[buttons.Text + "_header"].Rows[0][1] = mgDataViewer.Rows[SearchRowNumCC].Cells["FullName"].Value.ToString();
                             break;
                     }
+
                 }
             }
             foreach(Button removed in listOfButtons)
@@ -2052,33 +2072,39 @@ namespace dataEditor
             mgSplitContainer_inside_vertical.SplitterDistance = mgSplitContainer_inside_vertical.SplitterDistance - (max/4);
             mgSplitContainer_inside_vertical.Panel2MinSize = max+50;
             mgDataViewer.Refresh();
+            autoSelectedMethod();
         }
 
-        private void prepareDataRows()
+        private void autoSelectedMethod()
         {
-            foreach (DataGridViewRow rows in mgDataViewer.Rows)
+            DataGridViewComboBoxCell methodCell = null;
+            foreach (DataGridViewRow row in mgDataViewer.Rows)
             {
-                if (rows.Cells["dataTable"].GetType().Name == "DataGridViewButtonCell")
+                methodCell = (DataGridViewComboBoxCell)row.Cells["Method"];
+                if (row.Cells["Method"].GetType().Name == "DataGridViewComboBoxCell")
                 {
-                    rows.Cells["SelectID"].Value = true;
-                    if (Convert.ToString(rows.Cells["TariffZone"].Value)[0].ToString() == "1" && rows.Cells["dataTable"].ToolTipText.Contains("intg"))
+                    switch (methodCell.Items.Count)
                     {
-                        DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
-                        btnCell.UseColumnTextForButtonValue = false;
-                        btnCell.ToolTipText = "Preview File";
-                        rows.Cells["dataCalculation"] = btnCell;
-                    }
-                    if (Convert.ToString(rows.Cells["TariffZone"].Value)[0].ToString() == "2" && rows.Cells["dataTable"].ToolTipText.Contains("hrs"))
-                    {
-                        DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
-                        btnCell.UseColumnTextForButtonValue = false;
-                        btnCell.ToolTipText = "Preview File";
-                        rows.Cells["dataCalculation"] = btnCell;
+                        case 2:
+                            foreach (var item in methodCell.Items)
+                            {
+                                if (item.ToString() == "intg")
+                                {
+                                    row.Cells["Method"].Value = "intg";
+                                    break;
+                                }
+                            }
+                            break;
+                        case 1:
+                            row.Cells["Method"].Value = methodCell.Items[0].ToString();
+                            break;
+                        case 0:
+                            
+                            break;
                     }
                 }
             }
         }
-
 
         private static void prepareNewIntegralTables(DataTable headerTable, DataTable newTable)
         {
@@ -2235,6 +2261,7 @@ namespace dataEditor
 
             if (e.Data.GetDataPresent(typeof(DataGridViewButtonCell)))
             {
+                var methodCell = (DataGridViewComboBoxCell)mgDataViewer.Rows[tableRemove.RowIndex].Cells["Method"];
                 if (!btnTable.ToolTipText.Contains('+'))
                 {
                     Button newButton = new Button();
@@ -2243,24 +2270,14 @@ namespace dataEditor
                     switch (btnTable.ToolTipText.Split("_").First())
                     {
                         case "intg":
-                            mgDataViewer.Rows[tableRemove.RowIndex].Cells["intgStatusError"].Value = false;
+                            mgDataViewer.Rows[tableRemove.RowIndex].Cells["intgStatusError"].Value = CheckState.Unchecked;
                             break;
 
                         case "hrs":
-                            mgDataViewer.Rows[tableRemove.RowIndex].Cells["hrsStatusError"].Value = false;
+                            mgDataViewer.Rows[tableRemove.RowIndex].Cells["hrsStatusError"].Value = CheckState.Unchecked;
                             break;
                     }
                     mgDataViewer.Rows[tableRemove.RowIndex].Cells["GlobalStatus"].ToolTipText = "created";
-
-                    DataGridViewTextBoxCell empty = new DataGridViewTextBoxCell();
-                    mgDataViewer.Rows[tableRemove.RowIndex].Cells[tableRemove.ColumnIndex] = empty;
-                    mgDataViewer.ClearSelection();
-                    mgDataViewer.Refresh();
-
-                    mgDataViewer.Rows[tableRemove.RowIndex].Cells["dataCalculation"] = empty;
-                    mgDataViewer.ClearSelection();
-                    mgDataViewer.Refresh();
-
                 }
                 else
                 {
@@ -2274,26 +2291,26 @@ namespace dataEditor
                         switch (name.Split("_").First())
                         {
                             case "intg":
-                                mgDataViewer.Rows[tableRemove.RowIndex].Cells["intgStatusError"].Value = false;
+                                mgDataViewer.Rows[tableRemove.RowIndex].Cells["intgStatusError"].Value = CheckState.Unchecked;
                                 break;
 
                             case "hrs":
-                                mgDataViewer.Rows[tableRemove.RowIndex].Cells["hrsStatusError"].Value = false;
+                                mgDataViewer.Rows[tableRemove.RowIndex].Cells["hrsStatusError"].Value = CheckState.Unchecked;
                                 break;
                         }
                     }
 
                     mgDataViewer.Rows[tableRemove.RowIndex].Cells["GlobalStatus"].ToolTipText = "created";
-
-                    DataGridViewTextBoxCell empty = new DataGridViewTextBoxCell();
-                    mgDataViewer.Rows[tableRemove.RowIndex].Cells[tableRemove.ColumnIndex] = empty;
-                    mgDataViewer.ClearSelection();
-                    mgDataViewer.Refresh();
-
-                    mgDataViewer.Rows[tableRemove.RowIndex].Cells["dataCalculation"] = empty;
-                    mgDataViewer.ClearSelection();
-                    mgDataViewer.Refresh();
                 }
+                mgDataViewer.Rows[tableRemove.RowIndex].Cells["dataExcel"] = new DataGridViewTextBoxCell();
+                mgDataViewer.Rows[tableRemove.RowIndex].Cells["SelectID"].Value = false;
+                mgDataViewer.Rows[tableRemove.RowIndex].Cells[tableRemove.ColumnIndex] = new DataGridViewTextBoxCell();
+                methodCell.Value = null;
+                methodCell.Items.Clear();
+                cmbxMethod.Items.Clear();
+                cmbxMethod.Text = null;
+                mgDataViewer.ClearSelection();
+                mgDataViewer.Refresh();
                 tableRemove = null;
             }
         }
@@ -2323,6 +2340,7 @@ namespace dataEditor
                 if (hittest.ColumnIndex != -1 && hittest.RowIndex != -1)
                 {
                     int TariffZone = Convert.ToInt32(Convert.ToString(mgDataViewer.Rows[hittest.RowIndex].Cells["TariffZone"].Value)[0].ToString());
+                    var methodCell = (DataGridViewComboBoxCell)mgDataViewer.Rows[hittest.RowIndex].Cells["Method"];
 
                     if (mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].GetType().Name != "DataGridViewButtonCell")
                     {
@@ -2337,14 +2355,41 @@ namespace dataEditor
                         {
                             case "intg":
                                 IntegralsDataSet.Tables[btnCell.ToolTipText + "_header"].Rows[0][1] = mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["Agreement"].Index].Value.ToString();
-                                IntegralsDataSet.Tables[btnCell.ToolTipText + "_header"].Rows[2][1] = mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["NumCC"].Index].Value;
-                                mgDataViewer.Rows[hittest.RowIndex].Cells["intgStatusError"].Value = singleTableStatus(mgDataViewer.Rows[hittest.RowIndex].Cells["GlobalStatus"].ToolTipText);
+                                if (Convert.ToString(IntegralsDataSet.Tables[btnCell.ToolTipText + "_header"].Rows[3][1]) != Convert.ToString(mgDataViewer.Rows[hittest.RowIndex].Cells["NumCC"].Value))
+                                {
+                                    mgDataViewer.Rows[hittest.RowIndex].Cells["intgStatusError"].Value = CheckState.Indeterminate;
+                                }
+                                if(singleTableStatus(mgDataViewer.Rows[hittest.RowIndex].Cells["GlobalStatus"].ToolTipText))
+                                {
+                                    mgDataViewer.Rows[hittest.RowIndex].Cells["intgStatusError"].Value = CheckState.Checked;
+                                }
+                                else
+                                {
+                                    methodCell.Items.Add("intg");
+                                    createExcelButton(hittest.RowIndex);
+                                }
                                 break;
                             case "hrs":
                                 HoursDataSet.Tables[btnCell.ToolTipText + "_header"].Rows[0][1] = mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["Agreement"].Index].Value.ToString();
-                                HoursDataSet.Tables[btnCell.ToolTipText + "_header"].Rows[2][1] = mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["NumCC"].Index].Value;
-                                mgDataViewer.Rows[hittest.RowIndex].Cells["hrsStatusError"].Value = singleTableStatus(mgDataViewer.Rows[hittest.RowIndex].Cells["GlobalStatus"].ToolTipText);
+                                if (Convert.ToString(HoursDataSet.Tables[btnCell.ToolTipText + "_header"].Rows[3][1]) != Convert.ToString(mgDataViewer.Rows[hittest.RowIndex].Cells["NumCC"].Value))
+                                {
+                                    mgDataViewer.Rows[hittest.RowIndex].Cells["hrsStatusError"].Value = CheckState.Indeterminate;
+                                }
+                                if (singleTableStatus(mgDataViewer.Rows[hittest.RowIndex].Cells["GlobalStatus"].ToolTipText))
+                                {
+                                    mgDataViewer.Rows[hittest.RowIndex].Cells["hrsStatusError"].Value = CheckState.Checked;
+                                }
+                                else
+                                {
+                                    methodCell.Items.Add("hrs");
+                                    createExcelButton(hittest.RowIndex);
+                                }
                                 break;
+                        }
+
+                        if (Convert.ToString(mgDataViewer.Rows[hittest.RowIndex].Cells[table.Text.Split("_").First() + "StatusError"].Value) == CheckState.Indeterminate.ToString())
+                        {
+                            mgDataViewer.Rows[hittest.RowIndex].Cells["GlobalStatus"].ToolTipText = "TableWarning";
                         }
 
                         mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
@@ -2358,10 +2403,51 @@ namespace dataEditor
                             mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].ToolTipText.Split("_").First() != table.Text.Split("_").First())
                         {
                             mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].ToolTipText += "+" + table.Text;
-                            if(Convert.ToBoolean(mgDataViewer.Rows[hittest.RowIndex].Cells["hrsStatusError"].Value) | Convert.ToBoolean(mgDataViewer.Rows[hittest.RowIndex].Cells["intgStatusError"].Value))
+
+                            switch (table.Text.Split("_").First())
                             {
-                                mgDataViewer.Rows[hittest.RowIndex].Cells["GlobalStatus"].ToolTipText = "TableWarning";
+                                case "intg":
+                                    IntegralsDataSet.Tables[table.Text + "_header"].Rows[0][1] = mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["Agreement"].Index].Value.ToString();
+                                    if (Convert.ToString(IntegralsDataSet.Tables[table.Text + "_header"].Rows[3][1]) != Convert.ToString(mgDataViewer.Rows[hittest.RowIndex].Cells["NumCC"].Value))
+                                    {
+                                        mgDataViewer.Rows[hittest.RowIndex].Cells["intgStatusError"].Value = CheckState.Indeterminate;
+                                        mgDataViewer.Rows[hittest.RowIndex].Cells["GlobalStatus"].ToolTipText = "TableWarning";
+                                    }
+                                    if (singleTableStatus(validateTable(table.Text, TariffZone)))
+                                    {
+                                        mgDataViewer.Rows[hittest.RowIndex].Cells["intgStatusError"].Value = CheckState.Checked;
+                                    }
+                                    else
+                                    {
+                                        methodCell.Items.Add("intg");
+                                        createExcelButton(hittest.RowIndex);
+                                    }
+                                    break;
+                                case "hrs":
+                                    HoursDataSet.Tables[table.Text + "_header"].Rows[0][1] = mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["Agreement"].Index].Value.ToString();
+                                    if (Convert.ToString(HoursDataSet.Tables[table.Text + "_header"].Rows[3][1]) != Convert.ToString(mgDataViewer.Rows[hittest.RowIndex].Cells["NumCC"].Value))
+                                    {
+                                        mgDataViewer.Rows[hittest.RowIndex].Cells["hrsStatusError"].Value = CheckState.Indeterminate;
+                                        mgDataViewer.Rows[hittest.RowIndex].Cells["GlobalStatus"].ToolTipText = "TableWarning";
+                                    }
+                                    if (singleTableStatus(validateTable(table.Text, TariffZone)))
+                                    {
+                                        mgDataViewer.Rows[hittest.RowIndex].Cells["hrsgStatusError"].Value = CheckState.Checked;
+                                    }
+                                    else
+                                    {
+                                        methodCell.Items.Add("hrs");
+                                        createExcelButton(hittest.RowIndex);
+                                    }
+                                    break;
                             }
+                            if (Convert.ToString(mgDataViewer.Rows[hittest.RowIndex].Cells["hrsStatusError"].Value) == CheckState.Checked.ToString() |
+                                Convert.ToString(mgDataViewer.Rows[hittest.RowIndex].Cells["intgStatusError"].Value) == CheckState.Checked.ToString())
+                            {
+                                mgDataViewer.Rows[hittest.RowIndex].Cells["GlobalStatus"].ToolTipText = "TableError";
+                            }
+
+
                             mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
                             mgDataViewer.Refresh();
 
@@ -2373,10 +2459,33 @@ namespace dataEditor
                             mgDataViewer.Refresh();
                         }
                     }
+                    autoSelectedMethod();
                 }
-
             }
         }
+
+        private void createExcelButton(int row)
+        {
+            var cellMethod = (DataGridViewComboBoxCell)mgDataViewer.Rows[row].Cells["Method"];
+
+            if (Convert.ToString(mgDataViewer.Rows[row].Cells["TariffZone"].Value)[0].ToString() == "1" && cellMethod.Items.IndexOf("intg") != -1)
+            {
+                mgDataViewer.Rows[row].Cells["SelectID"].Value = true;
+                DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
+                btnCell.UseColumnTextForButtonValue = false;
+                btnCell.ToolTipText = "Preview File";
+                mgDataViewer.Rows[row].Cells["dataExcel"] = btnCell;
+            }
+            else if(Convert.ToString(mgDataViewer.Rows[row].Cells["TariffZone"].Value)[0].ToString() != "1" && cellMethod.Items.Count != 0)
+            {
+                mgDataViewer.Rows[row].Cells["SelectID"].Value = true;
+                DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
+                btnCell.UseColumnTextForButtonValue = false;
+                btnCell.ToolTipText = "Preview File";
+                mgDataViewer.Rows[row].Cells["dataExcel"] = btnCell;
+            }
+        }
+
 
         private static bool singleTableStatus(string validateStatus)
         {
@@ -2586,11 +2695,10 @@ namespace dataEditor
                 }
             }
 
-            if (e.ColumnIndex == mgDataViewer.Columns["dataCalculation"].Index && mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell")
+            if (e.ColumnIndex == mgDataViewer.Columns["dataExcel"].Index && mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell")
             {
                 openFormType1(e.RowIndex);
             }
-            
         }
 
         private void openFormType1(int eRowIndex)
@@ -4963,20 +5071,37 @@ namespace dataEditor
 
         private bool checkRealeseFiles(string url)
         {
+            bool result = false;
+
+            var request = WebRequest.Create(url);
+            request.Timeout = 1200;
+            request.Method = "HEAD";
+
+            HttpWebResponse response = null;
             try
             {
-                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
-                request.Method = "HEAD";
-                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-                return (response.StatusCode == HttpStatusCode.OK);
-                response.Close();
+                response = (HttpWebResponse)request.GetResponse();
+                result = true;
             }
-            catch
+            catch (WebException webException)
             {
-                return false;
+
             }
+            finally
+            {
+                if (response != null)
+                {
+                    response.Close();
+                }
+            }
+
+            return result;
         }
 
+        public bool AcceptAllCertifications(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certification, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors sslPolicyErrors)
+        {
+            return true;
+        }
 
         private void DownloadFile(object sender, DoWorkEventArgs e)
         {
@@ -5043,6 +5168,9 @@ namespace dataEditor
             bool rFileSVNC;
             bool rFileSPUNC;
             DateTime date = DateTime.Now;
+
+            urlLinksData.Clear();
+
 
             checkFolders();
             settingsPropertyValueChanged();
@@ -5146,7 +5274,9 @@ namespace dataEditor
                         null,
                         null,
                         null,
-                        "intg");
+                        null,
+                        CheckState.Unchecked,
+                        CheckState.Unchecked);
                     
                     mgDataViewer.Rows[idRow-1].Cells["GlobalStatus"].ToolTipText = "created";
                     idRow++;
@@ -5246,6 +5376,19 @@ namespace dataEditor
             }
         }
 
+        private void SplitterPaint(object sender, PaintEventArgs e)
+        {
+            SplitContainer l_SplitContainer = sender as SplitContainer;
+
+            if (l_SplitContainer != null)
+            {
+                Rectangle ll_ShrinkedSplitterRectangle = l_SplitContainer.SplitterRectangle;
+                ll_ShrinkedSplitterRectangle.Offset((ll_ShrinkedSplitterRectangle.Width/2)-20, 2);
+                ll_ShrinkedSplitterRectangle.Height = ll_ShrinkedSplitterRectangle.Height - 2;
+                ll_ShrinkedSplitterRectangle.Width = 40;
+                e.Graphics.FillRectangle(Brushes.Gray, ll_ShrinkedSplitterRectangle);
+            }
+        }
 
         private void mgDataViewer_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
@@ -5280,7 +5423,7 @@ namespace dataEditor
                     e.Handled = true;
                 }
             }
-            if (mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell" && e.ColumnIndex == mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataCalculation"]))
+            if (mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell" && e.ColumnIndex == mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataExcel"]))
             {
                 e.Paint(e.CellBounds, DataGridViewPaintParts.All);
 
@@ -5352,7 +5495,7 @@ namespace dataEditor
 
         private void mgBtnEntryDatFiles_ButtonClick(object sender, EventArgs e)
         {
-            
+
         }
 
         private void getPageForExtractLinks()
@@ -5429,24 +5572,6 @@ namespace dataEditor
             SettingsForm.Show();
         }
 
-        private void mgDataÑalculation_Click(object sender, EventArgs e)
-        {
-            FormType1 formType1 = new FormType1();
-            formType1.Show();
-        }
-
-        private void mgDataAct_Click(object sender, EventArgs e)
-        {
-            pdfDocument pdfViewerForm = new pdfDocument();
-            pdfViewerForm.Show();
-        }
-
-        private void mgOpenDataTable_Click(object sender, EventArgs e)
-        {
-            FormType3 formType3 = new FormType3();
-            formType3.Show();
-        }
-
         private int GetTextHeight(TextBox tBox)
         {
             return TextRenderer.MeasureText(tBox.Text, tBox.Font, tBox.ClientSize,
@@ -5502,7 +5627,7 @@ namespace dataEditor
             var panel = sender as TableLayoutPanel;
             e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
             var rectangle = e.CellBounds;
-            using (var pen = new Pen(Color.FromArgb(255, 100, 100, 100), 1))
+            using (var pen = new Pen(Color.FromArgb(255, 173, 173, 173), 1))
             {
                 pen.Alignment = PenAlignment.Center;
                 pen.DashStyle = DashStyle.Solid;
@@ -5554,24 +5679,65 @@ namespace dataEditor
 
         private int detectErrorTable(int row, string type)
         {
-            if(Convert.ToBoolean(mgDataViewer.Rows[row].Cells[type+"StatusError"].Value))
-                return 5;
-            else
-                return 21;
+            int index = 1;
+            switch (Convert.ToString(mgDataViewer.Rows[row].Cells[type + "StatusError"].Value))
+            {
+                case "Checked":
+                    index = 5;
+                    break;
+
+                case "Unchecked":
+                    index = 21;
+                    break;
+                    
+                case "Indeterminate":
+                    index = 22;
+                    break;
+                case "False":
+                    index = 21;
+                    break;
+            }
+            return index;
         }
 
 
         private void mgDataViewer_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            switch (mgDataViewer.Rows[e.RowIndex].Cells["Method"].Value.ToString())
+            var cellMethod = (DataGridViewComboBoxCell)mgDataViewer.Rows[e.RowIndex].Cells["Method"];
+            cmbxMethod.Items.Clear();
+            if (cellMethod.Items.Count != 0)
             {
-                case "intg":
-                    cmbxMethod.Text = "Èíòåðâàëû";
-                    break;
+                foreach (var item in cellMethod.Items)
+                {
+                    switch (item.ToString())
+                    {
+                        case "intg":
+                            cmbxMethod.Items.Add("Èíòåðâàëû");
+                            break;
+
                         case "hrs":
-                    cmbxMethod.Text = "×àñû";
-                    break;
+                            cmbxMethod.Items.Add("×àñû");
+                            break;
+                    }
+                }
             }
+
+            int indx = cellMethod.Items.IndexOf(Convert.ToString(mgDataViewer.Rows[e.RowIndex].Cells["Method"].Value));
+            if (indx != -1)
+            {
+                cmbxMethod.Text = cmbxMethod.Items[indx].ToString();
+            }
+
+        }
+
+        private void cmbxMethod_DropDownClosed(object sender, EventArgs e)
+        {
+            var methodCell = (DataGridViewComboBoxCell)mgDataViewer.Rows[mgDataViewer.CurrentCell.RowIndex].Cells["Method"];
+            if(cmbxMethod.SelectedIndex != -1)
+            {
+                methodCell.Value = methodCell.Items[cmbxMethod.SelectedIndex];
+            }
+            
         }
     }
     public static class ExtensionMethods

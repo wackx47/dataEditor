@@ -153,20 +153,22 @@
   <data name="dictBtnImportFromExcel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACwSURBVDhPYxhEIG0TF0PMriaG6J13GGJ31kJFiQQgzbE7
-        jgMN2MwQvduUIXQVG1SGSACyGaSZbAB29i4TKI8MELvrJ0PSBl4oDzuI364AZWEBhFwA0hy96xUwfByg
-        ImggZmcjwTAAacZpSMgxTqArjgGjbwtD3A4znLFA0JDYnQ1Ar9wG4j9A/B833nkVqotEELvbBmjAS6CX
-        naAiJIDo7bbkayYYC8QAvOmAbMDAAADQ81o+V3g1mAAAAABJRU5ErkJggg==
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD1SURBVDhPpVI7DoJAFNxrmF35nsOEOxgrpLG3MbGw1ZNY
+        W1iLZ6Aw0Wil1HScAOetPCJmWTFOMhneZt7se2RFH/i+n4OVgXltscPQ2LC22EFGx3EGJq0tdpCxi7XF
+        DjL+O8F/P/ErXNeNMFJpuKF9S3yMxDS9amXAMEJzAZ3QXp+kEG2kpjgtRJJWWjkEphIcY4oZzFkQBI7n
+        eXt8L1oByWGpm3QAKWoCGcgopVRoPKPeQu+g2wpgUMA7OICIpjnV4IrPmgBqfI3/0DWDA8IwHEJPWGWH
+        sxut0groAgdA1+BFKSWhGbj5KaCLfQK6XhnT8tqEeAIG1JwOWVcLtgAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="dictBtnExportToExcel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD2SURBVDhPpVI7DoJAFNxrGBaWzzlMuIOxQhp7GxMLWz2J
-        tYW1eAYKE41WSk3nCXDeyiOugRXjJJPhbebN20dW9EEQBAVYtbCoLXa0NDasLXaQ0fO8QZvWFjvI2MXa
-        YgcZ/73Bfz/xK5RSseu6j5YJ5pTkEItJdtHKgGGIfUromPb6JIVoIzUlWSnSrNLKITQZxhFuMYU5D8PQ
-        831/h++5EZDuF7pJB5CiJpCBjI7jSDSeUG+gN1AZAQwKeAcHENE0oxpc8lkTQI2v6991zeCAKIpc6BGr
-        bHF2pVWMgC5wAHQFnqWUDjQH1z8FdLFPQNcrY1pemxBP+rmcCMZzkc0AAAAASUVORK5CYII=
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD+SURBVDhPYxhkoHwmP0P5/AaG0vmnGMoWvGUoWfAXTIP4
+        IHGQPF5QtuAqQ8X82QxVCzyBmpUZqhZLQmggv3zBHLA8XlC+4D9Q0RqGykURQM1GDKWL1cF0xeJIoNxa
+        sDxeAFJQvqCKoWz+IaBBTxnK5n4E06XzDoLFiTIA5GxceOANKF3wCqoSB8BnQOVscYaaRfoM8dsVoKqx
+        AHwGlM7hBWuO3vWKIXq3A1h97C40L6EbgA3E7rYBanzJELPTCdOAkgUXgKluKUPZwiBgWtABi4EUYcU7
+        r4JpFFC/igcY5zVAlxwHpoXXUFFUEL3dFqgRhwsIAYJhQAxAiQUGBgDhG7jIiRz25QAAAABJRU5ErkJg
+        gg==
 </value>
   </data>
   <data name="dictBtnAddElm.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

@@ -940,6 +940,7 @@
             this.MaximizeBox = false;
             this.Name = "pdfDocument";
             this.Padding = new System.Windows.Forms.Padding(5);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PDF preview";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.pdfDocument_FormClosing);
             this.pdfDocToolStrip.ResumeLayout(false);

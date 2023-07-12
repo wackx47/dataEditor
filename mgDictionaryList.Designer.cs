@@ -510,11 +510,13 @@ namespace dataEditor
             // dictBtnExportToExcel
             // 
             this.dictBtnExportToExcel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.dictBtnExportToExcel.Enabled = false;
             this.dictBtnExportToExcel.Image = ((System.Drawing.Image)(resources.GetObject("dictBtnExportToExcel.Image")));
             this.dictBtnExportToExcel.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.dictBtnExportToExcel.Name = "dictBtnExportToExcel";
             this.dictBtnExportToExcel.Size = new System.Drawing.Size(23, 20);
             this.dictBtnExportToExcel.Text = "CreateExcel";
+            this.dictBtnExportToExcel.Visible = false;
             // 
             // toolStripSeparator4
             // 
@@ -577,6 +579,7 @@ namespace dataEditor
             this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.MinimumSize = new System.Drawing.Size(960, 469);
             this.Name = "mgDatsList";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DatsEditor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mgDatsList_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.mgDatsList_FormClosed);

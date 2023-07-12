@@ -30,11 +30,12 @@ namespace dataEditor
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("null");
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Коэффициент оплаты мощности потребителями (покупателями), осуществляющими расчеты" +
         " по 1ЦК, 1/час", new System.Windows.Forms.TreeNode[] {
@@ -55,7 +56,7 @@ namespace dataEditor
             System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("null");
             System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("пиковая зона суток", new System.Windows.Forms.TreeNode[] {
             treeNode11});
-            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode(resources.GetString("datsTreeView.Nodes"), new System.Windows.Forms.TreeNode[] {
             treeNode8,
             treeNode10,
             treeNode12});
@@ -65,7 +66,7 @@ namespace dataEditor
             System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("null");
             System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("дневная зона суток", new System.Windows.Forms.TreeNode[] {
             treeNode16});
-            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode(resources.GetString("datsTreeView.Nodes1"), new System.Windows.Forms.TreeNode[] {
             treeNode15,
             treeNode17});
             System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("null");
@@ -90,17 +91,17 @@ namespace dataEditor
             System.Windows.Forms.TreeNode treeNode30 = new System.Windows.Forms.TreeNode("Коэффициент оплаты мощности для соответствующих зон суток (две зоны суток)", new System.Windows.Forms.TreeNode[] {
             treeNode27,
             treeNode29});
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.RowContext = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.RightClick_HeadsRow = new System.Windows.Forms.ToolStripMenuItem();
             this.RightClick_FirstRowData = new System.Windows.Forms.ToolStripMenuItem();
@@ -130,12 +131,12 @@ namespace dataEditor
             this.lblMainName = new System.Windows.Forms.Label();
             this.mgSplitContainer_insideHorizontal = new System.Windows.Forms.SplitContainer();
             this.mgSplitContainer_inside_vertical = new System.Windows.Forms.SplitContainer();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBoxTable = new System.Windows.Forms.GroupBox();
             this.mgDataViewer = new dataEditor.MainForm.DoubleBufferedDataGridView();
             this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SelectID = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.dataTable = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataCalculation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataExcel = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataAct = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.OpenFolder = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GlobalStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -156,8 +157,11 @@ namespace dataEditor
             this.Method = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.intgStatusError = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.hrsStatusError = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.FlowTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.groupBoxData = new System.Windows.Forms.GroupBox();
             this.mgFlowPanelResult = new System.Windows.Forms.FlowLayoutPanel();
+            this.FlowPanelTools = new System.Windows.Forms.ToolStrip();
+            this.FlowPanelButtonAddTable = new System.Windows.Forms.ToolStripButton();
             this.inputTableLoyaut = new System.Windows.Forms.TableLayoutPanel();
             this.datsTreeView = new System.Windows.Forms.TreeView();
             this.mgToolStripInputData = new System.Windows.Forms.ToolStrip();
@@ -184,7 +188,6 @@ namespace dataEditor
             this.mgBtnOpenFolder = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolBtnStartProccess = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton4 = new System.Windows.Forms.ToolStripSeparator();
             this.mgOpenDataTable = new System.Windows.Forms.ToolStripButton();
             this.mgDataСalculation = new System.Windows.Forms.ToolStripButton();
             this.mgDataAct = new System.Windows.Forms.ToolStripButton();
@@ -255,9 +258,11 @@ namespace dataEditor
             this.mgSplitContainer_inside_vertical.Panel1.SuspendLayout();
             this.mgSplitContainer_inside_vertical.Panel2.SuspendLayout();
             this.mgSplitContainer_inside_vertical.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.groupBoxTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mgDataViewer)).BeginInit();
+            this.FlowTableLayout.SuspendLayout();
             this.groupBoxData.SuspendLayout();
+            this.FlowPanelTools.SuspendLayout();
             this.inputTableLoyaut.SuspendLayout();
             this.mgToolStripInputData.SuspendLayout();
             this.g.SuspendLayout();
@@ -479,10 +484,10 @@ namespace dataEditor
             // tabMicrogeneration
             // 
             this.tabMicrogeneration.Controls.Add(this.MainPanel);
-            this.tabMicrogeneration.Location = new System.Drawing.Point(4, 23);
+            this.tabMicrogeneration.Location = new System.Drawing.Point(4, 24);
             this.tabMicrogeneration.Name = "tabMicrogeneration";
             this.tabMicrogeneration.Padding = new System.Windows.Forms.Padding(1);
-            this.tabMicrogeneration.Size = new System.Drawing.Size(1203, 590);
+            this.tabMicrogeneration.Size = new System.Drawing.Size(1203, 589);
             this.tabMicrogeneration.TabIndex = 1;
             this.tabMicrogeneration.Text = "Microgeneration";
             // 
@@ -494,7 +499,7 @@ namespace dataEditor
             this.MainPanel.Location = new System.Drawing.Point(1, 1);
             this.MainPanel.Margin = new System.Windows.Forms.Padding(1);
             this.MainPanel.Name = "MainPanel";
-            this.MainPanel.Size = new System.Drawing.Size(1201, 588);
+            this.MainPanel.Size = new System.Drawing.Size(1201, 587);
             this.MainPanel.TabIndex = 6;
             // 
             // MainTableLayoutPanel
@@ -517,7 +522,7 @@ namespace dataEditor
             this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 124F));
             this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 328F));
             this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.MainTableLayoutPanel.Size = new System.Drawing.Size(1199, 586);
+            this.MainTableLayoutPanel.Size = new System.Drawing.Size(1199, 585);
             this.MainTableLayoutPanel.TabIndex = 5;
             // 
             // lblMainName
@@ -551,9 +556,10 @@ namespace dataEditor
             // mgSplitContainer_insideHorizontal.Panel2
             // 
             this.mgSplitContainer_insideHorizontal.Panel2.Controls.Add(this.inputTableLoyaut);
-            this.mgSplitContainer_insideHorizontal.Size = new System.Drawing.Size(1193, 402);
-            this.mgSplitContainer_insideHorizontal.SplitterDistance = 373;
+            this.mgSplitContainer_insideHorizontal.Size = new System.Drawing.Size(1193, 401);
+            this.mgSplitContainer_insideHorizontal.SplitterDistance = 372;
             this.mgSplitContainer_insideHorizontal.TabIndex = 3;
+            this.mgSplitContainer_insideHorizontal.Paint += new System.Windows.Forms.PaintEventHandler(this.SplitterPaint);
             // 
             // mgSplitContainer_inside_vertical
             // 
@@ -564,28 +570,30 @@ namespace dataEditor
             // 
             // mgSplitContainer_inside_vertical.Panel1
             // 
-            this.mgSplitContainer_inside_vertical.Panel1.Controls.Add(this.groupBox1);
+            this.mgSplitContainer_inside_vertical.Panel1.Controls.Add(this.groupBoxTable);
             this.mgSplitContainer_inside_vertical.Panel1MinSize = 500;
             // 
             // mgSplitContainer_inside_vertical.Panel2
             // 
-            this.mgSplitContainer_inside_vertical.Panel2.Controls.Add(this.groupBoxData);
+            this.mgSplitContainer_inside_vertical.Panel2.Controls.Add(this.FlowTableLayout);
             this.mgSplitContainer_inside_vertical.Panel2MinSize = 200;
-            this.mgSplitContainer_inside_vertical.Size = new System.Drawing.Size(1193, 373);
-            this.mgSplitContainer_inside_vertical.SplitterDistance = 987;
+            this.mgSplitContainer_inside_vertical.Size = new System.Drawing.Size(1193, 372);
+            this.mgSplitContainer_inside_vertical.SplitterDistance = 983;
             this.mgSplitContainer_inside_vertical.TabIndex = 0;
             // 
-            // groupBox1
+            // groupBoxTable
             // 
-            this.groupBox1.Controls.Add(this.mgDataViewer);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(987, 373);
-            this.groupBox1.TabIndex = 3;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Abonents: Selected - / -";
+            this.groupBoxTable.Controls.Add(this.mgDataViewer);
+            this.groupBoxTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBoxTable.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.groupBoxTable.Location = new System.Drawing.Point(0, 0);
+            this.groupBoxTable.Name = "groupBoxTable";
+            this.groupBoxTable.Padding = new System.Windows.Forms.Padding(2, 4, 2, 2);
+            this.groupBoxTable.Size = new System.Drawing.Size(983, 372);
+            this.groupBoxTable.TabIndex = 3;
+            this.groupBoxTable.TabStop = false;
+            this.groupBoxTable.Text = "Abonents: Selected - / -";
+            this.groupBoxTable.Paint += new System.Windows.Forms.PaintEventHandler(this.groupBox_Paint);
             // 
             // mgDataViewer
             // 
@@ -597,6 +605,7 @@ namespace dataEditor
             this.mgDataViewer.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.mgDataViewer.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.mgDataViewer.BackgroundColor = System.Drawing.SystemColors.AppWorkspace;
+            this.mgDataViewer.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.mgDataViewer.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -612,7 +621,7 @@ namespace dataEditor
             this.id,
             this.SelectID,
             this.dataTable,
-            this.dataCalculation,
+            this.dataExcel,
             this.dataAct,
             this.OpenFolder,
             this.GlobalStatus,
@@ -633,39 +642,39 @@ namespace dataEditor
             this.Method,
             this.intgStatusError,
             this.hrsStatusError});
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.ControlLight;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle6.Format = "N6";
-            dataGridViewCellStyle6.NullValue = null;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.AntiqueWhite;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.mgDataViewer.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle7.Format = "N6";
+            dataGridViewCellStyle7.NullValue = null;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.PeachPuff;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.mgDataViewer.DefaultCellStyle = dataGridViewCellStyle7;
             this.mgDataViewer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mgDataViewer.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.mgDataViewer.EnableHeadersVisualStyles = false;
             this.mgDataViewer.GridColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.mgDataViewer.Location = new System.Drawing.Point(3, 18);
+            this.mgDataViewer.Location = new System.Drawing.Point(2, 19);
             this.mgDataViewer.MultiSelect = false;
             this.mgDataViewer.Name = "mgDataViewer";
             this.mgDataViewer.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.ControlDark;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.mgDataViewer.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.ControlDark;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.mgDataViewer.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
             this.mgDataViewer.RowHeadersVisible = false;
             this.mgDataViewer.RowHeadersWidth = 20;
             this.mgDataViewer.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.mgDataViewer.RowTemplate.Height = 20;
             this.mgDataViewer.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.mgDataViewer.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.mgDataViewer.Size = new System.Drawing.Size(981, 352);
+            this.mgDataViewer.Size = new System.Drawing.Size(979, 351);
             this.mgDataViewer.TabIndex = 2;
             this.mgDataViewer.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.mgDataViewer_CellClick);
             this.mgDataViewer.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.mgDataViewer_CellPainting);
@@ -709,16 +718,16 @@ namespace dataEditor
             this.dataTable.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.dataTable.Width = 25;
             // 
-            // dataCalculation
+            // dataExcel
             // 
-            this.dataCalculation.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.dataCalculation.HeaderText = "Excel";
-            this.dataCalculation.MinimumWidth = 25;
-            this.dataCalculation.Name = "dataCalculation";
-            this.dataCalculation.ReadOnly = true;
-            this.dataCalculation.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataCalculation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataCalculation.Width = 25;
+            this.dataExcel.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataExcel.HeaderText = "Excel";
+            this.dataExcel.MinimumWidth = 25;
+            this.dataExcel.Name = "dataExcel";
+            this.dataExcel.ReadOnly = true;
+            this.dataExcel.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataExcel.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataExcel.Width = 25;
             // 
             // dataAct
             // 
@@ -818,6 +827,7 @@ namespace dataEditor
             this.REC.Name = "REC";
             this.REC.ReadOnly = true;
             this.REC.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.REC.Visible = false;
             // 
             // GEN
             // 
@@ -826,6 +836,7 @@ namespace dataEditor
             this.GEN.Name = "GEN";
             this.GEN.ReadOnly = true;
             this.GEN.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.GEN.Visible = false;
             // 
             // SELL
             // 
@@ -834,6 +845,7 @@ namespace dataEditor
             this.SELL.Name = "SELL";
             this.SELL.ReadOnly = true;
             this.SELL.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.SELL.Visible = false;
             // 
             // BUY
             // 
@@ -842,6 +854,7 @@ namespace dataEditor
             this.BUY.Name = "BUY";
             this.BUY.ReadOnly = true;
             this.BUY.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.BUY.Visible = false;
             // 
             // Price
             // 
@@ -850,6 +863,7 @@ namespace dataEditor
             this.Price.Name = "Price";
             this.Price.ReadOnly = true;
             this.Price.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Price.Visible = false;
             // 
             // Cost
             // 
@@ -858,6 +872,7 @@ namespace dataEditor
             this.Cost.Name = "Cost";
             this.Cost.ReadOnly = true;
             this.Cost.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Cost.Visible = false;
             // 
             // baseDoc
             // 
@@ -883,22 +898,22 @@ namespace dataEditor
             // 
             this.Method.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.Method.HeaderText = "Method";
-            this.Method.Items.AddRange(new object[] {
-            "intg",
-            "hrs"});
-            this.Method.MaxDropDownItems = 2;
             this.Method.Name = "Method";
             this.Method.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Method.Visible = false;
+            this.Method.Width = 50;
             // 
             // intgStatusError
             // 
             this.intgStatusError.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.intgStatusError.DefaultCellStyle = dataGridViewCellStyle6;
+            this.intgStatusError.FalseValue = "";
             this.intgStatusError.HeaderText = "intgS";
+            this.intgStatusError.IndeterminateValue = "";
             this.intgStatusError.Name = "intgStatusError";
-            this.intgStatusError.ReadOnly = true;
             this.intgStatusError.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.intgStatusError.Visible = false;
+            this.intgStatusError.ThreeState = true;
+            this.intgStatusError.TrueValue = "";
             this.intgStatusError.Width = 25;
             // 
             // hrsStatusError
@@ -906,18 +921,34 @@ namespace dataEditor
             this.hrsStatusError.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.hrsStatusError.HeaderText = "hrsS";
             this.hrsStatusError.Name = "hrsStatusError";
-            this.hrsStatusError.ReadOnly = true;
-            this.hrsStatusError.Visible = false;
+            this.hrsStatusError.ThreeState = true;
             this.hrsStatusError.Width = 25;
+            // 
+            // FlowTableLayout
+            // 
+            this.FlowTableLayout.ColumnCount = 1;
+            this.FlowTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.FlowTableLayout.Controls.Add(this.groupBoxData, 0, 1);
+            this.FlowTableLayout.Controls.Add(this.FlowPanelTools, 0, 0);
+            this.FlowTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.FlowTableLayout.Location = new System.Drawing.Point(0, 0);
+            this.FlowTableLayout.Margin = new System.Windows.Forms.Padding(0);
+            this.FlowTableLayout.Name = "FlowTableLayout";
+            this.FlowTableLayout.RowCount = 2;
+            this.FlowTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.FlowTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.FlowTableLayout.Size = new System.Drawing.Size(206, 372);
+            this.FlowTableLayout.TabIndex = 4;
             // 
             // groupBoxData
             // 
             this.groupBoxData.Controls.Add(this.mgFlowPanelResult);
             this.groupBoxData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxData.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBoxData.Location = new System.Drawing.Point(0, 0);
+            this.groupBoxData.Location = new System.Drawing.Point(1, 28);
+            this.groupBoxData.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
             this.groupBoxData.Name = "groupBoxData";
-            this.groupBoxData.Size = new System.Drawing.Size(202, 373);
+            this.groupBoxData.Size = new System.Drawing.Size(204, 345);
             this.groupBoxData.TabIndex = 2;
             this.groupBoxData.TabStop = false;
             this.groupBoxData.Text = "Extracted data";
@@ -933,10 +964,34 @@ namespace dataEditor
             this.mgFlowPanelResult.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.mgFlowPanelResult.Location = new System.Drawing.Point(3, 18);
             this.mgFlowPanelResult.Name = "mgFlowPanelResult";
-            this.mgFlowPanelResult.Size = new System.Drawing.Size(196, 352);
+            this.mgFlowPanelResult.Size = new System.Drawing.Size(198, 324);
             this.mgFlowPanelResult.TabIndex = 1;
             this.mgFlowPanelResult.DragDrop += new System.Windows.Forms.DragEventHandler(this.mgFlowPanelResult_DragDrop);
             this.mgFlowPanelResult.DragEnter += new System.Windows.Forms.DragEventHandler(this.mgFlowPanelResult_DragEnter);
+            // 
+            // FlowPanelTools
+            // 
+            this.FlowPanelTools.BackColor = System.Drawing.Color.Transparent;
+            this.FlowPanelTools.Dock = System.Windows.Forms.DockStyle.None;
+            this.FlowPanelTools.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.FlowPanelTools.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.FlowPanelTools.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.FlowPanelButtonAddTable});
+            this.FlowPanelTools.Location = new System.Drawing.Point(1, 1);
+            this.FlowPanelTools.Margin = new System.Windows.Forms.Padding(1);
+            this.FlowPanelTools.Name = "FlowPanelTools";
+            this.FlowPanelTools.Padding = new System.Windows.Forms.Padding(4, 0, 1, 0);
+            this.FlowPanelTools.Size = new System.Drawing.Size(30, 25);
+            this.FlowPanelTools.TabIndex = 3;
+            // 
+            // FlowPanelButtonAddTable
+            // 
+            this.FlowPanelButtonAddTable.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.FlowPanelButtonAddTable.Image = ((System.Drawing.Image)(resources.GetObject("FlowPanelButtonAddTable.Image")));
+            this.FlowPanelButtonAddTable.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.FlowPanelButtonAddTable.Name = "FlowPanelButtonAddTable";
+            this.FlowPanelButtonAddTable.Size = new System.Drawing.Size(23, 22);
+            this.FlowPanelButtonAddTable.Text = "Add Table";
             // 
             // inputTableLoyaut
             // 
@@ -1000,7 +1055,7 @@ namespace dataEditor
             treeNode12.Text = "пиковая зона суток";
             treeNode13.Name = "treeViewLine4";
             treeNode13.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode13.Text = "";
+            treeNode13.Text = resources.GetString("treeNode13.Text");
             treeNode14.Name = "treeViewLine5e1val";
             treeNode14.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode14.Text = "null";
@@ -1015,7 +1070,7 @@ namespace dataEditor
             treeNode17.Text = "дневная зона суток";
             treeNode18.Name = "treeViewLine5";
             treeNode18.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode18.Text = "";
+            treeNode18.Text = resources.GetString("treeNode18.Text");
             treeNode19.Name = "treeViewLine6e1val";
             treeNode19.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode19.Text = "null";
@@ -1215,14 +1270,13 @@ namespace dataEditor
             this.mgBtnOpenFolder,
             this.toolStripButton3,
             this.toolBtnStartProccess,
-            this.toolStripButton4,
             this.mgOpenDataTable,
             this.mgDataСalculation,
             this.mgDataAct});
             this.g.Location = new System.Drawing.Point(5, 28);
             this.g.Margin = new System.Windows.Forms.Padding(5, 1, 1, 1);
             this.g.Name = "g";
-            this.g.Size = new System.Drawing.Size(289, 25);
+            this.g.Size = new System.Drawing.Size(214, 25);
             this.g.TabIndex = 4;
             this.g.Text = "mgTools";
             // 
@@ -1279,7 +1333,6 @@ namespace dataEditor
             // toolBtnDictionaryList
             // 
             this.toolBtnDictionaryList.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolBtnDictionaryList.Enabled = false;
             this.toolBtnDictionaryList.Image = ((System.Drawing.Image)(resources.GetObject("toolBtnDictionaryList.Image")));
             this.toolBtnDictionaryList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolBtnDictionaryList.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -1326,11 +1379,6 @@ namespace dataEditor
             this.toolBtnStartProccess.Text = "Run";
             this.toolBtnStartProccess.Click += new System.EventHandler(this.toolBtnStartProccess_Click);
             // 
-            // toolStripButton4
-            // 
-            this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(6, 25);
-            // 
             // mgOpenDataTable
             // 
             this.mgOpenDataTable.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -1339,7 +1387,7 @@ namespace dataEditor
             this.mgOpenDataTable.Name = "mgOpenDataTable";
             this.mgOpenDataTable.Size = new System.Drawing.Size(23, 22);
             this.mgOpenDataTable.Text = "OpenDataTable";
-            this.mgOpenDataTable.Click += new System.EventHandler(this.mgOpenDataTable_Click);
+            this.mgOpenDataTable.Visible = false;
             // 
             // mgDataСalculation
             // 
@@ -1349,7 +1397,7 @@ namespace dataEditor
             this.mgDataСalculation.Name = "mgDataСalculation";
             this.mgDataСalculation.Size = new System.Drawing.Size(23, 22);
             this.mgDataСalculation.Text = "OpenСalculation";
-            this.mgDataСalculation.Click += new System.EventHandler(this.mgDataСalculation_Click);
+            this.mgDataСalculation.Visible = false;
             // 
             // mgDataAct
             // 
@@ -1359,7 +1407,7 @@ namespace dataEditor
             this.mgDataAct.Name = "mgDataAct";
             this.mgDataAct.Size = new System.Drawing.Size(23, 22);
             this.mgDataAct.Text = "OpenAct";
-            this.mgDataAct.Click += new System.EventHandler(this.mgDataAct_Click);
+            this.mgDataAct.Visible = false;
             // 
             // tabControlCurrentProject
             // 
@@ -1557,7 +1605,9 @@ namespace dataEditor
             // 
             // cmbxMethod
             // 
+            this.cmbxMethod.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.cmbxMethod.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmbxMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbxMethod.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.cmbxMethod.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.cmbxMethod.FormattingEnabled = true;
@@ -1566,6 +1616,7 @@ namespace dataEditor
             this.cmbxMethod.Name = "cmbxMethod";
             this.cmbxMethod.Size = new System.Drawing.Size(102, 23);
             this.cmbxMethod.TabIndex = 1;
+            this.cmbxMethod.DropDownClosed += new System.EventHandler(this.cmbxMethod_DropDownClosed);
             // 
             // groupBoxRes
             // 
@@ -1766,15 +1817,15 @@ namespace dataEditor
             this.tabExcel.BackColor = System.Drawing.Color.Transparent;
             this.tabExcel.Controls.Add(this.urToolStrip);
             this.tabExcel.Controls.Add(this.splitContainer_bigMain);
-            this.tabExcel.Location = new System.Drawing.Point(4, 23);
+            this.tabExcel.Location = new System.Drawing.Point(4, 24);
             this.tabExcel.Name = "tabExcel";
             this.tabExcel.Padding = new System.Windows.Forms.Padding(1);
-            this.tabExcel.Size = new System.Drawing.Size(1203, 590);
+            this.tabExcel.Size = new System.Drawing.Size(1203, 589);
             this.tabExcel.TabIndex = 0;
-            this.tabExcel.Text = "ExcelReader";
             // 
             // urToolStrip
             // 
+            this.urToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.urToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.urBtnImportFile,
             this.toolStripSeparator2,
@@ -1782,6 +1833,7 @@ namespace dataEditor
             this.urBtnConvert2Tree});
             this.urToolStrip.Location = new System.Drawing.Point(1, 1);
             this.urToolStrip.Name = "urToolStrip";
+            this.urToolStrip.Padding = new System.Windows.Forms.Padding(4, 0, 1, 0);
             this.urToolStrip.Size = new System.Drawing.Size(1201, 25);
             this.urToolStrip.TabIndex = 76;
             this.urToolStrip.Text = "mgTools";
@@ -1825,6 +1877,9 @@ namespace dataEditor
             // 
             // splitContainer_bigMain
             // 
+            this.splitContainer_bigMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer_bigMain.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.splitContainer_bigMain.Location = new System.Drawing.Point(3, 34);
             this.splitContainer_bigMain.Name = "splitContainer_bigMain";
@@ -1879,22 +1934,22 @@ namespace dataEditor
             this.dataViewer.AllowUserToResizeRows = false;
             this.dataViewer.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
             this.dataViewer.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.ControlDark;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataViewer.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.ControlDark;
             dataGridViewCellStyle9.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.Black;
             dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataViewer.DefaultCellStyle = dataGridViewCellStyle9;
+            this.dataViewer.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataViewer.DefaultCellStyle = dataGridViewCellStyle10;
             this.dataViewer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewer.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataViewer.GridColor = System.Drawing.SystemColors.ControlDarkDark;
@@ -1903,17 +1958,17 @@ namespace dataEditor
             this.dataViewer.Name = "dataViewer";
             this.dataViewer.ReadOnly = true;
             this.dataViewer.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.ControlDark;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataViewer.RowHeadersDefaultCellStyle = dataGridViewCellStyle10;
-            this.dataViewer.RowHeadersWidth = 20;
             dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.dataViewer.RowsDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.ControlDark;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataViewer.RowHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            this.dataViewer.RowHeadersWidth = 20;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.dataViewer.RowsDefaultCellStyle = dataGridViewCellStyle12;
             this.dataViewer.RowTemplate.Height = 25;
             this.dataViewer.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.dataViewer.Size = new System.Drawing.Size(893, 495);
@@ -1952,28 +2007,28 @@ namespace dataEditor
             this.statusGridView.BackgroundColor = System.Drawing.SystemColors.Control;
             this.statusGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.statusGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.ControlLight;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.statusGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.statusGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
             this.statusGridView.ColumnHeadersHeight = 20;
             this.statusGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.statusGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
             this.Column2,
             this.Column3});
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle16.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.statusGridView.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle17.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.statusGridView.DefaultCellStyle = dataGridViewCellStyle17;
             this.statusGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.statusGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.statusGridView.EnableHeadersVisualStyles = false;
@@ -1982,19 +2037,19 @@ namespace dataEditor
             this.statusGridView.MultiSelect = false;
             this.statusGridView.Name = "statusGridView";
             this.statusGridView.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.ControlLight;
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.statusGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle18.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.statusGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle18;
             this.statusGridView.RowHeadersVisible = false;
             this.statusGridView.RowHeadersWidth = 130;
             this.statusGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.statusGridView.RowsDefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.statusGridView.RowsDefaultCellStyle = dataGridViewCellStyle19;
             this.statusGridView.RowTemplate.Height = 17;
             this.statusGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.statusGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
@@ -2005,9 +2060,9 @@ namespace dataEditor
             // 
             // Column1
             // 
-            dataGridViewCellStyle13.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle14;
             this.Column1.HeaderText = "Name";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
@@ -2017,20 +2072,20 @@ namespace dataEditor
             // Column2
             // 
             this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            dataGridViewCellStyle14.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.Column2.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.Column2.DefaultCellStyle = dataGridViewCellStyle15;
             this.Column2.HeaderText = "Value";
             this.Column2.Name = "Column2";
             this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Column3
             // 
-            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            dataGridViewCellStyle15.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.Column3.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            dataGridViewCellStyle16.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.Column3.DefaultCellStyle = dataGridViewCellStyle16;
             this.Column3.HeaderText = "Status";
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
@@ -2062,9 +2117,10 @@ namespace dataEditor
             this.SectionsControl.Controls.Add(this.tabExcel);
             this.SectionsControl.Controls.Add(this.tabMicrogeneration);
             this.SectionsControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SectionsControl.ItemSize = new System.Drawing.Size(20, 20);
             this.SectionsControl.Location = new System.Drawing.Point(0, 24);
-            this.SectionsControl.Multiline = true;
             this.SectionsControl.Name = "SectionsControl";
+            this.SectionsControl.Padding = new System.Drawing.Point(10, 3);
             this.SectionsControl.SelectedIndex = 0;
             this.SectionsControl.Size = new System.Drawing.Size(1211, 617);
             this.SectionsControl.TabIndex = 76;
@@ -2205,10 +2261,14 @@ namespace dataEditor
             this.mgSplitContainer_inside_vertical.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mgSplitContainer_inside_vertical)).EndInit();
             this.mgSplitContainer_inside_vertical.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
+            this.groupBoxTable.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mgDataViewer)).EndInit();
+            this.FlowTableLayout.ResumeLayout(false);
+            this.FlowTableLayout.PerformLayout();
             this.groupBoxData.ResumeLayout(false);
             this.groupBoxData.PerformLayout();
+            this.FlowPanelTools.ResumeLayout(false);
+            this.FlowPanelTools.PerformLayout();
             this.inputTableLoyaut.ResumeLayout(false);
             this.inputTableLoyaut.PerformLayout();
             this.mgToolStripInputData.ResumeLayout(false);
@@ -2288,7 +2348,6 @@ namespace dataEditor
         private ToolStripButton toolBtnDictionaryList;
         private ToolStripButton toolBtnDictionaryEditor;
         private ToolStripSeparator toolStripButton3;
-        private ToolStripSeparator toolStripButton4;
         private TextBox textBoxNameGP;
         private Label lblNameGP;
         private TextBox textBoxGTPcode;
@@ -2354,7 +2413,6 @@ namespace dataEditor
         private Panel MainPanel;
         private TableLayoutPanel MainTableLayoutPanel;
         private TableLayoutPanel ProjectInfoTableLayoutPanel;
-        private TextBox txtProjectInfoName;
         private TextBox txtProjectMonth;
         private Label label1;
         private Label label2;
@@ -2369,15 +2427,15 @@ namespace dataEditor
         private GroupBox ProjectInfoBox;
         private ToolStripButton mgFileSPUNCbtn;
         private ToolStripComboBox mgFileSPUNCselector;
-        private GroupBox groupBox1;
+        private GroupBox groupBoxTable;
         private GroupBox groupBoxProp;
         private TableLayoutPanel propTableLayout;
         private Label label3;
-        private ComboBox cmbxMethod;
+        private TextBox txtProjectInfoName;
         private DataGridViewTextBoxColumn id;
         private DataGridViewCheckBoxColumn SelectID;
         private DataGridViewTextBoxColumn dataTable;
-        private DataGridViewTextBoxColumn dataCalculation;
+        private DataGridViewTextBoxColumn dataExcel;
         private DataGridViewTextBoxColumn dataAct;
         private DataGridViewTextBoxColumn OpenFolder;
         private DataGridViewTextBoxColumn GlobalStatus;
@@ -2398,5 +2456,9 @@ namespace dataEditor
         private DataGridViewComboBoxColumn Method;
         private DataGridViewCheckBoxColumn intgStatusError;
         private DataGridViewCheckBoxColumn hrsStatusError;
+        private ComboBox cmbxMethod;
+        private TableLayoutPanel FlowTableLayout;
+        private ToolStrip FlowPanelTools;
+        private ToolStripButton FlowPanelButtonAddTable;
     }
 }

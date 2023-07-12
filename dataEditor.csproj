@@ -9,9 +9,9 @@
     <PlatformTarget>x86</PlatformTarget>
     <UseWPF>False</UseWPF>
     <FileVersion>1.0</FileVersion>
-    <AssemblyVersion>2023.06.02</AssemblyVersion>
+    <AssemblyVersion>2023.07.12</AssemblyVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>0.9.7.2-beta</Version>
+    <Version>0.9.7.4-beta</Version>
     <Company>ПАО ГК "ТНС энерго"</Company>
     <Authors>47 5'9</Authors>
     <Copyright>47 5'9</Copyright>
