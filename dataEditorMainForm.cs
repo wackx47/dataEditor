@@ -2187,12 +2187,11 @@ namespace dataEditor
         }
 
         string btnMoveName = null;
-
         private void mgDataViewer_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             if (mgDataViewer.RectangleToScreen(e.RowBounds).Contains(MousePosition))
             {
-                var r = e.RowBounds; r.Width -= 1; r.Height -= 2;
+                var r = e.RowBounds; r.Width = GetGridWidth(mgDataViewer); r.Height -= 2;
                 switch (mgDataViewer.Rows[e.RowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].GetType().Name)
                 {
                     case "DataGridViewButtonCell":
@@ -2215,6 +2214,58 @@ namespace dataEditor
             }
         }
 
+        int GlobalRowIndex = -1;
+        private void mgDataViewer_CellMouseMove(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex != -1 && e.RowIndex != GlobalRowIndex)
+            {
+                GlobalRowIndex = e.RowIndex;
+                mgDataViewer.Refresh();
+                Rectangle rowBound = mgDataViewer.GetRowDisplayRectangle(e.RowIndex, false);
+                rowBound.Width = GetGridWidth(mgDataViewer);
+                mgDataViewerRowPaint(rowBound, new PaintEventArgs(mgDataViewer.CreateGraphics(), rowBound));
+            }
+        }
+
+
+        private void mgDataViewerRowPaint(Rectangle rowBound, PaintEventArgs e)
+        {
+            if (GlobalRowIndex != -1)
+            {
+                switch (mgDataViewer.Rows[GlobalRowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].GetType().Name)
+                {
+                    case "DataGridViewButtonCell":
+
+                        if (!mgDataViewer.Rows[GlobalRowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].ToolTipText.Contains('+') &&
+                            mgDataViewer.Rows[GlobalRowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].ToolTipText.Split("_").First() != btnMoveName.Split("_").First())
+                        {
+                            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+                            e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, Color.Blue)), rowBound);
+                            e.Graphics.DrawRectangle(new Pen(Color.Blue), rowBound);
+                        }
+                        break;
+
+                    case "DataGridViewTextBoxCell":
+                        e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+                        e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, Color.Blue)), rowBound);
+                        e.Graphics.DrawRectangle(new Pen(Color.Blue), rowBound);
+                        break;
+                }
+            }
+        }
+
+        private int GetGridWidth(DataGridView grid)
+        {
+            int width = 0;
+            foreach (DataGridViewColumn column in grid.Columns)
+            {
+                if(column.Visible)
+                width += column.Width;
+            }
+
+            return width;
+        }
+
         private void TableButton_GiveFeedback(object sender, GiveFeedbackEventArgs e)
         {
             mgDataViewer.ClearSelection();
@@ -2234,7 +2285,8 @@ namespace dataEditor
 
         private void mgDataViewer_DragLeave(object sender, EventArgs e)
         {
-                mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+                //mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+            mgDataViewer.CellMouseMove -= new DataGridViewCellMouseEventHandler(this.mgDataViewer_CellMouseMove);
         }
 
         private void mgDataViewer_DragEnter(object sender, DragEventArgs e)
@@ -2248,7 +2300,8 @@ namespace dataEditor
                 e.Effect = DragDropEffects.Move;
                 var table = (Button)e.Data.GetData(typeof(Button));
                 btnMoveName = table.Text;
-                mgDataViewer.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+                //mgDataViewer.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+                mgDataViewer.CellMouseMove += new DataGridViewCellMouseEventHandler(this.mgDataViewer_CellMouseMove);
             }
         }
 
@@ -2392,7 +2445,8 @@ namespace dataEditor
                             mgDataViewer.Rows[hittest.RowIndex].Cells["GlobalStatus"].ToolTipText = "TableWarning";
                         }
 
-                        mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+                        //mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+                        mgDataViewer.CellMouseMove -= new DataGridViewCellMouseEventHandler(this.mgDataViewer_CellMouseMove);
                         mgDataViewer.Refresh();
 
                         mgFlowPanelResult.Controls.Remove((Button)e.Data.GetData(typeof(Button)));
@@ -2448,14 +2502,16 @@ namespace dataEditor
                             }
 
 
-                            mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+                            //mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+                            mgDataViewer.CellMouseMove -= new DataGridViewCellMouseEventHandler(this.mgDataViewer_CellMouseMove);
                             mgDataViewer.Refresh();
 
                             mgFlowPanelResult.Controls.Remove((Button)e.Data.GetData(typeof(Button)));
                         }
                         else
                         {
-                            mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+                            //mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+                            mgDataViewer.CellMouseMove -= new DataGridViewCellMouseEventHandler(this.mgDataViewer_CellMouseMove);
                             mgDataViewer.Refresh();
                         }
                     }
@@ -5592,7 +5648,7 @@ namespace dataEditor
 
                 if (e.Column == 0)
                 {
-                    var bottomLeft = new Point(e.CellBounds.Left+2, e.CellBounds.Bottom - (Convert.ToInt32(styles[e.Row].Height)- 20));
+                    var bottomLeft = new Point(e.CellBounds.Left+2, e.CellBounds.Bottom - (Convert.ToInt32(styles[e.Row].Height) - 20));
                     var bottomRight = new Point(e.CellBounds.Right, e.CellBounds.Bottom - (Convert.ToInt32(styles[e.Row].Height) - 20));
                     e.Graphics.DrawLine(pen, bottomLeft, bottomRight);
                 }
@@ -5732,9 +5788,9 @@ namespace dataEditor
 
         private void cmbxMethod_DropDownClosed(object sender, EventArgs e)
         {
-            var methodCell = (DataGridViewComboBoxCell)mgDataViewer.Rows[mgDataViewer.CurrentCell.RowIndex].Cells["Method"];
             if(cmbxMethod.SelectedIndex != -1)
             {
+                var methodCell = (DataGridViewComboBoxCell)mgDataViewer.Rows[mgDataViewer.CurrentCell.RowIndex].Cells["Method"];
                 methodCell.Value = methodCell.Items[cmbxMethod.SelectedIndex];
             }
             

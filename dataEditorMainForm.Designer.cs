@@ -56,7 +56,7 @@ namespace dataEditor
             System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("null");
             System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("пиковая зона суток", new System.Windows.Forms.TreeNode[] {
             treeNode11});
-            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode(resources.GetString("datsTreeView.Nodes"), new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("", new System.Windows.Forms.TreeNode[] {
             treeNode8,
             treeNode10,
             treeNode12});
@@ -66,7 +66,7 @@ namespace dataEditor
             System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("null");
             System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("дневная зона суток", new System.Windows.Forms.TreeNode[] {
             treeNode16});
-            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode(resources.GetString("datsTreeView.Nodes1"), new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("", new System.Windows.Forms.TreeNode[] {
             treeNode15,
             treeNode17});
             System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("null");
@@ -477,7 +477,7 @@ namespace dataEditor
             this.MenuAbout});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1211, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1184, 24);
             this.menuStrip1.TabIndex = 22;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -487,7 +487,7 @@ namespace dataEditor
             this.tabMicrogeneration.Location = new System.Drawing.Point(4, 24);
             this.tabMicrogeneration.Name = "tabMicrogeneration";
             this.tabMicrogeneration.Padding = new System.Windows.Forms.Padding(1);
-            this.tabMicrogeneration.Size = new System.Drawing.Size(1203, 589);
+            this.tabMicrogeneration.Size = new System.Drawing.Size(1176, 582);
             this.tabMicrogeneration.TabIndex = 1;
             this.tabMicrogeneration.Text = "Microgeneration";
             // 
@@ -499,11 +499,12 @@ namespace dataEditor
             this.MainPanel.Location = new System.Drawing.Point(1, 1);
             this.MainPanel.Margin = new System.Windows.Forms.Padding(1);
             this.MainPanel.Name = "MainPanel";
-            this.MainPanel.Size = new System.Drawing.Size(1201, 587);
+            this.MainPanel.Size = new System.Drawing.Size(1174, 580);
             this.MainPanel.TabIndex = 6;
             // 
             // MainTableLayoutPanel
             // 
+            this.MainTableLayoutPanel.AutoSize = true;
             this.MainTableLayoutPanel.ColumnCount = 2;
             this.MainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 724F));
             this.MainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
@@ -517,12 +518,11 @@ namespace dataEditor
             this.MainTableLayoutPanel.Margin = new System.Windows.Forms.Padding(1);
             this.MainTableLayoutPanel.Name = "MainTableLayoutPanel";
             this.MainTableLayoutPanel.RowCount = 4;
+            this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
-            this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 124F));
-            this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 328F));
-            this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.MainTableLayoutPanel.Size = new System.Drawing.Size(1199, 585);
+            this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 125F));
+            this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.MainTableLayoutPanel.Size = new System.Drawing.Size(1172, 578);
             this.MainTableLayoutPanel.TabIndex = 5;
             // 
             // lblMainName
@@ -535,7 +535,7 @@ namespace dataEditor
             this.lblMainName.Location = new System.Drawing.Point(1, 1);
             this.lblMainName.Margin = new System.Windows.Forms.Padding(1);
             this.lblMainName.Name = "lblMainName";
-            this.lblMainName.Size = new System.Drawing.Size(1197, 25);
+            this.lblMainName.Size = new System.Drawing.Size(1170, 23);
             this.lblMainName.TabIndex = 1;
             this.lblMainName.Text = "Transaction MKG_REALESE_CLOSE: june 2023";
             this.lblMainName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -545,19 +545,23 @@ namespace dataEditor
             this.MainTableLayoutPanel.SetColumnSpan(this.mgSplitContainer_insideHorizontal, 2);
             this.mgSplitContainer_insideHorizontal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mgSplitContainer_insideHorizontal.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.mgSplitContainer_insideHorizontal.Location = new System.Drawing.Point(3, 181);
+            this.mgSplitContainer_insideHorizontal.Location = new System.Drawing.Point(3, 180);
             this.mgSplitContainer_insideHorizontal.Name = "mgSplitContainer_insideHorizontal";
             this.mgSplitContainer_insideHorizontal.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // mgSplitContainer_insideHorizontal.Panel1
             // 
+            this.mgSplitContainer_insideHorizontal.Panel1.AutoScroll = true;
             this.mgSplitContainer_insideHorizontal.Panel1.Controls.Add(this.mgSplitContainer_inside_vertical);
+            this.mgSplitContainer_insideHorizontal.Panel1.Padding = new System.Windows.Forms.Padding(0, 1, 0, 1);
+            this.mgSplitContainer_insideHorizontal.Panel1MinSize = 150;
             // 
             // mgSplitContainer_insideHorizontal.Panel2
             // 
             this.mgSplitContainer_insideHorizontal.Panel2.Controls.Add(this.inputTableLoyaut);
-            this.mgSplitContainer_insideHorizontal.Size = new System.Drawing.Size(1193, 401);
-            this.mgSplitContainer_insideHorizontal.SplitterDistance = 372;
+            this.mgSplitContainer_insideHorizontal.Panel2.Padding = new System.Windows.Forms.Padding(0, 1, 0, 1);
+            this.mgSplitContainer_insideHorizontal.Size = new System.Drawing.Size(1166, 395);
+            this.mgSplitContainer_insideHorizontal.SplitterDistance = 366;
             this.mgSplitContainer_insideHorizontal.TabIndex = 3;
             this.mgSplitContainer_insideHorizontal.Paint += new System.Windows.Forms.PaintEventHandler(this.SplitterPaint);
             // 
@@ -565,7 +569,7 @@ namespace dataEditor
             // 
             this.mgSplitContainer_inside_vertical.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mgSplitContainer_inside_vertical.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.mgSplitContainer_inside_vertical.Location = new System.Drawing.Point(0, 0);
+            this.mgSplitContainer_inside_vertical.Location = new System.Drawing.Point(0, 1);
             this.mgSplitContainer_inside_vertical.Name = "mgSplitContainer_inside_vertical";
             // 
             // mgSplitContainer_inside_vertical.Panel1
@@ -577,19 +581,20 @@ namespace dataEditor
             // 
             this.mgSplitContainer_inside_vertical.Panel2.Controls.Add(this.FlowTableLayout);
             this.mgSplitContainer_inside_vertical.Panel2MinSize = 200;
-            this.mgSplitContainer_inside_vertical.Size = new System.Drawing.Size(1193, 372);
-            this.mgSplitContainer_inside_vertical.SplitterDistance = 983;
+            this.mgSplitContainer_inside_vertical.Size = new System.Drawing.Size(1166, 364);
+            this.mgSplitContainer_inside_vertical.SplitterDistance = 956;
             this.mgSplitContainer_inside_vertical.TabIndex = 0;
             // 
             // groupBoxTable
             // 
+            this.groupBoxTable.AutoSize = true;
             this.groupBoxTable.Controls.Add(this.mgDataViewer);
             this.groupBoxTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxTable.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.groupBoxTable.Location = new System.Drawing.Point(0, 0);
             this.groupBoxTable.Name = "groupBoxTable";
             this.groupBoxTable.Padding = new System.Windows.Forms.Padding(2, 4, 2, 2);
-            this.groupBoxTable.Size = new System.Drawing.Size(983, 372);
+            this.groupBoxTable.Size = new System.Drawing.Size(956, 364);
             this.groupBoxTable.TabIndex = 3;
             this.groupBoxTable.TabStop = false;
             this.groupBoxTable.Text = "Abonents: Selected - / -";
@@ -674,7 +679,7 @@ namespace dataEditor
             this.mgDataViewer.RowTemplate.Height = 20;
             this.mgDataViewer.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.mgDataViewer.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.mgDataViewer.Size = new System.Drawing.Size(979, 351);
+            this.mgDataViewer.Size = new System.Drawing.Size(952, 343);
             this.mgDataViewer.TabIndex = 2;
             this.mgDataViewer.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.mgDataViewer_CellClick);
             this.mgDataViewer.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.mgDataViewer_CellPainting);
@@ -684,7 +689,6 @@ namespace dataEditor
             this.mgDataViewer.DragEnter += new System.Windows.Forms.DragEventHandler(this.mgDataViewer_DragEnter);
             this.mgDataViewer.DragLeave += new System.EventHandler(this.mgDataViewer_DragLeave);
             this.mgDataViewer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mgDataViewer_MouseDown);
-            this.mgDataViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mgDataViewer_MouseMove);
             // 
             // id
             // 
@@ -935,9 +939,9 @@ namespace dataEditor
             this.FlowTableLayout.Margin = new System.Windows.Forms.Padding(0);
             this.FlowTableLayout.Name = "FlowTableLayout";
             this.FlowTableLayout.RowCount = 2;
-            this.FlowTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.FlowTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.FlowTableLayout.Size = new System.Drawing.Size(206, 372);
+            this.FlowTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
+            this.FlowTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.FlowTableLayout.Size = new System.Drawing.Size(206, 364);
             this.FlowTableLayout.TabIndex = 4;
             // 
             // groupBoxData
@@ -948,7 +952,7 @@ namespace dataEditor
             this.groupBoxData.Location = new System.Drawing.Point(1, 28);
             this.groupBoxData.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
             this.groupBoxData.Name = "groupBoxData";
-            this.groupBoxData.Size = new System.Drawing.Size(204, 345);
+            this.groupBoxData.Size = new System.Drawing.Size(204, 336);
             this.groupBoxData.TabIndex = 2;
             this.groupBoxData.TabStop = false;
             this.groupBoxData.Text = "Extracted data";
@@ -964,7 +968,7 @@ namespace dataEditor
             this.mgFlowPanelResult.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.mgFlowPanelResult.Location = new System.Drawing.Point(3, 18);
             this.mgFlowPanelResult.Name = "mgFlowPanelResult";
-            this.mgFlowPanelResult.Size = new System.Drawing.Size(198, 324);
+            this.mgFlowPanelResult.Size = new System.Drawing.Size(198, 315);
             this.mgFlowPanelResult.TabIndex = 1;
             this.mgFlowPanelResult.DragDrop += new System.Windows.Forms.DragEventHandler(this.mgFlowPanelResult_DragDrop);
             this.mgFlowPanelResult.DragEnter += new System.Windows.Forms.DragEventHandler(this.mgFlowPanelResult_DragEnter);
@@ -1000,12 +1004,12 @@ namespace dataEditor
             this.inputTableLoyaut.Controls.Add(this.datsTreeView, 0, 1);
             this.inputTableLoyaut.Controls.Add(this.mgToolStripInputData, 0, 0);
             this.inputTableLoyaut.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.inputTableLoyaut.Location = new System.Drawing.Point(0, 0);
+            this.inputTableLoyaut.Location = new System.Drawing.Point(0, 1);
             this.inputTableLoyaut.Name = "inputTableLoyaut";
             this.inputTableLoyaut.RowCount = 2;
             this.inputTableLoyaut.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.inputTableLoyaut.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.inputTableLoyaut.Size = new System.Drawing.Size(1193, 25);
+            this.inputTableLoyaut.Size = new System.Drawing.Size(1166, 23);
             this.inputTableLoyaut.TabIndex = 0;
             // 
             // datsTreeView
@@ -1055,7 +1059,7 @@ namespace dataEditor
             treeNode12.Text = "пиковая зона суток";
             treeNode13.Name = "treeViewLine4";
             treeNode13.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode13.Text = resources.GetString("treeNode13.Text");
+            treeNode13.Text = "";
             treeNode14.Name = "treeViewLine5e1val";
             treeNode14.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode14.Text = "null";
@@ -1070,7 +1074,7 @@ namespace dataEditor
             treeNode17.Text = "дневная зона суток";
             treeNode18.Name = "treeViewLine5";
             treeNode18.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode18.Text = resources.GetString("treeNode18.Text");
+            treeNode18.Text = "";
             treeNode19.Name = "treeViewLine6e1val";
             treeNode19.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode19.Text = "null";
@@ -1115,7 +1119,7 @@ namespace dataEditor
             treeNode18,
             treeNode25,
             treeNode30});
-            this.datsTreeView.Size = new System.Drawing.Size(1187, 1);
+            this.datsTreeView.Size = new System.Drawing.Size(1160, 1);
             this.datsTreeView.TabIndex = 2;
             // 
             // mgToolStripInputData
@@ -1133,7 +1137,7 @@ namespace dataEditor
             this.imgStatusFailed});
             this.mgToolStripInputData.Location = new System.Drawing.Point(0, 0);
             this.mgToolStripInputData.Name = "mgToolStripInputData";
-            this.mgToolStripInputData.Size = new System.Drawing.Size(1193, 25);
+            this.mgToolStripInputData.Size = new System.Drawing.Size(1166, 25);
             this.mgToolStripInputData.TabIndex = 3;
             // 
             // mgBtnEntryDatFiles
@@ -1273,7 +1277,7 @@ namespace dataEditor
             this.mgOpenDataTable,
             this.mgDataСalculation,
             this.mgDataAct});
-            this.g.Location = new System.Drawing.Point(5, 28);
+            this.g.Location = new System.Drawing.Point(5, 26);
             this.g.Margin = new System.Windows.Forms.Padding(5, 1, 1, 1);
             this.g.Name = "g";
             this.g.Size = new System.Drawing.Size(214, 25);
@@ -1415,12 +1419,12 @@ namespace dataEditor
             this.tabControlCurrentProject.Controls.Add(this.tabDetail);
             this.tabControlCurrentProject.Dock = System.Windows.Forms.DockStyle.Left;
             this.tabControlCurrentProject.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tabControlCurrentProject.Location = new System.Drawing.Point(1, 55);
+            this.tabControlCurrentProject.Location = new System.Drawing.Point(1, 53);
             this.tabControlCurrentProject.Margin = new System.Windows.Forms.Padding(1);
             this.tabControlCurrentProject.Name = "tabControlCurrentProject";
             this.tabControlCurrentProject.Padding = new System.Drawing.Point(10, 3);
             this.tabControlCurrentProject.SelectedIndex = 0;
-            this.tabControlCurrentProject.Size = new System.Drawing.Size(719, 122);
+            this.tabControlCurrentProject.Size = new System.Drawing.Size(719, 123);
             this.tabControlCurrentProject.TabIndex = 4;
             // 
             // tabBasic
@@ -1432,7 +1436,7 @@ namespace dataEditor
             this.tabBasic.Margin = new System.Windows.Forms.Padding(0);
             this.tabBasic.Name = "tabBasic";
             this.tabBasic.Padding = new System.Windows.Forms.Padding(1, 4, 1, 1);
-            this.tabBasic.Size = new System.Drawing.Size(711, 95);
+            this.tabBasic.Size = new System.Drawing.Size(711, 96);
             this.tabBasic.TabIndex = 0;
             this.tabBasic.Text = "Basic data";
             // 
@@ -1553,18 +1557,19 @@ namespace dataEditor
             this.tabDetail.Margin = new System.Windows.Forms.Padding(0);
             this.tabDetail.Name = "tabDetail";
             this.tabDetail.Padding = new System.Windows.Forms.Padding(4);
-            this.tabDetail.Size = new System.Drawing.Size(711, 95);
+            this.tabDetail.Size = new System.Drawing.Size(711, 96);
             this.tabDetail.TabIndex = 1;
             this.tabDetail.Text = "Detail";
             // 
             // groupBoxProp
             // 
             this.groupBoxProp.Controls.Add(this.propTableLayout);
+            this.groupBoxProp.Dock = System.Windows.Forms.DockStyle.Right;
             this.groupBoxProp.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBoxProp.Location = new System.Drawing.Point(263, 4);
+            this.groupBoxProp.Location = new System.Drawing.Point(265, 4);
             this.groupBoxProp.Margin = new System.Windows.Forms.Padding(5, 17, 2, 2);
             this.groupBoxProp.Name = "groupBoxProp";
-            this.groupBoxProp.Size = new System.Drawing.Size(440, 85);
+            this.groupBoxProp.Size = new System.Drawing.Size(440, 86);
             this.groupBoxProp.TabIndex = 6;
             this.groupBoxProp.TabStop = false;
             this.groupBoxProp.Text = "Properties";
@@ -1626,7 +1631,7 @@ namespace dataEditor
             this.groupBoxRes.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.groupBoxRes.Location = new System.Drawing.Point(4, 4);
             this.groupBoxRes.Name = "groupBoxRes";
-            this.groupBoxRes.Size = new System.Drawing.Size(251, 85);
+            this.groupBoxRes.Size = new System.Drawing.Size(251, 86);
             this.groupBoxRes.TabIndex = 0;
             this.groupBoxRes.TabStop = false;
             this.groupBoxRes.Text = "Resources manager";
@@ -1643,7 +1648,7 @@ namespace dataEditor
             this.ResourcesTreeView.Location = new System.Drawing.Point(3, 18);
             this.ResourcesTreeView.Name = "ResourcesTreeView";
             this.ResourcesTreeView.SelectedImageIndex = 3;
-            this.ResourcesTreeView.Size = new System.Drawing.Size(245, 64);
+            this.ResourcesTreeView.Size = new System.Drawing.Size(245, 65);
             this.ResourcesTreeView.TabIndex = 2;
             // 
             // imgListData
@@ -1679,10 +1684,10 @@ namespace dataEditor
             // 
             this.ProjectInfoBox.Controls.Add(this.ProjectInfoTableLayoutPanel);
             this.ProjectInfoBox.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.ProjectInfoBox.Location = new System.Drawing.Point(729, 71);
+            this.ProjectInfoBox.Location = new System.Drawing.Point(729, 69);
             this.ProjectInfoBox.Margin = new System.Windows.Forms.Padding(5, 17, 2, 2);
             this.ProjectInfoBox.Name = "ProjectInfoBox";
-            this.ProjectInfoBox.Size = new System.Drawing.Size(279, 102);
+            this.ProjectInfoBox.Size = new System.Drawing.Size(279, 103);
             this.ProjectInfoBox.TabIndex = 5;
             this.ProjectInfoBox.TabStop = false;
             this.ProjectInfoBox.Text = "Project";
@@ -1804,7 +1809,7 @@ namespace dataEditor
             this.appInfo.Dock = System.Windows.Forms.DockStyle.Right;
             this.appInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.appInfo.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.appInfo.Location = new System.Drawing.Point(1156, 1);
+            this.appInfo.Location = new System.Drawing.Point(1129, 1);
             this.appInfo.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.appInfo.Name = "appInfo";
             this.appInfo.Size = new System.Drawing.Size(52, 23);
@@ -1820,7 +1825,7 @@ namespace dataEditor
             this.tabExcel.Location = new System.Drawing.Point(4, 24);
             this.tabExcel.Name = "tabExcel";
             this.tabExcel.Padding = new System.Windows.Forms.Padding(1);
-            this.tabExcel.Size = new System.Drawing.Size(1203, 589);
+            this.tabExcel.Size = new System.Drawing.Size(1176, 582);
             this.tabExcel.TabIndex = 0;
             // 
             // urToolStrip
@@ -1834,7 +1839,7 @@ namespace dataEditor
             this.urToolStrip.Location = new System.Drawing.Point(1, 1);
             this.urToolStrip.Name = "urToolStrip";
             this.urToolStrip.Padding = new System.Windows.Forms.Padding(4, 0, 1, 0);
-            this.urToolStrip.Size = new System.Drawing.Size(1201, 25);
+            this.urToolStrip.Size = new System.Drawing.Size(1174, 25);
             this.urToolStrip.TabIndex = 76;
             this.urToolStrip.Text = "mgTools";
             // 
@@ -1877,9 +1882,6 @@ namespace dataEditor
             // 
             // splitContainer_bigMain
             // 
-            this.splitContainer_bigMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer_bigMain.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.splitContainer_bigMain.Location = new System.Drawing.Point(3, 34);
             this.splitContainer_bigMain.Name = "splitContainer_bigMain";
@@ -1893,8 +1895,8 @@ namespace dataEditor
             // 
             this.splitContainer_bigMain.Panel2.Controls.Add(this.splitContainer_rightProps);
             this.splitContainer_bigMain.Panel2MinSize = 300;
-            this.splitContainer_bigMain.Size = new System.Drawing.Size(1197, 524);
-            this.splitContainer_bigMain.SplitterDistance = 893;
+            this.splitContainer_bigMain.Size = new System.Drawing.Size(1170, 446);
+            this.splitContainer_bigMain.SplitterDistance = 866;
             this.splitContainer_bigMain.TabIndex = 75;
             // 
             // splitContainer_dataGrids
@@ -1912,7 +1914,7 @@ namespace dataEditor
             // splitContainer_dataGrids.Panel2
             // 
             this.splitContainer_dataGrids.Panel2.Controls.Add(this.dataViewer);
-            this.splitContainer_dataGrids.Size = new System.Drawing.Size(893, 524);
+            this.splitContainer_dataGrids.Size = new System.Drawing.Size(866, 446);
             this.splitContainer_dataGrids.SplitterDistance = 25;
             this.splitContainer_dataGrids.TabIndex = 2;
             // 
@@ -1923,7 +1925,7 @@ namespace dataEditor
             this.CellViewer.Multiline = true;
             this.CellViewer.Name = "CellViewer";
             this.CellViewer.ReadOnly = true;
-            this.CellViewer.Size = new System.Drawing.Size(893, 25);
+            this.CellViewer.Size = new System.Drawing.Size(866, 25);
             this.CellViewer.TabIndex = 0;
             // 
             // dataViewer
@@ -1971,7 +1973,7 @@ namespace dataEditor
             this.dataViewer.RowsDefaultCellStyle = dataGridViewCellStyle12;
             this.dataViewer.RowTemplate.Height = 25;
             this.dataViewer.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dataViewer.Size = new System.Drawing.Size(893, 495);
+            this.dataViewer.Size = new System.Drawing.Size(866, 417);
             this.dataViewer.TabIndex = 1;
             this.dataViewer.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataViewer_DragDrop);
             this.dataViewer.DragEnter += new System.Windows.Forms.DragEventHandler(this.dataViewer_DragEnter);
@@ -1994,7 +1996,7 @@ namespace dataEditor
             // 
             this.splitContainer_rightProps.Panel2.Controls.Add(this.urOptionsGrid);
             this.splitContainer_rightProps.Panel2MinSize = 0;
-            this.splitContainer_rightProps.Size = new System.Drawing.Size(300, 524);
+            this.splitContainer_rightProps.Size = new System.Drawing.Size(300, 446);
             this.splitContainer_rightProps.SplitterDistance = 150;
             this.splitContainer_rightProps.TabIndex = 74;
             // 
@@ -2105,7 +2107,7 @@ namespace dataEditor
             this.urOptionsGrid.Location = new System.Drawing.Point(0, 0);
             this.urOptionsGrid.Name = "urOptionsGrid";
             this.urOptionsGrid.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.urOptionsGrid.Size = new System.Drawing.Size(300, 370);
+            this.urOptionsGrid.Size = new System.Drawing.Size(300, 292);
             this.urOptionsGrid.TabIndex = 66;
             this.urOptionsGrid.ToolbarVisible = false;
             this.urOptionsGrid.UseCompatibleTextRendering = true;
@@ -2122,7 +2124,7 @@ namespace dataEditor
             this.SectionsControl.Name = "SectionsControl";
             this.SectionsControl.Padding = new System.Drawing.Point(10, 3);
             this.SectionsControl.SelectedIndex = 0;
-            this.SectionsControl.Size = new System.Drawing.Size(1211, 617);
+            this.SectionsControl.Size = new System.Drawing.Size(1184, 610);
             this.SectionsControl.TabIndex = 76;
             this.SectionsControl.Selected += new System.Windows.Forms.TabControlEventHandler(this.SectionsControl_Selected);
             // 
@@ -2134,11 +2136,11 @@ namespace dataEditor
             this.buttonBackground.Controls.Add(this.appInfo, 0, 0);
             this.buttonBackground.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.buttonBackground.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-            this.buttonBackground.Location = new System.Drawing.Point(0, 641);
+            this.buttonBackground.Location = new System.Drawing.Point(0, 634);
             this.buttonBackground.Name = "buttonBackground";
             this.buttonBackground.RowCount = 1;
             this.buttonBackground.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.buttonBackground.Size = new System.Drawing.Size(1211, 25);
+            this.buttonBackground.Size = new System.Drawing.Size(1184, 25);
             this.buttonBackground.TabIndex = 78;
             // 
             // contextMenuOpenTable
@@ -2230,7 +2232,7 @@ namespace dataEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1211, 666);
+            this.ClientSize = new System.Drawing.Size(1184, 659);
             this.Controls.Add(this.SectionsControl);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.buttonBackground);
@@ -2251,6 +2253,7 @@ namespace dataEditor
             this.menuStrip1.PerformLayout();
             this.tabMicrogeneration.ResumeLayout(false);
             this.MainPanel.ResumeLayout(false);
+            this.MainPanel.PerformLayout();
             this.MainTableLayoutPanel.ResumeLayout(false);
             this.MainTableLayoutPanel.PerformLayout();
             this.mgSplitContainer_insideHorizontal.Panel1.ResumeLayout(false);
@@ -2258,6 +2261,7 @@ namespace dataEditor
             ((System.ComponentModel.ISupportInitialize)(this.mgSplitContainer_insideHorizontal)).EndInit();
             this.mgSplitContainer_insideHorizontal.ResumeLayout(false);
             this.mgSplitContainer_inside_vertical.Panel1.ResumeLayout(false);
+            this.mgSplitContainer_inside_vertical.Panel1.PerformLayout();
             this.mgSplitContainer_inside_vertical.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mgSplitContainer_inside_vertical)).EndInit();
             this.mgSplitContainer_inside_vertical.ResumeLayout(false);
