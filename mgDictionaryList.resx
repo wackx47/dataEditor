@@ -117,7 +117,7 @@
   <metadata name="Extra4.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="urToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="dictToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>287, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
@@ -153,22 +153,22 @@
   <data name="dictBtnImportFromExcel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD1SURBVDhPpVI7DoJAFNxrmF35nsOEOxgrpLG3MbGw1ZNY
-        W1iLZ6Aw0Wil1HScAOetPCJmWTFOMhneZt7se2RFH/i+n4OVgXltscPQ2LC22EFGx3EGJq0tdpCxi7XF
-        DjL+O8F/P/ErXNeNMFJpuKF9S3yMxDS9amXAMEJzAZ3QXp+kEG2kpjgtRJJWWjkEphIcY4oZzFkQBI7n
-        eXt8L1oByWGpm3QAKWoCGcgopVRoPKPeQu+g2wpgUMA7OICIpjnV4IrPmgBqfI3/0DWDA8IwHEJPWGWH
-        sxut0groAgdA1+BFKSWhGbj5KaCLfQK6XhnT8tqEeAIG1JwOWVcLtgAAAABJRU5ErkJggg==
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD1SURBVDhPpVI5DsIwEPQ3kE3OdyDlD4gqpKGnQaKghZdQ
+        U1AT3pACCQQVpE7HC8KsyUYYJSYoI43Ga82OvZZFF/i+n4NlA/PKYkdDY83KYgcZHccZNGllsYOMbaws
+        dpCx7w36PeJPuK4bKaWeDSeYp8THSEzTq1YGDCPMU0AnNNc3KUQbqSlOC5GkpVYOoZNhHOMWM5izIAgc
+        z/P2WC+MgOSw1E06gBQ1gQxklFIqNJ5Rb6F30DUCGBTwCQ4gomlONbjivTqAGt/Xf+iawQFhGA6hJ4yy
+        w96NRjEC2sAB0DV4wZtIaAZu/gpoY5eAtl/GtPw2IV7urZwCC/WAwgAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="dictBtnExportToExcel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD+SURBVDhPYxhkoHwmP0P5/AaG0vmnGMoWvGUoWfAXTIP4
-        IHGQPF5QtuAqQ8X82QxVCzyBmpUZqhZLQmggv3zBHLA8XlC+4D9Q0RqGykURQM1GDKWL1cF0xeJIoNxa
-        sDxeAFJQvqCKoWz+IaBBTxnK5n4E06XzDoLFiTIA5GxceOANKF3wCqoSB8BnQOVscYaaRfoM8dsVoKqx
-        AHwGlM7hBWuO3vWKIXq3A1h97C40L6EbgA3E7rYBanzJELPTCdOAkgUXgKluKUPZwiBgWtABi4EUYcU7
-        r4JpFFC/igcY5zVAlxwHpoXXUFFUEL3dFqgRhwsIAYJhQAxAiQUGBgDhG7jIiRz25QAAAABJRU5ErkJg
-        gg==
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD/SURBVDhPYxhkoHwmP0P5/AaG0vmnGMoWvGUoWvAXTIP4
+        IHGQPF5QtuAqQ8X82QxVCzwZShYoM1QtloTQQH75gjlgebygfMF/oKI1DJWLIoCajRhKF6uD6YrFkUC5
+        tWB5vACkoHxBFUPZ/ENAg54ylM3+CKZL5x0EixNlAMjZuPDAG1C84BVUJQ6Az4DK2eIMNYv0GeK3K0BV
+        YwH4DCidwwvWHL3rFUP0bgew+thdaF5CNwAbiN1tA9T4kiFmpxOmASULLgBT3VKGsoVBwLSgAxYDKcKK
+        d14F0yigfhUPMM5rgC45DkwLr6GiqCB6uy1QIw4XEAIEw4AYgBILDAwA0S+4wkBodvIAAAAASUVORK5C
+        YII=
 </value>
   </data>
   <data name="dictBtnAddElm.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

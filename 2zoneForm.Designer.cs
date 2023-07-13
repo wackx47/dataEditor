@@ -1993,6 +1993,7 @@
             this.MinimumSize = new System.Drawing.Size(720, 480);
             this.Name = "FormType2";
             this.Padding = new System.Windows.Forms.Padding(5);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Расчет по 2 зонам";
             this.mainPanel.ResumeLayout(false);
             this.mainPanel.PerformLayout();
@@ -2145,7 +2146,7 @@
         public TableLayoutPanel InfoTableLayout;
         private TableLayoutPanel HoursTableLayout;
         private TableLayoutPanel IntervalsTableLayout;
-        private RadioButton useHours;
-        private RadioButton useIntervals;
+        public RadioButton useHours;
+        public RadioButton useIntervals;
     }
 }

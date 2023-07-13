@@ -951,5 +951,10 @@ namespace dataEditor
                 return false;
             }
         }
+
+        private void dictListGTP_DropDownClosed(object sender, EventArgs e)
+        {
+            dictToolStrip.Focus();
+        }
     }
 }

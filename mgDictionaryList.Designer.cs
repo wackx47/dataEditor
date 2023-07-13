@@ -71,7 +71,7 @@ namespace dataEditor
             this.Extra3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Extra4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dictLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.urToolStrip = new System.Windows.Forms.ToolStrip();
+            this.dictToolStrip = new System.Windows.Forms.ToolStrip();
             this.dictBtnOpen = new System.Windows.Forms.ToolStripButton();
             this.dictBtnSave = new System.Windows.Forms.ToolStripButton();
             this.dictBtnShowFolder = new System.Windows.Forms.ToolStripButton();
@@ -88,7 +88,7 @@ namespace dataEditor
             this.mgRightClickMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridDictionaryList)).BeginInit();
             this.dictLayoutPanel.SuspendLayout();
-            this.urToolStrip.SuspendLayout();
+            this.dictToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // mgRightClickMenu
@@ -427,7 +427,7 @@ namespace dataEditor
             this.dictLayoutPanel.ColumnCount = 1;
             this.dictLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.dictLayoutPanel.Controls.Add(this.dataGridDictionaryList, 0, 1);
-            this.dictLayoutPanel.Controls.Add(this.urToolStrip, 0, 0);
+            this.dictLayoutPanel.Controls.Add(this.dictToolStrip, 0, 0);
             this.dictLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dictLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.dictLayoutPanel.Name = "dictLayoutPanel";
@@ -437,11 +437,11 @@ namespace dataEditor
             this.dictLayoutPanel.Size = new System.Drawing.Size(1138, 562);
             this.dictLayoutPanel.TabIndex = 4;
             // 
-            // urToolStrip
+            // dictToolStrip
             // 
-            this.urToolStrip.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.urToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.urToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dictToolStrip.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dictToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.dictToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.dictBtnOpen,
             this.dictBtnSave,
             this.dictBtnShowFolder,
@@ -455,12 +455,12 @@ namespace dataEditor
             this.dictBtnDelElm,
             this.toolStripSeparator3,
             this.dictBtnBankData});
-            this.urToolStrip.Location = new System.Drawing.Point(3, 0);
-            this.urToolStrip.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.urToolStrip.Name = "urToolStrip";
-            this.urToolStrip.Size = new System.Drawing.Size(1135, 23);
-            this.urToolStrip.TabIndex = 77;
-            this.urToolStrip.Text = "mgTools";
+            this.dictToolStrip.Location = new System.Drawing.Point(3, 0);
+            this.dictToolStrip.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.dictToolStrip.Name = "dictToolStrip";
+            this.dictToolStrip.Size = new System.Drawing.Size(1135, 23);
+            this.dictToolStrip.TabIndex = 77;
+            this.dictToolStrip.Text = "mgTools";
             // 
             // dictBtnOpen
             // 
@@ -525,8 +525,11 @@ namespace dataEditor
             // 
             // dictListGTP
             // 
+            this.dictListGTP.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.dictListGTP.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.dictListGTP.Name = "dictListGTP";
             this.dictListGTP.Size = new System.Drawing.Size(121, 23);
+            this.dictListGTP.DropDownClosed += new System.EventHandler(this.dictListGTP_DropDownClosed);
             // 
             // toolStripSeparator2
             // 
@@ -588,8 +591,8 @@ namespace dataEditor
             ((System.ComponentModel.ISupportInitialize)(this.dataGridDictionaryList)).EndInit();
             this.dictLayoutPanel.ResumeLayout(false);
             this.dictLayoutPanel.PerformLayout();
-            this.urToolStrip.ResumeLayout(false);
-            this.urToolStrip.PerformLayout();
+            this.dictToolStrip.ResumeLayout(false);
+            this.dictToolStrip.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -599,7 +602,7 @@ namespace dataEditor
         private ToolStripMenuItem mgMenuDelete;
         private CalendarColumn DateIntoForce;
         private TableLayoutPanel dictLayoutPanel;
-        private ToolStrip urToolStrip;
+        private ToolStrip dictToolStrip;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripButton dictBtnSave;
         private ToolStripButton dictBtnShowFolder;

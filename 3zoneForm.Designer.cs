@@ -2534,9 +2534,9 @@
         private DataGridViewTextBoxColumn GenSemiPeak;
         private DataGridViewTextBoxColumn GenNight;
         public TableLayoutPanel InfoTableLayout;
-        private RadioButton useHours;
         private TableLayoutPanel HoursTableLayout;
         private TableLayoutPanel IntervalsTableLayout;
-        private RadioButton useIntervals;
+        public RadioButton useHours;
+        public RadioButton useIntervals;
     }
 }

@@ -159,6 +159,7 @@
             // urToolStrip
             // 
             this.urToolStrip.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.urToolStrip.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.urToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.dictBankBtnOpen,
             this.dictBankBtnSave,

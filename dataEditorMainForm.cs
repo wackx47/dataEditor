@@ -189,7 +189,35 @@ namespace dataEditor
             cmnSettings.GlobalInfoStandart = "ru-RU";
             DictionaryForm.dictListGTP.Items.AddRange(ImportList.KnownGTPnames.ToArray());
             DictionaryForm.dictListGTP.Text = mgSettings.mgCodeName.propGTPname;
+
+            getNodesName();
+
             appInfo.Text = "ver." + Application.ProductVersion + " (" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + ")";
+        }
+
+        private void getNodesName()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "dataEditor.NodesName.txt";
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                try
+                {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        string? line;
+                        int i = 0;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            datsTreeView.Nodes[i].Text = line;
+                            i++;
+                        }
+                    }
+                }
+                catch(Exception ex) 
+                { 
+                    Console.WriteLine(ex.ToString());
+                }
         }
 
 
@@ -2152,6 +2180,7 @@ namespace dataEditor
             return isNum;
         }
 
+
         private void TableButton_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -2214,41 +2243,71 @@ namespace dataEditor
             }
         }
 
-        int GlobalRowIndex = -1;
-        private void mgDataViewer_CellMouseMove(object sender, DataGridViewCellMouseEventArgs e)
+        private void mgDataViewerRowPaint(int row, PaintEventArgs e)
         {
-            if (e.RowIndex != -1 && e.RowIndex != GlobalRowIndex)
+            if (row != -1)
             {
-                GlobalRowIndex = e.RowIndex;
                 mgDataViewer.Refresh();
-                Rectangle rowBound = mgDataViewer.GetRowDisplayRectangle(e.RowIndex, false);
-                rowBound.Width = GetGridWidth(mgDataViewer);
-                mgDataViewerRowPaint(rowBound, new PaintEventArgs(mgDataViewer.CreateGraphics(), rowBound));
-            }
-        }
-
-
-        private void mgDataViewerRowPaint(Rectangle rowBound, PaintEventArgs e)
-        {
-            if (GlobalRowIndex != -1)
-            {
-                switch (mgDataViewer.Rows[GlobalRowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].GetType().Name)
+                Rectangle rowBound = e.ClipRectangle;
+                switch (mgDataViewer.Rows[row].Cells[mgDataViewer.Columns["dataTable"].Index].GetType().Name)
                 {
                     case "DataGridViewButtonCell":
 
-                        if (!mgDataViewer.Rows[GlobalRowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].ToolTipText.Contains('+') &&
-                            mgDataViewer.Rows[GlobalRowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].ToolTipText.Split("_").First() != btnMoveName.Split("_").First())
+                        if (!mgDataViewer.Rows[row].Cells[mgDataViewer.Columns["dataTable"].Index].ToolTipText.Contains('+') &&
+                            mgDataViewer.Rows[row].Cells[mgDataViewer.Columns["dataTable"].Index].ToolTipText.Split("_").First() != btnMoveName.Split("_").First())
                         {
-                            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
-                            e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, Color.Blue)), rowBound);
-                            e.Graphics.DrawRectangle(new Pen(Color.Blue), rowBound);
+                            using (var pen = new Pen(Color.FromArgb(255, 50, 0, 250), 2))
+                            {
+                                pen.Alignment = PenAlignment.Center;
+                                pen.DashStyle = DashStyle.Solid;
+
+                                e.Graphics.DrawLine(pen, rowBound.X, rowBound.Y, rowBound.X, rowBound.Y + 5);
+                                e.Graphics.DrawLine(pen, rowBound.X, rowBound.Y, rowBound.X + 5, rowBound.Y);
+
+                                e.Graphics.DrawLine(pen, rowBound.X, rowBound.Bottom, rowBound.X, rowBound.Bottom - 5);
+                                e.Graphics.DrawLine(pen, rowBound.X, rowBound.Bottom, rowBound.X + 5, rowBound.Bottom);
+
+                                e.Graphics.DrawLine(pen, rowBound.Right, rowBound.Y, rowBound.Right, rowBound.Y + 5);
+                                e.Graphics.DrawLine(pen, rowBound.Right, rowBound.Y, rowBound.Right - 5, rowBound.Y);
+
+                                e.Graphics.DrawLine(pen, rowBound.Right, rowBound.Bottom, rowBound.Right, rowBound.Bottom - 5);
+                                e.Graphics.DrawLine(pen, rowBound.Right, rowBound.Bottom, rowBound.Right - 5, rowBound.Bottom);
+
+
+                                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, Color.Blue)), rowBound);
+                            }
+
+                            //e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+                            //e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, Color.Blue)), rowBound);
+                            //e.Graphics.DrawRectangle(new Pen(Color.Blue), rowBound);
                         }
                         break;
 
                     case "DataGridViewTextBoxCell":
-                        e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
-                        e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, Color.Blue)), rowBound);
-                        e.Graphics.DrawRectangle(new Pen(Color.Blue), rowBound);
+                        using (var pen = new Pen(Color.FromArgb(255, 50, 0, 250), 2))
+                        {
+                            pen.Alignment = PenAlignment.Center;
+                            pen.DashStyle = DashStyle.Solid;
+
+                            e.Graphics.DrawLine(pen, rowBound.X, rowBound.Y, rowBound.X, rowBound.Y + 5);
+                            e.Graphics.DrawLine(pen, rowBound.X, rowBound.Y, rowBound.X+5, rowBound.Y);
+
+                            e.Graphics.DrawLine(pen, rowBound.X, rowBound.Bottom, rowBound.X, rowBound.Bottom - 5);
+                            e.Graphics.DrawLine(pen, rowBound.X, rowBound.Bottom, rowBound.X + 5, rowBound.Bottom);
+
+                            e.Graphics.DrawLine(pen, rowBound.Right, rowBound.Y, rowBound.Right, rowBound.Y + 5);
+                            e.Graphics.DrawLine(pen, rowBound.Right, rowBound.Y, rowBound.Right - 5, rowBound.Y);
+
+                            e.Graphics.DrawLine(pen, rowBound.Right, rowBound.Bottom, rowBound.Right, rowBound.Bottom - 5);
+                            e.Graphics.DrawLine(pen, rowBound.Right, rowBound.Bottom, rowBound.Right - 5, rowBound.Bottom);
+
+                            
+                            e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, Color.Blue)), rowBound);
+                        }
+
+                        //e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+                        //e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, Color.Blue)), rowBound);
+                        //e.Graphics.DrawRectangle(new Pen(Color.Blue), rowBound);
                         break;
                 }
             }
@@ -2266,13 +2325,36 @@ namespace dataEditor
             return width;
         }
 
+
+        private int _selectedRowIndex;
+        public int SelectedRowIndex
+        {
+            get => _selectedRowIndex;
+            set
+            {
+                if (value != _selectedRowIndex)
+                {
+                    _selectedRowIndex = value;
+                    Rectangle rowBound = mgDataViewer.GetRowDisplayRectangle(SelectedRowIndex, false);
+                    if (GetGridWidth(mgDataViewer) > mgDataViewer.Width)
+                    {
+                        rowBound.Width = mgDataViewer.Width-1;
+                    }
+                    else
+                    {
+                        rowBound.Width = GetGridWidth(mgDataViewer)-1;
+                    }
+                    
+                    mgDataViewerRowPaint(SelectedRowIndex, new PaintEventArgs(mgDataViewer.CreateGraphics(), rowBound));
+                    //mgDataViewer.Invalidate();
+                }
+            }
+        }
         private void TableButton_GiveFeedback(object sender, GiveFeedbackEventArgs e)
         {
-            mgDataViewer.ClearSelection();
             Point cursorLocation = mgDataViewer.PointToClient(new Point(MousePosition.X, MousePosition.Y));
-            DataGridView.HitTestInfo hittest = mgDataViewer.HitTest(cursorLocation.X, cursorLocation.Y);
-
-            mgDataViewer.Invalidate();
+            int rowIndex = mgDataViewer.HitTest(cursorLocation.X, cursorLocation.Y).RowIndex;
+            SelectedRowIndex = rowIndex;
         }
 
         private void mgFlowPanelResult_DragEnter(object sender, DragEventArgs e)
@@ -2285,8 +2367,8 @@ namespace dataEditor
 
         private void mgDataViewer_DragLeave(object sender, EventArgs e)
         {
-                //mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
-            mgDataViewer.CellMouseMove -= new DataGridViewCellMouseEventHandler(this.mgDataViewer_CellMouseMove);
+            //mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
+            mgDataViewer.Refresh();
         }
 
         private void mgDataViewer_DragEnter(object sender, DragEventArgs e)
@@ -2300,8 +2382,8 @@ namespace dataEditor
                 e.Effect = DragDropEffects.Move;
                 var table = (Button)e.Data.GetData(typeof(Button));
                 btnMoveName = table.Text;
+                mgDataViewer.ClearSelection();
                 //mgDataViewer.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
-                mgDataViewer.CellMouseMove += new DataGridViewCellMouseEventHandler(this.mgDataViewer_CellMouseMove);
             }
         }
 
@@ -2363,7 +2445,7 @@ namespace dataEditor
                 cmbxMethod.Items.Clear();
                 cmbxMethod.Text = null;
                 mgDataViewer.ClearSelection();
-                mgDataViewer.Refresh();
+                mgDataViewer.Invalidate();
                 tableRemove = null;
             }
         }
@@ -2446,7 +2528,6 @@ namespace dataEditor
                         }
 
                         //mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
-                        mgDataViewer.CellMouseMove -= new DataGridViewCellMouseEventHandler(this.mgDataViewer_CellMouseMove);
                         mgDataViewer.Refresh();
 
                         mgFlowPanelResult.Controls.Remove((Button)e.Data.GetData(typeof(Button)));
@@ -2503,7 +2584,6 @@ namespace dataEditor
 
 
                             //mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
-                            mgDataViewer.CellMouseMove -= new DataGridViewCellMouseEventHandler(this.mgDataViewer_CellMouseMove);
                             mgDataViewer.Refresh();
 
                             mgFlowPanelResult.Controls.Remove((Button)e.Data.GetData(typeof(Button)));
@@ -2511,7 +2591,6 @@ namespace dataEditor
                         else
                         {
                             //mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
-                            mgDataViewer.CellMouseMove -= new DataGridViewCellMouseEventHandler(this.mgDataViewer_CellMouseMove);
                             mgDataViewer.Refresh();
                         }
                     }
@@ -2753,9 +2832,41 @@ namespace dataEditor
 
             if (e.ColumnIndex == mgDataViewer.Columns["dataExcel"].Index && mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell")
             {
-                openFormType1(e.RowIndex);
+                switch(Convert.ToString(mgDataViewer.Rows[e.RowIndex].Cells["TariffZone"].Value)[0].ToString())
+                {
+                    case "1":
+                        try
+                        {
+                            openFormType1(e.RowIndex);
+                        }
+                        catch (Exception ex) { }
+                        break; 
+
+                    case "2":
+                        try
+                        {
+                            openFormType2(e.RowIndex);
+                        }
+                        catch(Exception ex) { }
+                        break;
+                        
+                    case "3":
+                        try
+                        {
+                            openFormType3(e.RowIndex);
+                        }
+                        catch(Exception ex) { }
+                        break;
+                        
+                    default:
+                        Console.Error.WriteLine("Не удалось определить ценовую категорию.");
+                        break;
+                }
             }
         }
+
+
+
 
         private void openFormType1(int eRowIndex)
         {
@@ -2860,7 +2971,7 @@ namespace dataEditor
             formType1.txtResultPrice.Text = Price.ToString();
 
             if (diffBuy > 0)
-                formType1.txtResultCost.Text = (diffBuy * Price).ToString();
+                formType1.txtResultCost.Text = Math.Round((diffBuy * Price),2).ToString();
 
             formType1.Show();
         }
@@ -2873,8 +2984,71 @@ namespace dataEditor
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
 
-            int kTC = Convert.ToInt32(HoursDataSet.Tables[mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.ToString() + "_Header"].Rows[4][1].ToString().Split("/").First());
-            int kTV = Convert.ToInt32(HoursDataSet.Tables[mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.ToString() + "_Header"].Rows[4][1].ToString().Split("/").Last());
+            string hrsTable = null;
+            string intgTable = null;
+            if (!mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.ToString().Contains('+'))
+            {
+                switch (mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("_").First())
+                {
+                    case "intg":
+                        intgTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText);
+                        break;
+
+                    case "hrs":
+                        hrsTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText);
+                        break;
+                }
+            }
+            else
+            {
+                switch (mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").First().Split("_").First())
+                {
+                    case "intg":
+                        intgTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").First());
+                        break;
+
+                    case "hrs":
+                        hrsTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").First());
+                        break;
+                }
+                switch (mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").Last().Split("_").First())
+                {
+                    case "intg":
+                        intgTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").Last());
+                        break;
+
+                    case "hrs":
+                        hrsTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").Last());
+                        break;
+                }
+            }
+
+            int kTC = 1;
+            int kTV = 1;
+
+            switch (cmbxMethod.Text)
+            {
+                case "Интервалы":
+                    formType2.useIntervals.Checked = true;
+                    kTC = Convert.ToInt32(IntegralsDataSet.Tables[intgTable + "_Header"].Rows[4][1].ToString().Split("/").First());
+                    kTV = Convert.ToInt32(IntegralsDataSet.Tables[intgTable + "_Header"].Rows[4][1].ToString().Split("/").Last());
+                    if (cmbxMethod.Items.Count != 2)
+                    {
+                        formType2.useHours.Enabled = false;
+                    }
+                    break;
+
+                case "Часы":
+                    formType2.useHours.Checked = true;
+                    kTC = Convert.ToInt32(HoursDataSet.Tables[hrsTable + "_Header"].Rows[4][1].ToString().Split("/").First());
+                    kTV = Convert.ToInt32(HoursDataSet.Tables[hrsTable + "_Header"].Rows[4][1].ToString().Split("/").Last());
+                    if (cmbxMethod.Items.Count != 2)
+                    {
+                        formType2.useIntervals.Enabled = false;
+                    }
+                    break;
+            }
+
             int kT = kTC * kTV;
 
             int RowInDict = SearchDGV(DictionaryForm.dataGridDictionaryList, mgDataViewer.Rows[eRowIndex].Cells["FullName"].Value.ToString(), "FullName");
@@ -2902,30 +3076,32 @@ namespace dataEditor
             TimeSpan dayStart = new TimeSpan(mgSettings.mgHoursDoubleTariffZone.day.initial, 0, 0);
             TimeSpan dayEnd = new TimeSpan(mgSettings.mgHoursDoubleTariffZone.day.final, 0, 0);
 
-
-            foreach (DataRow rows in HoursDataSet.Tables[mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.ToString()].Rows)
+            if (hrsTable != null)
             {
-                if (hrs <= 24)
+                foreach (DataRow rows in HoursDataSet.Tables[hrsTable].Rows)
                 {
-                    string duration = (hrs-1).ToString() + ":00-" + hrs.ToString() +":00";
-                    if (TimeIsBetween(hrs, dayStart, dayEnd))
+                    if (hrs <= 24)
                     {
-                        formType2.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, rows[3], null);
-                        ConSummDay += Convert.ToDecimal(rows[2].ToString());
-                        GenSummDay += Convert.ToDecimal(rows[3].ToString());
+                        string duration = (hrs - 1).ToString() + ":00-" + hrs.ToString() + ":00";
+                        if (TimeIsBetween(hrs, dayStart, dayEnd))
+                        {
+                            formType2.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, rows[3], null);
+                            ConSummDay += Convert.ToDecimal(rows[2].ToString());
+                            GenSummDay += Convert.ToDecimal(rows[3].ToString());
+                        }
+                        else
+                        {
+                            formType2.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, rows[3]);
+                            ConSummNight += Convert.ToDecimal(rows[2].ToString());
+                            GenSummNight += Convert.ToDecimal(rows[3].ToString());
+                        }
                     }
                     else
                     {
-                        formType2.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, rows[3]);
-                        ConSummNight += Convert.ToDecimal(rows[2].ToString());
-                        GenSummNight += Convert.ToDecimal(rows[3].ToString());
+                        hrs = 1;
                     }
+                    hrs++;
                 }
-                else
-                {
-                    hrs = 1;
-                }
-                hrs++;
             }
 
             formType2.txtConSummDayHH.Text = ConSummDay.ToString();
@@ -2944,8 +3120,71 @@ namespace dataEditor
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
 
-            int kTC = Convert.ToInt32(HoursDataSet.Tables[mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.ToString() + "_Header"].Rows[4][1].ToString().Split("/").First());
-            int kTV = Convert.ToInt32(HoursDataSet.Tables[mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.ToString() + "_Header"].Rows[4][1].ToString().Split("/").Last());
+            string hrsTable = null;
+            string intgTable = null;
+            if (!mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.ToString().Contains('+'))
+            {
+                switch (mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("_").First())
+                {
+                    case "intg":
+                        intgTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText);
+                        break;
+
+                    case "hrs":
+                        hrsTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText);
+                        break;
+                }
+            }
+            else
+            {
+                switch (mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").First().Split("_").First())
+                {
+                    case "intg":
+                        intgTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").First());
+                        break;
+
+                    case "hrs":
+                        hrsTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").First());
+                        break;
+                }
+                switch (mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").Last().Split("_").First())
+                {
+                    case "intg":
+                        intgTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").Last());
+                        break;
+
+                    case "hrs":
+                        hrsTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").Last());
+                        break;
+                }
+            }
+
+            int kTC = 1;
+            int kTV = 1;
+
+            switch (cmbxMethod.Text)
+            {
+                case "Интервалы":
+                    formType3.useIntervals.Checked = true;
+                    kTC = Convert.ToInt32(IntegralsDataSet.Tables[intgTable + "_Header"].Rows[4][1].ToString().Split("/").First());
+                    kTV = Convert.ToInt32(IntegralsDataSet.Tables[intgTable + "_Header"].Rows[4][1].ToString().Split("/").Last());
+                    if (cmbxMethod.Items.Count != 2)
+                    {
+                        formType3.useHours.Enabled = false;
+                    }
+                    break;
+
+                case "Часы":
+                    formType3.useHours.Checked = true;
+                    kTC = Convert.ToInt32(HoursDataSet.Tables[hrsTable + "_Header"].Rows[4][1].ToString().Split("/").First());
+                    kTV = Convert.ToInt32(HoursDataSet.Tables[hrsTable + "_Header"].Rows[4][1].ToString().Split("/").Last());
+                    if (cmbxMethod.Items.Count != 2)
+                    {
+                        formType3.useIntervals.Enabled = false;
+                    }
+                    break;
+            }
+
             int kT = kTC * kTV;
 
             int RowInDict = SearchDGV(DictionaryForm.dataGridDictionaryList, mgDataViewer.Rows[eRowIndex].Cells["FullName"].Value.ToString(), "FullName");
@@ -2984,52 +3223,55 @@ namespace dataEditor
             TimeSpan semiPeakStart2 = new TimeSpan(mgSettings.mgHoursTripleTariffZone.semiPeak.initial2, 0, 0);
             TimeSpan semiPeakEnd2 = new TimeSpan(mgSettings.mgHoursTripleTariffZone.semiPeak.final2, 0, 0);
 
-            foreach (DataRow rows in HoursDataSet.Tables[mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.ToString()].Rows)
+            if (hrsTable != null)
             {
-                hrs++;
-                if (hrs <= 24)
+                foreach (DataRow rows in HoursDataSet.Tables[hrsTable].Rows)
                 {
-                    string duration = (hrs - 1).ToString() + ":00-" + hrs.ToString() + ":00";
-                    if (TimeIsBetween(hrs, peakStart1, peakEnd1))
+                    hrs++;
+                    if (hrs <= 24)
                     {
-                        formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
-                        ConSummPeak += Convert.ToDecimal(rows[2].ToString());
-                        GenSummPeak += Convert.ToDecimal(rows[3].ToString());
-                        
-                        continue;
+                        string duration = (hrs - 1).ToString() + ":00-" + hrs.ToString() + ":00";
+                        if (TimeIsBetween(hrs, peakStart1, peakEnd1))
+                        {
+                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
+                            ConSummPeak += Convert.ToDecimal(rows[2].ToString());
+                            GenSummPeak += Convert.ToDecimal(rows[3].ToString());
+
+                            continue;
+                        }
+                        if (TimeIsBetween(hrs, peakStart2, peakEnd2))
+                        {
+                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
+                            ConSummPeak += Convert.ToDecimal(rows[2].ToString());
+                            GenSummPeak += Convert.ToDecimal(rows[3].ToString());
+                            continue;
+                        }
+                        if (TimeIsBetween(hrs, semiPeakStart1, semiPeakEnd1))
+                        {
+                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
+                            ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
+                            GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
+                            continue;
+                        }
+                        if (TimeIsBetween(hrs, semiPeakStart2, semiPeakEnd2))
+                        {
+                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
+                            ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
+                            GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
+                            continue;
+                        }
+                        if (TimeIsBetween(hrs, nightStart, nightEnd))
+                        {
+                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, null, rows[2], null, null, rows[3]);
+                            ConSummNight += Convert.ToDecimal(rows[2].ToString());
+                            GenSummNight += Convert.ToDecimal(rows[3].ToString());
+                            continue;
+                        }
                     }
-                    if (TimeIsBetween(hrs, peakStart2, peakEnd2))
+                    else
                     {
-                        formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
-                        ConSummPeak += Convert.ToDecimal(rows[2].ToString());
-                        GenSummPeak += Convert.ToDecimal(rows[3].ToString());
-                        continue;
+                        hrs = 0;
                     }
-                    if (TimeIsBetween(hrs, semiPeakStart1, semiPeakEnd1))
-                    {
-                        formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
-                        ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
-                        GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
-                        continue;
-                    }
-                    if (TimeIsBetween(hrs, semiPeakStart2, semiPeakEnd2))
-                    {
-                        formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
-                        ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
-                        GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
-                        continue;
-                    }
-                    if (TimeIsBetween(hrs, nightStart, nightEnd))
-                    {
-                        formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, null, rows[2], null, null, rows[3]);
-                        ConSummNight += Convert.ToDecimal(rows[2].ToString());
-                        GenSummNight += Convert.ToDecimal(rows[3].ToString());
-                        continue;
-                    }
-                }
-                else
-                {
-                    hrs = 0;
                 }
             }
 

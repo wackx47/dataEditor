@@ -37,15 +37,13 @@ namespace dataEditor
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("null");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Коэффициент оплаты мощности потребителями (покупателями), осуществляющими расчеты" +
-        " по 1ЦК, 1/час", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("treeViewLine1", new System.Windows.Forms.TreeNode[] {
             treeNode1});
             System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("null");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Средневзвешенная нерегулируемая цена на мощность на оптовом рынке, руб/МВт", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("treeViewLine2", new System.Windows.Forms.TreeNode[] {
             treeNode3});
             System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("null");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Средневзвешенная нерегулируемая цена на электрическую энергию на оптовом рынке, о" +
-        "пределяемая по результатам конкурентных отборов на сутки вперед, руб/МВтч", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("treeViewLine3", new System.Windows.Forms.TreeNode[] {
             treeNode5});
             System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("null");
             System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("ночная зона суток", new System.Windows.Forms.TreeNode[] {
@@ -56,7 +54,7 @@ namespace dataEditor
             System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("null");
             System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("пиковая зона суток", new System.Windows.Forms.TreeNode[] {
             treeNode11});
-            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("treeViewLine4", new System.Windows.Forms.TreeNode[] {
             treeNode8,
             treeNode10,
             treeNode12});
@@ -66,7 +64,7 @@ namespace dataEditor
             System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("null");
             System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("дневная зона суток", new System.Windows.Forms.TreeNode[] {
             treeNode16});
-            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("treeViewLine5", new System.Windows.Forms.TreeNode[] {
             treeNode15,
             treeNode17});
             System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("null");
@@ -78,7 +76,7 @@ namespace dataEditor
             System.Windows.Forms.TreeNode treeNode23 = new System.Windows.Forms.TreeNode("null");
             System.Windows.Forms.TreeNode treeNode24 = new System.Windows.Forms.TreeNode("пиковая зона суток", new System.Windows.Forms.TreeNode[] {
             treeNode23});
-            System.Windows.Forms.TreeNode treeNode25 = new System.Windows.Forms.TreeNode("Коэффициент оплаты мощности для соответствующих зон суток (три зоны суток)", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode25 = new System.Windows.Forms.TreeNode("treeViewLine6", new System.Windows.Forms.TreeNode[] {
             treeNode20,
             treeNode22,
             treeNode24});
@@ -88,7 +86,7 @@ namespace dataEditor
             System.Windows.Forms.TreeNode treeNode28 = new System.Windows.Forms.TreeNode("null");
             System.Windows.Forms.TreeNode treeNode29 = new System.Windows.Forms.TreeNode("дневная зона суток", new System.Windows.Forms.TreeNode[] {
             treeNode28});
-            System.Windows.Forms.TreeNode treeNode30 = new System.Windows.Forms.TreeNode("Коэффициент оплаты мощности для соответствующих зон суток (две зоны суток)", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode30 = new System.Windows.Forms.TreeNode("treeViewLine7", new System.Windows.Forms.TreeNode[] {
             treeNode27,
             treeNode29});
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -689,6 +687,7 @@ namespace dataEditor
             this.mgDataViewer.DragEnter += new System.Windows.Forms.DragEventHandler(this.mgDataViewer_DragEnter);
             this.mgDataViewer.DragLeave += new System.EventHandler(this.mgDataViewer_DragLeave);
             this.mgDataViewer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mgDataViewer_MouseDown);
+            this.mgDataViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mgDataViewer_MouseMove);
             // 
             // id
             // 
@@ -708,6 +707,7 @@ namespace dataEditor
             this.SelectID.HeaderText = "Select";
             this.SelectID.MinimumWidth = 25;
             this.SelectID.Name = "SelectID";
+            this.SelectID.ReadOnly = true;
             this.SelectID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.SelectID.Width = 25;
             // 
@@ -831,7 +831,6 @@ namespace dataEditor
             this.REC.Name = "REC";
             this.REC.ReadOnly = true;
             this.REC.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.REC.Visible = false;
             // 
             // GEN
             // 
@@ -840,7 +839,6 @@ namespace dataEditor
             this.GEN.Name = "GEN";
             this.GEN.ReadOnly = true;
             this.GEN.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.GEN.Visible = false;
             // 
             // SELL
             // 
@@ -849,7 +847,6 @@ namespace dataEditor
             this.SELL.Name = "SELL";
             this.SELL.ReadOnly = true;
             this.SELL.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.SELL.Visible = false;
             // 
             // BUY
             // 
@@ -858,7 +855,6 @@ namespace dataEditor
             this.BUY.Name = "BUY";
             this.BUY.ReadOnly = true;
             this.BUY.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.BUY.Visible = false;
             // 
             // Price
             // 
@@ -867,7 +863,6 @@ namespace dataEditor
             this.Price.Name = "Price";
             this.Price.ReadOnly = true;
             this.Price.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Price.Visible = false;
             // 
             // Cost
             // 
@@ -876,7 +871,6 @@ namespace dataEditor
             this.Cost.Name = "Cost";
             this.Cost.ReadOnly = true;
             this.Cost.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Cost.Visible = false;
             // 
             // baseDoc
             // 
@@ -904,6 +898,7 @@ namespace dataEditor
             this.Method.HeaderText = "Method";
             this.Method.Name = "Method";
             this.Method.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Method.Visible = false;
             this.Method.Width = 50;
             // 
             // intgStatusError
@@ -918,6 +913,7 @@ namespace dataEditor
             this.intgStatusError.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.intgStatusError.ThreeState = true;
             this.intgStatusError.TrueValue = "";
+            this.intgStatusError.Visible = false;
             this.intgStatusError.Width = 25;
             // 
             // hrsStatusError
@@ -926,6 +922,7 @@ namespace dataEditor
             this.hrsStatusError.HeaderText = "hrsS";
             this.hrsStatusError.Name = "hrsStatusError";
             this.hrsStatusError.ThreeState = true;
+            this.hrsStatusError.Visible = false;
             this.hrsStatusError.Width = 25;
             // 
             // FlowTableLayout
@@ -1020,97 +1017,95 @@ namespace dataEditor
             this.datsTreeView.Location = new System.Drawing.Point(3, 28);
             this.datsTreeView.Name = "datsTreeView";
             treeNode1.Name = "treeViewLine1e1val";
-            treeNode1.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode1.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode1.Text = "null";
             treeNode2.Name = "treeViewLine1";
-            treeNode2.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode2.Text = "Коэффициент оплаты мощности потребителями (покупателями), осуществляющими расчеты" +
-    " по 1ЦК, 1/час";
+            treeNode2.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode2.Text = "treeViewLine1";
             treeNode3.Name = "treeViewLine2e1val";
-            treeNode3.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode3.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode3.Text = "null";
             treeNode4.Name = "treeViewLine2";
-            treeNode4.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode4.Text = "Средневзвешенная нерегулируемая цена на мощность на оптовом рынке, руб/МВт";
+            treeNode4.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode4.Text = "treeViewLine2";
             treeNode5.Name = "treeViewLine3e1val";
-            treeNode5.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode5.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode5.Text = "null";
             treeNode6.Name = "treeViewLine3";
-            treeNode6.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode6.Text = "Средневзвешенная нерегулируемая цена на электрическую энергию на оптовом рынке, о" +
-    "пределяемая по результатам конкурентных отборов на сутки вперед, руб/МВтч";
+            treeNode6.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode6.Text = "treeViewLine3";
             treeNode7.Name = "treeViewLine4e1val";
-            treeNode7.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode7.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode7.Text = "null";
             treeNode8.Name = "treeViewLine4e1";
-            treeNode8.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode8.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode8.Text = "ночная зона суток";
             treeNode9.Name = "treeViewLine4e2val";
-            treeNode9.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode9.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode9.Text = "null";
             treeNode10.Name = "treeViewLine4e2";
-            treeNode10.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode10.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode10.Text = "полупиковая зона суток";
             treeNode11.Name = "treeViewLine4e3val";
-            treeNode11.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode11.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode11.Text = "null";
             treeNode12.Name = "treeViewLine4e3";
-            treeNode12.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode12.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode12.Text = "пиковая зона суток";
             treeNode13.Name = "treeViewLine4";
-            treeNode13.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode13.Text = "";
+            treeNode13.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode13.Text = "treeViewLine4";
             treeNode14.Name = "treeViewLine5e1val";
-            treeNode14.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode14.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode14.Text = "null";
             treeNode15.Name = "treeViewLine5e1";
-            treeNode15.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode15.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode15.Text = "ночная зона суток";
             treeNode16.Name = "treeViewLine5e2val";
-            treeNode16.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode16.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode16.Text = "null";
             treeNode17.Name = "treeViewLine5e2";
-            treeNode17.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode17.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode17.Text = "дневная зона суток";
             treeNode18.Name = "treeViewLine5";
-            treeNode18.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode18.Text = "";
+            treeNode18.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode18.Text = "treeViewLine5";
             treeNode19.Name = "treeViewLine6e1val";
-            treeNode19.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode19.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode19.Text = "null";
             treeNode20.Name = "treeViewLine6e1";
-            treeNode20.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode20.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode20.Text = "ночная зона суток";
             treeNode21.Name = "treeViewLine6e2val";
-            treeNode21.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode21.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode21.Text = "null";
             treeNode22.Name = "treeViewLine6e2";
-            treeNode22.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode22.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode22.Text = "полупиковая зона суток";
             treeNode23.Name = "treeViewLine6e3val";
-            treeNode23.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode23.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode23.Text = "null";
             treeNode24.Name = "treeViewLine6e3";
-            treeNode24.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode24.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode24.Text = "пиковая зона суток";
             treeNode25.Name = "treeViewLine6";
-            treeNode25.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode25.Text = "Коэффициент оплаты мощности для соответствующих зон суток (три зоны суток)";
+            treeNode25.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode25.Text = "treeViewLine6";
             treeNode26.Name = "treeViewLine7e1val";
-            treeNode26.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode26.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode26.Text = "null";
             treeNode27.Name = "treeViewLine7e1";
-            treeNode27.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode27.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode27.Text = "ночная зона суток";
             treeNode28.Name = "treeViewLine7e2val";
-            treeNode28.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode28.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode28.Text = "null";
             treeNode29.Name = "treeViewLine7e2";
-            treeNode29.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode29.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode29.Text = "дневная зона суток";
             treeNode30.Name = "treeViewLine7";
-            treeNode30.NodeFont = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode30.Text = "Коэффициент оплаты мощности для соответствующих зон суток (две зоны суток)";
+            treeNode30.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode30.Text = "treeViewLine7";
             this.datsTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode2,
             treeNode4,
@@ -1895,7 +1890,7 @@ namespace dataEditor
             // 
             this.splitContainer_bigMain.Panel2.Controls.Add(this.splitContainer_rightProps);
             this.splitContainer_bigMain.Panel2MinSize = 300;
-            this.splitContainer_bigMain.Size = new System.Drawing.Size(1170, 446);
+            this.splitContainer_bigMain.Size = new System.Drawing.Size(1170, 544);
             this.splitContainer_bigMain.SplitterDistance = 866;
             this.splitContainer_bigMain.TabIndex = 75;
             // 
@@ -1914,7 +1909,7 @@ namespace dataEditor
             // splitContainer_dataGrids.Panel2
             // 
             this.splitContainer_dataGrids.Panel2.Controls.Add(this.dataViewer);
-            this.splitContainer_dataGrids.Size = new System.Drawing.Size(866, 446);
+            this.splitContainer_dataGrids.Size = new System.Drawing.Size(866, 544);
             this.splitContainer_dataGrids.SplitterDistance = 25;
             this.splitContainer_dataGrids.TabIndex = 2;
             // 
@@ -1973,7 +1968,7 @@ namespace dataEditor
             this.dataViewer.RowsDefaultCellStyle = dataGridViewCellStyle12;
             this.dataViewer.RowTemplate.Height = 25;
             this.dataViewer.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dataViewer.Size = new System.Drawing.Size(866, 417);
+            this.dataViewer.Size = new System.Drawing.Size(866, 515);
             this.dataViewer.TabIndex = 1;
             this.dataViewer.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataViewer_DragDrop);
             this.dataViewer.DragEnter += new System.Windows.Forms.DragEventHandler(this.dataViewer_DragEnter);
@@ -1996,7 +1991,7 @@ namespace dataEditor
             // 
             this.splitContainer_rightProps.Panel2.Controls.Add(this.urOptionsGrid);
             this.splitContainer_rightProps.Panel2MinSize = 0;
-            this.splitContainer_rightProps.Size = new System.Drawing.Size(300, 446);
+            this.splitContainer_rightProps.Size = new System.Drawing.Size(300, 544);
             this.splitContainer_rightProps.SplitterDistance = 150;
             this.splitContainer_rightProps.TabIndex = 74;
             // 
@@ -2107,7 +2102,7 @@ namespace dataEditor
             this.urOptionsGrid.Location = new System.Drawing.Point(0, 0);
             this.urOptionsGrid.Name = "urOptionsGrid";
             this.urOptionsGrid.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.urOptionsGrid.Size = new System.Drawing.Size(300, 292);
+            this.urOptionsGrid.Size = new System.Drawing.Size(300, 390);
             this.urOptionsGrid.TabIndex = 66;
             this.urOptionsGrid.ToolbarVisible = false;
             this.urOptionsGrid.UseCompatibleTextRendering = true;
@@ -2436,6 +2431,10 @@ namespace dataEditor
         private TableLayoutPanel propTableLayout;
         private Label label3;
         private TextBox txtProjectInfoName;
+        private ComboBox cmbxMethod;
+        private TableLayoutPanel FlowTableLayout;
+        private ToolStrip FlowPanelTools;
+        private ToolStripButton FlowPanelButtonAddTable;
         private DataGridViewTextBoxColumn id;
         private DataGridViewCheckBoxColumn SelectID;
         private DataGridViewTextBoxColumn dataTable;
@@ -2460,9 +2459,5 @@ namespace dataEditor
         private DataGridViewComboBoxColumn Method;
         private DataGridViewCheckBoxColumn intgStatusError;
         private DataGridViewCheckBoxColumn hrsStatusError;
-        private ComboBox cmbxMethod;
-        private TableLayoutPanel FlowTableLayout;
-        private ToolStrip FlowPanelTools;
-        private ToolStripButton FlowPanelButtonAddTable;
     }
 }

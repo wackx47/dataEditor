@@ -345,11 +345,11 @@
             this.txtKF1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtKF1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtKF1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtKF1.Location = new System.Drawing.Point(408, 53);
+            this.txtKF1.Location = new System.Drawing.Point(407, 53);
             this.txtKF1.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.txtKF1.Name = "txtKF1";
             this.txtKF1.ReadOnly = true;
-            this.txtKF1.Size = new System.Drawing.Size(110, 14);
+            this.txtKF1.Size = new System.Drawing.Size(111, 14);
             this.txtKF1.TabIndex = 20;
             this.txtKF1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtKF1.WordWrap = false;
@@ -359,11 +359,11 @@
             this.txtsvncPorem.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtsvncPorem.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtsvncPorem.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtsvncPorem.Location = new System.Drawing.Point(408, 29);
+            this.txtsvncPorem.Location = new System.Drawing.Point(407, 29);
             this.txtsvncPorem.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.txtsvncPorem.Name = "txtsvncPorem";
             this.txtsvncPorem.ReadOnly = true;
-            this.txtsvncPorem.Size = new System.Drawing.Size(110, 14);
+            this.txtsvncPorem.Size = new System.Drawing.Size(111, 14);
             this.txtsvncPorem.TabIndex = 19;
             this.txtsvncPorem.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtsvncPorem.WordWrap = false;
@@ -373,11 +373,11 @@
             this.txtsvncEEorem.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtsvncEEorem.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtsvncEEorem.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtsvncEEorem.Location = new System.Drawing.Point(408, 5);
+            this.txtsvncEEorem.Location = new System.Drawing.Point(407, 5);
             this.txtsvncEEorem.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.txtsvncEEorem.Name = "txtsvncEEorem";
             this.txtsvncEEorem.ReadOnly = true;
-            this.txtsvncEEorem.Size = new System.Drawing.Size(110, 14);
+            this.txtsvncEEorem.Size = new System.Drawing.Size(111, 14);
             this.txtsvncEEorem.TabIndex = 18;
             this.txtsvncEEorem.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtsvncEEorem.WordWrap = false;
@@ -390,7 +390,7 @@
             this.label38.Location = new System.Drawing.Point(1, 1);
             this.label38.Margin = new System.Windows.Forms.Padding(1);
             this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(396, 22);
+            this.label38.Size = new System.Drawing.Size(395, 22);
             this.label38.TabIndex = 0;
             this.label38.Text = "Средневзвешенная нерегулируемая цена на электрическую энергию на оптовом рынке, о" +
     "пределяемая по результатам конкурентных отборов на сутки вперед, руб/МВтч";
@@ -404,7 +404,7 @@
             this.label39.Location = new System.Drawing.Point(1, 25);
             this.label39.Margin = new System.Windows.Forms.Padding(1);
             this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(396, 22);
+            this.label39.Size = new System.Drawing.Size(395, 22);
             this.label39.TabIndex = 1;
             this.label39.Text = "Средневзвешенная нерегулируемая цена на мощность на оптовом рынке, руб/МВт";
             this.label39.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -417,7 +417,7 @@
             this.label40.Location = new System.Drawing.Point(1, 49);
             this.label40.Margin = new System.Windows.Forms.Padding(1);
             this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(396, 23);
+            this.label40.Size = new System.Drawing.Size(395, 23);
             this.label40.TabIndex = 2;
             this.label40.Text = "Коэффициент оплаты мощности потребителями (покупателями), осуществляющими расчеты" +
     " по первой ценовой категории, 1/час";
@@ -1087,6 +1087,7 @@
             this.MinimumSize = new System.Drawing.Size(550, 0);
             this.Name = "FormType1";
             this.Padding = new System.Windows.Forms.Padding(5);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Расчет по 1ЦК";
             this.Load += new System.EventHandler(this.FormType1_Load);
             this.mainPanel.ResumeLayout(false);
