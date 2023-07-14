@@ -485,7 +485,7 @@ namespace dataEditor
             this.tabMicrogeneration.Location = new System.Drawing.Point(4, 24);
             this.tabMicrogeneration.Name = "tabMicrogeneration";
             this.tabMicrogeneration.Padding = new System.Windows.Forms.Padding(1);
-            this.tabMicrogeneration.Size = new System.Drawing.Size(1176, 582);
+            this.tabMicrogeneration.Size = new System.Drawing.Size(1176, 584);
             this.tabMicrogeneration.TabIndex = 1;
             this.tabMicrogeneration.Text = "Microgeneration";
             // 
@@ -497,7 +497,7 @@ namespace dataEditor
             this.MainPanel.Location = new System.Drawing.Point(1, 1);
             this.MainPanel.Margin = new System.Windows.Forms.Padding(1);
             this.MainPanel.Name = "MainPanel";
-            this.MainPanel.Size = new System.Drawing.Size(1174, 580);
+            this.MainPanel.Size = new System.Drawing.Size(1174, 582);
             this.MainPanel.TabIndex = 6;
             // 
             // MainTableLayoutPanel
@@ -520,7 +520,7 @@ namespace dataEditor
             this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 125F));
             this.MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.MainTableLayoutPanel.Size = new System.Drawing.Size(1172, 578);
+            this.MainTableLayoutPanel.Size = new System.Drawing.Size(1172, 580);
             this.MainTableLayoutPanel.TabIndex = 5;
             // 
             // lblMainName
@@ -558,8 +558,8 @@ namespace dataEditor
             // 
             this.mgSplitContainer_insideHorizontal.Panel2.Controls.Add(this.inputTableLoyaut);
             this.mgSplitContainer_insideHorizontal.Panel2.Padding = new System.Windows.Forms.Padding(0, 1, 0, 1);
-            this.mgSplitContainer_insideHorizontal.Size = new System.Drawing.Size(1166, 395);
-            this.mgSplitContainer_insideHorizontal.SplitterDistance = 366;
+            this.mgSplitContainer_insideHorizontal.Size = new System.Drawing.Size(1166, 397);
+            this.mgSplitContainer_insideHorizontal.SplitterDistance = 368;
             this.mgSplitContainer_insideHorizontal.TabIndex = 3;
             this.mgSplitContainer_insideHorizontal.Paint += new System.Windows.Forms.PaintEventHandler(this.SplitterPaint);
             // 
@@ -579,7 +579,7 @@ namespace dataEditor
             // 
             this.mgSplitContainer_inside_vertical.Panel2.Controls.Add(this.FlowTableLayout);
             this.mgSplitContainer_inside_vertical.Panel2MinSize = 200;
-            this.mgSplitContainer_inside_vertical.Size = new System.Drawing.Size(1166, 364);
+            this.mgSplitContainer_inside_vertical.Size = new System.Drawing.Size(1166, 366);
             this.mgSplitContainer_inside_vertical.SplitterDistance = 956;
             this.mgSplitContainer_inside_vertical.TabIndex = 0;
             // 
@@ -592,7 +592,7 @@ namespace dataEditor
             this.groupBoxTable.Location = new System.Drawing.Point(0, 0);
             this.groupBoxTable.Name = "groupBoxTable";
             this.groupBoxTable.Padding = new System.Windows.Forms.Padding(2, 4, 2, 2);
-            this.groupBoxTable.Size = new System.Drawing.Size(956, 364);
+            this.groupBoxTable.Size = new System.Drawing.Size(956, 366);
             this.groupBoxTable.TabIndex = 3;
             this.groupBoxTable.TabStop = false;
             this.groupBoxTable.Text = "Abonents: Selected - / -";
@@ -677,7 +677,7 @@ namespace dataEditor
             this.mgDataViewer.RowTemplate.Height = 20;
             this.mgDataViewer.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.mgDataViewer.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.mgDataViewer.Size = new System.Drawing.Size(952, 343);
+            this.mgDataViewer.Size = new System.Drawing.Size(952, 345);
             this.mgDataViewer.TabIndex = 2;
             this.mgDataViewer.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.mgDataViewer_CellClick);
             this.mgDataViewer.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.mgDataViewer_CellPainting);
@@ -685,6 +685,7 @@ namespace dataEditor
             this.mgDataViewer.SelectionChanged += new System.EventHandler(this.mgDataViewer_SelectionChanged);
             this.mgDataViewer.DragDrop += new System.Windows.Forms.DragEventHandler(this.mgDataViewer_DragDrop);
             this.mgDataViewer.DragEnter += new System.Windows.Forms.DragEventHandler(this.mgDataViewer_DragEnter);
+            this.mgDataViewer.DragOver += new System.Windows.Forms.DragEventHandler(this.mgDataViewer_DragOver);
             this.mgDataViewer.DragLeave += new System.EventHandler(this.mgDataViewer_DragLeave);
             this.mgDataViewer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mgDataViewer_MouseDown);
             this.mgDataViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mgDataViewer_MouseMove);
@@ -938,7 +939,7 @@ namespace dataEditor
             this.FlowTableLayout.RowCount = 2;
             this.FlowTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.FlowTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.FlowTableLayout.Size = new System.Drawing.Size(206, 364);
+            this.FlowTableLayout.Size = new System.Drawing.Size(206, 366);
             this.FlowTableLayout.TabIndex = 4;
             // 
             // groupBoxData
@@ -949,7 +950,7 @@ namespace dataEditor
             this.groupBoxData.Location = new System.Drawing.Point(1, 28);
             this.groupBoxData.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
             this.groupBoxData.Name = "groupBoxData";
-            this.groupBoxData.Size = new System.Drawing.Size(204, 336);
+            this.groupBoxData.Size = new System.Drawing.Size(204, 338);
             this.groupBoxData.TabIndex = 2;
             this.groupBoxData.TabStop = false;
             this.groupBoxData.Text = "Extracted data";
@@ -965,7 +966,7 @@ namespace dataEditor
             this.mgFlowPanelResult.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.mgFlowPanelResult.Location = new System.Drawing.Point(3, 18);
             this.mgFlowPanelResult.Name = "mgFlowPanelResult";
-            this.mgFlowPanelResult.Size = new System.Drawing.Size(198, 315);
+            this.mgFlowPanelResult.Size = new System.Drawing.Size(198, 317);
             this.mgFlowPanelResult.TabIndex = 1;
             this.mgFlowPanelResult.DragDrop += new System.Windows.Forms.DragEventHandler(this.mgFlowPanelResult_DragDrop);
             this.mgFlowPanelResult.DragEnter += new System.Windows.Forms.DragEventHandler(this.mgFlowPanelResult_DragEnter);
@@ -1820,7 +1821,7 @@ namespace dataEditor
             this.tabExcel.Location = new System.Drawing.Point(4, 24);
             this.tabExcel.Name = "tabExcel";
             this.tabExcel.Padding = new System.Windows.Forms.Padding(1);
-            this.tabExcel.Size = new System.Drawing.Size(1176, 582);
+            this.tabExcel.Size = new System.Drawing.Size(1176, 584);
             this.tabExcel.TabIndex = 0;
             // 
             // urToolStrip
@@ -2119,7 +2120,7 @@ namespace dataEditor
             this.SectionsControl.Name = "SectionsControl";
             this.SectionsControl.Padding = new System.Drawing.Point(10, 3);
             this.SectionsControl.SelectedIndex = 0;
-            this.SectionsControl.Size = new System.Drawing.Size(1184, 610);
+            this.SectionsControl.Size = new System.Drawing.Size(1184, 612);
             this.SectionsControl.TabIndex = 76;
             this.SectionsControl.Selected += new System.Windows.Forms.TabControlEventHandler(this.SectionsControl_Selected);
             // 
@@ -2131,7 +2132,7 @@ namespace dataEditor
             this.buttonBackground.Controls.Add(this.appInfo, 0, 0);
             this.buttonBackground.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.buttonBackground.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-            this.buttonBackground.Location = new System.Drawing.Point(0, 634);
+            this.buttonBackground.Location = new System.Drawing.Point(0, 636);
             this.buttonBackground.Name = "buttonBackground";
             this.buttonBackground.RowCount = 1;
             this.buttonBackground.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -2227,7 +2228,7 @@ namespace dataEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1184, 659);
+            this.ClientSize = new System.Drawing.Size(1184, 661);
             this.Controls.Add(this.SectionsControl);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.buttonBackground);

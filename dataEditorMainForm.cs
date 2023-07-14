@@ -2371,6 +2371,27 @@ namespace dataEditor
             mgDataViewer.Refresh();
         }
 
+        private void mgDataViewer_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+            int mousepos = PointToClient(Cursor.Position).Y;
+            if (mousepos > (MainTableLayoutPanel.Bottom - (mgSplitContainer_insideHorizontal.Height - mgSplitContainer_insideHorizontal.Panel2MinSize - mgSplitContainer_insideHorizontal.SplitterDistance)) * 0.995)
+            {
+                if (mgDataViewer.FirstDisplayedScrollingRowIndex < mgDataViewer.RowCount - 1)
+                {
+                    mgDataViewer.FirstDisplayedScrollingRowIndex += 1;
+                }
+            }
+
+            if (mousepos < (MainTableLayoutPanel.Top+270))
+            {
+                if (mgDataViewer.FirstDisplayedScrollingRowIndex > 0)
+                {
+                    mgDataViewer.FirstDisplayedScrollingRowIndex -= 1;
+                }
+            }
+        }
+
         private void mgDataViewer_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -2654,10 +2675,8 @@ namespace dataEditor
                     {
                         if (IntegralsDataSet.Tables[tableName].Rows.Count == 4)
                             result = "TableOK";
-                        else if (IntegralsDataSet.Tables[tableName].Rows.Count == 2)
-                            result = "TableError";
                         else
-                            result = "TableOK";
+                            result = "TableError";
                     }
                     else
                     {
@@ -2962,9 +2981,21 @@ namespace dataEditor
                 formType1.txtSELL.Text = "0";
             }
 
-            decimal k1 = decimal.Parse(formType1.txtsvncEEorem.Text);
-            decimal k2 = decimal.Parse(formType1.txtsvncPorem.Text);
-            decimal k3 = decimal.Parse(formType1.txtKF1.Text);
+            decimal k1 = 0;
+            decimal k2 = 0;
+            decimal k3 = 0;
+
+            try
+            {
+                k1 = decimal.Parse(formType1.txtsvncEEorem.Text);
+                k2 = decimal.Parse(formType1.txtsvncPorem.Text);
+                k3 = decimal.Parse(formType1.txtKF1.Text);
+            }
+            catch
+            {
+
+            }
+
 
             decimal Price = ((k1 + k2 * k3) / 1000);
 
@@ -2979,6 +3010,8 @@ namespace dataEditor
         private void openFormType2(int eRowIndex)
         {
             FormType2 formType2 = new FormType2();
+            List<RadioButton> radioButtons = new List<RadioButton> { formType2.useIntervals, formType2.useHours };
+            var checkedButton = radioButtons.FirstOrDefault(r => r.Checked);
 
             DateTime date = DateTime.Now;
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
@@ -3023,6 +3056,7 @@ namespace dataEditor
                 }
             }
 
+
             int kTC = 1;
             int kTV = 1;
 
@@ -3066,6 +3100,60 @@ namespace dataEditor
 
             formType2.InfoTableLayout.RowStyles[2].Height = TextRenderer.MeasureText(formType2.lblAbonentAddress.Text, formType2.lblAbonentAddress.Font, formType2.lblAbonentAddress.ClientSize, TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height + 10;
 
+            formType2.txtDateFirst.Text = firstDayOfMonth.ToString("d");
+            formType2.txtDateLast.Text = lastDayOfMonth.ToString("d");
+
+            decimal SumConFirst = 0;
+            decimal SumConLast = 0;
+            decimal SumGenFirst = 0;
+            decimal SumGenLast = 0;
+
+            decimal ConSummDayDiff = 0;
+            decimal ConSummNightDiff = 0;
+            decimal GenSummDayDiff = 0;
+            decimal GenSummNightDiff = 0;
+
+            if (intgTable != null)
+            {
+                formType2.txtConDayFirst.Text = IntegralsDataSet.Tables[intgTable].Rows[0][2].ToString();
+                formType2.txtConDayLast.Text = IntegralsDataSet.Tables[intgTable].Rows[0][3].ToString();
+
+                formType2.txtConNightFirst.Text = IntegralsDataSet.Tables[intgTable].Rows[1][2].ToString();
+                formType2.txtConNightLast.Text = IntegralsDataSet.Tables[intgTable].Rows[1][3].ToString();
+
+                ConSummDayDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[0][4].ToString())*kT;
+                ConSummNightDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[1][4].ToString())*kT;
+
+                formType2.txtConDayDiff.Text = ConSummDayDiff.ToString();
+                formType2.txtConNightDiff.Text = ConSummNightDiff.ToString();
+
+                SumConFirst = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[0][2].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[1][2].ToString());
+                SumConLast = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[0][3].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[1][3].ToString());
+
+                formType2.txtGenDayFirst.Text = IntegralsDataSet.Tables[intgTable].Rows[2][2].ToString();
+                formType2.txtGenDayLast.Text = IntegralsDataSet.Tables[intgTable].Rows[2][3].ToString();
+                
+                formType2.txtGenNightFirst.Text = IntegralsDataSet.Tables[intgTable].Rows[3][2].ToString();
+                formType2.txtGenNightLast.Text = IntegralsDataSet.Tables[intgTable].Rows[3][3].ToString();
+                
+                GenSummDayDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[2][4].ToString())*kT;
+                GenSummNightDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[3][4].ToString())*kT;
+
+                formType2.txtGenDayDiff.Text = GenSummDayDiff.ToString();
+                formType2.txtGenNightDiff.Text = GenSummNightDiff.ToString();
+
+                SumGenFirst = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[2][2].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[3][2].ToString());
+                SumGenLast = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[2][3].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[3][3].ToString());
+
+            }
+
+            formType2.txtConSummFirst.Text = (SumConFirst * kT).ToString();
+            formType2.txtConSummLast.Text = (SumConLast * kT).ToString();
+            formType2.txtConSummDiff.Text = ((SumConLast - SumConFirst) * kT).ToString();
+
+            formType2.txtGenSummFirst.Text = (SumGenFirst * kT).ToString();
+            formType2.txtGenSummLast.Text = (SumGenLast * kT).ToString();
+            formType2.txtGenSummDiff.Text = ((SumGenLast - SumGenFirst) * kT).ToString();
 
             int hrs = 1;
             decimal ConSummDay = 0;
@@ -3104,10 +3192,139 @@ namespace dataEditor
                 }
             }
 
+            ConSummDay *= kT;
+            ConSummNight *= kT;
+            GenSummDay *= kT;
+            GenSummNight *= kT;
+
             formType2.txtConSummDayHH.Text = ConSummDay.ToString();
             formType2.txtGenSummDayHH.Text = GenSummDay.ToString();
             formType2.txtConSummNightHH.Text = ConSummNight.ToString();
             formType2.txtGenSummNightHH.Text = GenSummNight.ToString();
+
+            formType2.txtDiffEEoremNight.Text = datsTreeView.Nodes["treeViewLine5"].Nodes["treeViewLine5e1"].Nodes["treeViewLine5e1val"].Text;
+            formType2.txtDiffEEoremDay.Text = datsTreeView.Nodes["treeViewLine5"].Nodes["treeViewLine5e2"].Nodes["treeViewLine5e2val"].Text;
+
+            formType2.txtSvncPorem.Text = datsTreeView.Nodes["treeViewLine2"].Nodes["treeViewLine2e1val"].Text;
+
+            formType2.txtKFnight.Text = datsTreeView.Nodes["treeViewLine7"].Nodes["treeViewLine7e1"].Nodes["treeViewLine7e1val"].Text;
+            formType2.txtKFday.Text = datsTreeView.Nodes["treeViewLine7"].Nodes["treeViewLine7e2"].Nodes["treeViewLine7e2val"].Text;
+
+            decimal k1 = 0;
+            decimal k2 = 0;
+
+            decimal k3 = 0;
+
+            decimal k4 = 0;
+            decimal k5 = 0;
+
+            decimal intgDiffSellDay = 0;
+            decimal intgDiffBuyDay = 0;
+            decimal intgDiffSellNight = 0;
+            decimal intgDiffBuyNight = 0;
+
+            decimal hrsDiffSellDay = 0;
+            decimal hrsDiffBuyDay = 0;
+            decimal hrsDiffSellNight = 0;
+            decimal hrsDiffBuyNight = 0;
+
+            try
+            {
+                switch (checkedButton.Name)
+                {
+                    case "useIntervals":
+                        if (ConSummDayDiff > GenSummDayDiff)
+                        {
+                            intgDiffSellDay = ConSummDayDiff - GenSummDayDiff;
+                        }
+                        else
+                        {
+                            intgDiffBuyDay = GenSummDayDiff - ConSummDayDiff;
+                        }
+
+                        if(ConSummNightDiff > GenSummNightDiff)
+                        {
+                            intgDiffSellNight = ConSummNightDiff - GenSummNightDiff;
+                        }
+                        else
+                        {
+                            intgDiffBuyNight = GenSummNightDiff - ConSummNightDiff;
+                        }
+
+                        formType2.txtSELLday.Text = intgDiffSellDay.ToString();
+                        formType2.txtSELLnight.Text = intgDiffSellNight.ToString();
+                        formType2.txtBUYday.Text = intgDiffBuyDay.ToString();
+                        formType2.txtBUYnight.Text = intgDiffBuyNight.ToString();
+
+                        formType2.lblSell.Text = (intgDiffSellDay + intgDiffSellNight).ToString();
+                        formType2.lblBuy.Text = (intgDiffBuyDay + intgDiffBuyNight).ToString();
+                        break;
+
+                    case "useHours":
+                        if (ConSummDay > GenSummDay)
+                        {
+                            hrsDiffSellDay = ConSummDay - GenSummDay;
+                        }
+                        else
+                        {
+                            hrsDiffBuyDay = GenSummDay - ConSummDay;
+                        }
+
+                        if (ConSummNight > GenSummNight)
+                        {
+                            hrsDiffSellNight = ConSummNight - GenSummNight;
+                        }
+                        else
+                        {
+                            hrsDiffBuyNight = GenSummNight - ConSummNight;
+                        }
+
+                        formType2.txtSELLday.Text = hrsDiffSellDay.ToString();
+                        formType2.txtSELLnight.Text = hrsDiffSellNight.ToString();
+                        formType2.txtBUYday.Text = hrsDiffBuyDay.ToString();
+                        formType2.txtBUYnight.Text = hrsDiffBuyNight.ToString();
+
+                        formType2.lblSell.Text = (hrsDiffSellDay + hrsDiffSellNight).ToString();
+                        formType2.lblBuy.Text = (hrsDiffBuyDay + hrsDiffBuyNight).ToString();
+
+                        break;
+                }
+            }
+            catch(Exception ex)
+            {
+
+            }
+
+            decimal PriceNight = 0;
+            decimal PriceDay = 0;
+            decimal ResultCost = 0;
+
+            try
+            {
+                k1 = decimal.Parse(formType2.txtDiffEEoremNight.Text);
+                k2 = decimal.Parse(formType2.txtDiffEEoremDay.Text);
+
+                k3 = decimal.Parse(formType2.txtSvncPorem.Text);
+
+                k4 = decimal.Parse(formType2.txtKFnight.Text);
+                k5 = decimal.Parse(formType2.txtKFday.Text);
+
+
+                PriceNight = (k1 + (k3 * k4)) / 1000;
+                PriceDay = (k2 + (k3 * k5)) / 1000;
+
+                ResultCost = PriceNight * decimal.Parse(formType2.txtBUYnight.Text) + PriceDay * decimal.Parse(formType2.txtBUYday.Text);
+
+                formType2.txtResultPriceNight.Text = PriceNight.ToString();
+                formType2.txtResultPriceDay.Text = PriceDay.ToString();
+                formType2.txtResultCost.Text = Math.Round(ResultCost,2).ToString();
+            }
+            catch
+            {
+
+            }
+
+
 
             formType2.Show();
         }
@@ -4595,7 +4812,6 @@ namespace dataEditor
                             }
 
                             var cellType = wSheet.GetRow(row).GetCell(cell.ColumnIndex);
-
                             switch (cellType.CellType)
                             {
                                 case CellType.Numeric:
@@ -4616,7 +4832,6 @@ namespace dataEditor
                     }
                 int percentage = (row * 100) / wSheet.LastRowNum;
                 worker.ReportProgress(percentage);
-                //Thread.Sleep(5);
                 }
             }
             if (cmnSettings.CheckEmptyRows.SwitchChecks == true)
@@ -4856,7 +5071,6 @@ namespace dataEditor
             DataTable dataExtraction = new DataTable();
             commonImportEXCL(this, new EventArgs(), dataExtraction, xlFileName);
 
-
             //string[] components = Path.GetFileNameWithoutExtension(xlFileName).Split("_");
 
             switch (fileTypeTarget)
@@ -4865,11 +5079,11 @@ namespace dataEditor
 
                     if (DateTime.ParseExact(txtProjectMonth.Text, "MMMM", CultureInfo.CurrentCulture).Month != DateTime.ParseExact(dataExtraction.Rows[1][5].ToString().Split(" ").First(), "MMMM", CultureInfo.CurrentCulture).Month)
                     {
-                        MessageBox.Show("¬ыбранный мес€ц не совпадает с указанным расчетным периодом в загружаемом файле.");
+                        //MessageBox.Show("¬ыбранный мес€ц не совпадает с указанным расчетным периодом в загружаемом файле.");
                     }
                     if (txtProjectYear.Text != dataExtraction.Rows[1][5].ToString().Split(" ").Last())
                     {
-                        MessageBox.Show("¬ыбранный год не совпадает с указанным расчетным периодом в загружаемом файле.");
+                        //MessageBox.Show("¬ыбранный год не совпадает с указанным расчетным периодом в загружаемом файле.");
                     }
 
                     DataRow[] filteredRows = dataExtraction.Select(string.Format("{0} LIKE '%{1}%'", dataExtraction.Columns[3].ColumnName.ToString(), mgSettings.mgCodeName.propGTPcode));
@@ -4899,11 +5113,11 @@ namespace dataEditor
 
                     if (DateTime.ParseExact(txtProjectMonth.Text, "MMMM", CultureInfo.CurrentCulture).Month != DateTime.ParseExact(dataExtraction.Rows[2][1].ToString().Split(" ").First(), "MMMM", CultureInfo.CurrentCulture).Month)
                     {
-                        MessageBox.Show("¬ыбранный мес€ц не совпадает с указанным расчетным периодом в загружаемом файле.");
+                        //MessageBox.Show("¬ыбранный мес€ц не совпадает с указанным расчетным периодом в загружаемом файле.");
                     }
                     if (txtProjectYear.Text != dataExtraction.Rows[2][1].ToString().Split(" ").Last())
                     {
-                        MessageBox.Show("¬ыбранный год не совпадает с указанным расчетным периодом в загружаемом файле.");
+                        //MessageBox.Show("¬ыбранный год не совпадает с указанным расчетным периодом в загружаемом файле.");
                     }
 
                     datsTreeView.Nodes["treeViewLine2"].Nodes["treeViewLine2e1val"].Text = dataExtraction.Rows[31][1].ToString();
@@ -4921,7 +5135,8 @@ namespace dataEditor
                     break;
 
                 case "SPUNC":
-                    datsTreeView.Nodes["treeViewLine1"].Nodes["treeViewLine1e1val"].Text = "0,001913033";
+                    DataRow[] findRows = dataExtraction.Select(string.Format("{0} LIKE '%{1}%'", dataExtraction.Columns[0].ColumnName.ToString(), "расчеты по первой ценовой категории"));
+                    datsTreeView.Nodes["treeViewLine1"].Nodes["treeViewLine1e1val"].Text = findRows[0][4].ToString();
                     break;
             }
 
@@ -6037,6 +6252,7 @@ namespace dataEditor
             }
             
         }
+
     }
     public static class ExtensionMethods
     {
