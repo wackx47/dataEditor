@@ -79,7 +79,7 @@
             this.txtDiffEEoremPeak = new System.Windows.Forms.TextBox();
             this.txtDiffEEoremSemiPeak = new System.Windows.Forms.TextBox();
             this.txtDiffEEoremNight = new System.Windows.Forms.TextBox();
-            this.txtsvncPorem = new System.Windows.Forms.TextBox();
+            this.txtSvncPorem = new System.Windows.Forms.TextBox();
             this.txtKFpeak = new System.Windows.Forms.TextBox();
             this.txtKFsemiPeak = new System.Windows.Forms.TextBox();
             this.txtKFnight = new System.Windows.Forms.TextBox();
@@ -617,7 +617,7 @@
             // lblSell
             // 
             this.lblSell.AutoSize = true;
-            this.lblSell.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblSell.BackColor = System.Drawing.SystemColors.Control;
             this.vResultTableLayout.SetColumnSpan(this.lblSell, 3);
             this.lblSell.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblSell.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -632,7 +632,7 @@
             // lblBuy
             // 
             this.lblBuy.AutoSize = true;
-            this.lblBuy.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblBuy.BackColor = System.Drawing.SystemColors.Control;
             this.vResultTableLayout.SetColumnSpan(this.lblBuy, 3);
             this.lblBuy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBuy.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -673,7 +673,7 @@
             this.EntryDataTableLayout.Controls.Add(this.txtDiffEEoremPeak, 2, 0);
             this.EntryDataTableLayout.Controls.Add(this.txtDiffEEoremSemiPeak, 2, 1);
             this.EntryDataTableLayout.Controls.Add(this.txtDiffEEoremNight, 2, 2);
-            this.EntryDataTableLayout.Controls.Add(this.txtsvncPorem, 2, 3);
+            this.EntryDataTableLayout.Controls.Add(this.txtSvncPorem, 2, 3);
             this.EntryDataTableLayout.Controls.Add(this.txtKFpeak, 2, 4);
             this.EntryDataTableLayout.Controls.Add(this.txtKFsemiPeak, 2, 5);
             this.EntryDataTableLayout.Controls.Add(this.txtKFnight, 2, 6);
@@ -849,19 +849,19 @@
             this.txtDiffEEoremNight.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtDiffEEoremNight.WordWrap = false;
             // 
-            // txtsvncPorem
+            // txtSvncPorem
             // 
-            this.txtsvncPorem.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtsvncPorem.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtsvncPorem.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtsvncPorem.Location = new System.Drawing.Point(435, 74);
-            this.txtsvncPorem.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
-            this.txtsvncPorem.Name = "txtsvncPorem";
-            this.txtsvncPorem.ReadOnly = true;
-            this.txtsvncPorem.Size = new System.Drawing.Size(122, 14);
-            this.txtsvncPorem.TabIndex = 39;
-            this.txtsvncPorem.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtsvncPorem.WordWrap = false;
+            this.txtSvncPorem.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtSvncPorem.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSvncPorem.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtSvncPorem.Location = new System.Drawing.Point(435, 74);
+            this.txtSvncPorem.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtSvncPorem.Name = "txtSvncPorem";
+            this.txtSvncPorem.ReadOnly = true;
+            this.txtSvncPorem.Size = new System.Drawing.Size(122, 14);
+            this.txtSvncPorem.TabIndex = 39;
+            this.txtSvncPorem.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtSvncPorem.WordWrap = false;
             // 
             // txtKFpeak
             // 
@@ -2022,6 +2022,7 @@
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataHoursViewer.DefaultCellStyle = dataGridViewCellStyle4;
+            this.dataHoursViewer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataHoursViewer.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataHoursViewer.EnableHeadersVisualStyles = false;
             this.dataHoursViewer.GridColor = System.Drawing.SystemColors.ControlDarkDark;
@@ -2044,7 +2045,7 @@
             this.dataHoursViewer.RowsDefaultCellStyle = dataGridViewCellStyle6;
             this.dataHoursViewer.RowTemplate.Height = 15;
             this.dataHoursViewer.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dataHoursViewer.Size = new System.Drawing.Size(587, 810);
+            this.dataHoursViewer.Size = new System.Drawing.Size(587, 796);
             this.dataHoursViewer.TabIndex = 7;
             // 
             // DayDate
@@ -2415,7 +2416,6 @@
         private Label label36;
         private Label label37;
         private Label label73;
-        private Label lblSell;
         private TableLayoutPanel EntryDataTableLayout;
         private Label label38;
         private Label label81;
@@ -2455,7 +2455,6 @@
         private Label label117;
         private Label label80;
         private Label label89;
-        private Label lblBuy;
         private Label label104;
         private Label label105;
         private Label label108;
@@ -2521,7 +2520,7 @@
         public TextBox txtDiffEEoremPeak;
         public TextBox txtDiffEEoremSemiPeak;
         public TextBox txtDiffEEoremNight;
-        public TextBox txtsvncPorem;
+        public TextBox txtSvncPorem;
         public TextBox txtKFpeak;
         public TextBox txtKFsemiPeak;
         public TextBox txtKFnight;
@@ -2538,5 +2537,7 @@
         private TableLayoutPanel IntervalsTableLayout;
         public RadioButton useHours;
         public RadioButton useIntervals;
+        public Label lblSell;
+        public Label lblBuy;
     }
 }

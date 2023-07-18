@@ -3011,7 +3011,7 @@ namespace dataEditor
         {
             FormType2 formType2 = new FormType2();
             List<RadioButton> radioButtons = new List<RadioButton> { formType2.useIntervals, formType2.useHours };
-            var checkedButton = radioButtons.FirstOrDefault(r => r.Checked);
+
 
             DateTime date = DateTime.Now;
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
@@ -3083,6 +3083,7 @@ namespace dataEditor
                     break;
             }
 
+            var checkedButton = radioButtons.FirstOrDefault(r => r.Checked);
             int kT = kTC * kTV;
 
             int RowInDict = SearchDGV(DictionaryForm.dataGridDictionaryList, mgDataViewer.Rows[eRowIndex].Cells["FullName"].Value.ToString(), "FullName");
@@ -3333,6 +3334,8 @@ namespace dataEditor
         {
             FormType3 formType3 = new FormType3();
 
+            List<RadioButton> radioButtons = new List<RadioButton> { formType3.useIntervals, formType3.useHours };
+
             DateTime date = DateTime.Now;
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
@@ -3402,6 +3405,8 @@ namespace dataEditor
                     break;
             }
 
+
+            var checkedButton = radioButtons.FirstOrDefault(r => r.Checked);
             int kT = kTC * kTV;
 
             int RowInDict = SearchDGV(DictionaryForm.dataGridDictionaryList, mgDataViewer.Rows[eRowIndex].Cells["FullName"].Value.ToString(), "FullName");
@@ -3418,6 +3423,62 @@ namespace dataEditor
             formType3.lblAbonentDateYear.Text = date.ToString("yyyy");
 
             formType3.InfoTableLayout.RowStyles[2].Height = TextRenderer.MeasureText(formType3.lblAbonentAddress.Text, formType3.lblAbonentAddress.Font, formType3.lblAbonentAddress.ClientSize, TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height + 10;
+
+            formType3.txtDateFirst.Text = firstDayOfMonth.ToString("d");
+            formType3.txtDateLast.Text = lastDayOfMonth.ToString("d");
+
+            decimal SumConFirst = 0;
+            decimal SumConLast = 0;
+            decimal SumGenFirst = 0;
+            decimal SumGenLast = 0;
+
+            decimal ConPeakDiff = 0;
+            decimal ConSemiPeakDiff = 0;
+            decimal ConNightDiff = 0;
+
+            decimal GenPeakDiff = 0;
+            decimal GenSemiPeakDiff = 0;
+            decimal GenNightDiff = 0;
+
+            if (intgTable != null)
+            {
+                formType3.txtConPeakFirst.Text = IntegralsDataSet.Tables[intgTable].Rows[0][2].ToString();
+                formType3.txtConPeakLast.Text = IntegralsDataSet.Tables[intgTable].Rows[0][3].ToString();
+                formType3.txtConSemiPeakFirst.Text = IntegralsDataSet.Tables[intgTable].Rows[1][2].ToString();
+                formType3.txtConSemiPeakLast.Text = IntegralsDataSet.Tables[intgTable].Rows[1][3].ToString();
+                formType3.txtConNightFirst.Text = IntegralsDataSet.Tables[intgTable].Rows[2][2].ToString();
+                formType3.txtConNightLast.Text = IntegralsDataSet.Tables[intgTable].Rows[2][3].ToString();
+
+                SumConFirst = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[0][2].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[1][2].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[2][2].ToString());
+                SumConLast = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[0][3].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[1][3].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[2][3].ToString());
+                
+                ConPeakDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[0][2].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[0][3].ToString());
+                ConSemiPeakDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[1][2].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[1][3].ToString());
+                ConNightDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[2][2].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[2][3].ToString());
+
+                formType3.txtGenPeakFirst.Text = IntegralsDataSet.Tables[intgTable].Rows[3][2].ToString();
+                formType3.txtGenPeakLast.Text = IntegralsDataSet.Tables[intgTable].Rows[3][3].ToString();
+                formType3.txtGenSemiPeakFirst.Text = IntegralsDataSet.Tables[intgTable].Rows[4][2].ToString();
+                formType3.txtGenSemiPeakLast.Text = IntegralsDataSet.Tables[intgTable].Rows[4][3].ToString();
+                formType3.txtGenNightFirst.Text = IntegralsDataSet.Tables[intgTable].Rows[5][2].ToString();
+                formType3.txtGenNightLast.Text = IntegralsDataSet.Tables[intgTable].Rows[5][3].ToString();
+
+                SumGenFirst = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[3][2].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[4][2].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[5][2].ToString());
+                SumGenLast = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[3][3].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[4][3].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[5][3].ToString());
+                
+                GenPeakDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[3][2].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[3][3].ToString());
+                GenSemiPeakDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[4][2].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[4][3].ToString());
+                GenNightDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[5][2].ToString()) + decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[5][3].ToString());
+            }
+
+
+            formType3.txtConSummFirst.Text = (SumConFirst * kT).ToString();
+            formType3.txtConSummLast.Text = (SumConLast * kT).ToString();
+            formType3.txtConSummDiff.Text = ((SumConLast - SumConFirst) * kT).ToString();
+
+            formType3.txtGenSummFirst.Text = (SumGenFirst * kT).ToString();
+            formType3.txtGenSummLast.Text = (SumGenLast * kT).ToString();
+            formType3.txtGenSummDiff.Text = ((SumGenLast - SumGenFirst) * kT).ToString();
 
             int hrs = 0;
             decimal ConSummPeak = 0;
@@ -3498,6 +3559,183 @@ namespace dataEditor
             formType3.txtGenSummPeakHH.Text = GenSummPeak.ToString();
             formType3.txtGenSummSemiPeakHH.Text = GenSummSemiPeak.ToString();
             formType3.txtGenSummNightHH.Text = GenSummNight.ToString();
+            
+            ConSummPeak *= kT;
+            ConSummSemiPeak *= kT;
+            ConSummNight *= kT;
+            GenSummPeak *= kT;
+            GenSummSemiPeak *= kT;
+            GenSummNight *= kT;
+
+            formType3.txtConSummPeakHH.Text = ConSummPeak.ToString();
+            formType3.txtConSummSemiPeakHH.Text = ConSummSemiPeak.ToString();
+            formType3.txtConSummNightHH.Text = ConSummNight.ToString();
+            formType3.txtGenSummPeakHH.Text = GenSummPeak.ToString();
+            formType3.txtGenSummSemiPeakHH.Text = GenSummSemiPeak.ToString();
+            formType3.txtGenSummNightHH.Text = GenSummNight.ToString();
+
+            formType3.txtDiffEEoremPeak.Text = datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e1"].Nodes["treeViewLine4e1val"].Text;
+            formType3.txtDiffEEoremSemiPeak.Text = datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e2"].Nodes["treeViewLine4e2val"].Text;
+            formType3.txtDiffEEoremNight.Text = datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e3"].Nodes["treeViewLine4e3val"].Text;
+
+
+            formType3.txtSvncPorem.Text = datsTreeView.Nodes["treeViewLine2"].Nodes["treeViewLine2e1val"].Text;
+
+            formType3.txtKFpeak.Text = datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e1"].Nodes["treeViewLine6e1val"].Text;
+            formType3.txtKFsemiPeak.Text = datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e2"].Nodes["treeViewLine6e2val"].Text;
+            formType3.txtKFnight.Text = datsTreeView.Nodes["treeViewLine6"].Nodes["treeViewLine6e3"].Nodes["treeViewLine6e3val"].Text;
+
+
+            decimal k1 = 0;
+            decimal k2 = 0;
+            decimal k3 = 0;
+
+            decimal k4 = 0;
+
+            decimal k5 = 0;
+            decimal k6 = 0;
+            decimal k7 = 0;
+
+            decimal intgDiffSellPeak = 0;
+            decimal intgDiffSellSemiPeak = 0;
+            decimal intgDiffSellNight = 0;
+
+            decimal intgDiffBuyPeak = 0;
+            decimal intgDiffBuySemiPeak = 0;
+            decimal intgDiffBuyNight = 0;
+
+            decimal hrsDiffSellPeak = 0;
+            decimal hrsDiffSellSemiPeak = 0;
+            decimal hrsDiffSellNight = 0;
+
+            decimal hrsDiffBuyPeak = 0;
+            decimal hrsDiffBuySemiPeak = 0;
+            decimal hrsDiffBuyNight = 0;
+
+            try
+            {
+                switch (checkedButton.Name)
+                {
+                    case "useIntervals":
+                        if (ConPeakDiff > GenPeakDiff)
+                        {
+                            intgDiffSellPeak = ConPeakDiff - GenPeakDiff;
+                        }
+                        else
+                        {
+                            intgDiffBuyPeak = GenPeakDiff - ConPeakDiff;
+                        }
+
+                        if (ConSemiPeakDiff > GenSemiPeakDiff)
+                        {
+                            intgDiffSellSemiPeak = ConSemiPeakDiff - GenSemiPeakDiff;
+                        }
+                        else
+                        {
+                            intgDiffBuySemiPeak = GenSemiPeakDiff - ConSemiPeakDiff;
+                        }
+
+                        if (ConNightDiff > GenNightDiff)
+                        {
+                            intgDiffSellNight = ConNightDiff - GenNightDiff;
+                        }
+                        else
+                        {
+                            intgDiffBuyNight = GenNightDiff - ConNightDiff;
+                        }
+
+                        formType3.txtSELLpeak.Text = intgDiffSellPeak.ToString();
+                        formType3.txtSELLsemiPeak.Text = intgDiffSellSemiPeak.ToString();
+                        formType3.txtSELLnight.Text = intgDiffSellNight.ToString();
+
+                        formType3.txtBUYpeak.Text = intgDiffBuyPeak.ToString();
+                        formType3.txtBUYsemiPeak.Text = intgDiffSellSemiPeak.ToString();
+                        formType3.txtBUYnight.Text = intgDiffBuyNight.ToString();
+
+                        formType3.lblSell.Text = (intgDiffSellPeak + intgDiffSellSemiPeak + intgDiffSellNight).ToString();
+                        formType3.lblBuy.Text = (intgDiffBuyPeak + intgDiffSellSemiPeak + intgDiffBuyNight).ToString();
+                        break;
+
+                    case "useHours":
+                        if (ConSummPeak > GenSummPeak)
+                        {
+                            hrsDiffSellPeak = ConSummPeak - GenSummPeak;
+                        }
+                        else
+                        {
+                            hrsDiffBuyPeak = GenSummPeak - ConSummPeak;
+                        }
+
+                        if (ConSummSemiPeak > GenSummSemiPeak)
+                        {
+                            hrsDiffSellSemiPeak = ConSummSemiPeak - GenSummSemiPeak;
+                        }
+                        else
+                        {
+                            hrsDiffBuySemiPeak = GenSummSemiPeak - ConSummSemiPeak;
+                        }
+
+                        if (ConSummNight > GenSummNight)
+                        {
+                            hrsDiffSellNight = ConSummNight - GenSummNight;
+                        }
+                        else
+                        {
+                            hrsDiffBuyNight = GenSummNight - ConSummNight;
+                        }
+
+                        formType3.txtSELLpeak.Text = hrsDiffSellPeak.ToString();
+                        formType3.txtSELLsemiPeak.Text = hrsDiffSellSemiPeak.ToString();
+                        formType3.txtSELLnight.Text = hrsDiffSellNight.ToString();
+
+                        formType3.txtBUYpeak.Text = hrsDiffBuyPeak.ToString();
+                        formType3.txtBUYsemiPeak.Text = hrsDiffSellSemiPeak.ToString();
+                        formType3.txtBUYnight.Text = hrsDiffBuyNight.ToString();
+
+                        formType3.lblSell.Text = (hrsDiffSellPeak + hrsDiffSellSemiPeak + hrsDiffSellNight).ToString();
+                        formType3.lblBuy.Text = (hrsDiffBuyPeak + hrsDiffSellSemiPeak + hrsDiffBuyNight).ToString();
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            decimal PriceNight = 0;
+            decimal PriceSemiPeak = 0;
+            decimal PricePeak = 0;
+            decimal ResultCost = 0;
+
+            try
+            {
+                k1 = decimal.Parse(formType3.txtDiffEEoremNight.Text);
+                k2 = decimal.Parse(formType3.txtDiffEEoremPeak.Text);
+                k3 = decimal.Parse(formType3.txtDiffEEoremSemiPeak.Text);
+
+                k4 = decimal.Parse(formType3.txtSvncPorem.Text);
+
+                k5 = decimal.Parse(formType3.txtKFnight.Text);
+                k6 = decimal.Parse(formType3.txtKFpeak.Text);
+                k7 = decimal.Parse(formType3.txtKFsemiPeak.Text);
+
+
+                PriceNight = (k1 + (k4 * k5)) / 1000;
+                PricePeak = (k2 + (k4 * k6)) / 1000;
+                PriceSemiPeak = (k3 + (k4 * k7)) / 1000;
+
+                ResultCost = PriceNight * decimal.Parse(formType3.txtBUYnight.Text) + PricePeak * decimal.Parse(formType3.txtBUYpeak.Text) + PriceSemiPeak * decimal.Parse(formType3.txtBUYsemiPeak.Text);
+
+                formType3.txtResultPriceNight.Text = PriceNight.ToString();
+                formType3.txtResultPricePeak.Text = PricePeak.ToString();
+                formType3.txtResultPriceSemiPeak.Text = PriceSemiPeak.ToString();
+                formType3.txtResultCost.Text = Math.Round(ResultCost, 2).ToString();
+            }
+            catch
+            {
+
+            }
 
             formType3.Show();
         }
@@ -6251,6 +6489,12 @@ namespace dataEditor
                 methodCell.Value = methodCell.Items[cmbxMethod.SelectedIndex];
             }
             
+        }
+
+        private void FlowPanelButtonAddTable_Click(object sender, EventArgs e)
+        {
+            inputDataHandle inputDatForm = new inputDataHandle();
+            inputDatForm.ShowDialog();
         }
 
     }

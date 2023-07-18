@@ -994,6 +994,7 @@ namespace dataEditor
             this.FlowPanelButtonAddTable.Name = "FlowPanelButtonAddTable";
             this.FlowPanelButtonAddTable.Size = new System.Drawing.Size(23, 22);
             this.FlowPanelButtonAddTable.Text = "Add Table";
+            this.FlowPanelButtonAddTable.Click += new System.EventHandler(this.FlowPanelButtonAddTable_Click);
             // 
             // inputTableLoyaut
             // 
