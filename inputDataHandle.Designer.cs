@@ -35,9 +35,10 @@
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.inputTextBox = new System.Windows.Forms.RichTextBox();
             this.inputTableLayout = new System.Windows.Forms.TableLayoutPanel();
-            this.lineNumbersTable = new System.Windows.Forms.TableLayoutPanel();
+            this.lineNumbersBox = new System.Windows.Forms.PictureBox();
             this.NavToolStrip.SuspendLayout();
             this.inputTableLayout.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.lineNumbersBox)).BeginInit();
             this.SuspendLayout();
             // 
             // NavToolStrip
@@ -63,7 +64,8 @@
             this.inputBtnEntry.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.inputBtnEntry.Margin = new System.Windows.Forms.Padding(1, 1, 1, 2);
             this.inputBtnEntry.Name = "inputBtnEntry";
-            this.inputBtnEntry.Size = new System.Drawing.Size(23, 21);
+            this.inputBtnEntry.Padding = new System.Windows.Forms.Padding(0, 0, 8, 0);
+            this.inputBtnEntry.Size = new System.Drawing.Size(28, 21);
             this.inputBtnEntry.Text = "Enter";
             this.inputBtnEntry.Click += new System.EventHandler(this.inputBtnEntry_Click);
             // 
@@ -88,11 +90,10 @@
             this.inputTextBox.DetectUrls = false;
             this.inputTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inputTextBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.inputTextBox.Location = new System.Drawing.Point(2, 2);
-            this.inputTextBox.Margin = new System.Windows.Forms.Padding(1);
+            this.inputTextBox.Location = new System.Drawing.Point(41, 3);
+            this.inputTextBox.Margin = new System.Windows.Forms.Padding(0, 2, 2, 2);
             this.inputTextBox.Name = "inputTextBox";
-            this.inputTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.inputTextBox.Size = new System.Drawing.Size(416, 565);
+            this.inputTextBox.Size = new System.Drawing.Size(416, 549);
             this.inputTextBox.TabIndex = 83;
             this.inputTextBox.Text = "";
             this.inputTextBox.WordWrap = false;
@@ -103,37 +104,39 @@
             // 
             // inputTableLayout
             // 
-            this.inputTableLayout.ColumnCount = 1;
+            this.inputTableLayout.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.inputTableLayout.ColumnCount = 2;
             this.inputTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.inputTableLayout.Controls.Add(this.inputTextBox, 0, 0);
-            this.inputTableLayout.Location = new System.Drawing.Point(42, 30);
-            this.inputTableLayout.Margin = new System.Windows.Forms.Padding(1);
+            this.inputTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.inputTableLayout.Controls.Add(this.lineNumbersBox, 0, 0);
+            this.inputTableLayout.Controls.Add(this.inputTextBox, 1, 0);
+            this.inputTableLayout.Location = new System.Drawing.Point(2, 30);
+            this.inputTableLayout.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
             this.inputTableLayout.Name = "inputTableLayout";
             this.inputTableLayout.Padding = new System.Windows.Forms.Padding(1);
             this.inputTableLayout.RowCount = 1;
             this.inputTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-            this.inputTableLayout.Size = new System.Drawing.Size(420, 569);
+            this.inputTableLayout.Size = new System.Drawing.Size(460, 555);
             this.inputTableLayout.TabIndex = 84;
             this.inputTableLayout.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.RichTextBoxBorder);
             // 
-            // lineNumbersTable
+            // lineNumbersBox
             // 
-            this.lineNumbersTable.ColumnCount = 1;
-            this.lineNumbersTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.lineNumbersTable.Location = new System.Drawing.Point(2, 30);
-            this.lineNumbersTable.Margin = new System.Windows.Forms.Padding(1);
-            this.lineNumbersTable.Name = "lineNumbersTable";
-            this.lineNumbersTable.RowCount = 1;
-            this.lineNumbersTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.lineNumbersTable.Size = new System.Drawing.Size(38, 569);
-            this.lineNumbersTable.TabIndex = 85;
+            this.lineNumbersBox.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.lineNumbersBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lineNumbersBox.Location = new System.Drawing.Point(1, 1);
+            this.lineNumbersBox.Margin = new System.Windows.Forms.Padding(0);
+            this.lineNumbersBox.Name = "lineNumbersBox";
+            this.lineNumbersBox.Size = new System.Drawing.Size(40, 553);
+            this.lineNumbersBox.TabIndex = 87;
+            this.lineNumbersBox.TabStop = false;
+            this.lineNumbersBox.Paint += new System.Windows.Forms.PaintEventHandler(this.lineNumbersBox_Paint);
             // 
             // inputDataHandle
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(464, 601);
-            this.Controls.Add(this.lineNumbersTable);
             this.Controls.Add(this.NavToolStrip);
             this.Controls.Add(this.inputTableLayout);
             this.DoubleBuffered = true;
@@ -149,6 +152,7 @@
             this.NavToolStrip.ResumeLayout(false);
             this.NavToolStrip.PerformLayout();
             this.inputTableLayout.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.lineNumbersBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -161,6 +165,6 @@
         private RichTextBox inputTextBox;
         private TableLayoutPanel inputTableLayout;
         private ToolStripComboBox toolStripComboBox1;
-        private TableLayoutPanel lineNumbersTable;
+        private PictureBox lineNumbersBox;
     }
 }

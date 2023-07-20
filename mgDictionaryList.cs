@@ -876,11 +876,18 @@ namespace dataEditor
             dataExtraction.Rows[0].Delete();
             foreach (DataRow rows in dataExtraction.Rows)
             {
-                if (rows[1] != DBNull.Value)
+                try
                 {
-                    dataGridDictionaryList.Rows.Add("", rows[1], DateOnly.FromDateTime(Convert.ToDateTime(rows[2])), rows[3],
-                        ConvertToBoolRU(rows[4].ToString()), rows[5].ToString(), rows[6], rows[7], rows[8], PhoneNumberParse(rows[9].ToString()), 
-                        rows[10].ToString().Split(";").First(), ComboBoxParse(rows[11].ToString()), ComboBoxParse(rows[12].ToString()), rows[13]);
+                    if (rows[1] != DBNull.Value)
+                    {
+                        dataGridDictionaryList.Rows.Add("", rows[1], DateOnly.FromDateTime(Convert.ToDateTime(rows[2])), rows[3],
+                            ConvertToBoolRU(rows[4].ToString()), rows[5].ToString(), rows[6], rows[7], rows[8], PhoneNumberParse(rows[9].ToString()), 
+                            rows[10].ToString().Split(";").First(), ComboBoxParse(rows[11].ToString()), ComboBoxParse(rows[12].ToString()), rows[13]);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(Convert.ToString(rows[1]) + " - not converted because " + ex);
                 }
             }
             

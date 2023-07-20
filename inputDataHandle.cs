@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -13,31 +14,49 @@ using System.Windows.Forms;
 
 namespace dataEditor
 {
+
     public partial class inputDataHandle : Form
     {
         public inputDataHandle()
         {
             InitializeComponent();
-
         }
 
+
+
+
+
+        int _linesCount;
         private void inputTextBoxHRS_TextChanged(object sender, EventArgs e)
         {
-            DrawLineNumber();
+
+            if (_linesCount != inputTextBox.Lines.Count())
+            {
+                _linesCount = inputTextBox.Lines.Count();
+                lineNumbersBox.Refresh();
+            }
         }
 
         private void RichTextBoxBorder(object sender, TableLayoutCellPaintEventArgs e)
         {
             var panel = sender as TableLayoutPanel;
             e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
-            var rectangle = e.CellBounds;
 
+            var rectangle = e.ClipRectangle;
             using (var pen = new Pen(Color.Black, 1))
             {
                 pen.Alignment = System.Drawing.Drawing2D.PenAlignment.Center;
                 pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
 
-                e.Graphics.DrawRectangle(pen, rectangle);
+                var topLeft = new Point(rectangle.Left, rectangle.Location.Y);
+                var topRight = new Point(rectangle.Right-1, rectangle.Location.Y);
+                var bottonRight = new Point(rectangle.Right-1, rectangle.Location.Y + rectangle.Height-1);
+                var bottonLeft = new Point(rectangle.Left, rectangle.Location.Y + rectangle.Height-1);
+
+                e.Graphics.DrawLine(pen, topLeft, topRight);
+                e.Graphics.DrawLine(pen, topRight, bottonRight);
+                e.Graphics.DrawLine(pen, bottonRight, bottonLeft);
+                e.Graphics.DrawLine(pen, bottonLeft, topLeft);
             }
         }
 
@@ -45,9 +64,10 @@ namespace dataEditor
         {
             int lineNum = 0;
             int height = inputTextBox.Size.Height;
-            Graphics g = lineNumbersTable.CreateGraphics();
+            Graphics g = lineNumbersBox.CreateGraphics();
+            g.SmoothingMode = SmoothingMode.HighSpeed;
 
-            g.Clear(lineNumbersTable.BackColor);
+            lineNumbersBox.Refresh();
 
             int charIndex = inputTextBox.GetCharIndexFromPosition(new Point(0, 0));
             lineNum = inputTextBox.GetLineFromCharIndex(charIndex);
@@ -67,9 +87,10 @@ namespace dataEditor
             g.Dispose();
         }
 
+
         private void inputTextBoxHRS_VScroll(object sender, EventArgs e)
         {
-            DrawLineNumber();
+            lineNumbersBox.Refresh();
         }
 
 
@@ -93,7 +114,7 @@ namespace dataEditor
             Point pt = inputTextBox.GetPositionFromCharIndex(inputTextBox.SelectionStart);
             if (pt.X == 1)
             {
-                DrawLineNumber();
+                
             }
         }
 
@@ -104,10 +125,38 @@ namespace dataEditor
 
         private void inputDataHandle_Shown(object sender, EventArgs e)
         {
-            Graphics g = lineNumbersTable.CreateGraphics();
-            Font f = new Font("Courier New", 8.25F, GraphicsUnit.Point);
-            g.DrawString("1", f, Brushes.Blue, new PointF(8, lineNumbersTable.Margin.Top));
-            g.Dispose();
+
+        }
+
+        public class DBufferedPanel : Panel
+        {
+            public DBufferedPanel()
+            {
+                this.SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer,
+                    true);
+            }
+        }
+
+        private void lineNumbersBox_Paint(object sender, PaintEventArgs e)
+        {
+            int lineNum = 0;
+            int height = inputTextBox.Size.Height;
+
+            int charIndex = inputTextBox.GetCharIndexFromPosition(new Point(0, 0));
+            lineNum = inputTextBox.GetLineFromCharIndex(charIndex);
+
+            while (true)
+            {
+                charIndex = inputTextBox.GetFirstCharIndexFromLine(lineNum);
+                if (charIndex == -1)
+                    break;
+                Point pt = inputTextBox.GetPositionFromCharIndex(charIndex);
+                Font f = new Font("Courier New", 8.25F, GraphicsUnit.Point);
+                e.Graphics.DrawString((lineNum + 1).ToString(), f, Brushes.Blue, new PointF(8, inputTextBox.Margin.Top + pt.Y));
+                lineNum++;
+                if (height < inputTextBox.Margin.Top + pt.Y)
+                    break;
+            }
         }
     }
 }
