@@ -120,9 +120,6 @@
   <metadata name="dictToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>287, 17</value>
   </metadata>
-  <metadata name="dictToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>287, 17</value>
-  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="dictBtnOpen.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -166,11 +163,11 @@
   <data name="dictBtnExportToExcel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD/SURBVDhPYxhkoHwmP0P5/AaG0vmnGMoWvGUoWPAXTIP4
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD/SURBVDhPYxhkoHwmP0P5/AaG0vmnGMoWvGXIX/AXTIP4
         IHGQPF5QtuAqQ8X82QxVCzwZShYoM1QtloTQQH75gjlgebygfMF/oKI1DJWLIoCajRhKF6uD6YrFkUC5
         tWB5vACkoHxBFUPZ/ENAg54ylM36CKZL5x0EixNlAMjZuPDAG1C84BVUJQ6Az4DK2eIMNYv0GeK3K0BV
         YwH4DCidwwvWHL3rFUP0bgew+thdaF5CNwAbiN1tA9T4kiFmpxOmASULLgBT3VKGsoVBwLSgAxYDKcKK
-        d14F0yigfhUPMM5rgC45DkwLr6GiqCB6uy1QIw4XEAIEw4AYgBILDAwAx6O4v5uQRqcAAAAASUVORK5C
+        d14F0yigfhUPMM5rgC45DkwLr6GiqCB6uy1QIw4XEAIEw4AYgBILDAwAxDO4vhgDXqYAAAAASUVORK5C
         YII=
 </value>
   </data>

@@ -1322,11 +1322,10 @@ namespace dataEditor
                             //if(dictEqualsCell.Value != null)
                             //Console.Write(dictEqualsCell.OwningColumn.Name + ": " + dictEqualsCell.Value + ";   ");
                         }
-                        DataTable headerTable = new DataTable("hrs_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First() + "_Header");
                         DataTable newTable = new DataTable("hrs_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First());
-
-                        newTable.TableName = checkSimilarNameInTableLayout(newTable.TableName);
-                        headerTable.TableName = newTable.TableName + "_Header";
+                        newTable.TableName = expectedTableName(newTable.TableName, "hrs");
+                        DataTable headerTable = new DataTable(newTable.TableName + "_Header");
+                        
                         PrepareHeaderTable(headerTable);
 
                         headerTable.Rows[0]["Values"] = DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString();
@@ -1407,9 +1406,6 @@ namespace dataEditor
                         Button newButton = new Button();
                         createNewButtonOnTable(newButton, newTable.TableName);
                         mgFlowPanelResult.Controls.Add(newButton);
-
-                        //PrintValues(newTable, DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First());
-                        //Console.WriteLine("ConSumm: " + ConSumm.ToString() + "   GenSumm: " + GenSumm.ToString());
                     }
                     else
                     {
@@ -1432,11 +1428,10 @@ namespace dataEditor
                         }
                         if (foundRow2 != -1)
                         {
-                            DataTable headerTable = new DataTable("hrs_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow2].Cells["Agreement"].Value.ToString().Split(" от ").First() + "_Header");
                             DataTable newTable = new DataTable("hrs_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow2].Cells["Agreement"].Value.ToString().Split(" от ").First());
-
-                            newTable.TableName = checkSimilarNameInTableLayout(newTable.TableName);
-                            headerTable.TableName = newTable.TableName + "_Header";
+                            newTable.TableName = expectedTableName(newTable.TableName, "hrs");
+                            DataTable headerTable = new DataTable(newTable.TableName + "_Header");
+                            
                             PrepareHeaderTable(headerTable);
 
                             headerTable.Rows[0]["Values"] = DictionaryForm.dataGridDictionaryList.Rows[foundRow2].Cells["Agreement"].Value.ToString();
@@ -1520,11 +1515,10 @@ namespace dataEditor
                         }
                         else
                         {
-                            DataTable headerTable = new DataTable("hrs_" + resultString + "_Header");
                             DataTable newTable = new DataTable("hrs_" + resultString);
+                            newTable.TableName = expectedTableName(newTable.TableName, "hrs");
+                            DataTable headerTable = new DataTable(newTable.TableName + "_Header");
 
-                            newTable.TableName = checkSimilarNameInTableLayout(newTable.TableName);
-                            headerTable.TableName = newTable.TableName + "_Header";
                             PrepareHeaderTable(headerTable);
 
                             headerTable.Rows[2]["Values"] = dataExtraction.Rows[0][extractCols].ToString();
@@ -1601,9 +1595,6 @@ namespace dataEditor
                             Button newButton = new Button();
                             createNewButtonOnTable(newButton, newTable.TableName);
                             mgFlowPanelResult.Controls.Add(newButton);
-
-                            //PrintValues(newTable, dataExtraction.Rows[4][extractCols].ToString());
-                            //Console.WriteLine("ConSumm: " + ConSumm.ToString() + "   GenSumm: " + GenSumm.ToString());
                         }
                     }
                 }
@@ -1637,11 +1628,10 @@ namespace dataEditor
                         if (foundRow != -1)
                         {
                             int i = dataExtraction.Rows.IndexOf(extractRows) + 1;
-                            DataTable headerTable = new DataTable("intg_"+DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First() + "_Header");
                             DataTable newTable = new DataTable("intg_"+DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First());
-                            
-                            newTable.TableName = checkSimilarNameInTableLayout(newTable.TableName);
-                            headerTable.TableName = newTable.TableName + "_Header";
+                            newTable.TableName = expectedTableName(newTable.TableName, "intg");
+                            DataTable headerTable = new DataTable(newTable.TableName + "_Header");
+
                             prepareNewIntegralTables(headerTable, newTable);
 
                             int kTC = Convert.ToInt32(extractRows[4].ToString());
@@ -1701,17 +1691,14 @@ namespace dataEditor
 
                             IntegralsDataSet.Tables.Add(newTable);
                             IntegralsDataSet.Tables.Add(headerTable);
-
-                            //PrintValues(newTable, extractRows[3].ToString());
                         }
                         else
                         {
                             int i = dataExtraction.Rows.IndexOf(extractRows) + 1;
-                            DataTable headerTable = new DataTable("intg_" + resultString + "_Header");
                             DataTable newTable = new DataTable("intg_" + resultString);
-                            
-                            newTable.TableName = checkSimilarNameInTableLayout(newTable.TableName);
-                            headerTable.TableName = newTable.TableName + "_Header";
+                            newTable.TableName = expectedTableName(newTable.TableName, "intg");
+                            DataTable headerTable = new DataTable(newTable.TableName + "_Header");
+
                             prepareNewIntegralTables(headerTable, newTable);
 
                             int kTC = Convert.ToInt32(extractRows[4].ToString());
@@ -1768,8 +1755,6 @@ namespace dataEditor
 
                             IntegralsDataSet.Tables.Add(newTable);
                             IntegralsDataSet.Tables.Add(headerTable);
-
-                            //PrintValues(newTable, extractRows[3].ToString());
                         }
                     }
                     catch
@@ -1780,11 +1765,10 @@ namespace dataEditor
                             if (foundRow != -1)
                             {
                                 int i = dataExtraction.Rows.IndexOf(extractRows) + 1;
-                                DataTable headerTable = new DataTable("intg_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First() + "_Header");
                                 DataTable newTable = new DataTable("intg_" + DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString().Split(" от ").First());
-                               
-                                newTable.TableName = checkSimilarNameInTableLayout(newTable.TableName);
-                                headerTable.TableName = newTable.TableName + "_Header";
+                                newTable.TableName = expectedTableName(newTable.TableName, "intg");
+                                DataTable headerTable = new DataTable(newTable.TableName + "_Header");
+
                                 prepareNewIntegralTables(headerTable, newTable);
 
                                 int kTC = Convert.ToInt32(extractRows[4].ToString());
@@ -1827,17 +1811,14 @@ namespace dataEditor
 
                                 IntegralsDataSet.Tables.Add(newTable);
                                 IntegralsDataSet.Tables.Add(headerTable);
-
-                                //PrintValues(newTable, extractRows[3].ToString());
                             }
                             else
                             {
                                 int i = dataExtraction.Rows.IndexOf(extractRows) + 1;
-                                DataTable headerTable = new DataTable("intg_" + resultString + "_Header");
                                 DataTable newTable = new DataTable("intg_" + resultString);
+                                newTable.TableName = expectedTableName(newTable.TableName, "intg");
+                                DataTable headerTable = new DataTable(newTable.TableName + "_Header");
 
-                                newTable.TableName = checkSimilarNameInTableLayout(newTable.TableName);
-                                headerTable.TableName = newTable.TableName + "_Header";
                                 prepareNewIntegralTables(headerTable, newTable);
 
                                 int kTC = Convert.ToInt32(extractRows[4].ToString());
@@ -1878,8 +1859,6 @@ namespace dataEditor
 
                                 IntegralsDataSet.Tables.Add(newTable);
                                 IntegralsDataSet.Tables.Add(headerTable);
-
-                                //PrintValues(newTable, extractRows[3].ToString());
                             }
                         }
                         catch
@@ -1908,6 +1887,38 @@ namespace dataEditor
             return newTableName;
         }
 
+
+        private string expectedTableName(string expTableName, string type)
+        {
+            int existCount = 0;
+            switch (type)
+            {
+                case "intg":
+                    foreach (DataTable Table in IntegralsDataSet.Tables)
+                    {
+                        if (expTableName.Split("#").First() == Table.TableName)
+                        {
+                            existCount++;
+                        }
+                    }
+                    break;
+
+                case "hrs":
+                    foreach (DataTable Table in HoursDataSet.Tables)
+                    {
+                        if (expTableName.Split("#").First() == Table.TableName)
+                        {
+                            existCount++;
+                        }
+                    }
+                    break;
+            }
+            if (existCount > 0)
+            {
+                expTableName += "#" + (existCount + 1);
+            }
+            return expTableName;
+        }
 
         private void createNewButtonOnTable(Button newButton, string name)
         {
@@ -1955,7 +1966,7 @@ namespace dataEditor
                                 {
                                     DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
                                     btnCell.UseColumnTextForButtonValue = false;
-                                    btnCell.ToolTipText = "intg_" + mgDataViewer.Rows[SearchRowName].Cells["Agreement"].Value.ToString().Split(" от ").First();
+                                    btnCell.ToolTipText = buttons.Text;
                                     mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])] = btnCell;
                                     mgDataViewer.Rows[SearchRowName].Cells["GlobalStatus"].ToolTipText = validatedStatus;
                                     methodCell.Items.Add("intg");
@@ -1987,7 +1998,7 @@ namespace dataEditor
                             {
                                 DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
                                 btnCell.UseColumnTextForButtonValue = false;
-                                btnCell.ToolTipText = "hrs_" + mgDataViewer.Rows[SearchRowName].Cells["Agreement"].Value.ToString().Split(" от ").First();
+                                btnCell.ToolTipText = buttons.Text;
                                 mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])] = btnCell;
                                 mgDataViewer.Rows[SearchRowName].Cells["GlobalStatus"].ToolTipText = validatedStatus;
                                 methodCell.Items.Add("hrs");
@@ -2308,6 +2319,7 @@ namespace dataEditor
                         //e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
                         //e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, Color.Blue)), rowBound);
                         //e.Graphics.DrawRectangle(new Pen(Color.Blue), rowBound);
+
                         break;
                 }
             }
@@ -2346,7 +2358,6 @@ namespace dataEditor
                     }
                     
                     mgDataViewerRowPaint(SelectedRowIndex, new PaintEventArgs(mgDataViewer.CreateGraphics(), rowBound));
-                    //mgDataViewer.Invalidate();
                 }
             }
         }
@@ -2404,7 +2415,6 @@ namespace dataEditor
                 var table = (Button)e.Data.GetData(typeof(Button));
                 btnMoveName = table.Text;
                 mgDataViewer.ClearSelection();
-                //mgDataViewer.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
             }
         }
 
@@ -2547,10 +2557,7 @@ namespace dataEditor
                         {
                             mgDataViewer.Rows[hittest.RowIndex].Cells["GlobalStatus"].ToolTipText = "TableWarning";
                         }
-
-                        //mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
                         mgDataViewer.Refresh();
-
                         mgFlowPanelResult.Controls.Remove((Button)e.Data.GetData(typeof(Button)));
                     }
                     else
@@ -2602,16 +2609,12 @@ namespace dataEditor
                             {
                                 mgDataViewer.Rows[hittest.RowIndex].Cells["GlobalStatus"].ToolTipText = "TableError";
                             }
-
-
-                            //mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
                             mgDataViewer.Refresh();
 
                             mgFlowPanelResult.Controls.Remove((Button)e.Data.GetData(typeof(Button)));
                         }
                         else
                         {
-                            //mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
                             mgDataViewer.Refresh();
                         }
                     }
@@ -2895,8 +2898,62 @@ namespace dataEditor
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
 
-            int kTC = Convert.ToInt32(IntegralsDataSet.Tables[mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.ToString() + "_Header"].Rows[4][1].ToString().Split("/").First());
-            int kTV = Convert.ToInt32(IntegralsDataSet.Tables[mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.ToString() + "_Header"].Rows[4][1].ToString().Split("/").Last());
+            string hrsTable = null;
+            string intgTable = null;
+            if (!mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.ToString().Contains('+'))
+            {
+                switch (mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("_").First())
+                {
+                    case "intg":
+                        intgTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText);
+                        break;
+
+                    case "hrs":
+                        hrsTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText);
+                        break;
+                }
+            }
+            else
+            {
+                switch (mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").First().Split("_").First())
+                {
+                    case "intg":
+                        intgTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").First());
+                        break;
+
+                    case "hrs":
+                        hrsTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").First());
+                        break;
+                }
+                switch (mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").Last().Split("_").First())
+                {
+                    case "intg":
+                        intgTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").Last());
+                        break;
+
+                    case "hrs":
+                        hrsTable = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.Split("+").Last());
+                        break;
+                }
+            }
+
+            int kTC = 1;
+            int kTV = 1;
+
+            switch (cmbxMethod.Text)
+            {
+                case "»нтервалы":
+
+                    kTC = Convert.ToInt32(IntegralsDataSet.Tables[intgTable + "_Header"].Rows[4][1].ToString().Split("/").First());
+                    kTV = Convert.ToInt32(IntegralsDataSet.Tables[intgTable + "_Header"].Rows[4][1].ToString().Split("/").Last());
+                    break;
+
+                case "„асы":
+                    kTC = Convert.ToInt32(HoursDataSet.Tables[hrsTable + "_Header"].Rows[4][1].ToString().Split("/").First());
+                    kTV = Convert.ToInt32(HoursDataSet.Tables[hrsTable + "_Header"].Rows[4][1].ToString().Split("/").Last());
+                    break;
+            }
+
             int kT = kTC * kTV;
 
             int RowInDict = SearchDGV(DictionaryForm.dataGridDictionaryList, mgDataViewer.Rows[eRowIndex].Cells["FullName"].Value.ToString(), "FullName");
@@ -2922,53 +2979,84 @@ namespace dataEditor
             decimal SumGenFirst = 0;
             decimal SumGenLast = 0;
 
-            foreach (DataRow rows in IntegralsDataSet.Tables[mgDataViewer.Rows[eRowIndex].Cells["dataTable"].ToolTipText.ToString()].Rows)
+            if (intgTable != null)
             {
-                if (rows[1].ToString() != "—умма")
+                foreach (DataRow rows in IntegralsDataSet.Tables[intgTable].Rows)
                 {
-                    switch (rows[0].ToString())
+                    if (rows[1].ToString() != "—умма")
                     {
-                        case "A+, к¬т*ч":
-                            SumConFirst += decimal.Parse(rows[2].ToString());
-                            SumConLast += decimal.Parse(rows[3].ToString());
-                            break;
+                        switch (rows[0].ToString())
+                        {
+                            case "A+, к¬т*ч":
+                                SumConFirst += decimal.Parse(rows[2].ToString());
+                                SumConLast += decimal.Parse(rows[3].ToString());
+                                break;
 
-                        case "A-, к¬т*ч":
-                            SumGenFirst += decimal.Parse(rows[2].ToString());
-                            SumGenLast += decimal.Parse(rows[3].ToString());
-                            break;
+                            case "A-, к¬т*ч":
+                                SumGenFirst += decimal.Parse(rows[2].ToString());
+                                SumGenLast += decimal.Parse(rows[3].ToString());
+                                break;
+                        }
                     }
-                }
-                else
-                {
-                    switch (rows[0].ToString())
+                    else
                     {
-                        case "A+, к¬т*ч":
-                            SumConFirst = decimal.Parse(rows[2].ToString());
-                            SumConLast = decimal.Parse(rows[3].ToString());
-                            break;
+                        switch (rows[0].ToString())
+                        {
+                            case "A+, к¬т*ч":
+                                SumConFirst = decimal.Parse(rows[2].ToString());
+                                SumConLast = decimal.Parse(rows[3].ToString());
+                                break;
 
-                        case "A-, к¬т*ч":
-                            SumGenFirst = decimal.Parse(rows[2].ToString());
-                            SumGenLast = decimal.Parse(rows[3].ToString());
-                            break;
+                            case "A-, к¬т*ч":
+                                SumGenFirst = decimal.Parse(rows[2].ToString());
+                                SumGenLast = decimal.Parse(rows[3].ToString());
+                                break;
+                        }
                     }
                 }
             }
 
-            formType1.txtConFirst.Text = SumConFirst.ToString();
-            formType1.txtConLast.Text = SumConLast.ToString();
-            formType1.txtConSumm.Text = ((SumConLast - SumConFirst) * kT).ToString();
-            formType1.txtGenFirst.Text = SumGenFirst.ToString();
-            formType1.txtGenLast.Text = SumGenLast.ToString();
-            formType1.txtGenSumm.Text = ((SumGenLast - SumGenFirst) * kT).ToString();
+            decimal ConSumm = 0;
+            decimal GenSumm = 0;
+
+            if (hrsTable != null)
+            {
+                foreach (DataRow rows in HoursDataSet.Tables[hrsTable].Rows)
+                {
+                    ConSumm += Convert.ToDecimal(rows[2].ToString());
+                    GenSumm += Convert.ToDecimal(rows[3].ToString());
+                }
+            }
+
+
+            ConSumm *= kT;
+            GenSumm *= kT;
+
+            formType1.txtConFirst.Text = Math.Round(SumConFirst,3).ToString();
+            formType1.txtConLast.Text = Math.Round(SumConLast,3).ToString();
+            formType1.txtGenFirst.Text = Math.Round(SumGenFirst,3).ToString();
+            formType1.txtGenLast.Text = Math.Round(SumGenLast,3).ToString();
+
+            switch (cmbxMethod.Text)
+            {
+                case "»нтервалы":
+                    formType1.txtConSumm.Text = Math.Round(((SumConLast - SumConFirst) * kT), 2).ToString();
+                    formType1.txtGenSumm.Text = Math.Round(((SumGenLast - SumGenFirst) * kT), 2).ToString();
+                    break;
+
+                case "„асы":
+                    formType1.txtConSumm.Text = Math.Round(ConSumm,3).ToString();
+                    formType1.txtGenSumm.Text = Math.Round(GenSumm,3).ToString();
+                    break;
+            }
+
 
             formType1.txtsvncEEorem.Text = datsTreeView.Nodes["treeViewLine3"].Nodes["treeViewLine3e1val"].Text;
             formType1.txtsvncPorem.Text = datsTreeView.Nodes["treeViewLine2"].Nodes["treeViewLine2e1val"].Text;
             formType1.txtKF1.Text = datsTreeView.Nodes["treeViewLine1"].Nodes["treeViewLine1e1val"].Text;
 
-            decimal diffSell = ((SumConLast - SumConFirst) * kT) - ((SumGenLast - SumGenFirst) * kT);
-            decimal diffBuy = ((SumGenLast - SumGenFirst) * kT) - ((SumConLast - SumConFirst) * kT);
+            decimal diffSell = Math.Round(((SumConLast - SumConFirst) * kT) - ((SumGenLast - SumGenFirst) * kT),0);
+            decimal diffBuy = Math.Round(((SumGenLast - SumGenFirst) * kT) - ((SumConLast - SumConFirst) * kT),0);
 
             if (diffSell > 0)
             {
@@ -3141,43 +3229,43 @@ namespace dataEditor
                 }
                 catch (Exception ex){}
 
-                formType2.txtConDayFirst.Text = txtConDayFirst.ToString();
-                formType2.txtConDayLast.Text = txtConDayLast.ToString();
-                formType2.txtConNightFirst.Text = txtConNightFirst.ToString();
-                formType2.txtConNightLast.Text = txtConNightLast.ToString();
+                formType2.txtConDayFirst.Text = Math.Round(txtConDayFirst,3).ToString();
+                formType2.txtConDayLast.Text = Math.Round(txtConDayLast,3).ToString();
+                formType2.txtConNightFirst.Text = Math.Round(txtConNightFirst,3).ToString();
+                formType2.txtConNightLast.Text = Math.Round(txtConNightLast,3).ToString();
 
                 ConSummDayDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[0][4].ToString())*kT;
                 ConSummNightDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[1][4].ToString())*kT;
 
-                formType2.txtConDayDiff.Text = ConSummDayDiff.ToString();
-                formType2.txtConNightDiff.Text = ConSummNightDiff.ToString();
+                formType2.txtConDayDiff.Text = Math.Round(ConSummDayDiff,3).ToString();
+                formType2.txtConNightDiff.Text = Math.Round(ConSummNightDiff,3).ToString();
 
                 SumConFirst = txtConDayFirst + txtConNightFirst;
                 SumConLast = txtConDayLast + txtConNightLast;
 
-                formType2.txtGenDayFirst.Text = txtGenDayFirst.ToString();
-                formType2.txtGenDayLast.Text = txtGenDayLast.ToString();
-                formType2.txtGenNightFirst.Text = txtGenNightFirst.ToString();
-                formType2.txtGenNightLast.Text = txtGenNightLast.ToString();
+                formType2.txtGenDayFirst.Text = Math.Round(txtGenDayFirst,3).ToString();
+                formType2.txtGenDayLast.Text = Math.Round(txtGenDayLast,3).ToString();
+                formType2.txtGenNightFirst.Text = Math.Round(txtGenNightFirst,3).ToString();
+                formType2.txtGenNightLast.Text = Math.Round(txtGenNightLast,3).ToString();
                 
                 GenSummDayDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[2][4].ToString())*kT;
                 GenSummNightDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[3][4].ToString())*kT;
 
-                formType2.txtGenDayDiff.Text = GenSummDayDiff.ToString();
-                formType2.txtGenNightDiff.Text = GenSummNightDiff.ToString();
+                formType2.txtGenDayDiff.Text = Math.Round(GenSummDayDiff,3).ToString();
+                formType2.txtGenNightDiff.Text = Math.Round(GenSummNightDiff,3).ToString();
 
                 SumGenFirst = txtGenDayFirst + txtGenNightFirst;
                 SumGenLast = txtGenDayLast + txtGenNightLast;
 
             }
 
-            formType2.txtConSummFirst.Text = Math.Round((SumConFirst * kT),2).ToString();
-            formType2.txtConSummLast.Text = Math.Round((SumConLast * kT),2).ToString();
-            formType2.txtConSummDiff.Text = Math.Round(((SumConLast - SumConFirst) * kT),2).ToString();
+            formType2.txtConSummFirst.Text = Math.Round((SumConFirst * kT),3).ToString();
+            formType2.txtConSummLast.Text = Math.Round((SumConLast * kT),3).ToString();
+            formType2.txtConSummDiff.Text = Math.Round(((SumConLast - SumConFirst) * kT),3).ToString();
 
-            formType2.txtGenSummFirst.Text = Math.Round((SumGenFirst * kT),2).ToString();
-            formType2.txtGenSummLast.Text = Math.Round((SumGenLast * kT),2).ToString();
-            formType2.txtGenSummDiff.Text = Math.Round(((SumGenLast - SumGenFirst) * kT),2).ToString();
+            formType2.txtGenSummFirst.Text = Math.Round((SumGenFirst * kT),3).ToString();
+            formType2.txtGenSummLast.Text = Math.Round((SumGenLast * kT),3).ToString();
+            formType2.txtGenSummDiff.Text = Math.Round(((SumGenLast - SumGenFirst) * kT),3).ToString();
 
             int hrs = 1;
             decimal ConSummDay = 0;
@@ -3207,19 +3295,35 @@ namespace dataEditor
                             ConSummNight += Convert.ToDecimal(rows[2].ToString());
                             GenSummNight += Convert.ToDecimal(rows[3].ToString());
                         }
+                        hrs++;
                     }
                     else
                     {
                         hrs = 1;
+                        string duration = (hrs - 1).ToString() + ":00-" + hrs.ToString() + ":00";
+                        if (TimeIsBetween(hrs, dayStart, dayEnd))
+                        {
+                            formType2.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, rows[3], null);
+                            ConSummDay += Convert.ToDecimal(rows[2].ToString());
+                            GenSummDay += Convert.ToDecimal(rows[3].ToString());
+                        }
+                        else
+                        {
+                            formType2.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, rows[3]);
+                            ConSummNight += Convert.ToDecimal(rows[2].ToString());
+                            GenSummNight += Convert.ToDecimal(rows[3].ToString());
+                        }
+                        hrs++;
                     }
-                    hrs++;
                 }
             }
 
-            ConSummDay = Math.Round(ConSummDay*kT,2);
-            ConSummNight = Math.Round(ConSummNight*kT,2);
-            GenSummDay = Math.Round(GenSummDay,kT);
-            GenSummNight = Math.Round(GenSummNight,kT);
+            formType2.dataHoursViewer.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.DataHoursViewer_RowPrePaint);
+
+            ConSummDay = Math.Round(ConSummDay*kT,3);
+            ConSummNight = Math.Round(ConSummNight*kT,3);
+            GenSummDay = Math.Round(GenSummDay*kT,3);
+            GenSummNight = Math.Round(GenSummNight*kT,3);
 
             formType2.txtConSummDayHH.Text = ConSummDay.ToString();
             formType2.txtGenSummDayHH.Text = GenSummDay.ToString();
@@ -3275,13 +3379,13 @@ namespace dataEditor
                             intgDiffBuyNight = GenSummNightDiff - ConSummNightDiff;
                         }
 
-                        formType2.txtSELLday.Text = Math.Round(intgDiffSellDay,2).ToString();
-                        formType2.txtSELLnight.Text = Math.Round(intgDiffSellNight,2).ToString();
-                        formType2.txtBUYday.Text = Math.Round(intgDiffBuyDay,2).ToString();
-                        formType2.txtBUYnight.Text = Math.Round(intgDiffBuyNight,2).ToString();
+                        formType2.txtSELLday.Text = Math.Round(intgDiffSellDay,0).ToString();
+                        formType2.txtSELLnight.Text = Math.Round(intgDiffSellNight,0).ToString();
+                        formType2.txtBUYday.Text = Math.Round(intgDiffBuyDay,0).ToString();
+                        formType2.txtBUYnight.Text = Math.Round(intgDiffBuyNight,0).ToString();
 
-                        formType2.lblSell.Text = Math.Round((intgDiffSellDay + intgDiffSellNight),2).ToString();
-                        formType2.lblBuy.Text = Math.Round((intgDiffBuyDay + intgDiffBuyNight),2).ToString();
+                        formType2.lblSell.Text = Math.Round((intgDiffSellDay + intgDiffSellNight),0).ToString();
+                        formType2.lblBuy.Text = Math.Round((intgDiffBuyDay + intgDiffBuyNight),0).ToString();
                         break;
 
                     case "useHours":
@@ -3303,14 +3407,13 @@ namespace dataEditor
                             hrsDiffBuyNight = GenSummNight - ConSummNight;
                         }
 
-                        formType2.txtSELLday.Text = Math.Round(hrsDiffSellDay,2).ToString();
-                        formType2.txtSELLnight.Text = Math.Round(hrsDiffSellNight,2).ToString();
-                        formType2.txtBUYday.Text = Math.Round(hrsDiffBuyDay,2).ToString();
-                        formType2.txtBUYnight.Text = Math.Round(hrsDiffBuyNight,2).ToString();
+                        formType2.txtSELLday.Text = Math.Round(hrsDiffSellDay,0).ToString();
+                        formType2.txtSELLnight.Text = Math.Round(hrsDiffSellNight,0).ToString();
+                        formType2.txtBUYday.Text = Math.Round(hrsDiffBuyDay,0).ToString();
+                        formType2.txtBUYnight.Text = Math.Round(hrsDiffBuyNight,0).ToString();
 
-                        formType2.lblSell.Text = Math.Round((hrsDiffSellDay + hrsDiffSellNight),2).ToString();
-                        formType2.lblBuy.Text = Math.Round((hrsDiffBuyDay + hrsDiffBuyNight),2).ToString();
-
+                        formType2.lblSell.Text = Math.Round((hrsDiffSellDay + hrsDiffSellNight),0).ToString();
+                        formType2.lblBuy.Text = Math.Round((hrsDiffBuyDay + hrsDiffBuyNight),0).ToString();
                         break;
                 }
             }
@@ -3348,9 +3451,44 @@ namespace dataEditor
 
             }
 
-
-
             formType2.Show();
+        }
+
+        private void DataHoursViewer_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            var tablesDataGridView = (DoubleBufferedDataGridView)sender;
+
+            int lim1 = 0;
+            int lim2 = 0;
+            int start = 0;
+
+            foreach (DataGridViewRow rows in tablesDataGridView.Rows)
+            {
+                if (start >= 24)
+                {
+                    if (lim1 < 24)
+                    {
+                        rows.DefaultCellStyle.BackColor = Color.LightGray;
+                        lim1++;
+                        lim2++;
+                    }
+                    else if (lim2 != 47)
+                    {
+                        lim2++;
+                    }
+                    else
+                    {
+                        lim1 = 0;
+                        lim2 = 0;
+                    }
+                }
+                else
+                {
+                    start++;
+                }
+            }
+            tablesDataGridView.ClearSelection();
+            tablesDataGridView.RowPrePaint -= new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.DataHoursViewer_RowPrePaint);
         }
 
         private void openFormType3(int eRowIndex)
@@ -3527,13 +3665,13 @@ namespace dataEditor
             }
 
 
-            formType3.txtConSummFirst.Text = Math.Round((SumConFirst * kT),2).ToString();
-            formType3.txtConSummLast.Text = Math.Round((SumConLast * kT),2).ToString();
-            formType3.txtConSummDiff.Text = Math.Round(((SumConLast - SumConFirst) * kT),2).ToString();
+            formType3.txtConSummFirst.Text = Math.Round((SumConFirst * kT),3).ToString();
+            formType3.txtConSummLast.Text = Math.Round((SumConLast * kT),3).ToString();
+            formType3.txtConSummDiff.Text = Math.Round(((SumConLast - SumConFirst) * kT),3).ToString();
 
-            formType3.txtGenSummFirst.Text = Math.Round((SumGenFirst * kT),2).ToString();
-            formType3.txtGenSummLast.Text = Math.Round((SumGenLast * kT),2).ToString();
-            formType3.txtGenSummDiff.Text = Math.Round(((SumGenLast - SumGenFirst) * kT),2).ToString();
+            formType3.txtGenSummFirst.Text = Math.Round((SumGenFirst * kT),3).ToString();
+            formType3.txtGenSummLast.Text = Math.Round((SumGenLast * kT),3).ToString();
+            formType3.txtGenSummDiff.Text = Math.Round(((SumGenLast - SumGenFirst) * kT),3).ToString();
 
             int hrs = 0;
             decimal ConSummPeak = 0;
@@ -3608,12 +3746,12 @@ namespace dataEditor
                 }
             }
             
-            ConSummPeak = Math.Round(ConSummPeak*kT,2);
-            ConSummSemiPeak = Math.Round(ConSummSemiPeak*kT,2);
-            ConSummNight = Math.Round(ConSummNight*kT,2);
-            GenSummPeak = Math.Round(GenSummPeak*kT,2);
-            GenSummSemiPeak = Math.Round(GenSummSemiPeak*kT,2);
-            GenSummNight = Math.Round(GenSummNight*kT,2);
+            ConSummPeak = Math.Round(ConSummPeak*kT,3);
+            ConSummSemiPeak = Math.Round(ConSummSemiPeak*kT,3);
+            ConSummNight = Math.Round(ConSummNight*kT,3);
+            GenSummPeak = Math.Round(GenSummPeak*kT,3);
+            GenSummSemiPeak = Math.Round(GenSummSemiPeak*kT,3);
+            GenSummNight = Math.Round(GenSummNight*kT,3);
 
             formType3.txtConSummPeakHH.Text = ConSummPeak.ToString();
             formType3.txtConSummSemiPeakHH.Text = ConSummSemiPeak.ToString();
@@ -3692,13 +3830,13 @@ namespace dataEditor
                             intgDiffBuyNight = GenNightDiff - ConNightDiff;
                         }
 
-                        formType3.txtSELLpeak.Text = Math.Round(intgDiffSellPeak,2).ToString();
-                        formType3.txtSELLsemiPeak.Text = Math.Round(intgDiffSellSemiPeak,2).ToString();
-                        formType3.txtSELLnight.Text = Math.Round(intgDiffSellNight,2).ToString();
+                        formType3.txtSELLpeak.Text = Math.Round(intgDiffSellPeak,0).ToString();
+                        formType3.txtSELLsemiPeak.Text = Math.Round(intgDiffSellSemiPeak,0).ToString();
+                        formType3.txtSELLnight.Text = Math.Round(intgDiffSellNight,0).ToString();
 
-                        formType3.txtBUYpeak.Text = Math.Round(intgDiffBuyPeak,2).ToString();
-                        formType3.txtBUYsemiPeak.Text = Math.Round(intgDiffSellSemiPeak,2).ToString();
-                        formType3.txtBUYnight.Text = Math.Round(intgDiffBuyNight,2).ToString();
+                        formType3.txtBUYpeak.Text = Math.Round(intgDiffBuyPeak,0).ToString();
+                        formType3.txtBUYsemiPeak.Text = Math.Round(intgDiffSellSemiPeak,0).ToString();
+                        formType3.txtBUYnight.Text = Math.Round(intgDiffBuyNight,0).ToString();
 
                         formType3.lblSell.Text = (intgDiffSellPeak + intgDiffSellSemiPeak + intgDiffSellNight).ToString();
                         formType3.lblBuy.Text = (intgDiffBuyPeak + intgDiffSellSemiPeak + intgDiffBuyNight).ToString();
@@ -3732,13 +3870,13 @@ namespace dataEditor
                             hrsDiffBuyNight = GenSummNight - ConSummNight;
                         }
 
-                        formType3.txtSELLpeak.Text = Math.Round(hrsDiffSellPeak,2).ToString();
-                        formType3.txtSELLsemiPeak.Text = Math.Round(hrsDiffSellSemiPeak,2).ToString();
-                        formType3.txtSELLnight.Text = Math.Round(hrsDiffSellNight,2).ToString();
+                        formType3.txtSELLpeak.Text = Math.Round(hrsDiffSellPeak,0).ToString();
+                        formType3.txtSELLsemiPeak.Text = Math.Round(hrsDiffSellSemiPeak,0).ToString();
+                        formType3.txtSELLnight.Text = Math.Round(hrsDiffSellNight,0).ToString();
 
-                        formType3.txtBUYpeak.Text = Math.Round(hrsDiffBuyPeak,2).ToString();
-                        formType3.txtBUYsemiPeak.Text = Math.Round(hrsDiffBuySemiPeak, 2).ToString();
-                        formType3.txtBUYnight.Text = Math.Round(hrsDiffBuyNight,2).ToString();
+                        formType3.txtBUYpeak.Text = Math.Round(hrsDiffBuyPeak,0).ToString();
+                        formType3.txtBUYsemiPeak.Text = Math.Round(hrsDiffBuySemiPeak, 0).ToString();
+                        formType3.txtBUYnight.Text = Math.Round(hrsDiffBuyNight,0).ToString();
 
                         formType3.lblSell.Text = (hrsDiffSellPeak + hrsDiffSellSemiPeak + hrsDiffSellNight).ToString();
                         formType3.lblBuy.Text = (hrsDiffBuyPeak + hrsDiffBuySemiPeak + hrsDiffBuyNight).ToString();
@@ -3791,10 +3929,8 @@ namespace dataEditor
         public static bool TimeIsBetween(int hrs, TimeSpan start, TimeSpan end)
         {
             var time = hrs;
-            // Scenario 1: If the start time and the end time are in the same day.
             if (start.Hours <= end.Hours)
                 return time > start.Hours && time <= end.Hours;
-            // Scenario 2: The start time and end time is on different days.
             return time > start.Hours || time <= end.Hours;
         }
 
