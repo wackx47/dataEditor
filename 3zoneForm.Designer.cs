@@ -219,7 +219,7 @@
             this.mainPanel.MinimumSize = new System.Drawing.Size(720, 360);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Padding = new System.Windows.Forms.Padding(5);
-            this.mainPanel.Size = new System.Drawing.Size(1180, 735);
+            this.mainPanel.Size = new System.Drawing.Size(1174, 726);
             this.mainPanel.TabIndex = 2;
             // 
             // groupBoxResult
@@ -2376,13 +2376,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.AutoScrollMinSize = new System.Drawing.Size(1180, 735);
+            this.AutoScrollMinSize = new System.Drawing.Size(1150, 725);
             this.ClientSize = new System.Drawing.Size(1184, 736);
             this.Controls.Add(this.mainPanel);
             this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1200, 775);
-            this.MinimumSize = new System.Drawing.Size(607, 300);
+            this.MinimumSize = new System.Drawing.Size(625, 300);
             this.Name = "FormType3";
             this.Padding = new System.Windows.Forms.Padding(5);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

@@ -52,6 +52,7 @@ using static System.Windows.Forms.LinkLabel;
 using System.Drawing.Drawing2D;
 using System.IO.Packaging;
 using System.Net.Security;
+using IDataObject_Com = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace dataEditor
 {
@@ -1941,14 +1942,13 @@ namespace dataEditor
         {
             int max = 0;
             List<Button> listOfButtons = new List<Button>();
-            foreach (Button buttons in mgFlowPanelResult.Controls)
+            foreach (Button buttons in mgFlowPanelResult.Controls.OfType<Button>())
             {
                 Size len = TextRenderer.MeasureText(buttons.Text, buttons.Font);
                 if (len.Width > max)
                 {
                     max = len.Width;
                 }
-
 
                 int SearchRowName = -1;
                 switch (buttons.Text.Split("_").First())
@@ -2025,13 +2025,13 @@ namespace dataEditor
                 string tempBtnName = buttons.Text.Split("_").Last();
                 foreach (char c in tempBtnName)
                 {
-                    if(c.ToString() != "0")
+                    if (c.ToString() != "0")
                     {
                         break;
                     }
                     else
                     {
-                        tempBtnName=tempBtnName.Substring(1);
+                        tempBtnName = tempBtnName.Substring(1);
                     }
                 }
 
@@ -2100,7 +2100,6 @@ namespace dataEditor
                             HoursDataSet.Tables[buttons.Text + "_header"].Rows[0][1] = mgDataViewer.Rows[SearchRowNumCC].Cells["FullName"].Value.ToString();
                             break;
                     }
-
                 }
             }
             foreach(Button removed in listOfButtons)
@@ -2202,9 +2201,11 @@ namespace dataEditor
             }
         }
 
+
         private void mgDataViewer_MouseDown(object sender, MouseEventArgs e)
         {
             tableRemove = null;
+
             DataGridView.HitTestInfo hittest = mgDataViewer.HitTest(e.X, e.Y);
             if (hittest.ColumnIndex == mgDataViewer.Columns["dataTable"].Index && hittest.RowIndex != -1)
             {
@@ -2368,6 +2369,7 @@ namespace dataEditor
             SelectedRowIndex = rowIndex;
         }
 
+
         private void mgFlowPanelResult_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(typeof(DataGridViewButtonCell)))
@@ -2378,28 +2380,31 @@ namespace dataEditor
 
         private void mgDataViewer_DragLeave(object sender, EventArgs e)
         {
-            //mgDataViewer.RowPostPaint -= new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.mgDataViewer_RowPostPaint);
             mgDataViewer.Refresh();
         }
 
         private void mgDataViewer_DragOver(object sender, DragEventArgs e)
         {
-            e.Effect = DragDropEffects.Move;
-            int mousepos = PointToClient(Cursor.Position).Y;
-            if (mousepos > (MainTableLayoutPanel.Bottom - (mgSplitContainer_insideHorizontal.Height - mgSplitContainer_insideHorizontal.Panel2MinSize - mgSplitContainer_insideHorizontal.SplitterDistance)) * 0.995)
+            if (Control.MouseButtons.ToString() == "Left")
             {
-                if (mgDataViewer.FirstDisplayedScrollingRowIndex < mgDataViewer.RowCount - 1)
+                e.Effect = DragDropEffects.Move;
+                int mousepos = PointToClient(Cursor.Position).Y;
+                if (mousepos > (MainTableLayoutPanel.Bottom - (mgSplitContainer_insideHorizontal.Height - mgSplitContainer_insideHorizontal.Panel2MinSize - mgSplitContainer_insideHorizontal.SplitterDistance)) * 0.995)
                 {
-                    mgDataViewer.FirstDisplayedScrollingRowIndex += 1;
+                    if (mgDataViewer.FirstDisplayedScrollingRowIndex < mgDataViewer.RowCount - 1)
+                    {
+                        mgDataViewer.FirstDisplayedScrollingRowIndex += 1;
+                    }
                 }
-            }
 
-            if (mousepos < (MainTableLayoutPanel.Top+270))
-            {
-                if (mgDataViewer.FirstDisplayedScrollingRowIndex > 0)
+                if (mousepos < (MainTableLayoutPanel.Top + 270))
                 {
-                    mgDataViewer.FirstDisplayedScrollingRowIndex -= 1;
+                    if (mgDataViewer.FirstDisplayedScrollingRowIndex > 0)
+                    {
+                        mgDataViewer.FirstDisplayedScrollingRowIndex -= 1;
+                    }
                 }
+
             }
         }
 
@@ -2979,7 +2984,7 @@ namespace dataEditor
             decimal SumGenFirst = 0;
             decimal SumGenLast = 0;
 
-            if (intgTable != null)
+            if (intgTable != null && Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["intgStatusError"].Value) != CheckState.Checked.ToString())
             {
                 foreach (DataRow rows in IntegralsDataSet.Tables[intgTable].Rows)
                 {
@@ -3019,7 +3024,7 @@ namespace dataEditor
             decimal ConSumm = 0;
             decimal GenSumm = 0;
 
-            if (hrsTable != null)
+            if (hrsTable != null && Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["hrsStatusError"].Value) != CheckState.Checked.ToString())
             {
                 foreach (DataRow rows in HoursDataSet.Tables[hrsTable].Rows)
                 {
@@ -3203,7 +3208,7 @@ namespace dataEditor
             decimal GenSummNightDiff = 0;
 
 
-            if (intgTable != null)
+            if (intgTable != null && Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["intgStatusError"].Value) != CheckState.Checked.ToString())
             {
                 decimal txtConDayFirst = 0;
                 decimal txtConDayLast = 0;
@@ -3276,8 +3281,10 @@ namespace dataEditor
             TimeSpan dayStart = new TimeSpan(mgSettings.mgHoursDoubleTariffZone.day.initial, 0, 0);
             TimeSpan dayEnd = new TimeSpan(mgSettings.mgHoursDoubleTariffZone.day.final, 0, 0);
 
-            if (hrsTable != null)
+            if (hrsTable != null && Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["hrsStatusError"].Value) != CheckState.Checked.ToString())
             {
+                formType2.dataHoursViewer.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.DataHoursViewer_RowPrePaint);
+
                 foreach (DataRow rows in HoursDataSet.Tables[hrsTable].Rows)
                 {
                     if (hrs <= 24)
@@ -3317,8 +3324,6 @@ namespace dataEditor
                     }
                 }
             }
-
-            formType2.dataHoursViewer.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.DataHoursViewer_RowPrePaint);
 
             ConSummDay = Math.Round(ConSummDay*kT,3);
             ConSummNight = Math.Round(ConSummNight*kT,3);
@@ -3601,7 +3606,7 @@ namespace dataEditor
             decimal GenSemiPeakDiff = 0;
             decimal GenNightDiff = 0;
 
-            if (intgTable != null)
+            if (intgTable != null && Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["intgStatusError"].Value) != CheckState.Checked.ToString())
             {
                 decimal txtConPeakFirst = 0;
                 decimal txtConPeakLast = 0;
@@ -3694,8 +3699,10 @@ namespace dataEditor
             TimeSpan semiPeakStart2 = new TimeSpan(mgSettings.mgHoursTripleTariffZone.semiPeak.initial2, 0, 0);
             TimeSpan semiPeakEnd2 = new TimeSpan(mgSettings.mgHoursTripleTariffZone.semiPeak.final2, 0, 0);
 
-            if (hrsTable != null)
+            if (hrsTable != null && Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["hrsStatusError"].Value) != CheckState.Checked.ToString())
             {
+                formType3.dataHoursViewer.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.DataHoursViewer_RowPrePaint);
+
                 foreach (DataRow rows in HoursDataSet.Tables[hrsTable].Rows)
                 {
                     hrs++;
@@ -3707,7 +3714,6 @@ namespace dataEditor
                             formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
                             ConSummPeak += Convert.ToDecimal(rows[2].ToString());
                             GenSummPeak += Convert.ToDecimal(rows[3].ToString());
-
                             continue;
                         }
                         if (TimeIsBetween(hrs, peakStart2, peakEnd2))
@@ -3741,7 +3747,43 @@ namespace dataEditor
                     }
                     else
                     {
-                        hrs = 0;
+                        hrs = 1;
+                        string duration = (hrs - 1).ToString() + ":00-" + hrs.ToString() + ":00";
+                        if (TimeIsBetween(hrs, peakStart1, peakEnd1))
+                        {
+                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
+                            ConSummPeak += Convert.ToDecimal(rows[2].ToString());
+                            GenSummPeak += Convert.ToDecimal(rows[3].ToString());
+                            continue;
+                        }
+                        if (TimeIsBetween(hrs, peakStart2, peakEnd2))
+                        {
+                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
+                            ConSummPeak += Convert.ToDecimal(rows[2].ToString());
+                            GenSummPeak += Convert.ToDecimal(rows[3].ToString());
+                            continue;
+                        }
+                        if (TimeIsBetween(hrs, semiPeakStart1, semiPeakEnd1))
+                        {
+                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
+                            ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
+                            GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
+                            continue;
+                        }
+                        if (TimeIsBetween(hrs, semiPeakStart2, semiPeakEnd2))
+                        {
+                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
+                            ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
+                            GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
+                            continue;
+                        }
+                        if (TimeIsBetween(hrs, nightStart, nightEnd))
+                        {
+                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, null, rows[2], null, null, rows[3]);
+                            ConSummNight += Convert.ToDecimal(rows[2].ToString());
+                            GenSummNight += Convert.ToDecimal(rows[3].ToString());
+                            continue;
+                        }
                     }
                 }
             }

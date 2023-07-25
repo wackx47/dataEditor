@@ -308,6 +308,21 @@ namespace dataEditor
             set { m_siteLinkSPUNC = value; }
         }
 
+        hoursTariffZone m_mgHoursZone = new hoursTariffZone();
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("")]
+        [DisplayName("HoursZone")]
+        [Category("HoursSettings")]
+        [Editor(typeof(ZoneEditor), typeof(UITypeEditor))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public hoursTariffZone mgHoursZone
+        {
+            get { return m_mgHoursZone; }
+            set { m_mgHoursZone = value; }
+        }
+
+
         doubleTariffZone m_mgHoursDoubleTariffZone = new doubleTariffZone();
         [Browsable(true)]
         [ReadOnly(false)]
@@ -606,6 +621,60 @@ namespace dataEditor
         }
     }
 
+    class ZoneEditor : UITypeEditor
+    {
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        {
+            return UITypeEditorEditStyle.Modal;
+        }
+        public override object EditValue(ITypeDescriptorContext context, System.IServiceProvider provider, object value)
+        {
+            IWindowsFormsEditorService svc = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
+            hoursTariffZone zone = value as hoursTariffZone;
+            if (svc != null && zone != null)
+            {
+                using (hoursZoneEditor form = new hoursZoneEditor())
+                {
+                    if (svc.ShowDialog(form) == DialogResult.OK)
+                    {
+                        zone.DoubleZone = "4759";
+                    }
+                }
+            }
+            return value;
+        }
+    }
+
+    class hoursTariffZone
+    {
+        public hoursTariffZone()
+        {
+
+        }
+
+        private string _doubleZone;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("2Zone")]
+        [Description("")]
+        public string DoubleZone
+        {
+            get { return _doubleZone; }
+            set { _doubleZone = value; }
+        }
+
+        private string _trippleZone;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("3Zone")]
+        [Description("")]
+        public string TrippleZone
+        {
+            get { return _trippleZone; }
+            set { _trippleZone = value; }
+        }
+    }
+
     class doubleTariffZone
     {
         public doubleTariffZone()
@@ -674,7 +743,7 @@ namespace dataEditor
             set { _semiPeak = value; }
         }
 
-        night _night = new night(23,6);
+        night _night = new night(23,7);
         [Browsable(true)]
         [ReadOnly(false)]
         [DisplayName("night")]
