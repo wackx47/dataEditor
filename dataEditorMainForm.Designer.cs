@@ -160,6 +160,7 @@ namespace dataEditor
             this.mgFlowPanelResult = new System.Windows.Forms.FlowLayoutPanel();
             this.FlowPanelTools = new System.Windows.Forms.ToolStrip();
             this.FlowPanelButtonAddTable = new System.Windows.Forms.ToolStripButton();
+            this.FlowPanelButtonDeleteAllTables = new System.Windows.Forms.ToolStripButton();
             this.inputTableLoyaut = new System.Windows.Forms.TableLayoutPanel();
             this.datsTreeView = new System.Windows.Forms.TreeView();
             this.mgToolStripInputData = new System.Windows.Forms.ToolStrip();
@@ -174,7 +175,7 @@ namespace dataEditor
             this.imgStatusOk = new System.Windows.Forms.ToolStripButton();
             this.imgStatusDwnld = new System.Windows.Forms.ToolStripButton();
             this.imgStatusFailed = new System.Windows.Forms.ToolStripButton();
-            this.g = new System.Windows.Forms.ToolStrip();
+            this.mgMainToolStrip = new System.Windows.Forms.ToolStrip();
             this.mgBtnNewProject = new System.Windows.Forms.ToolStripButton();
             this.mgBtnOpenFile = new System.Windows.Forms.ToolStripButton();
             this.mgBtnSaveDats = new System.Windows.Forms.ToolStripButton();
@@ -263,7 +264,7 @@ namespace dataEditor
             this.FlowPanelTools.SuspendLayout();
             this.inputTableLoyaut.SuspendLayout();
             this.mgToolStripInputData.SuspendLayout();
-            this.g.SuspendLayout();
+            this.mgMainToolStrip.SuspendLayout();
             this.tabControlCurrentProject.SuspendLayout();
             this.tabBasic.SuspendLayout();
             this.upperTableLayoutMainData.SuspendLayout();
@@ -508,7 +509,7 @@ namespace dataEditor
             this.MainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.MainTableLayoutPanel.Controls.Add(this.lblMainName, 0, 0);
             this.MainTableLayoutPanel.Controls.Add(this.mgSplitContainer_insideHorizontal, 0, 3);
-            this.MainTableLayoutPanel.Controls.Add(this.g, 0, 1);
+            this.MainTableLayoutPanel.Controls.Add(this.mgMainToolStrip, 0, 1);
             this.MainTableLayoutPanel.Controls.Add(this.tabControlCurrentProject, 0, 2);
             this.MainTableLayoutPanel.Controls.Add(this.ProjectInfoBox, 1, 2);
             this.MainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -978,12 +979,13 @@ namespace dataEditor
             this.FlowPanelTools.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FlowPanelTools.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.FlowPanelTools.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.FlowPanelButtonAddTable});
+            this.FlowPanelButtonAddTable,
+            this.FlowPanelButtonDeleteAllTables});
             this.FlowPanelTools.Location = new System.Drawing.Point(1, 1);
             this.FlowPanelTools.Margin = new System.Windows.Forms.Padding(1);
             this.FlowPanelTools.Name = "FlowPanelTools";
             this.FlowPanelTools.Padding = new System.Windows.Forms.Padding(4, 0, 1, 0);
-            this.FlowPanelTools.Size = new System.Drawing.Size(30, 25);
+            this.FlowPanelTools.Size = new System.Drawing.Size(53, 25);
             this.FlowPanelTools.TabIndex = 3;
             // 
             // FlowPanelButtonAddTable
@@ -995,6 +997,15 @@ namespace dataEditor
             this.FlowPanelButtonAddTable.Size = new System.Drawing.Size(23, 22);
             this.FlowPanelButtonAddTable.Text = "Add Table";
             this.FlowPanelButtonAddTable.Click += new System.EventHandler(this.FlowPanelButtonAddTable_Click);
+            // 
+            // FlowPanelButtonDeleteAllTables
+            // 
+            this.FlowPanelButtonDeleteAllTables.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.FlowPanelButtonDeleteAllTables.Image = ((System.Drawing.Image)(resources.GetObject("FlowPanelButtonDeleteAllTables.Image")));
+            this.FlowPanelButtonDeleteAllTables.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.FlowPanelButtonDeleteAllTables.Name = "FlowPanelButtonDeleteAllTables";
+            this.FlowPanelButtonDeleteAllTables.Size = new System.Drawing.Size(23, 22);
+            this.FlowPanelButtonDeleteAllTables.Text = "toolStripButton1";
             // 
             // inputTableLoyaut
             // 
@@ -1254,12 +1265,12 @@ namespace dataEditor
             this.imgStatusFailed.Size = new System.Drawing.Size(23, 22);
             this.imgStatusFailed.Visible = false;
             // 
-            // g
+            // mgMainToolStrip
             // 
-            this.g.BackColor = System.Drawing.SystemColors.Control;
-            this.g.Dock = System.Windows.Forms.DockStyle.None;
-            this.g.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.g.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mgMainToolStrip.BackColor = System.Drawing.SystemColors.Control;
+            this.mgMainToolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.mgMainToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.mgMainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mgBtnNewProject,
             this.mgBtnOpenFile,
             this.mgBtnSaveDats,
@@ -1274,12 +1285,12 @@ namespace dataEditor
             this.mgOpenDataTable,
             this.mgDataСalculation,
             this.mgDataAct});
-            this.g.Location = new System.Drawing.Point(5, 26);
-            this.g.Margin = new System.Windows.Forms.Padding(5, 1, 1, 1);
-            this.g.Name = "g";
-            this.g.Size = new System.Drawing.Size(214, 25);
-            this.g.TabIndex = 4;
-            this.g.Text = "mgTools";
+            this.mgMainToolStrip.Location = new System.Drawing.Point(5, 26);
+            this.mgMainToolStrip.Margin = new System.Windows.Forms.Padding(5, 1, 1, 1);
+            this.mgMainToolStrip.Name = "mgMainToolStrip";
+            this.mgMainToolStrip.Size = new System.Drawing.Size(214, 25);
+            this.mgMainToolStrip.TabIndex = 4;
+            this.mgMainToolStrip.Text = "mgTools";
             // 
             // mgBtnNewProject
             // 
@@ -2274,8 +2285,8 @@ namespace dataEditor
             this.inputTableLoyaut.PerformLayout();
             this.mgToolStripInputData.ResumeLayout(false);
             this.mgToolStripInputData.PerformLayout();
-            this.g.ResumeLayout(false);
-            this.g.PerformLayout();
+            this.mgMainToolStrip.ResumeLayout(false);
+            this.mgMainToolStrip.PerformLayout();
             this.tabControlCurrentProject.ResumeLayout(false);
             this.tabBasic.ResumeLayout(false);
             this.tabBasic.PerformLayout();
@@ -2344,7 +2355,7 @@ namespace dataEditor
         private ToolStripMenuItem xFAReaderToolStripMenuItem;
         private ToolStripMenuItem ExitUR;
         private TabPage tabMicrogeneration;
-        private ToolStrip g;
+        private ToolStrip mgMainToolStrip;
         private ToolStripSplitButton mgBtnImportFile;
         private ToolStripButton toolBtnDictionaryList;
         private ToolStripButton toolBtnDictionaryEditor;
@@ -2461,5 +2472,6 @@ namespace dataEditor
         private DataGridViewComboBoxColumn Method;
         private DataGridViewCheckBoxColumn intgStatusError;
         private DataGridViewCheckBoxColumn hrsStatusError;
+        private ToolStripButton FlowPanelButtonDeleteAllTables;
     }
 }

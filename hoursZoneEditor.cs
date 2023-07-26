@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml.Core;
+﻿using NPOI.SS.Formula.Functions;
+using OfficeOpenXml.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,7 +27,9 @@ namespace dataEditor
         private void hoursZoneEditor_Load(object sender, EventArgs e)
         {
             fillTable();
-            cmbxSelectHours.SelectedIndex = 0;
+            cmbxSelectGlobalZone.SelectedIndex = 0;
+            cmbxSelectTypeZone.Items.AddRange(new[] { "день", "ночь" });
+            cmbxSelectTypeZone.SelectedIndex = 0;
             doubleZoneTreeView.ExpandAll();
         }
 
@@ -96,9 +99,62 @@ namespace dataEditor
             }
         }
 
+        int[,] _2dayZone = new int[1, 6];
+        int[,] _2nightZone = new int[1, 6];
+
+        int[,] _3peakZone = new int[1, 6];
+        int[,] _3semiPeakZone = new int[1, 6];
+        int[,] _3night = new int[1, 6];
+
+
+        int[,] _grectangles = new int[1, 6];
         private void btnApplyHours_Click(object sender, EventArgs e)
         {
-            SelectedRows();
+            switch (cmbxSelectGlobalZone.Text)
+            {
+                case "2 зоны":
+                    if(cmbxSelectTypeZone.Text == "день")
+                    {
+                        _2dayZone = SelectedRows();
+                    }
+                    else if (cmbxSelectTypeZone.Text == "ночь")
+                    {
+                        _2nightZone = SelectedRows();
+                    }
+
+                    foreach (DataGridViewRow rows in hoursDataGrid.Rows)
+                    {
+                        rows.DefaultCellStyle.BackColor = Color.FromKnownColor(KnownColor.Control);
+
+                        if (_2dayZone.GetLength(0) > 0)
+                        {
+                            for (int i = 0; i < _2dayZone.GetLength(0); i++)
+                            {
+                                for (int j = _2dayZone[i, 4]; j <= _2dayZone[i, 5]; j++)
+                                {
+                                    hoursDataGrid.Rows[j].DefaultCellStyle.BackColor = Color.LightBlue;
+                                }
+                            }
+                        }
+
+                        if (_2nightZone.GetLength(0) > 0)
+                        {
+                            for (int i = 0; i < _2nightZone.GetLength(0); i++)
+                            {
+                                for (int j = _2nightZone[i, 4]; j <= _2nightZone[i, 5]; j++)
+                                {
+                                    hoursDataGrid.Rows[j].DefaultCellStyle.BackColor = Color.Salmon;
+                                }
+                            }
+                        }
+                    }
+                    hoursDataGrid.Refresh();
+                    hoursDataGrid.ClearSelection();
+                    break;
+                case "3 зоны":
+
+                    break;
+            }
         }
 
         T[,] ResizeArray<T>(T[,] original, int rows, int cols)
@@ -124,17 +180,17 @@ namespace dataEditor
             }
 
             int arraysCount = 1;
-            int[,] rectangles = new int[arraysCount, 4];
-            Console.WriteLine("\n" + "Debug new ListSelectedRows");
+            int[,] rectangles = new int[arraysCount, 6];
+
             for (int i = 0; i < selectedRows.Count; i++)
             {
                 if (i == 0)
                 {
                     rectangles[arraysCount - 1, 0] = 1;
                     rectangles[arraysCount - 1, 1] = hoursDataGrid.GetRowDisplayRectangle(selectedRows[i], false).Y;
-                    rectangles[arraysCount - 1, 2] = hoursDataGrid.GetRowDisplayRectangle(selectedRows[i], false).Width;
+                    rectangles[arraysCount - 1, 2] = hoursDataGrid.GetRowDisplayRectangle(selectedRows[i], false).Width-1;
                     rectangles[arraysCount - 1, 3] = hoursDataGrid.GetRowDisplayRectangle(selectedRows[i], false).Height;
-                    Console.WriteLine(selectedRows[i]);
+                    rectangles[arraysCount - 1, 4] = selectedRows[i];
                 }
                 else
                 {
@@ -144,17 +200,17 @@ namespace dataEditor
                         if (diff == 1)
                         {
                             rectangles[arraysCount - 1, 3] += hoursDataGrid.GetRowDisplayRectangle(selectedRows[i], false).Height;
-                            Console.WriteLine(selectedRows[i]);
+                            rectangles[arraysCount - 1, 5] = selectedRows[i];
                         }
                         else
                         {
                             arraysCount++;
-                            rectangles = ResizeArray(rectangles, arraysCount, 4);
+                            rectangles = ResizeArray(rectangles, arraysCount, 6);
                             rectangles[arraysCount - 1, 0] = 1;
                             rectangles[arraysCount - 1, 1] = hoursDataGrid.GetRowDisplayRectangle(selectedRows[i], false).Y;
-                            rectangles[arraysCount - 1, 2] = hoursDataGrid.GetRowDisplayRectangle(selectedRows[i], false).Width;
+                            rectangles[arraysCount - 1, 2] = hoursDataGrid.GetRowDisplayRectangle(selectedRows[i], false).Width-1;
                             rectangles[arraysCount - 1, 3] = hoursDataGrid.GetRowDisplayRectangle(selectedRows[i], false).Height;
-                            Console.WriteLine("\n" + selectedRows[i]);
+                            rectangles[arraysCount - 1, 4] = selectedRows[i];
                         }
                     }
                     catch (Exception ex)
@@ -163,16 +219,19 @@ namespace dataEditor
                     }
                 }
             }
-            Console.WriteLine("\n" + "Debug View result array");
-            for(int i=0; i<rectangles.GetLength(0); i++)
+            bool printVal = false;
+            if (printVal)
             {
-                Console.Write("{X= " + rectangles[i,0] + "; ");
-                Console.Write("Y= " + rectangles[i, 1] + "; ");
-                Console.Write("width= " + rectangles[i, 2] + "; ");
-                Console.Write("TotalHeight= " + rectangles[i, 3] + "}" + "\n");
+                for (int i = 0; i < rectangles.GetLength(0); i++)
+                {
+                    Console.Write("{X= " + rectangles[i, 0] + "; ");
+                    Console.Write("Y= " + rectangles[i, 1] + "; ");
+                    Console.Write("width= " + rectangles[i, 2] + "; ");
+                    Console.Write("TotalHeight= " + rectangles[i, 3] + "; ");
+                    Console.Write("firstIndex= " + rectangles[i, 4] + "; ");
+                    Console.Write("lastIndex= " + rectangles[i, 5] + "}" + "\n");
+                }
             }
-            
-
             return rectangles;
         }
 
@@ -180,39 +239,159 @@ namespace dataEditor
         {
             if (e.Button == MouseButtons.Left)
             {
+                switch (cmbxSelectGlobalZone.Text)
+                {
+                    case "2 зоны":
+                        switch (cmbxSelectTypeZone.Text)
+                        {
+                            case "день":
+                                hoursDataGrid.Invalidate();
+                                _2dayZone = SelectedRows();
+                                break;
+
+                            case "ночь":
+                                hoursDataGrid.Invalidate();
+                                _2nightZone = SelectedRows();
+                                break;
+                        }
+                        break;
+
+                    case "3 зоны":
+
+                        break;
+                }
 
             }
         }
 
-        private void hoursDataGridRowPaint(int row, PaintEventArgs e)
+        private void hoursDataGridRowPaint(Rectangle rowBound)
         {
-            if (row != -1)
+            Graphics g = hoursDataGrid.CreateGraphics();
             {
-                hoursDataGrid.Refresh();
-                Rectangle rowBound = e.ClipRectangle;
+                using (var pen = new Pen(Color.FromArgb(255, 50, 0, 250), 2))
                 {
-                    using (var pen = new Pen(Color.FromArgb(255, 50, 0, 250), 2))
-                    {
-                        pen.Alignment = PenAlignment.Center;
-                        pen.DashStyle = DashStyle.Solid;
+                    pen.Alignment = PenAlignment.Center;
+                    pen.DashStyle = DashStyle.Solid;
 
-                        e.Graphics.DrawLine(pen, rowBound.X, rowBound.Y, rowBound.X, rowBound.Y + 5);
-                        e.Graphics.DrawLine(pen, rowBound.X, rowBound.Y, rowBound.X + 5, rowBound.Y);
+                    g.DrawLine(pen, rowBound.X, rowBound.Y, rowBound.X, rowBound.Y + 10);
+                    g.DrawLine(pen, rowBound.X, rowBound.Y, rowBound.X + 10, rowBound.Y);
 
-                        e.Graphics.DrawLine(pen, rowBound.Right, rowBound.Bottom, rowBound.Right, rowBound.Bottom - 5);
-                        e.Graphics.DrawLine(pen, rowBound.Right, rowBound.Bottom, rowBound.Right - 5, rowBound.Bottom);
-
-
-                        e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, Color.Blue)), rowBound);
-                    }
+                    g.DrawLine(pen, rowBound.Right, rowBound.Bottom, rowBound.Right, rowBound.Bottom - 10);
+                    g.DrawLine(pen, rowBound.Right, rowBound.Bottom, rowBound.Right - 10, rowBound.Bottom);
                 }
             }
         }
 
         private void hoursDataGrid_SelectionChanged(object sender, EventArgs e)
         {
-            //Rectangle rowBound = hoursDataGrid.GetRowDisplayRectangle(hoursDataGrid.CurrentCell.RowIndex, false);
-            //hoursDataGridRowPaint(hoursDataGrid.CurrentCell.RowIndex, new PaintEventArgs(hoursDataGrid.CreateGraphics(), rowBound));
+
+        }
+
+        private void hoursDataGrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+
+        }
+
+        private void hoursDataGrid_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+
+        }
+
+        private void hoursDataGrid_Paint(object sender, PaintEventArgs e)
+        {
+            if (_2dayZone.GetLength(0) > 0)
+            {
+                for (int i = 0; i < _2dayZone.GetLength(0); i++)
+                {
+                    Rectangle rowBound = new Rectangle(_2dayZone[i, 0], _2dayZone[i, 1], _2dayZone[i, 2], _2dayZone[i, 3]);
+                    using (var pen = new Pen(Color.FromArgb(255, 50, 0, 250), 2))
+                    {
+                        pen.Alignment = PenAlignment.Center;
+                        pen.DashStyle = DashStyle.Solid;
+
+                        e.Graphics.DrawLine(pen, rowBound.X, rowBound.Y, rowBound.X, rowBound.Y + 10);
+                        e.Graphics.DrawLine(pen, rowBound.X, rowBound.Y, rowBound.X + 10, rowBound.Y);
+
+                        e.Graphics.DrawLine(pen, rowBound.Right, rowBound.Bottom, rowBound.Right, rowBound.Bottom - 10);
+                        e.Graphics.DrawLine(pen, rowBound.Right, rowBound.Bottom, rowBound.Right - 10, rowBound.Bottom);
+                    }
+                }
+            }
+
+
+            if (_2nightZone.GetLength(0) > 0)
+            {
+                for (int i = 0; i < _2nightZone.GetLength(0); i++)
+                {
+                    Rectangle rowBound = new Rectangle(_2nightZone[i, 0], _2nightZone[i, 1], _2nightZone[i, 2], _2nightZone[i, 3]);
+                    using (var pen = new Pen(Color.FromArgb(255, 250, 0, 50), 2))
+                    {
+                        pen.Alignment = PenAlignment.Center;
+                        pen.DashStyle = DashStyle.Solid;
+
+                        e.Graphics.DrawLine(pen, rowBound.X, rowBound.Y, rowBound.X, rowBound.Y + 10);
+                        e.Graphics.DrawLine(pen, rowBound.X, rowBound.Y, rowBound.X + 10, rowBound.Y);
+
+                        e.Graphics.DrawLine(pen, rowBound.Right, rowBound.Bottom, rowBound.Right, rowBound.Bottom - 10);
+                        e.Graphics.DrawLine(pen, rowBound.Right, rowBound.Bottom, rowBound.Right - 10, rowBound.Bottom);
+                    }
+                }
+            }
+
+        }
+
+        private void cmbxSelectHours_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            hoursDataGrid.Refresh();
+        }
+
+        private void cmbxSelectHours_DropDownClosed(object sender, EventArgs e)
+        {
+            switch (cmbxSelectGlobalZone.Text)
+            {
+                case "2 зоны":
+                    cmbxSelectTypeZone.Items.Clear();
+                    cmbxSelectTypeZone.Items.AddRange(new[] { "день", "ночь" });
+
+                    foreach (DataGridViewRow rows in hoursDataGrid.Rows)
+                    {
+                        rows.DefaultCellStyle.BackColor = Color.FromKnownColor(KnownColor.Control);
+
+                        if (_2dayZone.GetLength(0) > 0)
+                        {
+                            for (int i = 0; i < _2dayZone.GetLength(0); i++)
+                            {
+                                for (int j = _2dayZone[i, 4]; j <= _2dayZone[i, 5]; j++)
+                                {
+                                    hoursDataGrid.Rows[j].DefaultCellStyle.BackColor = Color.LightBlue;
+                                }
+                            }
+                        }
+
+                        if (_2nightZone.GetLength(0) > 0)
+                        {
+                            for (int i = 0; i < _2nightZone.GetLength(0); i++)
+                            {
+                                for (int j = _2nightZone[i, 4]; j <= _2nightZone[i, 5]; j++)
+                                {
+                                    hoursDataGrid.Rows[j].DefaultCellStyle.BackColor = Color.LightCoral;
+                                }
+                            }
+                        }
+                    }
+                    hoursDataGrid.Refresh();
+                    hoursDataGrid.ClearSelection();
+                    break;
+
+                case "3 зоны":
+                    cmbxSelectTypeZone.Items.Clear();
+
+                    foreach (DataGridViewRow rows in hoursDataGrid.Rows)
+                    {
+                        rows.DefaultCellStyle.BackColor = Color.FromKnownColor(KnownColor.Control);
+                    }
+                    break;
+            }
         }
     }
 }

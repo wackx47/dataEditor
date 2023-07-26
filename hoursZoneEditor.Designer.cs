@@ -56,7 +56,7 @@
             this.ToolStrip = new System.Windows.Forms.ToolStrip();
             this.btnConfirm = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
-            this.hoursDataGrid = new System.Windows.Forms.DataGridView();
+            this.hoursDataGrid = new dataEditor.MainForm.DoubleBufferedDataGridView();
             this.Hours = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupDoubleZone = new System.Windows.Forms.GroupBox();
             this.DoubleZTableLayout = new System.Windows.Forms.TableLayoutPanel();
@@ -70,7 +70,8 @@
             this.groupHours = new System.Windows.Forms.GroupBox();
             this.HoursTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.btnApplyHours = new System.Windows.Forms.Button();
-            this.cmbxSelectHours = new System.Windows.Forms.ComboBox();
+            this.cmbxSelectTypeZone = new System.Windows.Forms.ComboBox();
+            this.cmbxSelectGlobalZone = new System.Windows.Forms.ComboBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hoursDataGrid)).BeginInit();
@@ -134,24 +135,30 @@
             this.Hours});
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.PeachPuff;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Gainsboro;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.hoursDataGrid.DefaultCellStyle = dataGridViewCellStyle2;
             this.hoursDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hoursDataGrid.Location = new System.Drawing.Point(3, 31);
+            this.hoursDataGrid.GridColor = System.Drawing.SystemColors.ControlLight;
+            this.hoursDataGrid.Location = new System.Drawing.Point(2, 57);
+            this.hoursDataGrid.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.hoursDataGrid.Name = "hoursDataGrid";
             this.hoursDataGrid.ReadOnly = true;
             this.hoursDataGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.hoursDataGrid.RowHeadersVisible = false;
             this.hoursDataGrid.RowTemplate.Height = 15;
             this.hoursDataGrid.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.hoursDataGrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.hoursDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.hoursDataGrid.Size = new System.Drawing.Size(103, 364);
+            this.hoursDataGrid.Size = new System.Drawing.Size(105, 365);
             this.hoursDataGrid.TabIndex = 82;
+            this.hoursDataGrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.hoursDataGrid_RowPostPaint);
+            this.hoursDataGrid.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.hoursDataGrid_RowPrePaint);
             this.hoursDataGrid.SelectionChanged += new System.EventHandler(this.hoursDataGrid_SelectionChanged);
+            this.hoursDataGrid.Paint += new System.Windows.Forms.PaintEventHandler(this.hoursDataGrid_Paint);
             this.hoursDataGrid.MouseMove += new System.Windows.Forms.MouseEventHandler(this.hoursDataGrid_MouseMove);
             // 
             // Hours
@@ -166,7 +173,7 @@
             this.groupDoubleZone.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.groupDoubleZone.Location = new System.Drawing.Point(137, 28);
             this.groupDoubleZone.Name = "groupDoubleZone";
-            this.groupDoubleZone.Size = new System.Drawing.Size(180, 450);
+            this.groupDoubleZone.Size = new System.Drawing.Size(180, 475);
             this.groupDoubleZone.TabIndex = 83;
             this.groupDoubleZone.TabStop = false;
             this.groupDoubleZone.Text = "2 зоны";
@@ -182,7 +189,7 @@
             this.DoubleZTableLayout.RowCount = 2;
             this.DoubleZTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.DoubleZTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.DoubleZTableLayout.Size = new System.Drawing.Size(174, 429);
+            this.DoubleZTableLayout.Size = new System.Drawing.Size(174, 454);
             this.DoubleZTableLayout.TabIndex = 87;
             // 
             // doubleZoneTreeView
@@ -224,7 +231,7 @@
             this.doubleZoneTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode5,
             treeNode10});
-            this.doubleZoneTreeView.Size = new System.Drawing.Size(168, 423);
+            this.doubleZoneTreeView.Size = new System.Drawing.Size(168, 448);
             this.doubleZoneTreeView.TabIndex = 0;
             // 
             // groupTrippleZone
@@ -233,7 +240,7 @@
             this.groupTrippleZone.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.groupTrippleZone.Location = new System.Drawing.Point(323, 28);
             this.groupTrippleZone.Name = "groupTrippleZone";
-            this.groupTrippleZone.Size = new System.Drawing.Size(200, 450);
+            this.groupTrippleZone.Size = new System.Drawing.Size(200, 475);
             this.groupTrippleZone.TabIndex = 84;
             this.groupTrippleZone.TabStop = false;
             this.groupTrippleZone.Text = "3 зоны";
@@ -250,7 +257,7 @@
             this.TrippleZTableLayout.RowCount = 2;
             this.TrippleZTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TrippleZTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.TrippleZTableLayout.Size = new System.Drawing.Size(194, 429);
+            this.TrippleZTableLayout.Size = new System.Drawing.Size(194, 454);
             this.TrippleZTableLayout.TabIndex = 86;
             // 
             // TrippleZoneTreeView
@@ -272,7 +279,7 @@
             treeNode11,
             treeNode12,
             treeNode13});
-            this.TrippleZoneTreeView.Size = new System.Drawing.Size(188, 396);
+            this.TrippleZoneTreeView.Size = new System.Drawing.Size(188, 421);
             this.TrippleZoneTreeView.TabIndex = 1;
             this.TrippleZoneTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TrippleZoneTreeView_AfterSelect);
             // 
@@ -314,7 +321,7 @@
             this.groupHours.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.groupHours.Location = new System.Drawing.Point(12, 28);
             this.groupHours.Name = "groupHours";
-            this.groupHours.Size = new System.Drawing.Size(115, 450);
+            this.groupHours.Size = new System.Drawing.Size(115, 475);
             this.groupHours.TabIndex = 85;
             this.groupHours.TabStop = false;
             this.groupHours.Text = "Hours";
@@ -323,23 +330,24 @@
             // 
             this.HoursTableLayoutPanel.ColumnCount = 1;
             this.HoursTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.HoursTableLayoutPanel.Controls.Add(this.hoursDataGrid, 0, 1);
-            this.HoursTableLayoutPanel.Controls.Add(this.btnApplyHours, 0, 2);
-            this.HoursTableLayoutPanel.Controls.Add(this.cmbxSelectHours, 0, 0);
+            this.HoursTableLayoutPanel.Controls.Add(this.btnApplyHours, 0, 3);
+            this.HoursTableLayoutPanel.Controls.Add(this.cmbxSelectTypeZone, 0, 1);
+            this.HoursTableLayoutPanel.Controls.Add(this.hoursDataGrid, 0, 2);
+            this.HoursTableLayoutPanel.Controls.Add(this.cmbxSelectGlobalZone, 0, 0);
             this.HoursTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.HoursTableLayoutPanel.Location = new System.Drawing.Point(3, 18);
             this.HoursTableLayoutPanel.Name = "HoursTableLayoutPanel";
-            this.HoursTableLayoutPanel.RowCount = 3;
+            this.HoursTableLayoutPanel.RowCount = 4;
+            this.HoursTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.HoursTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.HoursTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.HoursTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.HoursTableLayoutPanel.Size = new System.Drawing.Size(109, 429);
+            this.HoursTableLayoutPanel.Size = new System.Drawing.Size(109, 454);
             this.HoursTableLayoutPanel.TabIndex = 83;
             // 
             // btnApplyHours
             // 
-            this.btnApplyHours.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnApplyHours.Location = new System.Drawing.Point(3, 401);
+            this.btnApplyHours.Location = new System.Drawing.Point(3, 426);
             this.btnApplyHours.Name = "btnApplyHours";
             this.btnApplyHours.Size = new System.Drawing.Size(103, 25);
             this.btnApplyHours.TabIndex = 83;
@@ -347,19 +355,32 @@
             this.btnApplyHours.UseVisualStyleBackColor = true;
             this.btnApplyHours.Click += new System.EventHandler(this.btnApplyHours_Click);
             // 
-            // cmbxSelectHours
+            // cmbxSelectTypeZone
             // 
-            this.cmbxSelectHours.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmbxSelectHours.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbxSelectHours.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.cmbxSelectHours.FormattingEnabled = true;
-            this.cmbxSelectHours.Items.AddRange(new object[] {
+            this.cmbxSelectTypeZone.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmbxSelectTypeZone.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbxSelectTypeZone.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.cmbxSelectTypeZone.FormattingEnabled = true;
+            this.cmbxSelectTypeZone.Location = new System.Drawing.Point(3, 31);
+            this.cmbxSelectTypeZone.Name = "cmbxSelectTypeZone";
+            this.cmbxSelectTypeZone.Size = new System.Drawing.Size(103, 22);
+            this.cmbxSelectTypeZone.TabIndex = 85;
+            // 
+            // cmbxSelectGlobalZone
+            // 
+            this.cmbxSelectGlobalZone.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmbxSelectGlobalZone.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbxSelectGlobalZone.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.cmbxSelectGlobalZone.FormattingEnabled = true;
+            this.cmbxSelectGlobalZone.Items.AddRange(new object[] {
             "2 зоны",
             "3 зоны"});
-            this.cmbxSelectHours.Location = new System.Drawing.Point(3, 3);
-            this.cmbxSelectHours.Name = "cmbxSelectHours";
-            this.cmbxSelectHours.Size = new System.Drawing.Size(103, 22);
-            this.cmbxSelectHours.TabIndex = 84;
+            this.cmbxSelectGlobalZone.Location = new System.Drawing.Point(3, 3);
+            this.cmbxSelectGlobalZone.Name = "cmbxSelectGlobalZone";
+            this.cmbxSelectGlobalZone.Size = new System.Drawing.Size(103, 22);
+            this.cmbxSelectGlobalZone.TabIndex = 84;
+            this.cmbxSelectGlobalZone.SelectedIndexChanged += new System.EventHandler(this.cmbxSelectHours_SelectedIndexChanged);
+            this.cmbxSelectGlobalZone.DropDownClosed += new System.EventHandler(this.cmbxSelectHours_DropDownClosed);
             // 
             // contextMenuStrip1
             // 
@@ -370,13 +391,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(534, 486);
+            this.ClientSize = new System.Drawing.Size(534, 511);
             this.Controls.Add(this.groupTrippleZone);
             this.Controls.Add(this.groupHours);
             this.Controls.Add(this.groupDoubleZone);
             this.Controls.Add(this.ToolStrip);
             this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "hoursZoneEditor";
             this.Text = "hoursZoneEditor";
             this.Load += new System.EventHandler(this.hoursZoneEditor_Load);
@@ -401,7 +423,7 @@
         private ToolStrip ToolStrip;
         private ToolStripButton btnConfirm;
         private ToolStripSeparator toolStripSeparator7;
-        private DataGridView hoursDataGrid;
+        private dataEditor.MainForm.DoubleBufferedDataGridView hoursDataGrid;
         private DataGridViewTextBoxColumn Hours;
         private GroupBox groupDoubleZone;
         private TreeView doubleZoneTreeView;
@@ -415,7 +437,8 @@
         private ToolStripSeparator toolStripSeparator1;
         private TableLayoutPanel HoursTableLayoutPanel;
         private Button btnApplyHours;
-        private ComboBox cmbxSelectHours;
+        private ComboBox cmbxSelectGlobalZone;
         private ContextMenuStrip contextMenuStrip1;
+        private ComboBox cmbxSelectTypeZone;
     }
 }

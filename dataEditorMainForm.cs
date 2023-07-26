@@ -1958,7 +1958,16 @@ namespace dataEditor
                         if (SearchRowName != -1)
                         {
                             var methodCell = (DataGridViewComboBoxCell)mgDataViewer.Rows[SearchRowName].Cells["Method"];
-                            string validatedStatus = validateTable(buttons.Text, Convert.ToInt32(Convert.ToString(mgDataViewer.Rows[SearchRowName].Cells["TariffZone"].Value)[0].ToString()));
+                            string validatedStatus = null;
+                            try
+                            {
+                                validatedStatus = validateTable(buttons.Text, Convert.ToInt32(Convert.ToString(mgDataViewer.Rows[SearchRowName].Cells["TariffZone"].Value)[0].ToString()));
+                            }
+                            catch
+                            {
+                                validatedStatus = "TableError";
+                            }
+                            
                             if (validatedStatus != "TableError")
                             {
 
@@ -1993,7 +2002,16 @@ namespace dataEditor
                         if (SearchRowName != -1)
                         {
                             var methodCell = (DataGridViewComboBoxCell)mgDataViewer.Rows[SearchRowName].Cells["Method"];
-                            string validatedStatus = validateTable(buttons.Text, Convert.ToInt32(Convert.ToString(mgDataViewer.Rows[SearchRowName].Cells["TariffZone"].Value)[0].ToString()));
+                            string validatedStatus = null;
+                            try
+                            {
+                                validatedStatus = validateTable(buttons.Text, Convert.ToInt32(Convert.ToString(mgDataViewer.Rows[SearchRowName].Cells["TariffZone"].Value)[0].ToString()));
+                            }
+                            catch
+                            {
+                                validatedStatus = "TableError";
+                            }
+
                             if (mgDataViewer.Rows[SearchRowName].Cells[mgDataViewer.Columns.IndexOf(mgDataViewer.Columns["dataTable"])].GetType().Name != "DataGridViewButtonCell")
                             {
                                 DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
@@ -2038,8 +2056,17 @@ namespace dataEditor
                 int SearchRowNumCC = SearchDGV(mgDataViewer, tempBtnName, "NumCC");
                 if (SearchRowNumCC != -1)
                 {
-                    string validatedStatus = validateTable(buttons.Text, Convert.ToInt32(Convert.ToString(mgDataViewer.Rows[SearchRowNumCC].Cells["TariffZone"].Value)[0].ToString()));
+                    
                     var methodCell = (DataGridViewComboBoxCell)mgDataViewer.Rows[SearchRowNumCC].Cells["Method"];
+                    string validatedStatus = null;
+                    try
+                    {
+                        validatedStatus = validateTable(buttons.Text, Convert.ToInt32(Convert.ToString(mgDataViewer.Rows[SearchRowNumCC].Cells["TariffZone"].Value)[0].ToString()));
+                    }
+                    catch
+                    {
+                        validatedStatus = "TableError";
+                    }
 
                     switch (buttons.Text.Split("_").First())
                     {
@@ -2259,7 +2286,6 @@ namespace dataEditor
         {
             if (row != -1)
             {
-                mgDataViewer.Refresh();
                 Rectangle rowBound = e.ClipRectangle;
                 switch (mgDataViewer.Rows[row].Cells[mgDataViewer.Columns["dataTable"].Index].GetType().Name)
                 {
@@ -2357,11 +2383,14 @@ namespace dataEditor
                     {
                         rowBound.Width = GetGridWidth(mgDataViewer)-1;
                     }
-                    
+
+                    mgDataViewer.Refresh();
                     mgDataViewerRowPaint(SelectedRowIndex, new PaintEventArgs(mgDataViewer.CreateGraphics(), rowBound));
+
                 }
             }
         }
+
         private void TableButton_GiveFeedback(object sender, GiveFeedbackEventArgs e)
         {
             Point cursorLocation = mgDataViewer.PointToClient(new Point(MousePosition.X, MousePosition.Y));
@@ -2510,7 +2539,17 @@ namespace dataEditor
                 DataGridView.HitTestInfo hittest = mgDataViewer.HitTest(cursorLocation.X, cursorLocation.Y);
                 if (hittest.ColumnIndex != -1 && hittest.RowIndex != -1)
                 {
-                    int TariffZone = Convert.ToInt32(Convert.ToString(mgDataViewer.Rows[hittest.RowIndex].Cells["TariffZone"].Value)[0].ToString());
+                    int TariffZone = 1;
+                    try
+                    {
+                        TariffZone = Convert.ToInt32(Convert.ToString(mgDataViewer.Rows[hittest.RowIndex].Cells["TariffZone"].Value)[0].ToString());
+                    }
+                    catch
+                    {
+                        mgDataViewer.Refresh();
+                        return;
+                    }
+                    
                     var methodCell = (DataGridViewComboBoxCell)mgDataViewer.Rows[hittest.RowIndex].Cells["Method"];
 
                     if (mgDataViewer.Rows[hittest.RowIndex].Cells[mgDataViewer.Columns["dataTable"].Index].GetType().Name != "DataGridViewButtonCell")
@@ -2783,7 +2822,7 @@ namespace dataEditor
             }
             tablesDataGridView.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.tablesDataGridView_RowPrePaint);
             TableView.StartPosition = FormStartPosition.CenterParent;
-            TableView.ShowDialog();
+            TableView.Show();
         }
 
         private void tablesDataGridView_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
@@ -2838,7 +2877,7 @@ namespace dataEditor
 
         private void mgDataViewer_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if(e.ColumnIndex == mgDataViewer.Columns["dataTable"].Index && mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell")
+            if(e.RowIndex != -1 && e.ColumnIndex == mgDataViewer.Columns["dataTable"].Index && mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell")
             {
                 contextMenuOpenTable.Items.Clear();
 
@@ -2857,7 +2896,7 @@ namespace dataEditor
                 }
             }
 
-            if (e.ColumnIndex == mgDataViewer.Columns["dataExcel"].Index && mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell")
+            if (e.RowIndex != -1 && e.ColumnIndex == mgDataViewer.Columns["dataExcel"].Index && mgDataViewer.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType().Name == "DataGridViewButtonCell")
             {
                 switch(Convert.ToString(mgDataViewer.Rows[e.RowIndex].Cells["TariffZone"].Value)[0].ToString())
                 {
@@ -3090,7 +3129,7 @@ namespace dataEditor
             }
 
 
-            decimal Price = ((k1 + k2 * k3) / 1000);
+            decimal Price = Math.Round(((k1 + k2 * k3) / 1000),5);
 
             formType1.txtResultPrice.Text = Price.ToString();
 
@@ -3442,8 +3481,8 @@ namespace dataEditor
                 k5 = decimal.Parse(formType2.txtKFday.Text);
 
 
-                PriceNight = (k1 + (k3 * k4)) / 1000;
-                PriceDay = (k2 + (k3 * k5)) / 1000;
+                PriceNight = Math.Round((k1 + (k3 * k4)) / 1000,5);
+                PriceDay = Math.Round((k2 + (k3 * k5)) / 1000,5);
 
                 ResultCost = PriceNight * decimal.Parse(formType2.txtBUYnight.Text) + PriceDay * decimal.Parse(formType2.txtBUYday.Text);
 
@@ -3949,9 +3988,9 @@ namespace dataEditor
                 k7 = decimal.Parse(formType3.txtKFsemiPeak.Text);
 
 
-                PriceNight = (k1 + (k4 * k5)) / 1000;
-                PricePeak = (k2 + (k4 * k6)) / 1000;
-                PriceSemiPeak = (k3 + (k4 * k7)) / 1000;
+                PriceNight = Math.Round((k1 + (k4 * k5)) / 1000,5);
+                PricePeak = Math.Round((k2 + (k4 * k6)) / 1000,5);
+                PriceSemiPeak = Math.Round((k3 + (k4 * k7)) / 1000,5);
 
                 ResultCost = PriceNight * decimal.Parse(formType3.txtBUYnight.Text) + PricePeak * decimal.Parse(formType3.txtBUYpeak.Text) + PriceSemiPeak * decimal.Parse(formType3.txtBUYsemiPeak.Text);
 
@@ -6720,9 +6759,8 @@ namespace dataEditor
         private void FlowPanelButtonAddTable_Click(object sender, EventArgs e)
         {
             inputDataHandle inputDatForm = new inputDataHandle();
-            inputDatForm.ShowDialog();
+            inputDatForm.Show();
         }
-
     }
     public static class ExtensionMethods
     {
