@@ -762,11 +762,6 @@ namespace dataEditor
             }
         }
 
-        private void cellStripMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            
-        }
-
         private void OnProcessExitTreeView(object sender, EventArgs e)
         {
             TreeColViewer_CellCmbxValueChanged(this.TreeColViewer, new DataGridViewCellEventArgs(this.TreeColViewer.CurrentCell.ColumnIndex, this.TreeColViewer.CurrentRow.Index));
@@ -1280,6 +1275,7 @@ namespace dataEditor
 
         public static int SearchDGV(DataGridView dgv, string SearchValue, string ColName)
         {
+            int Result = -1;
             foreach (DataGridViewRow Row in dgv.Rows)
             {
                 string value = null;
@@ -1292,9 +1288,9 @@ namespace dataEditor
                     value = "";
                 }
                 if (value.Equals(SearchValue))
-                    return Row.Index;
+                    Result= Row.Index;
             }
-            return -1;
+            return Result;
         }
 
         private void HoursFile_processing(DataTable dataExtraction)
@@ -1870,24 +1866,6 @@ namespace dataEditor
                 }
             }
         }
-
-        private string checkSimilarNameInTableLayout(string newTableName)
-        {
-            int existCount = 0;
-            foreach (Button buttons in mgFlowPanelResult.Controls)
-            {
-                if(buttons.Text.Split("#").First() == newTableName)
-                {
-                    existCount++;
-                }
-            }
-            if (existCount > 0)
-            {
-                newTableName += "#" + (existCount + 1);
-            }
-            return newTableName;
-        }
-
 
         private string expectedTableName(string expTableName, string type)
         {
@@ -2671,15 +2649,7 @@ namespace dataEditor
         {
             var cellMethod = (DataGridViewComboBoxCell)mgDataViewer.Rows[row].Cells["Method"];
 
-            if (Convert.ToString(mgDataViewer.Rows[row].Cells["TariffZone"].Value)[0].ToString() == "1" && cellMethod.Items.IndexOf("intg") != -1)
-            {
-                mgDataViewer.Rows[row].Cells["SelectID"].Value = true;
-                DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
-                btnCell.UseColumnTextForButtonValue = false;
-                btnCell.ToolTipText = "Preview File";
-                mgDataViewer.Rows[row].Cells["dataExcel"] = btnCell;
-            }
-            else if(Convert.ToString(mgDataViewer.Rows[row].Cells["TariffZone"].Value)[0].ToString() != "1" && cellMethod.Items.Count != 0)
+            if (cellMethod.Items.Count != 0)
             {
                 mgDataViewer.Rows[row].Cells["SelectID"].Value = true;
                 DataGridViewButtonCell btnCell = new DataGridViewButtonCell();
@@ -2773,6 +2743,7 @@ namespace dataEditor
             Form TableView = new Form();
             DataGridView headerDataGridView = new DataGridView();
             DoubleBufferedDataGridView tablesDataGridView = new DoubleBufferedDataGridView();
+            
             SettingsNewFormTablesResult(TableView, tablesDataGridView, headerDataGridView);
 
             int hSize = tablesDataGridView.Size.Height;
@@ -2821,7 +2792,7 @@ namespace dataEditor
                 cols.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             }
             tablesDataGridView.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.tablesDataGridView_RowPrePaint);
-            TableView.StartPosition = FormStartPosition.CenterParent;
+            TableView.StartPosition = FormStartPosition.CenterScreen;
             TableView.Show();
         }
 
@@ -2937,6 +2908,7 @@ namespace dataEditor
         private void openFormType1(int eRowIndex)
         {
             FormType1 formType1 = new FormType1();
+            List<RadioButton> radioButtons = new List<RadioButton> { formType1.useIntervals, formType1.useHours };
 
             DateTime date = DateTime.Now;
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
@@ -2984,20 +2956,31 @@ namespace dataEditor
             int kTC = 1;
             int kTV = 1;
 
+
             switch (cmbxMethod.Text)
             {
                 case "Интервалы":
-
+                    formType1.useIntervals.Checked = true;
                     kTC = Convert.ToInt32(IntegralsDataSet.Tables[intgTable + "_Header"].Rows[4][1].ToString().Split("/").First());
                     kTV = Convert.ToInt32(IntegralsDataSet.Tables[intgTable + "_Header"].Rows[4][1].ToString().Split("/").Last());
+                    if (cmbxMethod.Items.Count != 2)
+                    {
+                        formType1.useHours.Enabled = false;
+                    }
                     break;
 
                 case "Часы":
+                    formType1.useHours.Checked = true;
                     kTC = Convert.ToInt32(HoursDataSet.Tables[hrsTable + "_Header"].Rows[4][1].ToString().Split("/").First());
                     kTV = Convert.ToInt32(HoursDataSet.Tables[hrsTable + "_Header"].Rows[4][1].ToString().Split("/").Last());
+                    if (cmbxMethod.Items.Count != 2)
+                    {
+                        formType1.useIntervals.Enabled = false;
+                    }
                     break;
             }
 
+            var checkedButton = radioButtons.FirstOrDefault(r => r.Checked);
             int kT = kTC * kTV;
 
             int RowInDict = SearchDGV(DictionaryForm.dataGridDictionaryList, mgDataViewer.Rows[eRowIndex].Cells["FullName"].Value.ToString(), "FullName");
@@ -3020,8 +3003,10 @@ namespace dataEditor
 
             decimal SumConFirst = 0;
             decimal SumConLast = 0;
+            decimal SumConDiff = 0;
             decimal SumGenFirst = 0;
             decimal SumGenLast = 0;
+            decimal SumGenDiff = 0;
 
             if (intgTable != null && Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["intgStatusError"].Value) != CheckState.Checked.ToString())
             {
@@ -3058,40 +3043,97 @@ namespace dataEditor
                         }
                     }
                 }
+
+                SumConDiff = Math.Round(((SumConLast - SumConFirst) * kT), 3);
+                SumGenDiff = Math.Round(((SumGenLast - SumGenFirst) * kT), 3);
+
+                formType1.txtConFirst.Text = Math.Round(SumConFirst, 3).ToString();
+                formType1.txtConLast.Text = Math.Round(SumConLast, 3).ToString();
+                formType1.txtGenFirst.Text = Math.Round(SumGenFirst, 3).ToString();
+                formType1.txtGenLast.Text = Math.Round(SumGenLast, 3).ToString();
+
+                formType1.txtConSumm.Text = SumConDiff.ToString();
+                formType1.txtGenSumm.Text = SumGenDiff.ToString();
             }
 
+            int hrs = 1;
             decimal ConSumm = 0;
             decimal GenSumm = 0;
 
             if (hrsTable != null && Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["hrsStatusError"].Value) != CheckState.Checked.ToString())
             {
+                formType1.dataHoursViewer.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.DataHoursViewer_RowPrePaint);
+
                 foreach (DataRow rows in HoursDataSet.Tables[hrsTable].Rows)
                 {
-                    ConSumm += Convert.ToDecimal(rows[2].ToString());
-                    GenSumm += Convert.ToDecimal(rows[3].ToString());
+                    if (hrs <= 24)
+                    {
+                        string duration = (hrs - 1).ToString() + ":00-" + hrs.ToString() + ":00";
+                        formType1.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], rows[3]);
+
+                        ConSumm += Convert.ToDecimal(rows[2].ToString());
+                        GenSumm += Convert.ToDecimal(rows[3].ToString());
+                        hrs++;
+                    }
+                    else
+                    {
+                        hrs = 1;
+                        string duration = (hrs - 1).ToString() + ":00-" + hrs.ToString() + ":00";
+                        formType1.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], rows[3]);
+
+                        ConSumm += Convert.ToDecimal(rows[2].ToString());
+                        GenSumm += Convert.ToDecimal(rows[3].ToString());
+                        hrs++;
+                    }
                 }
+
+                ConSumm = Math.Round(ConSumm * kT, 3);
+                GenSumm = Math.Round(GenSumm * kT, 3);
+
+                formType1.txtConSummHH.Text = ConSumm.ToString();
+                formType1.txtGenSummHH.Text = GenSumm.ToString();
             }
 
 
-            ConSumm *= kT;
-            GenSumm *= kT;
+            decimal intgDiffSell = 0;
+            decimal intgDiffBuy = 0;
+            decimal hrsDiffSell = 0;
+            decimal hrsDiffBuy = 0;
 
-            formType1.txtConFirst.Text = Math.Round(SumConFirst,3).ToString();
-            formType1.txtConLast.Text = Math.Round(SumConLast,3).ToString();
-            formType1.txtGenFirst.Text = Math.Round(SumGenFirst,3).ToString();
-            formType1.txtGenLast.Text = Math.Round(SumGenLast,3).ToString();
-
-            switch (cmbxMethod.Text)
+            try
             {
-                case "Интервалы":
-                    formType1.txtConSumm.Text = Math.Round(((SumConLast - SumConFirst) * kT), 2).ToString();
-                    formType1.txtGenSumm.Text = Math.Round(((SumGenLast - SumGenFirst) * kT), 2).ToString();
-                    break;
+                switch (checkedButton.Name)
+                {
+                    case "useIntervals":
+                        if(SumConDiff> SumGenDiff)
+                        {
+                            intgDiffSell = Math.Round((SumConDiff - SumGenDiff), 0);
+                        }
+                        else
+                        {
+                            intgDiffBuy = Math.Round((SumGenDiff - SumConDiff), 0);
+                        }
+                        formType1.txtSELL.Text = intgDiffSell.ToString();
+                        formType1.txtBUY.Text = intgDiffBuy.ToString();
+                        break;
 
-                case "Часы":
-                    formType1.txtConSumm.Text = Math.Round(ConSumm,3).ToString();
-                    formType1.txtGenSumm.Text = Math.Round(GenSumm,3).ToString();
-                    break;
+                    case "useHours":
+                        if (ConSumm > GenSumm)
+                        {
+                            hrsDiffSell = Math.Round((ConSumm - GenSumm), 0);
+                        }
+                        else
+                        {
+                            hrsDiffBuy = Math.Round((GenSumm - ConSumm), 0);
+                        }
+                        formType1.txtSELL.Text = hrsDiffSell.ToString();
+                        formType1.txtBUY.Text = hrsDiffBuy.ToString();
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
 
 
@@ -3099,19 +3141,6 @@ namespace dataEditor
             formType1.txtsvncPorem.Text = datsTreeView.Nodes["treeViewLine2"].Nodes["treeViewLine2e1val"].Text;
             formType1.txtKF1.Text = datsTreeView.Nodes["treeViewLine1"].Nodes["treeViewLine1e1val"].Text;
 
-            decimal diffSell = Math.Round(((SumConLast - SumConFirst) * kT) - ((SumGenLast - SumGenFirst) * kT),0);
-            decimal diffBuy = Math.Round(((SumGenLast - SumGenFirst) * kT) - ((SumConLast - SumConFirst) * kT),0);
-
-            if (diffSell > 0)
-            {
-                formType1.txtSELL.Text = diffSell.ToString();
-                formType1.txtBUY.Text = "0";
-            }
-            else
-            {
-                formType1.txtBUY.Text = diffBuy.ToString();
-                formType1.txtSELL.Text = "0";
-            }
 
             decimal k1 = 0;
             decimal k2 = 0;
@@ -3128,13 +3157,14 @@ namespace dataEditor
 
             }
 
+            decimal Price = 0;
+            decimal ResultCost = 0;
 
-            decimal Price = Math.Round(((k1 + k2 * k3) / 1000),5);
+            Price = Math.Round(((k1 + k2 * k3) / 1000), 5);
+            ResultCost = Price * decimal.Parse(formType1.txtBUY.Text);
 
             formType1.txtResultPrice.Text = Price.ToString();
-
-            if (diffBuy > 0)
-                formType1.txtResultCost.Text = Math.Round((diffBuy * Price),2).ToString();
+            formType1.txtResultCost.Text = Math.Round(ResultCost, 2).ToString();
 
             formType1.Show();
         }
@@ -3301,15 +3331,16 @@ namespace dataEditor
                 SumGenFirst = txtGenDayFirst + txtGenNightFirst;
                 SumGenLast = txtGenDayLast + txtGenNightLast;
 
+                formType2.txtConSummFirst.Text = Math.Round((SumConFirst * kT), 3).ToString();
+                formType2.txtConSummLast.Text = Math.Round((SumConLast * kT), 3).ToString();
+                formType2.txtConSummDiff.Text = Math.Round(((SumConLast - SumConFirst) * kT), 3).ToString();
+
+                formType2.txtGenSummFirst.Text = Math.Round((SumGenFirst * kT), 3).ToString();
+                formType2.txtGenSummLast.Text = Math.Round((SumGenLast * kT), 3).ToString();
+                formType2.txtGenSummDiff.Text = Math.Round(((SumGenLast - SumGenFirst) * kT), 3).ToString();
             }
 
-            formType2.txtConSummFirst.Text = Math.Round((SumConFirst * kT),3).ToString();
-            formType2.txtConSummLast.Text = Math.Round((SumConLast * kT),3).ToString();
-            formType2.txtConSummDiff.Text = Math.Round(((SumConLast - SumConFirst) * kT),3).ToString();
 
-            formType2.txtGenSummFirst.Text = Math.Round((SumGenFirst * kT),3).ToString();
-            formType2.txtGenSummLast.Text = Math.Round((SumGenLast * kT),3).ToString();
-            formType2.txtGenSummDiff.Text = Math.Round(((SumGenLast - SumGenFirst) * kT),3).ToString();
 
             int hrs = 1;
             decimal ConSummDay = 0;
@@ -3362,17 +3393,18 @@ namespace dataEditor
                         hrs++;
                     }
                 }
+
+                ConSummDay = Math.Round(ConSummDay * kT, 3);
+                ConSummNight = Math.Round(ConSummNight * kT, 3);
+                GenSummDay = Math.Round(GenSummDay * kT, 3);
+                GenSummNight = Math.Round(GenSummNight * kT, 3);
+
+                formType2.txtConSummDayHH.Text = ConSummDay.ToString();
+                formType2.txtGenSummDayHH.Text = GenSummDay.ToString();
+                formType2.txtConSummNightHH.Text = ConSummNight.ToString();
+                formType2.txtGenSummNightHH.Text = GenSummNight.ToString();
             }
 
-            ConSummDay = Math.Round(ConSummDay*kT,3);
-            ConSummNight = Math.Round(ConSummNight*kT,3);
-            GenSummDay = Math.Round(GenSummDay*kT,3);
-            GenSummNight = Math.Round(GenSummNight*kT,3);
-
-            formType2.txtConSummDayHH.Text = ConSummDay.ToString();
-            formType2.txtGenSummDayHH.Text = GenSummDay.ToString();
-            formType2.txtConSummNightHH.Text = ConSummNight.ToString();
-            formType2.txtGenSummNightHH.Text = GenSummNight.ToString();
 
             formType2.txtDiffEEoremNight.Text = datsTreeView.Nodes["treeViewLine5"].Nodes["treeViewLine5e1"].Nodes["treeViewLine5e1val"].Text;
             formType2.txtDiffEEoremDay.Text = datsTreeView.Nodes["treeViewLine5"].Nodes["treeViewLine5e2"].Nodes["treeViewLine5e2val"].Text;
@@ -3706,16 +3738,16 @@ namespace dataEditor
                 GenPeakDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[3][4].ToString())*kT;
                 GenSemiPeakDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[4][4].ToString())*kT;
                 GenNightDiff = decimal.Parse(IntegralsDataSet.Tables[intgTable].Rows[5][4].ToString())*kT;
+
+
+                formType3.txtConSummFirst.Text = Math.Round((SumConFirst * kT), 3).ToString();
+                formType3.txtConSummLast.Text = Math.Round((SumConLast * kT), 3).ToString();
+                formType3.txtConSummDiff.Text = Math.Round(((SumConLast - SumConFirst) * kT), 3).ToString();
+
+                formType3.txtGenSummFirst.Text = Math.Round((SumGenFirst * kT), 3).ToString();
+                formType3.txtGenSummLast.Text = Math.Round((SumGenLast * kT), 3).ToString();
+                formType3.txtGenSummDiff.Text = Math.Round(((SumGenLast - SumGenFirst) * kT), 3).ToString();
             }
-
-
-            formType3.txtConSummFirst.Text = Math.Round((SumConFirst * kT),3).ToString();
-            formType3.txtConSummLast.Text = Math.Round((SumConLast * kT),3).ToString();
-            formType3.txtConSummDiff.Text = Math.Round(((SumConLast - SumConFirst) * kT),3).ToString();
-
-            formType3.txtGenSummFirst.Text = Math.Round((SumGenFirst * kT),3).ToString();
-            formType3.txtGenSummLast.Text = Math.Round((SumGenLast * kT),3).ToString();
-            formType3.txtGenSummDiff.Text = Math.Round(((SumGenLast - SumGenFirst) * kT),3).ToString();
 
             int hrs = 0;
             decimal ConSummPeak = 0;
@@ -3825,21 +3857,22 @@ namespace dataEditor
                         }
                     }
                 }
+
+                ConSummPeak = Math.Round(ConSummPeak * kT, 3);
+                ConSummSemiPeak = Math.Round(ConSummSemiPeak * kT, 3);
+                ConSummNight = Math.Round(ConSummNight * kT, 3);
+                GenSummPeak = Math.Round(GenSummPeak * kT, 3);
+                GenSummSemiPeak = Math.Round(GenSummSemiPeak * kT, 3);
+                GenSummNight = Math.Round(GenSummNight * kT, 3);
+
+                formType3.txtConSummPeakHH.Text = ConSummPeak.ToString();
+                formType3.txtConSummSemiPeakHH.Text = ConSummSemiPeak.ToString();
+                formType3.txtConSummNightHH.Text = ConSummNight.ToString();
+                formType3.txtGenSummPeakHH.Text = GenSummPeak.ToString();
+                formType3.txtGenSummSemiPeakHH.Text = GenSummSemiPeak.ToString();
+                formType3.txtGenSummNightHH.Text = GenSummNight.ToString();
             }
             
-            ConSummPeak = Math.Round(ConSummPeak*kT,3);
-            ConSummSemiPeak = Math.Round(ConSummSemiPeak*kT,3);
-            ConSummNight = Math.Round(ConSummNight*kT,3);
-            GenSummPeak = Math.Round(GenSummPeak*kT,3);
-            GenSummSemiPeak = Math.Round(GenSummSemiPeak*kT,3);
-            GenSummNight = Math.Round(GenSummNight*kT,3);
-
-            formType3.txtConSummPeakHH.Text = ConSummPeak.ToString();
-            formType3.txtConSummSemiPeakHH.Text = ConSummSemiPeak.ToString();
-            formType3.txtConSummNightHH.Text = ConSummNight.ToString();
-            formType3.txtGenSummPeakHH.Text = GenSummPeak.ToString();
-            formType3.txtGenSummSemiPeakHH.Text = GenSummSemiPeak.ToString();
-            formType3.txtGenSummNightHH.Text = GenSummNight.ToString();
 
             formType3.txtDiffEEoremPeak.Text = datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e1"].Nodes["treeViewLine4e1val"].Text;
             formType3.txtDiffEEoremSemiPeak.Text = datsTreeView.Nodes["treeViewLine4"].Nodes["treeViewLine4e2"].Nodes["treeViewLine4e2val"].Text;

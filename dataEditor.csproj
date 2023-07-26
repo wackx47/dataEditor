@@ -9,10 +9,10 @@
     <PlatformTarget>x86</PlatformTarget>
     <UseWPF>False</UseWPF>
     <FileVersion>1.0</FileVersion>
-    <AssemblyVersion>2023.07.20</AssemblyVersion>
+    <AssemblyVersion>2023.07.27</AssemblyVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>0.9.7.5-beta</Version>
-    <Company>ПАО ГК "ТНС энерго"</Company>
+    <Version>0.9.7.6-beta</Version>
+    <Company>i4759</Company>
     <Authors>47 5'9</Authors>
     <Copyright>47 5'9</Copyright>
     <Product>dataEditor</Product>

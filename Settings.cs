@@ -44,5 +44,14 @@ namespace dataEditor
             main.settingsPropertyValueChanged();
         }
 
+        private void setBtnSave_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void setBtnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

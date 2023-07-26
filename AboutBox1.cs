@@ -21,8 +21,15 @@ namespace universalReader
             this.labelVersion.Text = String.Format("version: {0}", Application.ProductVersion);
             this.labelCopyright.Text = "Автор: " + AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
-            if (File.Exists(Environment.CurrentDirectory + "\\RELEASE-NOTES.txt"))
-                this.ChangeLogBox.Text = File.ReadAllText(Environment.CurrentDirectory + "\\RELEASE-NOTES.txt");
+
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "dataEditor.RELEASE-NOTES.txt";
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                ChangeLogBox.Text = reader.ReadToEnd();
+            }
 
         }
 

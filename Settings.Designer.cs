@@ -30,9 +30,9 @@ namespace dataEditor
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Common");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("ExcelReader");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Microgeneration");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Common");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("ExcelReader");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Microgeneration");
             this.optionsGrid = new System.Windows.Forms.PropertyGrid();
             this.SettingsLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.SettingsTreeView = new System.Windows.Forms.TreeView();
@@ -82,16 +82,16 @@ namespace dataEditor
             this.SettingsTreeView.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.SettingsTreeView.Location = new System.Drawing.Point(3, 3);
             this.SettingsTreeView.Name = "SettingsTreeView";
-            treeNode1.Name = "setCommon";
-            treeNode1.Text = "Common";
-            treeNode2.Name = "setExcelReader";
-            treeNode2.Text = "ExcelReader";
-            treeNode3.Name = "setMicrogeneration";
-            treeNode3.Text = "Microgeneration";
+            treeNode4.Name = "setCommon";
+            treeNode4.Text = "Common";
+            treeNode5.Name = "setExcelReader";
+            treeNode5.Text = "ExcelReader";
+            treeNode6.Name = "setMicrogeneration";
+            treeNode6.Text = "Microgeneration";
             this.SettingsTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2,
-            treeNode3});
+            treeNode4,
+            treeNode5,
+            treeNode6});
             this.SettingsTreeView.Size = new System.Drawing.Size(164, 395);
             this.SettingsTreeView.TabIndex = 66;
             this.SettingsTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.SettingsTreeView_AfterSelect);
@@ -104,6 +104,7 @@ namespace dataEditor
             this.setBtnSave.TabIndex = 67;
             this.setBtnSave.Text = "Save";
             this.setBtnSave.UseVisualStyleBackColor = true;
+            this.setBtnSave.Click += new System.EventHandler(this.setBtnSave_Click);
             // 
             // setBtnCancel
             // 
@@ -113,6 +114,7 @@ namespace dataEditor
             this.setBtnCancel.TabIndex = 68;
             this.setBtnCancel.Text = "Cancel";
             this.setBtnCancel.UseVisualStyleBackColor = true;
+            this.setBtnCancel.Click += new System.EventHandler(this.setBtnCancel_Click);
             // 
             // Settings
             // 
@@ -129,6 +131,7 @@ namespace dataEditor
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(430, 469);
             this.Name = "Settings";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Settings";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Settings_FormClosing);
             this.Load += new System.EventHandler(this.Settings_Load);

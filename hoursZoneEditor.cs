@@ -99,15 +99,15 @@ namespace dataEditor
             }
         }
 
-        int[,] _2dayZone = new int[1, 6];
-        int[,] _2nightZone = new int[1, 6];
+        int[,] _2dayZone = new int[0, 6];
+        int[,] _2nightZone = new int[0, 6];
 
-        int[,] _3peakZone = new int[1, 6];
-        int[,] _3semiPeakZone = new int[1, 6];
-        int[,] _3night = new int[1, 6];
+        int[,] _3peakZone = new int[0, 6];
+        int[,] _3semiPeakZone = new int[0, 6];
+        int[,] _3night = new int[0, 6];
 
 
-        int[,] _grectangles = new int[1, 6];
+        int[,] _grectangles = new int[0, 6];
         private void btnApplyHours_Click(object sender, EventArgs e)
         {
             switch (cmbxSelectGlobalZone.Text)
@@ -124,29 +124,8 @@ namespace dataEditor
 
                     foreach (DataGridViewRow rows in hoursDataGrid.Rows)
                     {
-                        rows.DefaultCellStyle.BackColor = Color.FromKnownColor(KnownColor.Control);
-
-                        if (_2dayZone.GetLength(0) > 0)
-                        {
-                            for (int i = 0; i < _2dayZone.GetLength(0); i++)
-                            {
-                                for (int j = _2dayZone[i, 4]; j <= _2dayZone[i, 5]; j++)
-                                {
-                                    hoursDataGrid.Rows[j].DefaultCellStyle.BackColor = Color.LightBlue;
-                                }
-                            }
-                        }
-
-                        if (_2nightZone.GetLength(0) > 0)
-                        {
-                            for (int i = 0; i < _2nightZone.GetLength(0); i++)
-                            {
-                                for (int j = _2nightZone[i, 4]; j <= _2nightZone[i, 5]; j++)
-                                {
-                                    hoursDataGrid.Rows[j].DefaultCellStyle.BackColor = Color.Salmon;
-                                }
-                            }
-                        }
+                        rows.DefaultCellStyle.BackColor = Color.Empty;
+                        doubleZoneBackColor();
                     }
                     hoursDataGrid.Refresh();
                     hoursDataGrid.ClearSelection();
@@ -156,6 +135,35 @@ namespace dataEditor
                     break;
             }
         }
+
+        private void doubleZoneBackColor()
+        {
+            if (_2dayZone.GetLength(0) > 0)
+            {
+                for (int i = 0; i < _2dayZone.GetLength(0); i++)
+                {
+                    for (int j = _2dayZone[i, 4]; j <= _2dayZone[i, 5]; j++)
+                    {
+                        if (hoursDataGrid.Rows[j].DefaultCellStyle.BackColor == Color.Empty)
+                            hoursDataGrid.Rows[j].DefaultCellStyle.BackColor = Color.FromArgb(255, 200, 200, 250);
+                    }
+                }
+            }
+
+            if (_2nightZone.GetLength(0) > 0)
+            {
+                for (int i = 0; i < _2nightZone.GetLength(0); i++)
+                {
+                    for (int j = _2nightZone[i, 4]; j <= _2nightZone[i, 5]; j++)
+                    {
+                        if(hoursDataGrid.Rows[j].DefaultCellStyle.BackColor == Color.Empty)
+                            hoursDataGrid.Rows[j].DefaultCellStyle.BackColor = Color.FromArgb(255, 250, 200, 200);
+                    }
+                }
+            }
+        }
+
+
 
         T[,] ResizeArray<T>(T[,] original, int rows, int cols)
         {
@@ -245,11 +253,21 @@ namespace dataEditor
                         switch (cmbxSelectTypeZone.Text)
                         {
                             case "день":
+                                foreach(DataGridViewRow row in hoursDataGrid.Rows)
+                                {
+                                    if(row.DefaultCellStyle.BackColor == Color.FromArgb(255, 200, 200, 250))
+                                        row.DefaultCellStyle.BackColor = Color.Empty;
+                                }
                                 hoursDataGrid.Invalidate();
                                 _2dayZone = SelectedRows();
                                 break;
 
                             case "ночь":
+                                foreach (DataGridViewRow row in hoursDataGrid.Rows)
+                                {
+                                    if (row.DefaultCellStyle.BackColor == Color.FromArgb(255, 250, 200, 200))
+                                        row.DefaultCellStyle.BackColor = Color.Empty;
+                                }
                                 hoursDataGrid.Invalidate();
                                 _2nightZone = SelectedRows();
                                 break;
@@ -329,6 +347,7 @@ namespace dataEditor
                         pen.Alignment = PenAlignment.Center;
                         pen.DashStyle = DashStyle.Solid;
 
+
                         e.Graphics.DrawLine(pen, rowBound.X, rowBound.Y, rowBound.X, rowBound.Y + 10);
                         e.Graphics.DrawLine(pen, rowBound.X, rowBound.Y, rowBound.X + 10, rowBound.Y);
 
@@ -352,32 +371,14 @@ namespace dataEditor
                 case "2 зоны":
                     cmbxSelectTypeZone.Items.Clear();
                     cmbxSelectTypeZone.Items.AddRange(new[] { "день", "ночь" });
+                    cmbxSelectTypeZone.SelectedIndex = 0;
 
                     foreach (DataGridViewRow rows in hoursDataGrid.Rows)
                     {
                         rows.DefaultCellStyle.BackColor = Color.FromKnownColor(KnownColor.Control);
 
-                        if (_2dayZone.GetLength(0) > 0)
-                        {
-                            for (int i = 0; i < _2dayZone.GetLength(0); i++)
-                            {
-                                for (int j = _2dayZone[i, 4]; j <= _2dayZone[i, 5]; j++)
-                                {
-                                    hoursDataGrid.Rows[j].DefaultCellStyle.BackColor = Color.LightBlue;
-                                }
-                            }
-                        }
+                        doubleZoneBackColor();
 
-                        if (_2nightZone.GetLength(0) > 0)
-                        {
-                            for (int i = 0; i < _2nightZone.GetLength(0); i++)
-                            {
-                                for (int j = _2nightZone[i, 4]; j <= _2nightZone[i, 5]; j++)
-                                {
-                                    hoursDataGrid.Rows[j].DefaultCellStyle.BackColor = Color.LightCoral;
-                                }
-                            }
-                        }
                     }
                     hoursDataGrid.Refresh();
                     hoursDataGrid.ClearSelection();
@@ -388,7 +389,7 @@ namespace dataEditor
 
                     foreach (DataGridViewRow rows in hoursDataGrid.Rows)
                     {
-                        rows.DefaultCellStyle.BackColor = Color.FromKnownColor(KnownColor.Control);
+                        rows.DefaultCellStyle.BackColor = Color.Empty;
                     }
                     break;
             }

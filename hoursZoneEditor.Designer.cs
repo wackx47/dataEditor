@@ -400,6 +400,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "hoursZoneEditor";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "hoursZoneEditor";
             this.Load += new System.EventHandler(this.hoursZoneEditor_Load);
             this.ToolStrip.ResumeLayout(false);

@@ -1005,7 +1005,7 @@ namespace dataEditor
             this.FlowPanelButtonDeleteAllTables.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.FlowPanelButtonDeleteAllTables.Name = "FlowPanelButtonDeleteAllTables";
             this.FlowPanelButtonDeleteAllTables.Size = new System.Drawing.Size(23, 22);
-            this.FlowPanelButtonDeleteAllTables.Text = "toolStripButton1";
+            this.FlowPanelButtonDeleteAllTables.Text = "Remove Tables";
             // 
             // inputTableLoyaut
             // 
@@ -2249,6 +2249,7 @@ namespace dataEditor
             this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(800, 500);
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "dataEditor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);

@@ -28,7 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.mainPanel = new System.Windows.Forms.Panel();
+            this.groupBoxHours = new System.Windows.Forms.GroupBox();
+            this.HoursTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.HeaderDataTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.txtConSummHH = new System.Windows.Forms.TextBox();
+            this.txtGenSummHH = new System.Windows.Forms.TextBox();
+            this.label90 = new System.Windows.Forms.Label();
+            this.label92 = new System.Windows.Forms.Label();
+            this.label94 = new System.Windows.Forms.Label();
+            this.label91 = new System.Windows.Forms.Label();
+            this.dataHoursViewer = new dataEditor.MainForm.DoubleBufferedDataGridView();
+            this.DayDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DayHours = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Con = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Gen = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBoxResult = new System.Windows.Forms.GroupBox();
             this.cpResultTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.txtResultCost = new System.Windows.Forms.TextBox();
@@ -36,12 +58,15 @@
             this.label42 = new System.Windows.Forms.Label();
             this.label41 = new System.Windows.Forms.Label();
             this.groupBoxAmounts = new System.Windows.Forms.GroupBox();
+            this.tableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.vResultTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.txtBUY = new System.Windows.Forms.TextBox();
             this.txtSELL = new System.Windows.Forms.TextBox();
             this.label35 = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
             this.label37 = new System.Windows.Forms.Label();
+            this.useHours = new System.Windows.Forms.RadioButton();
+            this.useIntervals = new System.Windows.Forms.RadioButton();
             this.groupBoxEntryDat = new System.Windows.Forms.GroupBox();
             this.EntryDataTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.txtKF1 = new System.Windows.Forms.TextBox();
@@ -94,9 +119,14 @@
             this.lblAbonentName = new System.Windows.Forms.Label();
             this.lblAbonentINN = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
+            this.groupBoxHours.SuspendLayout();
+            this.HoursTableLayout.SuspendLayout();
+            this.HeaderDataTableLayout.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataHoursViewer)).BeginInit();
             this.groupBoxResult.SuspendLayout();
             this.cpResultTableLayout.SuspendLayout();
             this.groupBoxAmounts.SuspendLayout();
+            this.tableLayout.SuspendLayout();
             this.vResultTableLayout.SuspendLayout();
             this.groupBoxEntryDat.SuspendLayout();
             this.EntryDataTableLayout.SuspendLayout();
@@ -110,6 +140,7 @@
             // 
             this.mainPanel.BackColor = System.Drawing.SystemColors.ControlLight;
             this.mainPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mainPanel.Controls.Add(this.groupBoxHours);
             this.mainPanel.Controls.Add(this.groupBoxResult);
             this.mainPanel.Controls.Add(this.groupBoxAmounts);
             this.mainPanel.Controls.Add(this.groupBoxEntryDat);
@@ -120,15 +151,245 @@
             this.mainPanel.Location = new System.Drawing.Point(5, 5);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Padding = new System.Windows.Forms.Padding(5);
-            this.mainPanel.Size = new System.Drawing.Size(552, 653);
+            this.mainPanel.Size = new System.Drawing.Size(1097, 577);
             this.mainPanel.TabIndex = 0;
             this.mainPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.mainPanel_Paint);
+            // 
+            // groupBoxHours
+            // 
+            this.groupBoxHours.Controls.Add(this.HoursTableLayout);
+            this.groupBoxHours.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.groupBoxHours.Location = new System.Drawing.Point(548, 144);
+            this.groupBoxHours.Name = "groupBoxHours";
+            this.groupBoxHours.Size = new System.Drawing.Size(534, 420);
+            this.groupBoxHours.TabIndex = 16;
+            this.groupBoxHours.TabStop = false;
+            this.groupBoxHours.Text = "Почасовые объемы электроэнергии";
+            // 
+            // HoursTableLayout
+            // 
+            this.HoursTableLayout.ColumnCount = 1;
+            this.HoursTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.HoursTableLayout.Controls.Add(this.HeaderDataTableLayout, 0, 0);
+            this.HoursTableLayout.Controls.Add(this.dataHoursViewer, 0, 1);
+            this.HoursTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.HoursTableLayout.Location = new System.Drawing.Point(3, 18);
+            this.HoursTableLayout.Margin = new System.Windows.Forms.Padding(0);
+            this.HoursTableLayout.Name = "HoursTableLayout";
+            this.HoursTableLayout.RowCount = 2;
+            this.HoursTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.HoursTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.HoursTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.HoursTableLayout.Size = new System.Drawing.Size(528, 399);
+            this.HoursTableLayout.TabIndex = 7;
+            // 
+            // HeaderDataTableLayout
+            // 
+            this.HeaderDataTableLayout.ColumnCount = 2;
+            this.HeaderDataTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.HeaderDataTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.HeaderDataTableLayout.Controls.Add(this.txtConSummHH, 0, 2);
+            this.HeaderDataTableLayout.Controls.Add(this.txtGenSummHH, 0, 2);
+            this.HeaderDataTableLayout.Controls.Add(this.label90, 0, 0);
+            this.HeaderDataTableLayout.Controls.Add(this.label92, 0, 1);
+            this.HeaderDataTableLayout.Controls.Add(this.label94, 1, 1);
+            this.HeaderDataTableLayout.Controls.Add(this.label91, 1, 0);
+            this.HeaderDataTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.HeaderDataTableLayout.Location = new System.Drawing.Point(3, 3);
+            this.HeaderDataTableLayout.Name = "HeaderDataTableLayout";
+            this.HeaderDataTableLayout.RowCount = 3;
+            this.HeaderDataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.HeaderDataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.HeaderDataTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.HeaderDataTableLayout.Size = new System.Drawing.Size(522, 64);
+            this.HeaderDataTableLayout.TabIndex = 6;
+            this.HeaderDataTableLayout.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.mainTableLayoutGridBorder);
+            // 
+            // txtConSummHH
+            // 
+            this.txtConSummHH.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtConSummHH.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtConSummHH.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtConSummHH.Location = new System.Drawing.Point(10, 43);
+            this.txtConSummHH.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtConSummHH.Name = "txtConSummHH";
+            this.txtConSummHH.ReadOnly = true;
+            this.txtConSummHH.Size = new System.Drawing.Size(241, 14);
+            this.txtConSummHH.TabIndex = 24;
+            this.txtConSummHH.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtConSummHH.WordWrap = false;
+            // 
+            // txtGenSummHH
+            // 
+            this.txtGenSummHH.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtGenSummHH.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtGenSummHH.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtGenSummHH.Location = new System.Drawing.Point(271, 43);
+            this.txtGenSummHH.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.txtGenSummHH.Name = "txtGenSummHH";
+            this.txtGenSummHH.ReadOnly = true;
+            this.txtGenSummHH.Size = new System.Drawing.Size(241, 14);
+            this.txtGenSummHH.TabIndex = 23;
+            this.txtGenSummHH.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtGenSummHH.WordWrap = false;
+            // 
+            // label90
+            // 
+            this.label90.AutoSize = true;
+            this.label90.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label90.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label90.Location = new System.Drawing.Point(1, 1);
+            this.label90.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
+            this.label90.Name = "label90";
+            this.label90.Size = new System.Drawing.Size(259, 18);
+            this.label90.TabIndex = 16;
+            this.label90.Text = "Прием";
+            this.label90.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label92
+            // 
+            this.label92.AutoSize = true;
+            this.label92.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label92.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label92.Location = new System.Drawing.Point(1, 20);
+            this.label92.Margin = new System.Windows.Forms.Padding(1);
+            this.label92.Name = "label92";
+            this.label92.Size = new System.Drawing.Size(259, 17);
+            this.label92.TabIndex = 18;
+            this.label92.Text = "День";
+            this.label92.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label94
+            // 
+            this.label94.AutoSize = true;
+            this.label94.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label94.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label94.Location = new System.Drawing.Point(262, 20);
+            this.label94.Margin = new System.Windows.Forms.Padding(1);
+            this.label94.Name = "label94";
+            this.label94.Size = new System.Drawing.Size(259, 17);
+            this.label94.TabIndex = 20;
+            this.label94.Text = "День";
+            this.label94.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label91
+            // 
+            this.label91.AutoSize = true;
+            this.label91.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label91.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label91.Location = new System.Drawing.Point(262, 1);
+            this.label91.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
+            this.label91.Name = "label91";
+            this.label91.Size = new System.Drawing.Size(259, 18);
+            this.label91.TabIndex = 17;
+            this.label91.Text = "Выдача";
+            this.label91.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // dataHoursViewer
+            // 
+            this.dataHoursViewer.AllowDrop = true;
+            this.dataHoursViewer.AllowUserToAddRows = false;
+            this.dataHoursViewer.AllowUserToDeleteRows = false;
+            this.dataHoursViewer.AllowUserToResizeColumns = false;
+            this.dataHoursViewer.AllowUserToResizeRows = false;
+            this.dataHoursViewer.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataHoursViewer.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ControlDark;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataHoursViewer.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataHoursViewer.ColumnHeadersHeight = 40;
+            this.dataHoursViewer.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.DayDate,
+            this.DayHours,
+            this.Con,
+            this.Gen});
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataHoursViewer.DefaultCellStyle = dataGridViewCellStyle6;
+            this.dataHoursViewer.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dataHoursViewer.EnableHeadersVisualStyles = false;
+            this.dataHoursViewer.GridColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.dataHoursViewer.Location = new System.Drawing.Point(3, 73);
+            this.dataHoursViewer.MultiSelect = false;
+            this.dataHoursViewer.Name = "dataHoursViewer";
+            this.dataHoursViewer.ReadOnly = true;
+            this.dataHoursViewer.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.ControlDark;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataHoursViewer.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            this.dataHoursViewer.RowHeadersVisible = false;
+            this.dataHoursViewer.RowHeadersWidth = 20;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.dataHoursViewer.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            this.dataHoursViewer.RowTemplate.Height = 15;
+            this.dataHoursViewer.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.dataHoursViewer.Size = new System.Drawing.Size(522, 323);
+            this.dataHoursViewer.TabIndex = 2;
+            // 
+            // DayDate
+            // 
+            this.DayDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.DayDate.DefaultCellStyle = dataGridViewCellStyle2;
+            this.DayDate.HeaderText = "Дата";
+            this.DayDate.Name = "DayDate";
+            this.DayDate.ReadOnly = true;
+            this.DayDate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.DayDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.DayDate.Width = 43;
+            // 
+            // DayHours
+            // 
+            this.DayHours.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.DayHours.DefaultCellStyle = dataGridViewCellStyle3;
+            this.DayHours.HeaderText = "Час";
+            this.DayHours.Name = "DayHours";
+            this.DayHours.ReadOnly = true;
+            this.DayHours.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.DayHours.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.DayHours.Width = 34;
+            // 
+            // Con
+            // 
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.Con.DefaultCellStyle = dataGridViewCellStyle4;
+            this.Con.HeaderText = "Потребление";
+            this.Con.Name = "Con";
+            this.Con.ReadOnly = true;
+            this.Con.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Gen
+            // 
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.Gen.DefaultCellStyle = dataGridViewCellStyle5;
+            this.Gen.HeaderText = "Генерация";
+            this.Gen.Name = "Gen";
+            this.Gen.ReadOnly = true;
+            this.Gen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // groupBoxResult
             // 
             this.groupBoxResult.Controls.Add(this.cpResultTableLayout);
             this.groupBoxResult.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBoxResult.Location = new System.Drawing.Point(8, 574);
+            this.groupBoxResult.Location = new System.Drawing.Point(8, 496);
             this.groupBoxResult.Name = "groupBoxResult";
             this.groupBoxResult.Size = new System.Drawing.Size(534, 68);
             this.groupBoxResult.TabIndex = 15;
@@ -210,14 +471,31 @@
             // 
             // groupBoxAmounts
             // 
-            this.groupBoxAmounts.Controls.Add(this.vResultTableLayout);
+            this.groupBoxAmounts.Controls.Add(this.tableLayout);
             this.groupBoxAmounts.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBoxAmounts.Location = new System.Drawing.Point(8, 474);
+            this.groupBoxAmounts.Location = new System.Drawing.Point(8, 340);
             this.groupBoxAmounts.Name = "groupBoxAmounts";
-            this.groupBoxAmounts.Size = new System.Drawing.Size(379, 94);
+            this.groupBoxAmounts.Size = new System.Drawing.Size(534, 150);
             this.groupBoxAmounts.TabIndex = 14;
             this.groupBoxAmounts.TabStop = false;
             this.groupBoxAmounts.Text = "Данные по объемам продажи/покупки";
+            // 
+            // tableLayout
+            // 
+            this.tableLayout.ColumnCount = 1;
+            this.tableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayout.Controls.Add(this.vResultTableLayout, 0, 2);
+            this.tableLayout.Controls.Add(this.useHours, 0, 1);
+            this.tableLayout.Controls.Add(this.useIntervals, 0, 0);
+            this.tableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayout.Location = new System.Drawing.Point(3, 18);
+            this.tableLayout.Name = "tableLayout";
+            this.tableLayout.RowCount = 3;
+            this.tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayout.Size = new System.Drawing.Size(528, 129);
+            this.tableLayout.TabIndex = 0;
             // 
             // vResultTableLayout
             // 
@@ -230,13 +508,12 @@
             this.vResultTableLayout.Controls.Add(this.label35, 1, 0);
             this.vResultTableLayout.Controls.Add(this.label36, 2, 0);
             this.vResultTableLayout.Controls.Add(this.label37, 0, 1);
-            this.vResultTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.vResultTableLayout.Location = new System.Drawing.Point(3, 18);
+            this.vResultTableLayout.Location = new System.Drawing.Point(3, 51);
             this.vResultTableLayout.Name = "vResultTableLayout";
             this.vResultTableLayout.RowCount = 2;
             this.vResultTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65F));
             this.vResultTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.vResultTableLayout.Size = new System.Drawing.Size(373, 73);
+            this.vResultTableLayout.Size = new System.Drawing.Size(387, 75);
             this.vResultTableLayout.TabIndex = 4;
             this.vResultTableLayout.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.mainTableLayoutGridBorder);
             // 
@@ -245,11 +522,11 @@
             this.txtBUY.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtBUY.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBUY.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtBUY.Location = new System.Drawing.Point(256, 52);
+            this.txtBUY.Location = new System.Drawing.Point(263, 53);
             this.txtBUY.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.txtBUY.Name = "txtBUY";
             this.txtBUY.ReadOnly = true;
-            this.txtBUY.Size = new System.Drawing.Size(107, 14);
+            this.txtBUY.Size = new System.Drawing.Size(114, 14);
             this.txtBUY.TabIndex = 24;
             this.txtBUY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtBUY.WordWrap = false;
@@ -259,11 +536,11 @@
             this.txtSELL.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtSELL.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSELL.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txtSELL.Location = new System.Drawing.Point(130, 52);
+            this.txtSELL.Location = new System.Drawing.Point(130, 53);
             this.txtSELL.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.txtSELL.Name = "txtSELL";
             this.txtSELL.ReadOnly = true;
-            this.txtSELL.Size = new System.Drawing.Size(106, 14);
+            this.txtSELL.Size = new System.Drawing.Size(113, 14);
             this.txtSELL.TabIndex = 23;
             this.txtSELL.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtSELL.WordWrap = false;
@@ -276,7 +553,7 @@
             this.label35.Location = new System.Drawing.Point(121, 1);
             this.label35.Margin = new System.Windows.Forms.Padding(1);
             this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(124, 45);
+            this.label35.Size = new System.Drawing.Size(131, 46);
             this.label35.TabIndex = 0;
             this.label35.Text = "Договор энергоснабжения";
             this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -286,10 +563,10 @@
             this.label36.AutoSize = true;
             this.label36.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label36.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label36.Location = new System.Drawing.Point(247, 1);
+            this.label36.Location = new System.Drawing.Point(254, 1);
             this.label36.Margin = new System.Windows.Forms.Padding(1);
             this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(125, 45);
+            this.label36.Size = new System.Drawing.Size(132, 46);
             this.label36.TabIndex = 1;
             this.label36.Text = "Договор купли-продажи";
             this.label36.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -299,19 +576,44 @@
             this.label37.AutoSize = true;
             this.label37.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label37.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label37.Location = new System.Drawing.Point(1, 48);
+            this.label37.Location = new System.Drawing.Point(1, 49);
             this.label37.Margin = new System.Windows.Forms.Padding(1);
             this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(118, 24);
+            this.label37.Size = new System.Drawing.Size(118, 25);
             this.label37.TabIndex = 2;
             this.label37.Text = "Итого";
             this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // useHours
+            // 
+            this.useHours.AutoSize = true;
+            this.useHours.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.useHours.Location = new System.Drawing.Point(3, 27);
+            this.useHours.Name = "useHours";
+            this.useHours.Size = new System.Drawing.Size(319, 18);
+            this.useHours.TabIndex = 9;
+            this.useHours.Text = "использовать для расчёта почасовые объёмы";
+            this.useHours.UseVisualStyleBackColor = true;
+            this.useHours.CheckedChanged += new System.EventHandler(this.useHours_CheckedChanged);
+            // 
+            // useIntervals
+            // 
+            this.useIntervals.AutoSize = true;
+            this.useIntervals.Checked = true;
+            this.useIntervals.Location = new System.Drawing.Point(3, 3);
+            this.useIntervals.Name = "useIntervals";
+            this.useIntervals.Size = new System.Drawing.Size(342, 18);
+            this.useIntervals.TabIndex = 10;
+            this.useIntervals.TabStop = true;
+            this.useIntervals.Text = "использовать для расчёта интервальные объёмы";
+            this.useIntervals.UseVisualStyleBackColor = true;
+            this.useIntervals.CheckedChanged += new System.EventHandler(this.useIntervals_CheckedChanged);
             // 
             // groupBoxEntryDat
             // 
             this.groupBoxEntryDat.Controls.Add(this.EntryDataTableLayout);
             this.groupBoxEntryDat.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBoxEntryDat.Location = new System.Drawing.Point(8, 374);
+            this.groupBoxEntryDat.Location = new System.Drawing.Point(8, 240);
             this.groupBoxEntryDat.Name = "groupBoxEntryDat";
             this.groupBoxEntryDat.Size = new System.Drawing.Size(534, 94);
             this.groupBoxEntryDat.TabIndex = 13;
@@ -428,7 +730,7 @@
             this.groupBoxIntervals.AutoSize = true;
             this.groupBoxIntervals.Controls.Add(this.DataTableLayout);
             this.groupBoxIntervals.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBoxIntervals.Location = new System.Drawing.Point(8, 240);
+            this.groupBoxIntervals.Location = new System.Drawing.Point(548, 8);
             this.groupBoxIntervals.Name = "groupBoxIntervals";
             this.groupBoxIntervals.Size = new System.Drawing.Size(534, 128);
             this.groupBoxIntervals.TabIndex = 10;
@@ -1080,7 +1382,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(562, 663);
+            this.ClientSize = new System.Drawing.Size(1107, 587);
             this.Controls.Add(this.mainPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -1092,10 +1394,17 @@
             this.Load += new System.EventHandler(this.FormType1_Load);
             this.mainPanel.ResumeLayout(false);
             this.mainPanel.PerformLayout();
+            this.groupBoxHours.ResumeLayout(false);
+            this.HoursTableLayout.ResumeLayout(false);
+            this.HeaderDataTableLayout.ResumeLayout(false);
+            this.HeaderDataTableLayout.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataHoursViewer)).EndInit();
             this.groupBoxResult.ResumeLayout(false);
             this.cpResultTableLayout.ResumeLayout(false);
             this.cpResultTableLayout.PerformLayout();
             this.groupBoxAmounts.ResumeLayout(false);
+            this.tableLayout.ResumeLayout(false);
+            this.tableLayout.PerformLayout();
             this.vResultTableLayout.ResumeLayout(false);
             this.vResultTableLayout.PerformLayout();
             this.groupBoxEntryDat.ResumeLayout(false);
@@ -1179,5 +1488,22 @@
         public TextBox txtsvncPorem;
         public TextBox txtsvncEEorem;
         public TableLayoutPanel InfoTableLayout;
+        private GroupBox groupBoxHours;
+        private TableLayoutPanel HoursTableLayout;
+        private TableLayoutPanel HeaderDataTableLayout;
+        public TextBox txtConSummHH;
+        public TextBox txtGenSummHH;
+        private Label label90;
+        private Label label92;
+        private Label label94;
+        private Label label91;
+        public MainForm.DoubleBufferedDataGridView dataHoursViewer;
+        private DataGridViewTextBoxColumn DayDate;
+        private DataGridViewTextBoxColumn DayHours;
+        private DataGridViewTextBoxColumn Con;
+        private DataGridViewTextBoxColumn Gen;
+        private TableLayoutPanel tableLayout;
+        public RadioButton useHours;
+        public RadioButton useIntervals;
     }
 }
