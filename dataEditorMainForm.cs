@@ -826,14 +826,12 @@ namespace dataEditor
 
         private void ConfirmCols_Click(object sender, EventArgs e)
         {
-            DataTable dt = new DataTable();
-            DataTable dte = new DataTable();
+            DataTable dt = new DataTable("usedColumns");
+            DataTable dte = new DataTable("commonSettings");
 
 
             if (statusGridView.Rows[5].Cells[1].Value == null)
             {
-                dt.TableName = "usedColumns";
-                dte.TableName = "commonSettings";
                 UniversalDataSet.Tables.Add(dt);
                 UniversalDataSet.Tables.Add(dte);
             }
@@ -6613,6 +6611,16 @@ namespace dataEditor
                 }
             }
             return maxWidth;
+        }
+
+        public string currentGTP
+        {
+            get { return mgSettings.mgCodeName.propGTPname; }
+        }
+
+        public string currentProjectFolder
+        {
+            get { return mgSettings.mgFolderProject.fullPathProject; }
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)

@@ -13,7 +13,7 @@ namespace dataEditor
     public partial class Settings : Form
     {
         MainForm main = (MainForm)Application.OpenForms["MainForm"];
-        
+
         public Settings()
         {
             InitializeComponent();
