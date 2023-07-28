@@ -192,35 +192,35 @@
             // doubleZoneTreeView
             // 
             this.doubleZoneTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.doubleZoneTreeView.ItemHeight = 20;
+            this.doubleZoneTreeView.ItemHeight = 15;
             this.doubleZoneTreeView.Location = new System.Drawing.Point(3, 3);
             this.doubleZoneTreeView.Name = "doubleZoneTreeView";
             treeNode1.Name = "initialVal";
-            treeNode1.NodeFont = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode1.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode1.Text = "0";
             treeNode2.Name = "initial";
-            treeNode2.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode2.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode2.Text = "с";
             treeNode3.Name = "finalVal";
-            treeNode3.NodeFont = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode3.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode3.Text = "0";
             treeNode4.Name = "final";
-            treeNode4.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode4.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode4.Text = "до";
             treeNode5.Name = "day";
             treeNode5.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             treeNode5.Text = "день";
             treeNode6.Name = "initialVal";
-            treeNode6.NodeFont = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode6.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode6.Text = "0";
             treeNode7.Name = "initial";
-            treeNode7.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode7.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode7.Text = "с";
             treeNode8.Name = "finalVal";
-            treeNode8.NodeFont = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode8.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode8.Text = "0";
             treeNode9.Name = "final";
-            treeNode9.NodeFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode9.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             treeNode9.Text = "до";
             treeNode10.Name = "night";
             treeNode10.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
@@ -261,7 +261,7 @@
             // trippleZoneTreeView
             // 
             this.trippleZoneTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trippleZoneTreeView.ItemHeight = 20;
+            this.trippleZoneTreeView.ItemHeight = 15;
             this.trippleZoneTreeView.Location = new System.Drawing.Point(3, 3);
             this.trippleZoneTreeView.Name = "trippleZoneTreeView";
             treeNode11.Name = "peak";

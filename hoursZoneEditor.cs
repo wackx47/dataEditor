@@ -44,9 +44,18 @@ namespace dataEditor
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(currentFolder + "\\doubleZone_" + currentGTP + ".xml");
                 parsingXMl(doubleZoneTreeView, xmlDoc);
+                parsingTreeViewDoubleZoneForPaint();
             }
 
-            parsingTreeViewForPaint();
+            if (File.Exists(currentFolder + "\\trippleZone_" + currentGTP + ".xml"))
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(currentFolder + "\\trippleZone_" + currentGTP + ".xml");
+                parsingXMl(trippleZoneTreeView, xmlDoc);
+                parsingTreeViewTrippleZoneForPaint();
+            }
+
+
         }
 
         private void parsingXMl(System.Windows.Forms.TreeView treeViewControl,  XmlDocument xmlDoc)
@@ -62,6 +71,7 @@ namespace dataEditor
                     AddNode(treeViewControl.Nodes, node);
                 }
                 treeViewControl.ExpandAll();
+                treeViewControl.ItemHeight = 15;
             }
             catch (Exception ex)
             {
@@ -80,18 +90,26 @@ namespace dataEditor
         {
             if (inXmlNode.HasChildNodes)
             {
-                string text = GetAttributeText(inXmlNode, "name");
-                if (string.IsNullOrEmpty(text))
-                    text = inXmlNode.Name;
-                TreeNode newNode = nodes.Add(text);
+                string name = GetAttributeText(inXmlNode, "name");
+                string text = inXmlNode.Attributes["Text"].Value;
+
+                if (string.IsNullOrEmpty(name))
+                    name = inXmlNode.Name;
+
+                TreeNode newNode = nodes.Add(name);
                 XmlNodeList nodeList = inXmlNode.ChildNodes;
 
+                newNode.Name = name;
+                newNode.Text = text;
 
                 for (int i = 0; i <= nodeList.Count - 1; i++)
                 {
                     XmlNode xNode = inXmlNode.ChildNodes[i];
-                    if(xNode.NodeType is XmlNodeType.Element)
+                    if (xNode.NodeType is XmlNodeType.Element)
+                    {
                         newNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+                    }    
+                        
                     else
                         newNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
                     AddNode(newNode.Nodes, xNode);
@@ -107,12 +125,194 @@ namespace dataEditor
                 newNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             }
         }
-
-        private void parsingTreeViewForPaint()
+        private void parsingTreeViewTrippleZoneForPaint()
         {
-            foreach (TreeNode node in doubleZoneTreeView.Nodes)
+            foreach (TreeNode mainNode in trippleZoneTreeView.Nodes)
             {
+                switch (mainNode.Name)
+                {
+                    case "peak":
+                        if (mainNode.FirstNode.Name == "initial")
+                        {
+                            _3peakZone = ResizeArray(_3peakZone, mainNode.GetNodeCount(false) / 2, 6);
+                        }
+                        else
+                        {
+                            _3peakZone = ResizeArray(_3peakZone, mainNode.GetNodeCount(false), 6);
+                        }
 
+                        for (int i = 0; i < _3peakZone.GetLength(0); i++)
+                        {
+                            int initialIndex = 0;
+                            int finalIndex = 0;
+
+                            TreeNode nodeLevelOne = mainNode.Nodes[i];
+
+                            initialIndex = Convert.ToInt32(nodeLevelOne.Nodes[0].LastNode.Text);
+                            finalIndex = Convert.ToInt32(nodeLevelOne.Nodes[1].LastNode.Text);
+
+                            _3peakZone[i, 0] = 1;
+                            _3peakZone[i, 1] = hoursDataGrid.GetRowDisplayRectangle(initialIndex, false).Y;
+                            _3peakZone[i, 2] = hoursDataGrid.GetRowDisplayRectangle(initialIndex, false).Width - 1;
+                            _3peakZone[i, 3] = hoursDataGrid.Rows[initialIndex].Height * (finalIndex - initialIndex);
+                            _3peakZone[i, 4] = initialIndex;
+                            _3peakZone[i, 5] = finalIndex - 1;
+                        }
+                        break;
+
+                    case "semiPeak":
+                        if (mainNode.FirstNode.Name == "initial")
+                        {
+                            _3semiPeakZone = ResizeArray(_3semiPeakZone, mainNode.GetNodeCount(false) / 2, 6);
+                        }
+                        else
+                        {
+                            _3semiPeakZone = ResizeArray(_3semiPeakZone, mainNode.GetNodeCount(false), 6);
+                        }
+
+                        for (int i = 0; i < _3semiPeakZone.GetLength(0); i++)
+                        {
+                            int initialIndex = 0;
+                            int finalIndex = 0;
+
+                            TreeNode nodeLevelOne = mainNode.Nodes[i];
+
+                            initialIndex = Convert.ToInt32(nodeLevelOne.Nodes[0].LastNode.Text);
+                            finalIndex = Convert.ToInt32(nodeLevelOne.Nodes[1].LastNode.Text);
+
+                            _3semiPeakZone[i, 0] = 1;
+                            _3semiPeakZone[i, 1] = hoursDataGrid.GetRowDisplayRectangle(initialIndex, false).Y;
+                            _3semiPeakZone[i, 2] = hoursDataGrid.GetRowDisplayRectangle(initialIndex, false).Width - 1;
+                            _3semiPeakZone[i, 3] = hoursDataGrid.Rows[initialIndex].Height * (finalIndex - initialIndex);
+                            _3semiPeakZone[i, 4] = initialIndex;
+                            _3semiPeakZone[i, 5] = finalIndex - 1;
+                        }
+                        break;
+
+                    case "night":
+                        if (mainNode.FirstNode.Name == "initial")
+                        {
+                            _3nightZone = ResizeArray(_3nightZone, mainNode.GetNodeCount(false) / 2 + 1, 6);
+                        }
+                        else
+                        {
+                            _3nightZone = ResizeArray(_3nightZone, mainNode.GetNodeCount(false) + 1, 6);
+                        }
+
+                        int initialIndexNight = 0;
+                        int finalIndexNight = 0;
+
+                        foreach (TreeNode nodeLevelOne in mainNode.Nodes)
+                        {
+                            switch (nodeLevelOne.Name)
+                            {
+                                case "initial":
+                                    initialIndexNight = Convert.ToInt32(nodeLevelOne.LastNode.Text);
+                                    break;
+
+                                case "final":
+                                    finalIndexNight = Convert.ToInt32(nodeLevelOne.LastNode.Text);
+                                    break;
+                            }
+                        }
+
+                        _3nightZone[0, 0] = 1;
+                        _3nightZone[0, 1] = hoursDataGrid.GetRowDisplayRectangle(initialIndexNight, false).Y;
+                        _3nightZone[0, 2] = hoursDataGrid.GetRowDisplayRectangle(initialIndexNight, false).Width - 1;
+                        _3nightZone[0, 3] = hoursDataGrid.Rows[initialIndexNight].Height * (24 - initialIndexNight);
+                        _3nightZone[0, 4] = initialIndexNight;
+                        _3nightZone[0, 5] = 23;
+
+                        _3nightZone[1, 0] = 1;
+                        _3nightZone[1, 1] = hoursDataGrid.GetRowDisplayRectangle(0, false).Y;
+                        _3nightZone[1, 2] = hoursDataGrid.GetRowDisplayRectangle(0, false).Width - 1;
+                        _3nightZone[1, 3] = hoursDataGrid.Rows[0].Height * (finalIndexNight - 0);
+                        _3nightZone[1, 4] = 0;
+                        _3nightZone[1, 5] = finalIndexNight;
+                        break;
+
+                }
+            }
+        }
+
+
+        private void parsingTreeViewDoubleZoneForPaint()
+        {
+            foreach (TreeNode mainNode in doubleZoneTreeView.Nodes)
+            {
+                switch(mainNode.Name)
+                {
+                    case "day":
+                        if(mainNode.FirstNode.Name == "initial")
+                        {
+                            _2dayZone = ResizeArray(_2dayZone, mainNode.GetNodeCount(false) / 2, 6);
+                        }
+                        else
+                        {
+                            _2dayZone = ResizeArray(_2dayZone, mainNode.GetNodeCount(false), 6);
+                        }
+
+                        for (int i = 0; i < _2dayZone.GetLength(0); i++)
+                        {
+                            int initialIndex = 0;
+                            int finalIndex = 0;
+
+                            TreeNode nodeLevelOne = mainNode;
+
+                            initialIndex = Convert.ToInt32(nodeLevelOne.Nodes[0].LastNode.Text);
+                            finalIndex = Convert.ToInt32(nodeLevelOne.Nodes[1].LastNode.Text);
+
+                            _2dayZone[i, 0] = 1;
+                            _2dayZone[i, 1] = hoursDataGrid.GetRowDisplayRectangle(initialIndex, false).Y;
+                            _2dayZone[i, 2] = hoursDataGrid.GetRowDisplayRectangle(initialIndex, false).Width - 1;
+                            _2dayZone[i, 3] = hoursDataGrid.Rows[initialIndex].Height * (finalIndex - initialIndex);
+                            _2dayZone[i, 4] = initialIndex;
+                            _2dayZone[i, 5] = finalIndex - 1;
+                        }
+                        break;
+
+                    case "night":
+                        if (mainNode.FirstNode.Name == "initial")
+                        {
+                            _2nightZone = ResizeArray(_2nightZone, mainNode.GetNodeCount(false) / 2+1, 6);
+                        }
+                        else
+                        {
+                            _2nightZone = ResizeArray(_2nightZone, mainNode.GetNodeCount(false)+1, 6);
+                        }
+
+                        int initialIndexNight = 0;
+                        int finalIndexNight = 0;
+
+                        foreach (TreeNode nodeLevelOne in mainNode.Nodes)
+                        {
+                            switch (nodeLevelOne.Name)
+                            {
+                                case "initial":
+                                    initialIndexNight = Convert.ToInt32(nodeLevelOne.LastNode.Text);
+                                    break;
+
+                                case "final":
+                                    finalIndexNight = Convert.ToInt32(nodeLevelOne.LastNode.Text);
+                                    break;
+                            }
+                        }
+
+                        _2nightZone[0, 0] = 1;
+                        _2nightZone[0, 1] = hoursDataGrid.GetRowDisplayRectangle(initialIndexNight, false).Y;
+                        _2nightZone[0, 2] = hoursDataGrid.GetRowDisplayRectangle(initialIndexNight, false).Width-1;
+                        _2nightZone[0, 3] = hoursDataGrid.Rows[initialIndexNight].Height * (24 - initialIndexNight);
+                        _2nightZone[0, 4] = initialIndexNight;
+                        _2nightZone[0, 5] = 23;
+
+                        _2nightZone[1, 0] = 1;
+                        _2nightZone[1, 1] = hoursDataGrid.GetRowDisplayRectangle(0, false).Y;
+                        _2nightZone[1, 2] = hoursDataGrid.GetRowDisplayRectangle(0, false).Width-1;
+                        _2nightZone[1, 3] = hoursDataGrid.Rows[0].Height * (finalIndexNight - 0);
+                        _2nightZone[1, 4] = 0;
+                        _2nightZone[1, 5] = finalIndexNight;
+                        break;
+                }
             }
         }
 
@@ -181,13 +381,27 @@ namespace dataEditor
             string currentGTP = main.currentGTP;
             string currentFolder = main.currentProjectFolder;
 
-            var rootElement = new XElement("doubleZone_" + currentGTP, CreateXmlElement(doubleZoneTreeView.Nodes));
-            var document = new XDocument(rootElement);
-            document.Save(currentFolder + "\\doubleZone_" + currentGTP + ".xml");
+            try
+            {
+                var rootElement = new XElement("doubleZone_" + currentGTP, CreateXmlElement(doubleZoneTreeView.Nodes));
+                var document = new XDocument(rootElement);
+                document.Save(currentFolder + "\\doubleZone_" + currentGTP + ".xml");
+            }
+            catch
+            {
 
-            rootElement = new XElement("trippleZone" + currentGTP, CreateXmlElement(trippleZoneTreeView.Nodes));
-            document = new XDocument(rootElement);
-            document.Save(currentFolder + "\\trippleZone_" + currentGTP + ".xml");
+            }
+
+            try
+            {
+                var rootElement = new XElement("trippleZone" + currentGTP, CreateXmlElement(trippleZoneTreeView.Nodes));
+                var document = new XDocument(rootElement);
+                document.Save(currentFolder + "\\trippleZone_" + currentGTP + ".xml");
+            }
+            catch
+            {
+
+            }
         }
 
         private static List<XElement> CreateXmlElement(TreeNodeCollection treeViewNodes)
@@ -195,9 +409,12 @@ namespace dataEditor
             var elements = new List<XElement>();
             foreach (TreeNode treeViewNode in treeViewNodes)
             {
-                var element = new XElement(treeViewNode.Text);
+                var element = new XElement(treeViewNode.Name);
+                element.SetAttributeValue("Text", treeViewNode.Text);
                 if (treeViewNode.GetNodeCount(true) == 1)
+                {
                     element.Value = treeViewNode.Nodes[0].Text;
+                } 
                 else
                     element.Add(CreateXmlElement(treeViewNode.Nodes));
                 elements.Add(element);
@@ -401,7 +618,9 @@ namespace dataEditor
                     for (int j = _2nightZone[i, 4]; j <= _2nightZone[i, 5]; j++)
                     {
                         if(hoursDataGrid.Rows[j].DefaultCellStyle.BackColor == Color.Empty)
+                        {
                             hoursDataGrid.Rows[j].DefaultCellStyle.BackColor = Color.FromArgb(255, 200, 200, 250);
+                        }
                     }
                 }
             }
@@ -476,6 +695,7 @@ namespace dataEditor
             int arraysCount = 1;
             rectangles = new int[arraysCount, 6];
 
+
             for (int i = 0; i < selectedRows.Count; i++)
             {
                 if (i == 0)
@@ -506,6 +726,7 @@ namespace dataEditor
                             rectangles[arraysCount - 1, 2] = hoursDataGrid.GetRowDisplayRectangle(selectedRows[i], false).Width-1;
                             rectangles[arraysCount - 1, 3] = hoursDataGrid.GetRowDisplayRectangle(selectedRows[i], false).Height;
                             rectangles[arraysCount - 1, 4] = selectedRows[i];
+                            rectangles[arraysCount - 1, 5] = selectedRows[i];
                         }
                         else
                         {
