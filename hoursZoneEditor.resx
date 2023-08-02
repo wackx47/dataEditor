@@ -61,6 +61,24 @@
     <value>17, 18</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="btnSave.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
+        JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAgUlE
+        QVQ4T2OgDojZ+YAhdtd/IvFHhujdDlCdUACSiN4uCcbIbHQMNmC3P0PMrldAS52guoGAFANAdMyOYKAB
+        n6C6gYBUA2BsOKCqATG7HoH52DBIjqABxGKsBsTs3ABkH8WLQWpwGgBSALMBF4apGTUAzYCYXaRkJggG
+        6aEcMDAAAF9SLgyxVO/SAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnSaveAll.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
+        JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAnklE
+        QVQ4T2OgLojdtZwhdud+gjhmVz2D/X4WqC4SAUhjzM4WsCFwELPzAdD2/wRx9K41DGlnWMGGgFwCB2DJ
+        7ZJgjMxGFovdLQekt4ENAesh1QAwDTbkP0QPOQbA2GA9uAyI2fUIzEfGIDGiDSCE8RoQs3MDkH0UKwbJ
+        ETQApBBmEzqGyQ0iA4DJHg7IMQAFYIs6XDhm132oLmoABgYA88QRXE/rUOAAAAAASUVORK5CYII=
+</value>
+  </data>
   <data name="btnConfirm.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8

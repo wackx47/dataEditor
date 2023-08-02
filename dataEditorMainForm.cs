@@ -2741,7 +2741,7 @@ namespace dataEditor
             Form TableView = new Form();
             DataGridView headerDataGridView = new DataGridView();
             DoubleBufferedDataGridView tablesDataGridView = new DoubleBufferedDataGridView();
-            
+
             SettingsNewFormTablesResult(TableView, tablesDataGridView, headerDataGridView);
 
             int hSize = tablesDataGridView.Size.Height;
@@ -2789,7 +2789,9 @@ namespace dataEditor
             {
                 cols.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             }
+
             tablesDataGridView.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.tablesDataGridView_RowPrePaint);
+           
             TableView.StartPosition = FormStartPosition.CenterScreen;
             TableView.Show();
         }
@@ -2826,6 +2828,7 @@ namespace dataEditor
                     start++;
                 }
             }
+
             tablesDataGridView.ClearSelection();
             tablesDataGridView.RowPrePaint -= new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.tablesDataGridView_RowPrePaint);
         }
@@ -4081,7 +4084,7 @@ namespace dataEditor
             headerDataGridView.ColumnHeadersVisible = false;
             headerDataGridView.RowHeadersVisible = false;
             headerDataGridView.ScrollBars = ScrollBars.Both;
-            headerDataGridView.RowTemplate.DefaultCellStyle.Font = new Font("Arial", 9);
+            headerDataGridView.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             headerDataGridView.RowTemplate.MinimumHeight = 18;
             headerDataGridView.RowTemplate.Height = 18;
             headerDataGridView.AllowUserToAddRows = false;
@@ -4104,12 +4107,12 @@ namespace dataEditor
 
             tablesDataGridView.Dock = DockStyle.Fill;
             tablesDataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            tablesDataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 9, FontStyle.Bold);
+            tablesDataGridView.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             tablesDataGridView.Location = new Point(5, 40);
             tablesDataGridView.ColumnHeadersVisible = true;
             tablesDataGridView.RowHeadersVisible = false;
             tablesDataGridView.ScrollBars = ScrollBars.Both;
-            tablesDataGridView.RowTemplate.DefaultCellStyle.Font = new Font("Arial", 9);
+            tablesDataGridView.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             tablesDataGridView.RowTemplate.MinimumHeight = 18;
             tablesDataGridView.RowTemplate.Height = 18;
             tablesDataGridView.AllowUserToAddRows = false;
@@ -4120,6 +4123,7 @@ namespace dataEditor
             tablesDataGridView.DefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
             tablesDataGridView.ReadOnly = true;
             tablesDataGridView.EnableHeadersVisualStyles = false;
+            tablesDataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
 
             tablesDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             tablesDataGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
@@ -6801,6 +6805,48 @@ namespace dataEditor
         {
             inputDataHandle inputDatForm = new inputDataHandle();
             inputDatForm.Show();
+        }
+
+        private void FlowPanelButtonDeleteAllTables_Click(object sender, EventArgs e)
+        {
+            List<Button> listOfButtons = new List<Button>();
+            foreach (Button buttons in mgFlowPanelResult.Controls.OfType<Button>())
+            {
+                switch(buttons.Text.Split('_').First())
+                {
+                    case "hrs":
+                        if (HoursDataSet.Tables.Contains(buttons.Text))
+                        {
+                            DataTable dtDelete = HoursDataSet.Tables[buttons.Text];
+                            DataTable dtDeleteHeader = HoursDataSet.Tables[buttons.Text + "_header"];
+                            if (HoursDataSet.Tables.CanRemove(dtDelete))
+                            {
+                                listOfButtons.Add(buttons);
+                                HoursDataSet.Tables.Remove(dtDelete);
+                                HoursDataSet.Tables.Remove(dtDeleteHeader);
+                            }
+                        }
+                        break;
+
+                    case "intg":
+                        if (IntegralsDataSet.Tables.Contains(buttons.Text))
+                        {
+                            DataTable dtDelete = IntegralsDataSet.Tables[buttons.Text];
+                            DataTable dtDeleteHeader = IntegralsDataSet.Tables[buttons.Text+"_header"];
+                            if (IntegralsDataSet.Tables.CanRemove(dtDelete))
+                            {
+                                listOfButtons.Add(buttons);
+                                IntegralsDataSet.Tables.Remove(dtDelete);
+                                IntegralsDataSet.Tables.Remove(dtDeleteHeader);
+                            }
+                        }
+                        break;
+                }
+            }
+            foreach (Button removed in listOfButtons)
+            {
+                mgFlowPanelResult.Controls.Remove(removed);
+            }
         }
     }
     public static class ExtensionMethods

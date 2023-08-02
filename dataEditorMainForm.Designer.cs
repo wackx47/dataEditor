@@ -985,7 +985,7 @@ namespace dataEditor
             this.FlowPanelTools.Margin = new System.Windows.Forms.Padding(1);
             this.FlowPanelTools.Name = "FlowPanelTools";
             this.FlowPanelTools.Padding = new System.Windows.Forms.Padding(4, 0, 1, 0);
-            this.FlowPanelTools.Size = new System.Drawing.Size(53, 25);
+            this.FlowPanelTools.Size = new System.Drawing.Size(84, 25);
             this.FlowPanelTools.TabIndex = 3;
             // 
             // FlowPanelButtonAddTable
@@ -1006,6 +1006,7 @@ namespace dataEditor
             this.FlowPanelButtonDeleteAllTables.Name = "FlowPanelButtonDeleteAllTables";
             this.FlowPanelButtonDeleteAllTables.Size = new System.Drawing.Size(23, 22);
             this.FlowPanelButtonDeleteAllTables.Text = "Remove Tables";
+            this.FlowPanelButtonDeleteAllTables.Click += new System.EventHandler(this.FlowPanelButtonDeleteAllTables_Click);
             // 
             // inputTableLoyaut
             // 

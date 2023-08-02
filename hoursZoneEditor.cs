@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,8 +57,14 @@ namespace dataEditor
                 parsingTreeViewTrippleZoneForPaint();
             }
 
+            for (int i = 2023; i < DateTime.Now.Year + 3; i++)
+                cmbxYear.Items.Add(i);
 
+            cmbxYear.Text = DateTime.Now.Year.ToString();
+            monthList.Text = monthList.Items[0].ToString();
+            typeList.Text = typeList.Items[0].ToString();
         }
+
 
         private void parsingXMl(System.Windows.Forms.TreeView treeViewControl,  XmlDocument xmlDoc)
         {
@@ -379,13 +387,21 @@ namespace dataEditor
         {
             main = StartScreen.universalReaderForm;
             string currentGTP = main.currentGTP;
-            string currentFolder = main.currentProjectFolder;
+            string currentFolder = main.currentProjectFolder+"\\data\\common\\TimesZones\\";
+            string month = (DateTime.ParseExact(monthList.Text, "MMMM", CultureInfo.CurrentCulture).Month).ToString("00");
+            string doubleName = "doubleZone_" + currentGTP + "_0" + typeList.SelectedIndex + "_" + month + cmbxYear.Text;
+            string trippleName = "trippleZone" + currentGTP + "_0" + typeList.SelectedIndex + "_" + month + cmbxYear.Text;
 
             try
             {
-                var rootElement = new XElement("doubleZone_" + currentGTP, CreateXmlElement(doubleZoneTreeView.Nodes));
+                if (!Directory.Exists(currentFolder))
+                {
+                    Directory.CreateDirectory(currentFolder);
+                }
+
+                var rootElement = new XElement(doubleName, CreateXmlElement(doubleZoneTreeView.Nodes));
                 var document = new XDocument(rootElement);
-                document.Save(currentFolder + "\\doubleZone_" + currentGTP + ".xml");
+                document.Save(currentFolder + doubleName + ".xml");
             }
             catch
             {
@@ -394,9 +410,14 @@ namespace dataEditor
 
             try
             {
-                var rootElement = new XElement("trippleZone" + currentGTP, CreateXmlElement(trippleZoneTreeView.Nodes));
+                if (!Directory.Exists(currentFolder))
+                {
+                    Directory.CreateDirectory(currentFolder);
+                }
+
+                var rootElement = new XElement(trippleName, CreateXmlElement(trippleZoneTreeView.Nodes));
                 var document = new XDocument(rootElement);
-                document.Save(currentFolder + "\\trippleZone_" + currentGTP + ".xml");
+                document.Save(currentFolder + trippleName + ".xml");
             }
             catch
             {
@@ -531,11 +552,26 @@ namespace dataEditor
                             }
                             else
                             {
-                                _3peakZone = new int[0,6];
-                                hoursDataGrid.Refresh();
-                                hoursDataGrid.ClearSelection();
-                                MessageBox.Show("Недостаточно узлов для заполнения");
-                                return;
+                                TreeNode parentNode = trippleZoneTreeView.Nodes[0];
+
+                                for (int i = 0; i < _3peakZone.GetLength(0); i++)
+                                {
+                                    var childNode = (i+1) + " период";
+                                    TreeNode newZoneNode = parentNode.Nodes.Add(childNode);
+                                    newZoneNode.Name = "zone_" + (i+1);
+                                    newZoneNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                    TreeNode initialChildNode = newZoneNode.Nodes.Add("с");
+                                    initialChildNode.Name = "initial";
+                                    initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                    TreeNode initialValueNode = initialChildNode.Nodes.Add(_3peakZone[i, 4].ToString());
+                                    initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                    TreeNode finalChildNode = newZoneNode.Nodes.Add("до");
+                                    finalChildNode.Name = "final";
+                                    finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                    TreeNode finalValueNode = finalChildNode.Nodes.Add((_3peakZone[i, 5] + 1).ToString());
+                                    finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                }
+                                trippleZoneTreeView.ExpandAll();
                             }
 
                         }
@@ -559,11 +595,26 @@ namespace dataEditor
                             }
                             else
                             {
-                                _3semiPeakZone = new int[0, 6];
-                                hoursDataGrid.Refresh();
-                                hoursDataGrid.ClearSelection();
-                                MessageBox.Show("Недостаточно узлов для заполнения");
-                                return;
+                                TreeNode parentNode = trippleZoneTreeView.Nodes[1];
+
+                                for (int i = 0; i < _3semiPeakZone.GetLength(0); i++)
+                                {
+                                    var childNode = (i + 1) + " период";
+                                    TreeNode newZoneNode = parentNode.Nodes.Add(childNode);
+                                    newZoneNode.Name = "zone_" + (i + 1);
+                                    newZoneNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                    TreeNode initialChildNode = newZoneNode.Nodes.Add("с");
+                                    initialChildNode.Name = "initial";
+                                    initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                    TreeNode initialValueNode = initialChildNode.Nodes.Add(_3semiPeakZone[i, 4].ToString());
+                                    initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                    TreeNode finalChildNode = newZoneNode.Nodes.Add("до");
+                                    finalChildNode.Name = "final";
+                                    finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                    TreeNode finalValueNode = finalChildNode.Nodes.Add((_3semiPeakZone[i, 5] + 1).ToString());
+                                    finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                }
+                                trippleZoneTreeView.ExpandAll();
                             }
 
                         }
@@ -1071,6 +1122,20 @@ namespace dataEditor
         private void btnConfirm_Click(object sender, EventArgs e)
         {
             saveData();
+        }
+
+        private void cbDefault_CheckedChanged(object sender, EventArgs e)
+        {
+            if(cbDefault.Checked)
+            {
+                monthList.Enabled = false;
+                cmbxYear.Enabled = false;
+            }
+            else
+            {
+                monthList.Enabled = true;
+                cmbxYear.Enabled = true;
+            }
         }
     }
 }
