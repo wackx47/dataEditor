@@ -30,29 +30,29 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(hoursZoneEditor));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("0");
-            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("с", new System.Windows.Forms.TreeNode[] {
-            treeNode14});
-            System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("0");
-            System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("до", new System.Windows.Forms.TreeNode[] {
-            treeNode16});
-            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("день", new System.Windows.Forms.TreeNode[] {
-            treeNode15,
-            treeNode17});
-            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("0");
-            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("с", new System.Windows.Forms.TreeNode[] {
-            treeNode19});
-            System.Windows.Forms.TreeNode treeNode21 = new System.Windows.Forms.TreeNode("0");
-            System.Windows.Forms.TreeNode treeNode22 = new System.Windows.Forms.TreeNode("до", new System.Windows.Forms.TreeNode[] {
-            treeNode21});
-            System.Windows.Forms.TreeNode treeNode23 = new System.Windows.Forms.TreeNode("ночь", new System.Windows.Forms.TreeNode[] {
-            treeNode20,
-            treeNode22});
-            System.Windows.Forms.TreeNode treeNode24 = new System.Windows.Forms.TreeNode("пик");
-            System.Windows.Forms.TreeNode treeNode25 = new System.Windows.Forms.TreeNode("полупик");
-            System.Windows.Forms.TreeNode treeNode26 = new System.Windows.Forms.TreeNode("ночь");
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("0");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("с", new System.Windows.Forms.TreeNode[] {
+            treeNode1});
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("0");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("до", new System.Windows.Forms.TreeNode[] {
+            treeNode3});
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("день", new System.Windows.Forms.TreeNode[] {
+            treeNode2,
+            treeNode4});
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("0");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("с", new System.Windows.Forms.TreeNode[] {
+            treeNode6});
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("0");
+            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("до", new System.Windows.Forms.TreeNode[] {
+            treeNode8});
+            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("ночь", new System.Windows.Forms.TreeNode[] {
+            treeNode7,
+            treeNode9});
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("пик");
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("полупик");
+            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("ночь");
             this.ToolStrip = new System.Windows.Forms.ToolStrip();
             this.btnConfirm = new System.Windows.Forms.ToolStripSplitButton();
             this.btnSave = new System.Windows.Forms.ToolStripMenuItem();
@@ -102,7 +102,7 @@
             this.ToolStrip.Location = new System.Drawing.Point(0, 0);
             this.ToolStrip.Name = "ToolStrip";
             this.ToolStrip.Padding = new System.Windows.Forms.Padding(10, 2, 1, 2);
-            this.ToolStrip.Size = new System.Drawing.Size(258, 28);
+            this.ToolStrip.Size = new System.Drawing.Size(289, 28);
             this.ToolStrip.TabIndex = 81;
             this.ToolStrip.Text = "mgTools";
             // 
@@ -133,7 +133,7 @@
             this.btnSaveAll.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnSaveAll.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveAll.Image")));
             this.btnSaveAll.Name = "btnSaveAll";
-            this.btnSaveAll.Size = new System.Drawing.Size(156, 22);
+            this.btnSaveAll.Size = new System.Drawing.Size(180, 22);
             this.btnSaveAll.Text = "Сохранить все";
             // 
             // toolStripSeparator7
@@ -180,12 +180,14 @@
             // cmbxYear
             // 
             this.cmbxYear.AutoSize = false;
-            this.cmbxYear.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+            this.cmbxYear.BackColor = System.Drawing.SystemColors.Window;
+            this.cmbxYear.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.cmbxYear.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.cmbxYear.Margin = new System.Windows.Forms.Padding(1);
             this.cmbxYear.MaxLength = 4;
             this.cmbxYear.Name = "cmbxYear";
             this.cmbxYear.Size = new System.Drawing.Size(55, 22);
+            this.cmbxYear.DropDownClosed += new System.EventHandler(this.cmbxYear_DropDownClosed);
             // 
             // hoursDataGrid
             // 
@@ -197,26 +199,26 @@
             this.hoursDataGrid.BackgroundColor = System.Drawing.SystemColors.Control;
             this.hoursDataGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.hoursDataGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.hoursDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.hoursDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.hoursDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.hoursDataGrid.ColumnHeadersVisible = false;
             this.hoursDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Hours});
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Gainsboro;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.hoursDataGrid.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Gainsboro;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.hoursDataGrid.DefaultCellStyle = dataGridViewCellStyle2;
             this.hoursDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hoursDataGrid.GridColor = System.Drawing.SystemColors.ControlLight;
             this.hoursDataGrid.Location = new System.Drawing.Point(2, 57);
@@ -271,39 +273,39 @@
             this.doubleZoneTreeView.ItemHeight = 15;
             this.doubleZoneTreeView.Location = new System.Drawing.Point(3, 3);
             this.doubleZoneTreeView.Name = "doubleZoneTreeView";
-            treeNode14.Name = "initialVal";
-            treeNode14.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode14.Text = "0";
-            treeNode15.Name = "initial";
-            treeNode15.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode15.Text = "с";
-            treeNode16.Name = "finalVal";
-            treeNode16.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode16.Text = "0";
-            treeNode17.Name = "final";
-            treeNode17.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode17.Text = "до";
-            treeNode18.Name = "day";
-            treeNode18.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            treeNode18.Text = "день";
-            treeNode19.Name = "initialVal";
-            treeNode19.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode19.Text = "0";
-            treeNode20.Name = "initial";
-            treeNode20.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode20.Text = "с";
-            treeNode21.Name = "finalVal";
-            treeNode21.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode21.Text = "0";
-            treeNode22.Name = "final";
-            treeNode22.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode22.Text = "до";
-            treeNode23.Name = "night";
-            treeNode23.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            treeNode23.Text = "ночь";
+            treeNode1.Name = "initialVal";
+            treeNode1.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode1.Text = "0";
+            treeNode2.Name = "initial";
+            treeNode2.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode2.Text = "с";
+            treeNode3.Name = "finalVal";
+            treeNode3.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode3.Text = "0";
+            treeNode4.Name = "final";
+            treeNode4.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode4.Text = "до";
+            treeNode5.Name = "day";
+            treeNode5.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode5.Text = "день";
+            treeNode6.Name = "initialVal";
+            treeNode6.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode6.Text = "0";
+            treeNode7.Name = "initial";
+            treeNode7.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode7.Text = "с";
+            treeNode8.Name = "finalVal";
+            treeNode8.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode8.Text = "0";
+            treeNode9.Name = "final";
+            treeNode9.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            treeNode9.Text = "до";
+            treeNode10.Name = "night";
+            treeNode10.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode10.Text = "ночь";
             this.doubleZoneTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode18,
-            treeNode23});
+            treeNode5,
+            treeNode10});
             this.doubleZoneTreeView.Size = new System.Drawing.Size(168, 448);
             this.doubleZoneTreeView.TabIndex = 0;
             this.doubleZoneTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.doubleZoneTreeView_AfterSelect);
@@ -340,19 +342,19 @@
             this.trippleZoneTreeView.ItemHeight = 15;
             this.trippleZoneTreeView.Location = new System.Drawing.Point(3, 3);
             this.trippleZoneTreeView.Name = "trippleZoneTreeView";
-            treeNode24.Name = "peak";
-            treeNode24.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            treeNode24.Text = "пик";
-            treeNode25.Name = "semiPeak";
-            treeNode25.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            treeNode25.Text = "полупик";
-            treeNode26.Name = "night";
-            treeNode26.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            treeNode26.Text = "ночь";
+            treeNode11.Name = "peak";
+            treeNode11.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode11.Text = "пик";
+            treeNode12.Name = "semiPeak";
+            treeNode12.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode12.Text = "полупик";
+            treeNode13.Name = "night";
+            treeNode13.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode13.Text = "ночь";
             this.trippleZoneTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode24,
-            treeNode25,
-            treeNode26});
+            treeNode11,
+            treeNode12,
+            treeNode13});
             this.trippleZoneTreeView.Size = new System.Drawing.Size(188, 448);
             this.trippleZoneTreeView.TabIndex = 1;
             this.trippleZoneTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TrippleZoneTreeView_AfterSelect);

@@ -487,12 +487,12 @@ namespace dataEditor
             selectTrippleTreeNode();
         }
 
-        int[,] _2dayZone = new int[0, 6];
-        int[,] _2nightZone = new int[0, 6];
+        public int[,] _2dayZone = new int[0, 6];
+        public int[,] _2nightZone = new int[0, 6];
 
-        int[,] _3peakZone = new int[0, 6];
-        int[,] _3semiPeakZone = new int[0, 6];
-        int[,] _3nightZone = new int[0, 6];
+        public int[,] _3peakZone = new int[0, 6];
+        public int[,] _3semiPeakZone = new int[0, 6];
+        public int[,] _3nightZone = new int[0, 6];
 
         private void btnApplyHours_Click(object sender, EventArgs e)
         {
@@ -1121,7 +1121,7 @@ namespace dataEditor
 
         private void btnConfirm_Click(object sender, EventArgs e)
         {
-            saveData();
+            DialogResult = DialogResult.OK;
         }
 
         private void cbDefault_CheckedChanged(object sender, EventArgs e)
@@ -1136,6 +1136,11 @@ namespace dataEditor
                 monthList.Enabled = true;
                 cmbxYear.Enabled = true;
             }
+        }
+
+        private void cmbxYear_DropDownClosed(object sender, EventArgs e)
+        {
+            ToolStrip.Focus();
         }
     }
 }
