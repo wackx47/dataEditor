@@ -29,6 +29,21 @@ namespace dataEditor
             InitializeComponent();
         }
 
+
+        public int[,] _2dayZone_00 = new int[0, 6];
+        public int[,] _2nightZone_00 = new int[0, 6];
+
+        public int[,] _3peakZone_00 = new int[0, 6];
+        public int[,] _3semiPeakZone_00 = new int[0, 6];
+        public int[,] _3nightZone_00 = new int[0, 6];
+
+        public int[,] _2dayZone_01 = new int[0, 6];
+        public int[,] _2nightZone_01 = new int[0, 6];
+
+        public int[,] _3peakZone_01 = new int[0, 6];
+        public int[,] _3semiPeakZone_01 = new int[0, 6];
+        public int[,] _3nightZone_01 = new int[0, 6];
+
         private void hoursZoneEditor_Load(object sender, EventArgs e)
         {
             fillTable();
@@ -37,34 +52,52 @@ namespace dataEditor
             cmbxSelectTypeZone.SelectedIndex = 0;
             doubleZoneTreeView.ExpandAll();
 
-            main = StartScreen.universalReaderForm;
-            string currentGTP = main.currentGTP;
-            string currentFolder = main.currentProjectFolder;
-
-            if(File.Exists(currentFolder + "\\doubleZone_" + currentGTP + ".xml"))
-            {
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.Load(currentFolder + "\\doubleZone_" + currentGTP + ".xml");
-                parsingXMl(doubleZoneTreeView, xmlDoc);
-                parsingTreeViewDoubleZoneForPaint();
-            }
-
-            if (File.Exists(currentFolder + "\\trippleZone_" + currentGTP + ".xml"))
-            {
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.Load(currentFolder + "\\trippleZone_" + currentGTP + ".xml");
-                parsingXMl(trippleZoneTreeView, xmlDoc);
-                parsingTreeViewTrippleZoneForPaint();
-            }
-
-            for (int i = 2023; i < DateTime.Now.Year + 3; i++)
-                cmbxYear.Items.Add(i);
-
-            cmbxYear.Text = DateTime.Now.Year.ToString();
-            monthList.Text = monthList.Items[0].ToString();
             typeList.Text = typeList.Items[0].ToString();
+
+            loadXMLfiles();
         }
 
+        private void loadXMLfiles()
+        {
+            main = StartScreen.universalReaderForm;
+            string currentGTP = main.currentGTP;
+            string currentFolder = main.currentProjectFolder + "\\data\\common\\TimesZones\\";
+
+            string doubleName = "doubleZone_" + currentGTP;
+            string trippleName = "trippleZone_" + currentGTP;
+
+            if (File.Exists(currentFolder + doubleName + "_00.xml"))
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(currentFolder + doubleName + "_00.xml");
+                parsingXMl(doubleZoneTreeView, xmlDoc);
+                parsingTreeViewDoubleZoneForPaint(ref _2dayZone_00, ref _2nightZone_00);
+            }
+
+            if (File.Exists(currentFolder + trippleName + "_00.xml"))
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(currentFolder + trippleName + "_00.xml");
+                parsingXMl(trippleZoneTreeView, xmlDoc);
+                parsingTreeViewTrippleZoneForPaint(ref _3peakZone_00, ref _3semiPeakZone_00, ref _3nightZone_00);
+            }
+
+            if (File.Exists(currentFolder + doubleName + "_01.xml"))
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(currentFolder + doubleName + "_01.xml");
+                parsingXMl(doubleZoneTreeView, xmlDoc);
+                parsingTreeViewDoubleZoneForPaint(ref _2dayZone_01, ref _2nightZone_01);
+            }
+
+            if (File.Exists(currentFolder + trippleName + "_01.xml"))
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(currentFolder + trippleName + "_01.xml");
+                parsingXMl(trippleZoneTreeView, xmlDoc);
+                parsingTreeViewTrippleZoneForPaint(ref _3peakZone_01, ref _3semiPeakZone_01, ref _3nightZone_01);
+            }
+        }
 
         private void parsingXMl(System.Windows.Forms.TreeView treeViewControl,  XmlDocument xmlDoc)
         {
@@ -75,6 +108,7 @@ namespace dataEditor
                 {
                     if (node.Name == "namespace" && node.ChildNodes.Count == 0 && string.IsNullOrEmpty(GetAttributeText(node, "name")))
                         continue;
+                        
 
                     AddNode(treeViewControl.Nodes, node);
                 }
@@ -133,7 +167,7 @@ namespace dataEditor
                 newNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             }
         }
-        private void parsingTreeViewTrippleZoneForPaint()
+        private void parsingTreeViewTrippleZoneForPaint(ref int[,] _3peakZone, ref int[,] _3semiPeakZone, ref int[,] _3nightZone)
         {
             foreach (TreeNode mainNode in trippleZoneTreeView.Nodes)
             {
@@ -241,10 +275,14 @@ namespace dataEditor
 
                 }
             }
+
+            _chg3peakZone = _3peakZone;
+            _chg3semiPeakZone = _3semiPeakZone;
+            _chg3nightZone = _3nightZone;
         }
 
 
-        private void parsingTreeViewDoubleZoneForPaint()
+        private void parsingTreeViewDoubleZoneForPaint(ref int[,] _2dayZone, ref int[,] _2nightZone)
         {
             foreach (TreeNode mainNode in doubleZoneTreeView.Nodes)
             {
@@ -322,6 +360,8 @@ namespace dataEditor
                         break;
                 }
             }
+            _chg2dayZone = _2dayZone;
+            _chg2nightZone = _2nightZone;
         }
 
         private void fillTable()
@@ -383,14 +423,14 @@ namespace dataEditor
             trippleZoneTreeView.ExpandAll();
         }
 
-        private void saveData()
+        private void saveData(int typePerson, int typeZone)
         {
             main = StartScreen.universalReaderForm;
             string currentGTP = main.currentGTP;
             string currentFolder = main.currentProjectFolder+"\\data\\common\\TimesZones\\";
-            string month = (DateTime.ParseExact(monthList.Text, "MMMM", CultureInfo.CurrentCulture).Month).ToString("00");
-            string doubleName = "doubleZone_" + currentGTP + "_0" + typeList.SelectedIndex + "_" + month + cmbxYear.Text;
-            string trippleName = "trippleZone" + currentGTP + "_0" + typeList.SelectedIndex + "_" + month + cmbxYear.Text;
+
+            string doubleName = "doubleZone_" + currentGTP + "_0" + typePerson;
+            string trippleName = "trippleZone_" + currentGTP + "_0" + typePerson;
 
             try
             {
@@ -399,25 +439,37 @@ namespace dataEditor
                     Directory.CreateDirectory(currentFolder);
                 }
 
-                var rootElement = new XElement(doubleName, CreateXmlElement(doubleZoneTreeView.Nodes));
-                var document = new XDocument(rootElement);
-                document.Save(currentFolder + doubleName + ".xml");
-            }
-            catch
-            {
+                var document = new XDocument();
 
-            }
-
-            try
-            {
-                if (!Directory.Exists(currentFolder))
+                switch (typeZone)
                 {
-                    Directory.CreateDirectory(currentFolder);
+                    case 0:
+                        document = new XDocument(new XElement(doubleName, CreateXmlElement(doubleZoneTreeView.Nodes)));
+                        document.Save(currentFolder + doubleName + ".xml");
+                        break;
+
+                    case 1:
+                        document = new XDocument(new XElement(trippleName, CreateXmlElement(trippleZoneTreeView.Nodes)));
+                        document.Save(currentFolder + trippleName + ".xml");
+                        break;
+
+                    case 2:
+                        document = new XDocument(new XElement(doubleName, CreateXmlElement(doubleZoneTreeView.Nodes)));
+                        document.Save(currentFolder + doubleName + ".xml");
+
+                        document = new XDocument(new XElement(trippleName, CreateXmlElement(trippleZoneTreeView.Nodes)));
+                        document.Save(currentFolder + trippleName + ".xml");
+                        break;
+
+                    default:
+                        document = new XDocument(new XElement(doubleName, CreateXmlElement(doubleZoneTreeView.Nodes)));
+                        document.Save(currentFolder + doubleName + ".xml");
+
+                        document = new XDocument(new XElement(trippleName, CreateXmlElement(trippleZoneTreeView.Nodes)));
+                        document.Save(currentFolder + trippleName + ".xml");
+                        break; 
                 }
 
-                var rootElement = new XElement(trippleName, CreateXmlElement(trippleZoneTreeView.Nodes));
-                var document = new XDocument(rootElement);
-                document.Save(currentFolder + trippleName + ".xml");
             }
             catch
             {
@@ -458,6 +510,9 @@ namespace dataEditor
             }
             hoursDataGrid.Refresh();
             hoursDataGrid.ClearSelection();
+
+            groupDoubleZone.ForeColor = Color.Black;
+            groupTrippleZone.ForeColor = Color.Gray;
         }
 
         private void TrippleZoneTreeView_Enter(object sender, EventArgs e)
@@ -475,6 +530,9 @@ namespace dataEditor
             }
             hoursDataGrid.Refresh();
             hoursDataGrid.ClearSelection();
+
+            groupDoubleZone.ForeColor = Color.Gray;
+            groupTrippleZone.ForeColor = Color.Black;
         }
 
         private void doubleZoneTreeView_AfterSelect(object sender, TreeViewEventArgs e)
@@ -487,12 +545,12 @@ namespace dataEditor
             selectTrippleTreeNode();
         }
 
-        public int[,] _2dayZone = new int[0, 6];
-        public int[,] _2nightZone = new int[0, 6];
+        public int[,] _chg2dayZone = new int[0, 6];
+        public int[,] _chg2nightZone = new int[0, 6];
 
-        public int[,] _3peakZone = new int[0, 6];
-        public int[,] _3semiPeakZone = new int[0, 6];
-        public int[,] _3nightZone = new int[0, 6];
+        public int[,] _chg3peakZone = new int[0, 6];
+        public int[,] _chg3semiPeakZone = new int[0, 6];
+        public int[,] _chg3nightZone = new int[0, 6];
 
         private void btnApplyHours_Click(object sender, EventArgs e)
         {
@@ -502,11 +560,11 @@ namespace dataEditor
                 case "2 зоны":
                     if(cmbxSelectTypeZone.Text == "день")
                     {
-                        _2dayZone = SelectedRows(_2dayZone, false);
+                        _chg2dayZone = SelectedRows(_chg2dayZone, false);
                         try
                         {
-                            doubleZoneTreeView.Nodes[0].Nodes[0].Nodes[0].Text = _2dayZone[0, 4].ToString();
-                            doubleZoneTreeView.Nodes[0].Nodes[1].Nodes[0].Text = (_2dayZone[0, 5] + 1).ToString();
+                            doubleZoneTreeView.Nodes[0].Nodes[0].Nodes[0].Text = _chg2dayZone[0, 4].ToString();
+                            doubleZoneTreeView.Nodes[0].Nodes[1].Nodes[0].Text = (_chg2dayZone[0, 5] + 1).ToString();
                         }
                         catch (Exception ex)
                         {
@@ -516,45 +574,81 @@ namespace dataEditor
                     }
                     else if (cmbxSelectTypeZone.Text == "ночь")
                     {
-                        _2nightZone = SelectedRows(_2nightZone, true);
+                        _chg2nightZone = SelectedRows(_chg2nightZone, true);
                         try
                         {
-                            doubleZoneTreeView.Nodes[1].Nodes[0].Nodes[0].Text = _2nightZone[1, 4].ToString();
-                            doubleZoneTreeView.Nodes[1].Nodes[1].Nodes[0].Text = (_2nightZone[0, 5] + 1).ToString();
+                            TreeNode parentNode = doubleZoneTreeView.Nodes[1];
+                            parentNode.Nodes.Clear();
+
+                            if (_chg2nightZone.GetLength(0) == 2)
+                            {
+                                TreeNode initialChildNode = parentNode.Nodes.Add("с");
+                                initialChildNode.Name = "initial";
+                                initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg2nightZone[1, 4].ToString());
+                                initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                TreeNode finalChildNode = parentNode.Nodes.Add("до");
+                                finalChildNode.Name = "final";
+                                finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg2nightZone[0, 5] + 1).ToString());
+                                finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                            }
+                            else if (_chg2nightZone.GetLength(0) == 1)
+                            {
+                                TreeNode initialChildNode = parentNode.Nodes.Add("с");
+                                initialChildNode.Name = "initial";
+                                initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg2nightZone[0, 4].ToString());
+                                initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                TreeNode finalChildNode = parentNode.Nodes.Add("до");
+                                finalChildNode.Name = "final";
+                                finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg2nightZone[0, 5] + 1).ToString());
+                                finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                            }
+
+                            doubleZoneTreeView.ExpandAll();
+
+                            //doubleZoneTreeView.Nodes[1].Nodes[0].Nodes[0].Text = _chg2nightZone[1, 4].ToString();
+                            //doubleZoneTreeView.Nodes[1].Nodes[1].Nodes[0].Text = (_chg2nightZone[0, 5] + 1).ToString();
                         }
                         catch (Exception ex)
                         {
-
+                            TreeNode parentNode = doubleZoneTreeView.Nodes[1];
+                            parentNode.Nodes.Clear();
                         }
                     }
 
                     foreach (DataGridViewRow rows in hoursDataGrid.Rows)
                     {
                         rows.DefaultCellStyle.BackColor = Color.Empty;
-                        doubleZoneBackColor();
                     }
+                    doubleZoneBackColor();
                     hoursDataGrid.Refresh();
                     hoursDataGrid.ClearSelection();
                     break;
                 case "3 зоны":
                     if (cmbxSelectTypeZone.Text == "пик")
                     {
-                        _3peakZone = SelectedRows(_3peakZone, true);
+                        _chg3peakZone = SelectedRows(_chg3peakZone, true);
                         try
                         {
-                            if (_3peakZone.GetLength(0) == trippleZoneTreeView.Nodes[0].Nodes.Count)
+                            if (_chg3peakZone.GetLength(0) == trippleZoneTreeView.Nodes[0].Nodes.Count)
                             {
-                                for (int i = 0; i < _3peakZone.GetLength(0); i++)
+                                for (int i = 0; i < _chg3peakZone.GetLength(0); i++)
                                 {
-                                    trippleZoneTreeView.Nodes[0].Nodes[i].Nodes[0].Nodes[0].Text = _3peakZone[i, 4].ToString();
-                                    trippleZoneTreeView.Nodes[0].Nodes[i].Nodes[1].Nodes[0].Text = (_3peakZone[i, 5] + 1).ToString();
+                                    trippleZoneTreeView.Nodes[0].Nodes[i].Nodes[0].Nodes[0].Text = _chg3peakZone[i, 4].ToString();
+                                    trippleZoneTreeView.Nodes[0].Nodes[i].Nodes[1].Nodes[0].Text = (_chg3peakZone[i, 5] + 1).ToString();
                                 }
                             }
                             else
                             {
+
                                 TreeNode parentNode = trippleZoneTreeView.Nodes[0];
 
-                                for (int i = 0; i < _3peakZone.GetLength(0); i++)
+                                parentNode.Nodes.Clear();
+
+                                for (int i = 0; i < _chg3peakZone.GetLength(0); i++)
                                 {
                                     var childNode = (i+1) + " период";
                                     TreeNode newZoneNode = parentNode.Nodes.Add(childNode);
@@ -563,12 +657,12 @@ namespace dataEditor
                                     TreeNode initialChildNode = newZoneNode.Nodes.Add("с");
                                     initialChildNode.Name = "initial";
                                     initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-                                    TreeNode initialValueNode = initialChildNode.Nodes.Add(_3peakZone[i, 4].ToString());
+                                    TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg3peakZone[i, 4].ToString());
                                     initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
                                     TreeNode finalChildNode = newZoneNode.Nodes.Add("до");
                                     finalChildNode.Name = "final";
                                     finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-                                    TreeNode finalValueNode = finalChildNode.Nodes.Add((_3peakZone[i, 5] + 1).ToString());
+                                    TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg3peakZone[i, 5] + 1).ToString());
                                     finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
                                 }
                                 trippleZoneTreeView.ExpandAll();
@@ -582,22 +676,24 @@ namespace dataEditor
                     }
                     else if (cmbxSelectTypeZone.Text == "полупик")
                     {
-                        _3semiPeakZone = SelectedRows(_3semiPeakZone, true);
+                        _chg3semiPeakZone = SelectedRows(_chg3semiPeakZone, true);
                         try
                         {
-                            if (_3semiPeakZone.GetLength(0) == trippleZoneTreeView.Nodes[1].Nodes.Count)
+                            if (_chg3semiPeakZone.GetLength(0) == trippleZoneTreeView.Nodes[1].Nodes.Count)
                             {
-                                for (int i = 0; i < _3semiPeakZone.GetLength(0); i++)
+                                for (int i = 0; i < _chg3semiPeakZone.GetLength(0); i++)
                                 {
-                                    trippleZoneTreeView.Nodes[1].Nodes[i].Nodes[0].Nodes[0].Text = _3semiPeakZone[i, 4].ToString();
-                                    trippleZoneTreeView.Nodes[1].Nodes[i].Nodes[1].Nodes[0].Text = (_3semiPeakZone[i, 5] + 1).ToString();
+                                    trippleZoneTreeView.Nodes[1].Nodes[i].Nodes[0].Nodes[0].Text = _chg3semiPeakZone[i, 4].ToString();
+                                    trippleZoneTreeView.Nodes[1].Nodes[i].Nodes[1].Nodes[0].Text = (_chg3semiPeakZone[i, 5] + 1).ToString();
                                 }
                             }
                             else
                             {
                                 TreeNode parentNode = trippleZoneTreeView.Nodes[1];
 
-                                for (int i = 0; i < _3semiPeakZone.GetLength(0); i++)
+                                parentNode.Nodes.Clear();
+
+                                for (int i = 0; i < _chg3semiPeakZone.GetLength(0); i++)
                                 {
                                     var childNode = (i + 1) + " период";
                                     TreeNode newZoneNode = parentNode.Nodes.Add(childNode);
@@ -606,12 +702,12 @@ namespace dataEditor
                                     TreeNode initialChildNode = newZoneNode.Nodes.Add("с");
                                     initialChildNode.Name = "initial";
                                     initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-                                    TreeNode initialValueNode = initialChildNode.Nodes.Add(_3semiPeakZone[i, 4].ToString());
+                                    TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg3semiPeakZone[i, 4].ToString());
                                     initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
                                     TreeNode finalChildNode = newZoneNode.Nodes.Add("до");
                                     finalChildNode.Name = "final";
                                     finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-                                    TreeNode finalValueNode = finalChildNode.Nodes.Add((_3semiPeakZone[i, 5] + 1).ToString());
+                                    TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg3semiPeakZone[i, 5] + 1).ToString());
                                     finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
                                 }
                                 trippleZoneTreeView.ExpandAll();
@@ -625,36 +721,90 @@ namespace dataEditor
                     }
                     else
                     {
-                        _3nightZone = SelectedRows(_3nightZone, true);
+                        _chg3nightZone = SelectedRows(_chg3nightZone, true);
                         try
                         {
-                            trippleZoneTreeView.Nodes[2].Nodes[0].Nodes[0].Text = _3nightZone[1, 4].ToString();
-                            trippleZoneTreeView.Nodes[2].Nodes[1].Nodes[0].Text = (_3nightZone[0, 5] + 1).ToString();
+                            TreeNode parentNode = trippleZoneTreeView.Nodes[2];
+                            parentNode.Nodes.Clear();
+
+                            if (_chg3nightZone.GetLength(0) == 2)
+                            {
+                                TreeNode initialChildNode = parentNode.Nodes.Add("с");
+                                initialChildNode.Name = "initial";
+                                initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg3nightZone[1, 4].ToString());
+                                initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                TreeNode finalChildNode = parentNode.Nodes.Add("до");
+                                finalChildNode.Name = "final";
+                                finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg3nightZone[0, 5] + 1).ToString());
+                                finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                            }
+                            else if (_chg3nightZone.GetLength(0) == 1)
+                            {
+                                TreeNode initialChildNode = parentNode.Nodes.Add("с");
+                                initialChildNode.Name = "initial";
+                                initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg3nightZone[0, 4].ToString());
+                                initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                TreeNode finalChildNode = parentNode.Nodes.Add("до");
+                                finalChildNode.Name = "final";
+                                finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg3nightZone[0, 5] + 1).ToString());
+                                finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                            }
+                            
+                            trippleZoneTreeView.ExpandAll();
+                            //trippleZoneTreeView.Nodes[2].Nodes[0].Nodes[0].Text = _chg3nightZone[1, 4].ToString();
+                            //trippleZoneTreeView.Nodes[2].Nodes[1].Nodes[0].Text = (_chg3nightZone[0, 5] + 1).ToString();
                         }
                         catch (Exception ex)
                         {
-
+                            TreeNode parentNode = trippleZoneTreeView.Nodes[2];
+                            parentNode.Nodes.Clear();
                         }
                     }
 
                     foreach (DataGridViewRow rows in hoursDataGrid.Rows)
                     {
                         rows.DefaultCellStyle.BackColor = Color.Empty;
-                        trippleZoneBackColor();
                     }
+                    trippleZoneBackColor();
                     hoursDataGrid.Refresh();
                     hoursDataGrid.ClearSelection();
+                    break;
+            }
+
+
+            switch (typeList.SelectedIndex)
+            {
+                case 0:
+                    _2dayZone_00 = _chg2dayZone;
+                    _2nightZone_00 = _chg2nightZone;
+
+                    _3peakZone_00 = _chg3peakZone;
+                    _3semiPeakZone_00 = _chg3semiPeakZone;
+                    _3nightZone_00 = _chg3nightZone;
+                    break;
+
+                case 1:
+                    _2dayZone_01 = _chg2dayZone;
+                    _2nightZone_01 = _chg2nightZone;
+
+                    _3peakZone_01 = _chg3peakZone;
+                    _3semiPeakZone_01 = _chg3semiPeakZone;
+                    _3nightZone_01 = _chg3nightZone;
                     break;
             }
         }
 
         private void doubleZoneBackColor()
         {
-            if (_2dayZone.GetLength(0) > 0)
+            if (_chg2dayZone.GetLength(0) > 0)
             {
-                for (int i = 0; i < _2dayZone.GetLength(0); i++)
+                for (int i = 0; i < _chg2dayZone.GetLength(0); i++)
                 {
-                    for (int j = _2dayZone[i, 4]; j <= _2dayZone[i, 5]; j++)
+                    for (int j = _chg2dayZone[i, 4]; j <= _chg2dayZone[i, 5]; j++)
                     {
                         if (hoursDataGrid.Rows[j].DefaultCellStyle.BackColor == Color.Empty)
                             hoursDataGrid.Rows[j].DefaultCellStyle.BackColor = Color.FromArgb(255, 250, 200, 200);
@@ -662,11 +812,11 @@ namespace dataEditor
                 }
             }
 
-            if (_2nightZone.GetLength(0) > 0)
+            if (_chg2nightZone.GetLength(0) > 0)
             {
-                for (int i = 0; i < _2nightZone.GetLength(0); i++)
+                for (int i = 0; i < _chg2nightZone.GetLength(0); i++)
                 {
-                    for (int j = _2nightZone[i, 4]; j <= _2nightZone[i, 5]; j++)
+                    for (int j = _chg2nightZone[i, 4]; j <= _chg2nightZone[i, 5]; j++)
                     {
                         if(hoursDataGrid.Rows[j].DefaultCellStyle.BackColor == Color.Empty)
                         {
@@ -679,11 +829,11 @@ namespace dataEditor
 
         private void trippleZoneBackColor()
         {
-            if (_3peakZone.GetLength(0) > 0)
+            if (_chg3peakZone.GetLength(0) > 0)
             {
-                for (int i = 0; i < _3peakZone.GetLength(0); i++)
+                for (int i = 0; i < _chg3peakZone.GetLength(0); i++)
                 {
-                    for (int j = _3peakZone[i, 4]; j <= _3peakZone[i, 5]; j++)
+                    for (int j = _chg3peakZone[i, 4]; j <= _chg3peakZone[i, 5]; j++)
                     {
                         if (hoursDataGrid.Rows[j].DefaultCellStyle.BackColor == Color.Empty)
                             hoursDataGrid.Rows[j].DefaultCellStyle.BackColor = Color.FromArgb(255, 250, 200, 200);
@@ -691,11 +841,11 @@ namespace dataEditor
                 }
             }
 
-            if (_3semiPeakZone.GetLength(0) > 0)
+            if (_chg3semiPeakZone.GetLength(0) > 0)
             {
-                for (int i = 0; i < _3semiPeakZone.GetLength(0); i++)
+                for (int i = 0; i < _chg3semiPeakZone.GetLength(0); i++)
                 {
-                    for (int j = _3semiPeakZone[i, 4]; j <= _3semiPeakZone[i, 5]; j++)
+                    for (int j = _chg3semiPeakZone[i, 4]; j <= _chg3semiPeakZone[i, 5]; j++)
                     {
                         if (hoursDataGrid.Rows[j].DefaultCellStyle.BackColor == Color.Empty)
                             hoursDataGrid.Rows[j].DefaultCellStyle.BackColor = Color.FromArgb(255, 250, 215, 180);
@@ -703,11 +853,11 @@ namespace dataEditor
                 }
             }
 
-            if (_3nightZone.GetLength(0) > 0)
+            if (_chg3nightZone.GetLength(0) > 0)
             {
-                for (int i = 0; i < _3nightZone.GetLength(0); i++)
+                for (int i = 0; i < _chg3nightZone.GetLength(0); i++)
                 {
-                    for (int j = _3nightZone[i, 4]; j <= _3nightZone[i, 5]; j++)
+                    for (int j = _chg3nightZone[i, 4]; j <= _chg3nightZone[i, 5]; j++)
                     {
                         if (hoursDataGrid.Rows[j].DefaultCellStyle.BackColor == Color.Empty)
                             hoursDataGrid.Rows[j].DefaultCellStyle.BackColor = Color.FromArgb(255, 200, 200, 250);
@@ -827,7 +977,7 @@ namespace dataEditor
                                         row.DefaultCellStyle.BackColor = Color.Empty;
                                 }
                                 hoursDataGrid.Invalidate();
-                                _2dayZone= SelectedRows(_2dayZone, false);
+                                _chg2dayZone = SelectedRows(_chg2dayZone, false);
                                 break;
 
                             case "ночь":
@@ -837,7 +987,7 @@ namespace dataEditor
                                         row.DefaultCellStyle.BackColor = Color.Empty;
                                 }
                                 hoursDataGrid.Invalidate();
-                                _2nightZone=SelectedRows(_2nightZone, true);
+                                _chg2nightZone = SelectedRows(_chg2nightZone, true);
                                 break;
                         }
                         break;
@@ -852,7 +1002,7 @@ namespace dataEditor
                                         row.DefaultCellStyle.BackColor = Color.Empty;
                                 }
                                 hoursDataGrid.Invalidate();
-                                _3peakZone = SelectedRows(_3peakZone, true);
+                                _chg3peakZone = SelectedRows(_chg3peakZone, true);
                                 break;
 
                             case "полупик":
@@ -862,7 +1012,7 @@ namespace dataEditor
                                         row.DefaultCellStyle.BackColor = Color.Empty;
                                 }
                                 hoursDataGrid.Invalidate();
-                                _3semiPeakZone = SelectedRows(_3semiPeakZone, true);
+                                _chg3semiPeakZone = SelectedRows(_chg3semiPeakZone, true);
                                 break;
 
                             case "ночь":
@@ -872,7 +1022,7 @@ namespace dataEditor
                                         row.DefaultCellStyle.BackColor = Color.Empty;
                                 }
                                 hoursDataGrid.Invalidate();
-                                _3nightZone = SelectedRows(_3nightZone, true);
+                                _chg3nightZone = SelectedRows(_chg3nightZone, true);
                                 break;
                         }
                         break;
@@ -903,11 +1053,11 @@ namespace dataEditor
             switch (cmbxSelectGlobalZone.Text)
             {
                 case "2 зоны":
-                    if (_2dayZone.GetLength(0) > 0)
+                    if (_chg2dayZone.GetLength(0) > 0)
                     {
-                        for (int i = 0; i < _2dayZone.GetLength(0); i++)
+                        for (int i = 0; i < _chg2dayZone.GetLength(0); i++)
                         {
-                            Rectangle rowBound = new Rectangle(_2dayZone[i, 0], _2dayZone[i, 1], _2dayZone[i, 2], _2dayZone[i, 3]);
+                            Rectangle rowBound = new Rectangle(_chg2dayZone[i, 0], _chg2dayZone[i, 1], _chg2dayZone[i, 2], _chg2dayZone[i, 3]);
                             using (var pen = new Pen(Color.FromArgb(255, 250, 0, 50), 2))
                             {
                                 pen.Alignment = PenAlignment.Center;
@@ -923,11 +1073,11 @@ namespace dataEditor
                     }
 
 
-                    if (_2nightZone.GetLength(0) > 0)
+                    if (_chg2nightZone.GetLength(0) > 0)
                     {
-                        for (int i = 0; i < _2nightZone.GetLength(0); i++)
+                        for (int i = 0; i < _chg2nightZone.GetLength(0); i++)
                         {
-                            Rectangle rowBound = new Rectangle(_2nightZone[i, 0], _2nightZone[i, 1], _2nightZone[i, 2], _2nightZone[i, 3]);
+                            Rectangle rowBound = new Rectangle(_chg2nightZone[i, 0], _chg2nightZone[i, 1], _chg2nightZone[i, 2], _chg2nightZone[i, 3]);
                             using (var pen = new Pen(Color.FromArgb(255, 50, 0, 250), 2))
                             {
                                 pen.Alignment = PenAlignment.Center;
@@ -945,11 +1095,11 @@ namespace dataEditor
                     break;
 
                 case "3 зоны":
-                    if (_3peakZone.GetLength(0) > 0)
+                    if (_chg3peakZone.GetLength(0) > 0)
                     {
-                        for (int i = 0; i < _3peakZone.GetLength(0); i++)
+                        for (int i = 0; i < _chg3peakZone.GetLength(0); i++)
                         {
-                            Rectangle rowBound = new Rectangle(_3peakZone[i, 0], _3peakZone[i, 1], _3peakZone[i, 2], _3peakZone[i, 3]);
+                            Rectangle rowBound = new Rectangle(_chg3peakZone[i, 0], _chg3peakZone[i, 1], _chg3peakZone[i, 2], _chg3peakZone[i, 3]);
                             using (var pen = new Pen(Color.FromArgb(255, 250, 0, 50), 2))
                             {
                                 pen.Alignment = PenAlignment.Center;
@@ -964,11 +1114,11 @@ namespace dataEditor
                         }
                     }
 
-                    if (_3semiPeakZone.GetLength(0) > 0)
+                    if (_chg3semiPeakZone.GetLength(0) > 0)
                     {
-                        for (int i = 0; i < _3semiPeakZone.GetLength(0); i++)
+                        for (int i = 0; i < _chg3semiPeakZone.GetLength(0); i++)
                         {
-                            Rectangle rowBound = new Rectangle(_3semiPeakZone[i, 0], _3semiPeakZone[i, 1], _3semiPeakZone[i, 2], _3semiPeakZone[i, 3]);
+                            Rectangle rowBound = new Rectangle(_chg3semiPeakZone[i, 0], _chg3semiPeakZone[i, 1], _chg3semiPeakZone[i, 2], _chg3semiPeakZone[i, 3]);
                             using (var pen = new Pen(Color.FromArgb(255, 250, 150, 50), 2))
                             {
                                 pen.Alignment = PenAlignment.Center;
@@ -983,11 +1133,11 @@ namespace dataEditor
                         }
                     }
 
-                    if (_3nightZone.GetLength(0) > 0)
+                    if (_chg3nightZone.GetLength(0) > 0)
                     {
-                        for (int i = 0; i < _3nightZone.GetLength(0); i++)
+                        for (int i = 0; i < _chg3nightZone.GetLength(0); i++)
                         {
-                            Rectangle rowBound = new Rectangle(_3nightZone[i, 0], _3nightZone[i, 1], _3nightZone[i, 2], _3nightZone[i, 3]);
+                            Rectangle rowBound = new Rectangle(_chg3nightZone[i, 0], _chg3nightZone[i, 1], _chg3nightZone[i, 2], _chg3nightZone[i, 3]);
                             using (var pen = new Pen(Color.FromArgb(255, 50, 0, 250), 2))
                             {
                                 pen.Alignment = PenAlignment.Center;
@@ -1019,8 +1169,8 @@ namespace dataEditor
                     foreach (DataGridViewRow rows in hoursDataGrid.Rows)
                     {
                         rows.DefaultCellStyle.BackColor = Color.Empty;
-                        doubleZoneBackColor();
                     }
+                    doubleZoneBackColor();
                     hoursDataGrid.Refresh();
                     hoursDataGrid.ClearSelection();
                     break;
@@ -1034,8 +1184,8 @@ namespace dataEditor
                     foreach (DataGridViewRow rows in hoursDataGrid.Rows)
                     {
                         rows.DefaultCellStyle.BackColor = Color.Empty;
-                        trippleZoneBackColor();
                     }
+                    trippleZoneBackColor();
                     hoursDataGrid.Refresh();
                     hoursDataGrid.ClearSelection();
                     break;
@@ -1069,6 +1219,9 @@ namespace dataEditor
                         break;
                 }
             }
+
+            groupDoubleZone.ForeColor = Color.Black;
+            groupTrippleZone.ForeColor = Color.Gray;
         }
 
         private void selectTrippleTreeNode()
@@ -1100,6 +1253,9 @@ namespace dataEditor
                         break;
                 }
             }
+
+            groupDoubleZone.ForeColor = Color.Gray;
+            groupTrippleZone.ForeColor = Color.Black;
         }
 
         private void cmbxSelectTypeZone_DropDownClosed(object sender, EventArgs e)
@@ -1124,23 +1280,96 @@ namespace dataEditor
             DialogResult = DialogResult.OK;
         }
 
-        private void cbDefault_CheckedChanged(object sender, EventArgs e)
+        private void typeList_DropDownClosed(object sender, EventArgs e)
         {
-            if(cbDefault.Checked)
+            switch(typeList.SelectedIndex)
             {
-                monthList.Enabled = false;
-                cmbxYear.Enabled = false;
+                case 0:
+                    _chg2dayZone = _2dayZone_00;
+                    _chg2nightZone = _2nightZone_00;
+
+                    _chg3peakZone = _3peakZone_00;
+                    _chg3semiPeakZone = _3semiPeakZone_00;
+                    _chg3nightZone = _3nightZone_00;
+
+                    foreach (DataGridViewRow rows in hoursDataGrid.Rows)
+                    {
+                        rows.DefaultCellStyle.BackColor = Color.Empty;
+                    }
+
+                    switch (cmbxSelectGlobalZone.Text)
+                    {
+                        case "2 зоны":
+                            doubleZoneBackColor();
+                            break;
+                        case "3 зоны":
+                            trippleZoneBackColor();
+                            break;
+                    }
+
+                            hoursDataGrid.Refresh();
+                    hoursDataGrid.ClearSelection();
+                    break;
+
+                case 1:
+                    _chg2dayZone = _2dayZone_01;
+                    _chg2nightZone = _2nightZone_01;
+
+                    _chg3peakZone = _3peakZone_01;
+                    _chg3semiPeakZone = _3semiPeakZone_01;
+                    _chg3nightZone = _3nightZone_01;
+
+                    foreach (DataGridViewRow rows in hoursDataGrid.Rows)
+                    {
+                        rows.DefaultCellStyle.BackColor = Color.Empty;
+                    }
+
+                    switch (cmbxSelectGlobalZone.Text)
+                    {
+                        case "2 зоны":
+                            doubleZoneBackColor();
+                            break;
+                        case "3 зоны":
+                            trippleZoneBackColor();
+                            break;
+                    }
+
+                    hoursDataGrid.Refresh();
+                    hoursDataGrid.ClearSelection();
+                    break;
+
+                default:
+                    foreach (DataGridViewRow rows in hoursDataGrid.Rows)
+                    {
+                        rows.DefaultCellStyle.BackColor = Color.Empty;
+                    }
+
+                    switch (cmbxSelectGlobalZone.Text)
+                    {
+                        case "2 зоны":
+                            doubleZoneBackColor();
+                            break;
+                        case "3 зоны":
+                            trippleZoneBackColor();
+                            break;
+                    }
+
+                    hoursDataGrid.Refresh();
+                    hoursDataGrid.ClearSelection();
+                    break;
             }
-            else
-            {
-                monthList.Enabled = true;
-                cmbxYear.Enabled = true;
-            }
+
+
         }
 
-        private void cmbxYear_DropDownClosed(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
-            ToolStrip.Focus();
+            saveData(typeList.SelectedIndex,cmbxSelectGlobalZone.SelectedIndex);
+        }
+
+        private void btnSaveAll_Click(object sender, EventArgs e)
+        {
+            saveData(typeList.SelectedIndex,2);
         }
     }
 }

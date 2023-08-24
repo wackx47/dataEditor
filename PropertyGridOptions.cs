@@ -315,7 +315,7 @@ namespace dataEditor
         [DisplayName("HoursZone")]
         [Category("HoursSettings")]
         [Editor(typeof(ZoneEditor), typeof(UITypeEditor))]
-        [TypeConverter(typeof(ExpandableObjectConverter))]
+        //[TypeConverter(typeof(ExpandableObjectConverter))]
         public hoursTariffZone mgHoursZone
         {
             get { return m_mgHoursZone; }
@@ -637,49 +637,6 @@ namespace dataEditor
                 {
                     if (svc.ShowDialog(form) == DialogResult.OK)
                     {
-                        if(form._2dayZone.GetLength(0) != 0)
-                        {
-                            zone.DoubleZone += "День: ";
-                            for (int i = 0; i < form._2dayZone.GetLength(0); i++)
-                            {
-                                
-                                zone.DoubleZone += form._2dayZone[i,4] + "-" + form._2dayZone[i, 5] + "; ";
-                            }
-                        }
-                        if (form._2nightZone.GetLength(0) != 0)
-                        {
-                            zone.DoubleZone += "Ночь: ";
-                            for (int i = 0; i < form._2nightZone.GetLength(0); i++)
-                            {
-                                zone.DoubleZone += form._2nightZone[i, 4] + "-" + form._2nightZone[i, 5] + ";";
-                            }
-                        }
-
-                        if (form._3peakZone.GetLength(0) != 0)
-                        {
-                            zone.TrippleZone += "Пик: ";
-                            for (int i = 0; i < form._3peakZone.GetLength(0); i++)
-                            {
-
-                                zone.TrippleZone += form._3peakZone[i, 4] + "-" + form._3peakZone[i, 5] + "; ";
-                            }
-                        }
-                        if (form._3semiPeakZone.GetLength(0) != 0)
-                        {
-                            zone.TrippleZone += "Полупик: ";
-                            for (int i = 0; i < form._3semiPeakZone.GetLength(0); i++)
-                            {
-                                zone.TrippleZone += form._3semiPeakZone[i, 4] + "-" + form._3semiPeakZone[i, 5] + "; ";
-                            }
-                        }
-                        if (form._3nightZone.GetLength(0) != 0)
-                        {
-                            zone.TrippleZone += "Ночь: ";
-                            for (int i = 0; i < form._3nightZone.GetLength(0); i++)
-                            {
-                                zone.TrippleZone += form._3nightZone[i, 4] + "-" + form._3nightZone[i, 5] + ";";
-                            }
-                        }
 
                     }
                 }
@@ -715,6 +672,11 @@ namespace dataEditor
         {
             get { return _trippleZone; }
             set { _trippleZone = value; }
+        }
+
+        public override string ToString()
+        {
+            return "Редактор тарифных зон суток...";
         }
     }
 
