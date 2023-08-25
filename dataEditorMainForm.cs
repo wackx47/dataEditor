@@ -88,6 +88,18 @@ namespace dataEditor
         string memSQLlist = null;
         string defaultSQL = null;
 
+        public int[,] _main2dayZone_00 = new int[0, 6];
+        public int[,] _main2nightZone_00 = new int[0, 6];
+        public int[,] _main3peakZone_00 = new int[0, 6];
+        public int[,] _main3semiPeakZone_00 = new int[0, 6];
+        public int[,] _main3nightZone_00 = new int[0, 6];
+
+        public int[,] _main2dayZone_01 = new int[0, 6];
+        public int[,] _main2nightZone_01 = new int[0, 6];
+        public int[,] _main3peakZone_01 = new int[0, 6];
+        public int[,] _main3semiPeakZone_01 = new int[0, 6];
+        public int[,] _main3nightZone_01 = new int[0, 6];
+
         CheckBox headerCheckBox = new CheckBox();
         DataGridViewCell ActiveCell = null;
 

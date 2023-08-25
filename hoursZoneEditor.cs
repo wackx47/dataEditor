@@ -32,14 +32,12 @@ namespace dataEditor
 
         public int[,] _2dayZone_00 = new int[0, 6];
         public int[,] _2nightZone_00 = new int[0, 6];
-
         public int[,] _3peakZone_00 = new int[0, 6];
         public int[,] _3semiPeakZone_00 = new int[0, 6];
         public int[,] _3nightZone_00 = new int[0, 6];
 
         public int[,] _2dayZone_01 = new int[0, 6];
         public int[,] _2nightZone_01 = new int[0, 6];
-
         public int[,] _3peakZone_01 = new int[0, 6];
         public int[,] _3semiPeakZone_01 = new int[0, 6];
         public int[,] _3nightZone_01 = new int[0, 6];
@@ -54,7 +52,27 @@ namespace dataEditor
 
             typeList.Text = typeList.Items[0].ToString();
 
-            loadXMLfiles();
+            Settings settings = (Settings)Application.OpenForms["Settings"];
+            settings = MainForm.SettingsForm;
+
+            switch (typeList.SelectedIndex)
+            {
+                case 0:
+                    _chg2dayZone = settings._settings2dayZone_00;
+                    _chg2nightZone = settings._settings2nightZone_00;
+                    _chg3peakZone = settings._settings3peakZone_00;
+                    _chg3semiPeakZone = settings._settings3semiPeakZone_00;
+                    _chg3nightZone = settings._settings3nightZone_00;
+                    break;
+
+                case 1:
+                    _chg2dayZone = settings._settings2dayZone_01;
+                    _chg2nightZone = settings._settings2nightZone_01;
+                    _chg3peakZone = settings._settings3peakZone_01;
+                    _chg3semiPeakZone = settings._settings3semiPeakZone_01;
+                    _chg3nightZone = settings._settings3nightZone_01;
+                    break;
+            }
         }
 
         private void loadXMLfiles()
@@ -511,7 +529,7 @@ namespace dataEditor
             hoursDataGrid.Refresh();
             hoursDataGrid.ClearSelection();
 
-            groupDoubleZone.ForeColor = Color.Black;
+            groupDoubleZone.ForeColor = Color.Blue;
             groupTrippleZone.ForeColor = Color.Gray;
         }
 
@@ -532,7 +550,7 @@ namespace dataEditor
             hoursDataGrid.ClearSelection();
 
             groupDoubleZone.ForeColor = Color.Gray;
-            groupTrippleZone.ForeColor = Color.Black;
+            groupTrippleZone.ForeColor = Color.Blue;
         }
 
         private void doubleZoneTreeView_AfterSelect(object sender, TreeViewEventArgs e)
@@ -1220,7 +1238,7 @@ namespace dataEditor
                 }
             }
 
-            groupDoubleZone.ForeColor = Color.Black;
+            groupDoubleZone.ForeColor = Color.Blue;
             groupTrippleZone.ForeColor = Color.Gray;
         }
 
@@ -1255,7 +1273,7 @@ namespace dataEditor
             }
 
             groupDoubleZone.ForeColor = Color.Gray;
-            groupTrippleZone.ForeColor = Color.Black;
+            groupTrippleZone.ForeColor = Color.Blue;
         }
 
         private void cmbxSelectTypeZone_DropDownClosed(object sender, EventArgs e)
@@ -1370,6 +1388,29 @@ namespace dataEditor
         private void btnSaveAll_Click(object sender, EventArgs e)
         {
             saveData(typeList.SelectedIndex,2);
+        }
+
+        private void btnLoad_Click(object sender, EventArgs e)
+        {
+            loadXMLfiles();
+
+            foreach (DataGridViewRow rows in hoursDataGrid.Rows)
+            {
+                rows.DefaultCellStyle.BackColor = Color.Empty;
+            }
+
+            switch (cmbxSelectGlobalZone.Text)
+            {
+                case "2 зоны":
+                    doubleZoneBackColor();
+                    break;
+                case "3 зоны":
+                    trippleZoneBackColor();
+                    break;
+            }
+
+            hoursDataGrid.Refresh();
+            hoursDataGrid.ClearSelection();
         }
     }
 }

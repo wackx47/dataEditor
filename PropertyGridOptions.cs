@@ -637,7 +637,20 @@ namespace dataEditor
                 {
                     if (svc.ShowDialog(form) == DialogResult.OK)
                     {
+                        Settings settings = (Settings)Application.OpenForms["Settings"];
+                        settings = MainForm.SettingsForm;
 
+                        settings._settings2dayZone_00 = form._2dayZone_00;
+                        settings._settings2nightZone_00 = form._2nightZone_00;
+                        settings._settings3peakZone_00 = form._3peakZone_00;
+                        settings._settings3semiPeakZone_00 = form._3semiPeakZone_00;
+                        settings._settings3nightZone_00 = form._3nightZone_00;
+
+                        settings._settings2dayZone_01 = form._2dayZone_01;
+                        settings._settings2nightZone_01 = form._2nightZone_01;
+                        settings._settings3peakZone_01 = form._3peakZone_01;
+                        settings._settings3semiPeakZone_01 = form._3semiPeakZone_01;
+                        settings._settings3nightZone_01 = form._3nightZone_01;
                     }
                 }
             }

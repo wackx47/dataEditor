@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MathNet.Numerics.LinearAlgebra.Factorization;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,6 +14,18 @@ namespace dataEditor
     public partial class Settings : Form
     {
         MainForm main = (MainForm)Application.OpenForms["MainForm"];
+
+        public int[,] _settings2dayZone_00 = new int[0, 6];
+        public int[,] _settings2nightZone_00 = new int[0, 6];
+        public int[,] _settings3peakZone_00 = new int[0, 6];
+        public int[,] _settings3semiPeakZone_00 = new int[0, 6];
+        public int[,] _settings3nightZone_00 = new int[0, 6];
+
+        public int[,] _settings2dayZone_01 = new int[0, 6];
+        public int[,] _settings2nightZone_01 = new int[0, 6];
+        public int[,] _settings3peakZone_01 = new int[0, 6];
+        public int[,] _settings3semiPeakZone_01 = new int[0, 6];
+        public int[,] _settings3nightZone_01 = new int[0, 6];
 
         public Settings()
         {
@@ -46,7 +59,10 @@ namespace dataEditor
 
         private void setBtnSave_Click(object sender, EventArgs e)
         {
+            main = StartScreen.universalReaderForm;
+
             this.Close();
+
         }
 
         private void setBtnCancel_Click(object sender, EventArgs e)
