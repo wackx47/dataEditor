@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using System.Data.OleDb;
-using Excel=Microsoft.Office.Interop.Excel;
+using Excel = Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 using System.Diagnostics.Tracing;
 using System.Xml.Linq;
@@ -53,6 +53,7 @@ using System.Drawing.Drawing2D;
 using System.IO.Packaging;
 using System.Net.Security;
 using IDataObject_Com = System.Runtime.InteropServices.ComTypes.IDataObject;
+using dataEditor.data;
 
 namespace dataEditor
 {
@@ -211,7 +212,7 @@ namespace dataEditor
         private void getNodesName()
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "dataEditor.NodesName.txt";
+            var resourceName = "dataEditor.data.text.NodesName.txt";
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
                 try

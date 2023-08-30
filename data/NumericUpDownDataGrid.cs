@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace dataEditor
+namespace dataEditor.data
 {
     internal class NumericUpDownDataGrid
     {
@@ -51,18 +51,18 @@ namespace dataEditor
             {
                 base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
                 NumericUpDownEditingControl ctl = DataGridView.EditingControl as NumericUpDownEditingControl;
-                ctl.Minimum = this.min;
-                ctl.Maximum = this.max;
-                if (Convert.ToDecimal(this.Value) >= min && Convert.ToDecimal(this.Value) <= max)
+                ctl.Minimum = min;
+                ctl.Maximum = max;
+                if (Convert.ToDecimal(Value) >= min && Convert.ToDecimal(Value) <= max)
                 {
-                    ctl.Value = Convert.ToDecimal(this.Value);
+                    ctl.Value = Convert.ToDecimal(Value);
                 }
                 else
                 {
-                    ctl.Value = Convert.ToDecimal(this.min);
+                    ctl.Value = Convert.ToDecimal(min);
                     SendKeys.Send("{UP}");
                     SendKeys.Send("{DOWN}");
-                }       
+                }
             }
 
             public override Type EditType
@@ -72,7 +72,7 @@ namespace dataEditor
 
             public override Type ValueType
             {
-                get { return typeof(Decimal); }
+                get { return typeof(decimal); }
             }
 
             public override object DefaultNewRowValue
@@ -90,7 +90,7 @@ namespace dataEditor
             public NumericUpDownEditingControl()
                 : base()
             {
-                this.DecimalPlaces = 0;
+                DecimalPlaces = 0;
             }
 
             public DataGridView EditingControlDataGridView
@@ -101,8 +101,8 @@ namespace dataEditor
 
             public object EditingControlFormattedValue
             {
-                get { return this.Value.ToString("F0"); }
-                set { this.Value = Decimal.Parse(value.ToString()); }
+                get { return Value.ToString("F0"); }
+                set { Value = decimal.Parse(value.ToString()); }
             }
             public int EditingControlRowIndex
             {
@@ -127,22 +127,22 @@ namespace dataEditor
 
             public void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
             {
-                this.Font = dataGridViewCellStyle.Font;
-                this.ForeColor = dataGridViewCellStyle.ForeColor;
-                this.BackColor = dataGridViewCellStyle.BackColor;
+                Font = dataGridViewCellStyle.Font;
+                ForeColor = dataGridViewCellStyle.ForeColor;
+                BackColor = dataGridViewCellStyle.BackColor;
             }
 
             public bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
             {
-                return (keyData == Keys.Left || keyData == Keys.Right ||
+                return keyData == Keys.Left || keyData == Keys.Right ||
                     keyData == Keys.Up || keyData == Keys.Down ||
                     keyData == Keys.Home || keyData == Keys.End ||
-                    keyData == Keys.PageDown || keyData == Keys.PageUp || keyData == Keys.Escape || keyData == Keys.Enter);
+                    keyData == Keys.PageDown || keyData == Keys.PageUp || keyData == Keys.Escape || keyData == Keys.Enter;
             }
 
             public object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
             {
-                return this.Value.ToString();
+                return Value.ToString();
             }
 
             public void PrepareEditingControlForEdit(bool selectAll)
@@ -152,7 +152,7 @@ namespace dataEditor
             protected override void OnValueChanged(EventArgs e)
             {
                 valueIsChanged = true;
-                this.EditingControlDataGridView.NotifyCurrentCellDirty(true);
+                EditingControlDataGridView.NotifyCurrentCellDirty(true);
                 base.OnValueChanged(e);
             }
         }

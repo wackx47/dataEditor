@@ -15,7 +15,7 @@ namespace dataEditor
                 .SetValue((MemberDescriptor)p, attributes.ToArray());
         }
     }
-
+    
     internal static class Program
     {
         [STAThread]

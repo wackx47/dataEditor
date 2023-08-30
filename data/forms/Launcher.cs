@@ -29,7 +29,7 @@ namespace dataEditor
             this.navCmbxAccessList.Text = "MKG_REALESE_CLOSE";
 
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "dataEditor.RELEASE-NOTES.txt";
+            var resourceName = "dataEditor.data.text.RELEASE-NOTES.txt";
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))

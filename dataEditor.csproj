@@ -26,13 +26,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="NodesName.txt" />
-    <None Remove="RELEASE-NOTES.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="NodesName.txt" />
-    <EmbeddedResource Include="RELEASE-NOTES.txt" />
+    <EmbeddedResource Include="data\text\NodesName.txt" />
+    <EmbeddedResource Include="data\text\RELEASE-NOTES.txt" />
   </ItemGroup>
 
   <ItemGroup>

@@ -28,7 +28,7 @@ using System.Xml;
 using static System.ComponentModel.TypeConverter;
 using static NPOI.SS.Formula.PTG.ArrayPtg;
 
-namespace dataEditor
+namespace dataEditor.data
 {
     class commonSettings
     {
@@ -219,7 +219,7 @@ namespace dataEditor
             set { m_mgCodeName = value; }
         }
 
-        private DateTime m_rDateSVNC = Convert.ToDateTime(10+"."+(DateTime.Now.Month)+"."+DateTime.Now.Year);
+        private DateTime m_rDateSVNC = Convert.ToDateTime(10 + "." + DateTime.Now.Month + "." + DateTime.Now.Year);
         [Browsable(true)]
         [ReadOnly(false)]
         [Description("Число месяца публикации СВНЦ на сайте АТС")]
@@ -617,7 +617,7 @@ namespace dataEditor
 
         public override string ToString()
         {
-                return SwitchChecks + " (RLim=" + EmptyRowsLimit + " CLim="  + EmptyColmLimit + ")";
+            return SwitchChecks + " (RLim=" + EmptyRowsLimit + " CLim=" + EmptyColmLimit + ")";
         }
     }
 
@@ -627,7 +627,7 @@ namespace dataEditor
         {
             return UITypeEditorEditStyle.Modal;
         }
-        public override object EditValue(ITypeDescriptorContext context, System.IServiceProvider provider, object value)
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             IWindowsFormsEditorService svc = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
             hoursTariffZone zone = value as hoursTariffZone;
@@ -700,7 +700,7 @@ namespace dataEditor
 
         }
 
-        day _day = new day(7,23);
+        day _day = new day(7, 23);
         [Browsable(true)]
         [ReadOnly(false)]
         [DisplayName("day")]
@@ -712,7 +712,7 @@ namespace dataEditor
             set { _day = value; }
         }
 
-        night _night = new night(23,7);
+        night _night = new night(23, 7);
         [Browsable(true)]
         [ReadOnly(false)]
         [DisplayName("night")]
@@ -737,7 +737,7 @@ namespace dataEditor
 
         }
 
-        Peak _peak = new Peak(7,10,17,21);
+        Peak _peak = new Peak(7, 10, 17, 21);
         [Browsable(true)]
         [ReadOnly(false)]
         [DisplayName("peak")]
@@ -749,7 +749,7 @@ namespace dataEditor
             set { _peak = value; }
         }
 
-        semiPeak _semiPeak = new semiPeak(10,17,21,23);
+        semiPeak _semiPeak = new semiPeak(10, 17, 21, 23);
         [Browsable(true)]
         [ReadOnly(false)]
         [DisplayName("semiPeak")]
@@ -761,7 +761,7 @@ namespace dataEditor
             set { _semiPeak = value; }
         }
 
-        night _night = new night(23,7);
+        night _night = new night(23, 7);
         [Browsable(true)]
         [ReadOnly(false)]
         [DisplayName("night")]
@@ -988,7 +988,7 @@ namespace dataEditor
         [Description("")]
         [DisplayName("GTPname")]
         [TypeConverter(typeof(mgListGTPnames))]
-        public string propGTPname 
+        public string propGTPname
         { get { return _GTPName; } set { _GTPName = value; } }
 
 
@@ -1004,7 +1004,7 @@ namespace dataEditor
 
         public override string ToString()
         {
-                return "name: " + propGTPname + " (code: " + mgGTPcodeList[mgGTPnameList.IndexOf(propGTPname)] + ")";
+            return "name: " + propGTPname + " (code: " + mgGTPcodeList[mgGTPnameList.IndexOf(propGTPname)] + ")";
         }
     }
 
@@ -1045,7 +1045,7 @@ namespace dataEditor
 
         [Browsable(false)]
         public string strHDR { get { return _HDR ? "Yes" : "No"; } }
-            
+
 
         private uint _IMEX;
         [Browsable(true)]
@@ -1082,12 +1082,12 @@ namespace dataEditor
 
 
     class CollectionTypeConverter : TypeConverter
-    { 
+    {
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destType)
         {
             return destType == typeof(string);
         }
-            
+
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destType)
         {
             return "(...)";
@@ -1103,7 +1103,7 @@ namespace dataEditor
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
 
-            string[] standarts = { "ru-RU", "en-US"};
+            string[] standarts = { "ru-RU", "en-US" };
 
             return new StandardValuesCollection(standarts);
             return base.GetStandardValues(context);
@@ -1337,4 +1337,4 @@ namespace dataEditor
         }
     }
 
-}   
+}

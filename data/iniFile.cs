@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Reflection;
 
-namespace dataEditor
+namespace dataEditor.data
 {
     internal class iniFile
     {

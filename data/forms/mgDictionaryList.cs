@@ -1,4 +1,5 @@
-﻿using dataEditor.Properties;
+﻿using dataEditor.data;
+using dataEditor.Properties;
 using MathNet.Numerics.LinearAlgebra.Factorization;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
