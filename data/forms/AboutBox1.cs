@@ -20,15 +20,14 @@ namespace universalReader
             this.labelBuild.Text = String.Format("build: {0}", AssemblyVersion);
             this.labelVersion.Text = String.Format("version: {0}", Application.ProductVersion);
             this.labelCopyright.Text = "Автор: " + AssemblyCopyright;
-            this.labelCompanyName.Text = AssemblyCompany;
 
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "dataEditor.RELEASE-NOTES.txt";
+            var resourceName = "dataEditor.data.text.RELEASE-NOTES.txt";
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))
             {
-                ChangeLogBox.Text = reader.ReadToEnd();
+
             }
 
         }
