@@ -1,4 +1,5 @@
-﻿using MathNet.Numerics.LinearAlgebra.Factorization;
+﻿using dataEditor.Properties;
+using MathNet.Numerics.LinearAlgebra.Factorization;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -60,6 +61,18 @@ namespace dataEditor
         private void setBtnSave_Click(object sender, EventArgs e)
         {
             main = StartScreen.universalReaderForm;
+
+            main._main2dayZone_00 = _settings2dayZone_00;
+            main._main2nightZone_00 = _settings2nightZone_00;
+            main._main3peakZone_00 = _settings3peakZone_00;
+            main._main3semiPeakZone_00 = _settings3semiPeakZone_00;
+            main._main3nightZone_00 = _settings3nightZone_00;
+
+            main._main2dayZone_01 = _settings2dayZone_01;
+            main._main2nightZone_01 = _settings2nightZone_01;
+            main._main3peakZone_01 = _settings3peakZone_01;
+            main._main3semiPeakZone_01 = _settings3semiPeakZone_01;
+            main._main3nightZone_01 = _settings3nightZone_01;
 
             this.Close();
 
