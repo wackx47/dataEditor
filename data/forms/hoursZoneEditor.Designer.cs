@@ -32,27 +32,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(hoursZoneEditor));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("0");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("с", new System.Windows.Forms.TreeNode[] {
-            treeNode1});
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("0");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("до", new System.Windows.Forms.TreeNode[] {
-            treeNode3});
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("день", new System.Windows.Forms.TreeNode[] {
-            treeNode2,
-            treeNode4});
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("0");
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("с", new System.Windows.Forms.TreeNode[] {
-            treeNode6});
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("0");
-            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("до", new System.Windows.Forms.TreeNode[] {
-            treeNode8});
-            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("ночь", new System.Windows.Forms.TreeNode[] {
-            treeNode7,
-            treeNode9});
-            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("пик");
-            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("полупик");
-            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("ночь");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("день");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("ночь");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("пик");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("полупик");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("ночь");
             this.ToolStrip = new System.Windows.Forms.ToolStrip();
             this.btnConfirm = new System.Windows.Forms.ToolStripButton();
             this.btnSave = new System.Windows.Forms.ToolStripButton();
@@ -252,39 +236,15 @@
             this.doubleZoneTreeView.ItemHeight = 15;
             this.doubleZoneTreeView.Location = new System.Drawing.Point(3, 3);
             this.doubleZoneTreeView.Name = "doubleZoneTreeView";
-            treeNode1.Name = "initialVal";
-            treeNode1.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode1.Text = "0";
-            treeNode2.Name = "initial";
-            treeNode2.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode2.Text = "с";
-            treeNode3.Name = "finalVal";
-            treeNode3.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode3.Text = "0";
-            treeNode4.Name = "final";
-            treeNode4.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode4.Text = "до";
-            treeNode5.Name = "day";
-            treeNode5.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            treeNode5.Text = "день";
-            treeNode6.Name = "initialVal";
-            treeNode6.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode6.Text = "0";
-            treeNode7.Name = "initial";
-            treeNode7.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode7.Text = "с";
-            treeNode8.Name = "finalVal";
-            treeNode8.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode8.Text = "0";
-            treeNode9.Name = "final";
-            treeNode9.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            treeNode9.Text = "до";
-            treeNode10.Name = "night";
-            treeNode10.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            treeNode10.Text = "ночь";
+            treeNode1.Name = "day";
+            treeNode1.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode1.Text = "день";
+            treeNode2.Name = "night";
+            treeNode2.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode2.Text = "ночь";
             this.doubleZoneTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode5,
-            treeNode10});
+            treeNode1,
+            treeNode2});
             this.doubleZoneTreeView.Size = new System.Drawing.Size(168, 448);
             this.doubleZoneTreeView.TabIndex = 0;
             this.doubleZoneTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.doubleZoneTreeView_AfterSelect);
@@ -322,19 +282,19 @@
             this.trippleZoneTreeView.ItemHeight = 15;
             this.trippleZoneTreeView.Location = new System.Drawing.Point(3, 3);
             this.trippleZoneTreeView.Name = "trippleZoneTreeView";
-            treeNode11.Name = "peak";
-            treeNode11.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            treeNode11.Text = "пик";
-            treeNode12.Name = "semiPeak";
-            treeNode12.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            treeNode12.Text = "полупик";
-            treeNode13.Name = "night";
-            treeNode13.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            treeNode13.Text = "ночь";
+            treeNode3.Name = "peak";
+            treeNode3.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode3.Text = "пик";
+            treeNode4.Name = "semiPeak";
+            treeNode4.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode4.Text = "полупик";
+            treeNode5.Name = "night";
+            treeNode5.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            treeNode5.Text = "ночь";
             this.trippleZoneTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode11,
-            treeNode12,
-            treeNode13});
+            treeNode3,
+            treeNode4,
+            treeNode5});
             this.trippleZoneTreeView.Size = new System.Drawing.Size(188, 448);
             this.trippleZoneTreeView.TabIndex = 1;
             this.trippleZoneTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TrippleZoneTreeView_AfterSelect);

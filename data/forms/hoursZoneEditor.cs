@@ -1,4 +1,5 @@
-﻿using NPOI.SS.Formula.Functions;
+﻿using dataEditor.Properties;
+using NPOI.SS.Formula.Functions;
 using OfficeOpenXml.Core;
 using System;
 using System.Collections.Generic;
@@ -73,47 +74,212 @@ namespace dataEditor
                     _chg3nightZone = settings._settings3nightZone_01;
                     break;
             }
+            _2dayZone_00 = settings._settings2dayZone_00;
+            _2nightZone_00 = settings._settings2nightZone_00;
+            _3peakZone_00 = settings._settings3peakZone_00;
+            _3semiPeakZone_00 = settings._settings3semiPeakZone_00;
+            _3nightZone_00 = settings._settings3nightZone_00;
+            _2dayZone_01 = settings._settings2dayZone_01;
+            _2nightZone_01 = settings._settings2nightZone_01;
+            _3peakZone_01 = settings._settings3peakZone_01;
+            _3semiPeakZone_01 = settings._settings3semiPeakZone_01;
+            _3nightZone_01 = settings._settings3nightZone_01;
+
+            refresTreesNodes();
+        }
+
+        private void refresTreesNodes()
+        {
+            if(_chg2dayZone.GetLength(0) != 0)
+            {
+                TreeNode parentNode = doubleZoneTreeView.Nodes[0];
+                parentNode.Nodes.Clear();
+                for (int i = 0; i < _chg2dayZone.GetLength(0); i++)
+                {
+                    TreeNode initialChildNode = parentNode.Nodes.Add("с");
+                    initialChildNode.Name = "initial";
+                    initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg2dayZone[i, 4].ToString());
+                    initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode finalChildNode = parentNode.Nodes.Add("до");
+                    finalChildNode.Name = "final";
+                    finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg2dayZone[i, 5] + 1).ToString());
+                    finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                }
+            }
+            if (_chg2nightZone.GetLength(0) != 0)
+            {
+                try
+                {
+                    TreeNode parentNode = doubleZoneTreeView.Nodes[1];
+                    parentNode.Nodes.Clear();
+
+                    TreeNode initialChildNode = parentNode.Nodes.Add("с");
+                    initialChildNode.Name = "initial";
+                    initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg2nightZone[0, 4].ToString());
+                    initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode finalChildNode = parentNode.Nodes.Add("до");
+                    finalChildNode.Name = "final";
+                    finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg2nightZone[1, 5]).ToString());
+                    finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                }
+                catch (Exception ex)
+                {
+                    TreeNode parentNode = doubleZoneTreeView.Nodes[1];
+                    parentNode.Nodes.Clear();
+                }
+            }
+
+            doubleZoneTreeView.ExpandAll();
+
+            if (_chg3peakZone.GetLength(0) != 0)
+            {
+                TreeNode parentNode = trippleZoneTreeView.Nodes[0];
+                parentNode.Nodes.Clear();
+
+                for (int i = 0; i < _chg3peakZone.GetLength(0); i++)
+                {
+                    var childNode = (i + 1) + " период";
+                    TreeNode newZoneNode = parentNode.Nodes.Add(childNode);
+                    newZoneNode.Name = "zone_" + (i + 1);
+                    newZoneNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode initialChildNode = newZoneNode.Nodes.Add("с");
+                    initialChildNode.Name = "initial";
+                    initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg3peakZone[i, 4].ToString());
+                    initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode finalChildNode = newZoneNode.Nodes.Add("до");
+                    finalChildNode.Name = "final";
+                    finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg3peakZone[i, 5] + 1).ToString());
+                    finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                }
+            }
+            if (_chg3semiPeakZone.GetLength(0) != 0)
+            {
+                TreeNode parentNode = trippleZoneTreeView.Nodes[1];
+                parentNode.Nodes.Clear();
+
+                for (int i = 0; i < _chg3semiPeakZone.GetLength(0); i++)
+                {
+                    var childNode = (i + 1) + " период";
+                    TreeNode newZoneNode = parentNode.Nodes.Add(childNode);
+                    newZoneNode.Name = "zone_" + (i + 1);
+                    newZoneNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode initialChildNode = newZoneNode.Nodes.Add("с");
+                    initialChildNode.Name = "initial";
+                    initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg3semiPeakZone[i, 4].ToString());
+                    initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode finalChildNode = newZoneNode.Nodes.Add("до");
+                    finalChildNode.Name = "final";
+                    finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg3semiPeakZone[i, 5] + 1).ToString());
+                    finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                }
+            }
+            if (_chg3nightZone.GetLength(0) != 0)
+            {
+                TreeNode parentNode = trippleZoneTreeView.Nodes[2];
+                parentNode.Nodes.Clear();
+
+                if (_chg3nightZone.GetLength(0) == 2)
+                {
+                    TreeNode initialChildNode = parentNode.Nodes.Add("с");
+                    initialChildNode.Name = "initial";
+                    initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg3nightZone[1, 4].ToString());
+                    initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode finalChildNode = parentNode.Nodes.Add("до");
+                    finalChildNode.Name = "final";
+                    finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg3nightZone[0, 5] + 1).ToString());
+                    finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                }
+                else if (_chg3nightZone.GetLength(0) == 1)
+                {
+                    TreeNode initialChildNode = parentNode.Nodes.Add("с");
+                    initialChildNode.Name = "initial";
+                    initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg3nightZone[0, 4].ToString());
+                    initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode finalChildNode = parentNode.Nodes.Add("до");
+                    finalChildNode.Name = "final";
+                    finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg3nightZone[0, 5] + 1).ToString());
+                    finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                }
+            }
+            trippleZoneTreeView.ExpandAll();
         }
 
         private void loadXMLfiles()
         {
             main = StartScreen.universalReaderForm;
             string currentGTP = main.currentGTP;
-            string currentFolder = main.currentProjectFolder + "\\data\\common\\TimesZones\\";
+            string currentFolder = null;
+
+            if (main.currentProjectFolder == null)
+            {
+                using (var fbd = new FolderBrowserDialog())
+                {
+                    fbd.SelectedPath = Environment.CurrentDirectory;
+                    DialogResult result = fbd.ShowDialog();
+                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                    {
+                        currentFolder = fbd.SelectedPath + "\\";
+                    }
+                }
+            }
+            else
+            {
+                currentFolder = main.currentProjectFolder + "\\data\\common\\TimesZones\\";
+            }
 
             string doubleName = "doubleZone_" + currentGTP;
             string trippleName = "trippleZone_" + currentGTP;
 
-            if (File.Exists(currentFolder + doubleName + "_00.xml"))
-            {
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.Load(currentFolder + doubleName + "_00.xml");
-                parsingXMl(doubleZoneTreeView, xmlDoc);
-                parsingTreeViewDoubleZoneForPaint(ref _2dayZone_00, ref _2nightZone_00);
-            }
 
-            if (File.Exists(currentFolder + trippleName + "_00.xml"))
+            switch (typeList.SelectedIndex)
             {
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.Load(currentFolder + trippleName + "_00.xml");
-                parsingXMl(trippleZoneTreeView, xmlDoc);
-                parsingTreeViewTrippleZoneForPaint(ref _3peakZone_00, ref _3semiPeakZone_00, ref _3nightZone_00);
-            }
+                case 0:
+                    if (File.Exists(currentFolder + doubleName + "_00.xml"))
+                    {
+                        XmlDocument xmlDoc = new XmlDocument();
+                        xmlDoc.Load(currentFolder + doubleName + "_00.xml");
+                        parsingXMl(doubleZoneTreeView, xmlDoc);
+                        parsingTreeViewDoubleZoneForPaint(ref _2dayZone_00, ref _2nightZone_00);
+                    }
 
-            if (File.Exists(currentFolder + doubleName + "_01.xml"))
-            {
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.Load(currentFolder + doubleName + "_01.xml");
-                parsingXMl(doubleZoneTreeView, xmlDoc);
-                parsingTreeViewDoubleZoneForPaint(ref _2dayZone_01, ref _2nightZone_01);
-            }
+                    if (File.Exists(currentFolder + trippleName + "_00.xml"))
+                    {
+                        XmlDocument xmlDoc = new XmlDocument();
+                        xmlDoc.Load(currentFolder + trippleName + "_00.xml");
+                        parsingXMl(trippleZoneTreeView, xmlDoc);
+                        parsingTreeViewTrippleZoneForPaint(ref _3peakZone_00, ref _3semiPeakZone_00, ref _3nightZone_00);
+                    }
+                    break;
 
-            if (File.Exists(currentFolder + trippleName + "_01.xml"))
-            {
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.Load(currentFolder + trippleName + "_01.xml");
-                parsingXMl(trippleZoneTreeView, xmlDoc);
-                parsingTreeViewTrippleZoneForPaint(ref _3peakZone_01, ref _3semiPeakZone_01, ref _3nightZone_01);
+                case 1:
+                    if (File.Exists(currentFolder + doubleName + "_01.xml"))
+                    {
+                        XmlDocument xmlDoc = new XmlDocument();
+                        xmlDoc.Load(currentFolder + doubleName + "_01.xml");
+                        parsingXMl(doubleZoneTreeView, xmlDoc);
+                        parsingTreeViewDoubleZoneForPaint(ref _2dayZone_01, ref _2nightZone_01);
+                    }
+
+                    if (File.Exists(currentFolder + trippleName + "_01.xml"))
+                    {
+                        XmlDocument xmlDoc = new XmlDocument();
+                        xmlDoc.Load(currentFolder + trippleName + "_01.xml");
+                        parsingXMl(trippleZoneTreeView, xmlDoc);
+                        parsingTreeViewTrippleZoneForPaint(ref _3peakZone_01, ref _3semiPeakZone_01, ref _3nightZone_01);
+                    }
+                    break;
             }
         }
 
@@ -173,7 +339,6 @@ namespace dataEditor
                     else
                         newNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
                     AddNode(newNode.Nodes, xNode);
-                    
                 }
             }
             else
@@ -579,15 +744,39 @@ namespace dataEditor
                     if(cmbxSelectTypeZone.Text == "день")
                     {
                         _chg2dayZone = SelectedRows(_chg2dayZone, false);
+
                         try
                         {
-                            doubleZoneTreeView.Nodes[0].Nodes[0].Nodes[0].Text = _chg2dayZone[0, 4].ToString();
-                            doubleZoneTreeView.Nodes[0].Nodes[1].Nodes[0].Text = (_chg2dayZone[0, 5] + 1).ToString();
+                            if (_chg2dayZone.GetLength(0) == doubleZoneTreeView.Nodes[0].Nodes.Count)
+                            {
+                                doubleZoneTreeView.Nodes[0].Nodes[0].Nodes[0].Text = _chg2dayZone[0, 4].ToString();
+                                doubleZoneTreeView.Nodes[0].Nodes[1].Nodes[0].Text = (_chg2dayZone[0, 5] + 1).ToString();
+                            }
+                            else
+                            {
+                                TreeNode parentNode = doubleZoneTreeView.Nodes[0];
+                                parentNode.Nodes.Clear();
+
+                                TreeNode initialChildNode = parentNode.Nodes.Add("с");
+                                initialChildNode.Name = "initial";
+                                initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg2dayZone[0, 4].ToString());
+                                initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                TreeNode finalChildNode = parentNode.Nodes.Add("до");
+                                finalChildNode.Name = "final";
+                                finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                                TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg2dayZone[0, 5] + 1).ToString());
+                                finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+
+                                doubleZoneTreeView.ExpandAll();
+                            }
+
                         }
                         catch (Exception ex)
                         {
 
                         }
+
 
                     }
                     else if (cmbxSelectTypeZone.Text == "ночь")
@@ -1377,6 +1566,7 @@ namespace dataEditor
                     break;
             }
 
+            refresTreesNodes();
 
         }
 

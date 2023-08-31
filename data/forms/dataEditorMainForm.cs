@@ -3362,8 +3362,32 @@ namespace dataEditor
             decimal GenSummDay = 0;
             decimal GenSummNight = 0;
 
-            TimeSpan dayStart = new TimeSpan(mgSettings.mgHoursDoubleTariffZone.day.initial, 0, 0);
-            TimeSpan dayEnd = new TimeSpan(mgSettings.mgHoursDoubleTariffZone.day.final, 0, 0);
+
+            TimeSpan dayStart = new TimeSpan(0, 0, 0);
+            TimeSpan dayEnd = new TimeSpan(0, 0, 0);
+
+            switch (Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["type"].Value))
+            {
+                case "тк":
+                    if(_main2dayZone_00.GetLength(0) != 0)
+                    {
+                        dayStart = new TimeSpan(_main2dayZone_00[0,4], 0, 0);
+                        dayEnd = new TimeSpan(_main2dayZone_00[0,5], 0, 0);
+                        Console.WriteLine("initial: " + _main2dayZone_00[0, 4]);
+                        Console.WriteLine("final : " + _main2dayZone_00[0, 5]);
+                    }
+                    break;
+
+                case "чк":
+                    if (_main2dayZone_01.GetLength(0) != 0)
+                    {
+                        dayStart = new TimeSpan(_main2dayZone_01[0,4], 0, 0);
+                        dayEnd = new TimeSpan(_main2dayZone_01[0,5], 0, 0);
+                        Console.WriteLine("initial: " + _main2dayZone_01[0, 4]);
+                        Console.WriteLine("final : " + _main2dayZone_01[0, 5]);
+                    }
+                    break;
+            }
 
             if (hrsTable != null && Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["hrsStatusError"].Value) != CheckState.Checked.ToString())
             {
