@@ -54,6 +54,8 @@ using System.IO.Packaging;
 using System.Net.Security;
 using IDataObject_Com = System.Runtime.InteropServices.ComTypes.IDataObject;
 using dataEditor.data;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
+using static OfficeOpenXml.ExcelErrorValue;
 
 namespace dataEditor
 {
@@ -2916,8 +2918,318 @@ namespace dataEditor
             }
         }
 
+        string gNodeMassiveName;
+        int gNodeZoneCount;
+
+        T[,] ResizeArray<T>(T[,] original, int rows, int cols)
+        {
+            var newArray = new T[rows, cols];
+            int minRows = Math.Min(rows, original.GetLength(0));
+            int minCols = Math.Min(cols, original.GetLength(1));
+            for (int i = 0; i < minRows; i++)
+                for (int j = 0; j < minCols; j++)
+                    newArray[i, j] = original[i, j];
+            return newArray;
+        }
+
+        private void parsingXMl(XmlDocument xmlDoc, string personType, string tariffType)
+        {
+            try
+            {
+                foreach (XmlNode node in xmlDoc.DocumentElement.ChildNodes)
+                {
+                    if (node.Name == "namespace" && node.ChildNodes.Count == 0 && string.IsNullOrEmpty(GetAttributeText(node, "name")))
+                        continue;
+
+                    gNodeMassiveName = null;
+                    gNodeZoneCount = 1;
+
+                    gNodeMassiveName = GetAttributeText(node, "name");
+                    if (string.IsNullOrEmpty(gNodeMassiveName))
+                        gNodeMassiveName = node.Name;
+
+                    if (node.FirstChild.Name.Contains("zone"))
+                        gNodeZoneCount = node.ChildNodes.Count;
+
+                    resizeMassive(personType, tariffType, gNodeMassiveName, gNodeZoneCount);
+                    addNode(node, personType, tariffType);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void addNode(XmlNode inXmlNode, string personType, string tariffType)
+        {
+            if (inXmlNode.HasChildNodes)
+            {
+                XmlNodeList nodeList = inXmlNode.ChildNodes;
+                for (int i = 0; i <= nodeList.Count - 1; i++)
+                {
+                    XmlNode xNode = inXmlNode.ChildNodes[i];
+                    addNode(xNode, personType, tariffType);
+                }
+            }
+            else
+            {
+                int currentZone = 0;
+                if (gNodeZoneCount > 1)
+                    currentZone = Convert.ToInt32(inXmlNode.ParentNode.ParentNode.Name.Split('_').Last())-1;
+
+                dropXmlValues(personType, tariffType, gNodeMassiveName, inXmlNode.ParentNode.Name, currentZone, Convert.ToInt32(inXmlNode.Value));
+            }
+        }
 
 
+        private void resizeMassive(string personType, string tariffType, string gMassiveName, int countRow)
+        {
+            switch (tariffType)
+            {
+                case "double":
+                    switch (personType)
+                    {
+                        case "00":
+                            switch (gMassiveName)
+                            {
+                                case "day":
+                                    _main2dayZone_00 = ResizeArray(_main2dayZone_00, countRow, 6);
+                                    break;
+
+                                case "night":
+                                    _main2nightZone_00 = ResizeArray(_main2nightZone_00, countRow, 6);
+                                    break;
+                            }
+                            break;
+
+                        case "01":
+                            switch (gMassiveName)
+                            {
+                                case "day":
+                                    _main2dayZone_01 = ResizeArray(_main2dayZone_01, countRow, 6);
+                                    break;
+
+                                case "night":
+                                    _main2nightZone_01 = ResizeArray(_main2nightZone_01, countRow, 6);
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+
+                case "tripple":
+                    switch (personType)
+                    {
+                        case "00":
+                            switch (gMassiveName)
+                            {
+                                case "peak":
+                                    _main3peakZone_00 = ResizeArray(_main3peakZone_00, countRow, 6);
+                                    break;
+
+                                case "semiPeak":
+                                    _main3semiPeakZone_00 = ResizeArray(_main3semiPeakZone_00, countRow, 6);
+                                    break;
+
+                                case "night":
+                                    _main3nightZone_00 = ResizeArray(_main3nightZone_00, countRow, 6);
+                                    break;
+                            }
+                            break;
+
+                        case "01":
+                            switch (gMassiveName)
+                            {
+                                case "peak":
+                                    _main3peakZone_01 = ResizeArray(_main3peakZone_01, countRow, 6);
+                                    break;
+
+                                case "semiPeak":
+                                    _main3semiPeakZone_01 = ResizeArray(_main3semiPeakZone_01, countRow, 6);
+                                    break;
+
+                                case "night":
+                                    _main3nightZone_01 = ResizeArray(_main3nightZone_01, countRow, 6);
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        private void dropXmlValues(string personType, string tariffType, string gMassiveName, string valueType, int currentZone, int value)
+        {
+            switch (tariffType)
+            {
+                case "double":
+                    switch(personType)
+                    {
+                        case "00":
+                            switch (gMassiveName)
+                            {
+                                case "day":
+                                    switch (valueType)
+                                    {
+                                        case "initial":
+                                            _main2dayZone_00[currentZone, 4] = value;
+                                            break;
+
+                                        case "final":
+                                            _main2dayZone_00[currentZone, 5] = value;
+                                            break;
+                                    }
+                                    break;
+
+                                case "night":
+                                    switch (valueType)
+                                    {
+                                        case "initial":
+                                            _main2nightZone_00[currentZone, 4] = value;
+                                            break;
+
+                                        case "final":
+                                            _main2nightZone_00[currentZone, 5] = value;
+                                            break;
+                                    }
+                                    break;
+                            }
+                            break;
+
+                        case "01":
+                            switch (gMassiveName)
+                            {
+                                case "day":
+                                    switch (valueType)
+                                    {
+                                        case "initial":
+                                            _main2dayZone_01[currentZone, 4] = value;
+                                            break;
+
+                                        case "final":
+                                            _main2dayZone_01[currentZone, 5] = value;
+                                            break;
+                                    }
+                                    break;
+
+                                case "night":
+                                    switch (valueType)
+                                    {
+                                        case "initial":
+                                            _main2nightZone_01[currentZone, 4] = value;
+                                            break;
+
+                                        case "final":
+                                            _main2nightZone_01[currentZone, 5] = value;
+                                            break;
+                                    }
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+
+                case "tripple":
+                    switch (personType)
+                    {
+                        case "00":
+                            switch (gMassiveName)
+                            {
+                                case "peak":
+                                    switch (valueType)
+                                    {
+                                        case "initial":
+                                            _main3peakZone_00[currentZone, 4] = value;
+                                            break;
+
+                                        case "final":
+                                            _main3peakZone_00[currentZone, 5] = value;
+                                            break;
+                                    }
+                                    break;
+
+                                case "semiPeak":
+                                    switch (valueType)
+                                    {
+                                        case "initial":
+                                            _main3semiPeakZone_00[currentZone, 4] = value;
+                                            break;
+
+                                        case "final":
+                                            _main3semiPeakZone_00[currentZone, 5] = value;
+                                            break;
+                                    }
+                                    break;
+
+                                case "night":
+                                    switch (valueType)
+                                    {
+                                        case "initial":
+                                            _main3nightZone_00[currentZone, 4] = value;
+                                            break;
+
+                                        case "final":
+                                            _main3nightZone_00[currentZone, 5] = value;
+                                            break;
+                                    }
+                                    break;
+                            }
+                            break;
+
+                        case "01":
+                            switch (gMassiveName)
+                            {
+                                case "peak":
+                                    switch (valueType)
+                                    {
+                                        case "initial":
+                                            _main3peakZone_01[currentZone, 4] = value;
+                                            break;
+
+                                        case "final":
+                                            _main3peakZone_01[currentZone, 5] = value;
+                                            break;
+                                    }
+                                    break;
+
+                                case "semiPeak":
+                                    switch (valueType)
+                                    {
+                                        case "initial":
+                                            _main3semiPeakZone_01[currentZone, 4] = value;
+                                            break;
+
+                                        case "final":
+                                            _main3semiPeakZone_01[currentZone, 5] = value;
+                                            break;
+                                    }
+                                    break;
+
+                                case "night":
+                                    switch (valueType)
+                                    {
+                                        case "initial":
+                                            _main3nightZone_01[currentZone, 4] = value;
+                                            break;
+
+                                        case "final":
+                                            _main3nightZone_01[currentZone, 5] = value;
+                                            break;
+                                    }
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        static string GetAttributeText(XmlNode inXmlNode, string name)
+        {
+            XmlAttribute attr = (inXmlNode.Attributes == null ? null : inXmlNode.Attributes[name]);
+            return attr == null ? null : attr.Value;
+        }
 
         private void openFormType1(int eRowIndex)
         {
@@ -3366,6 +3678,9 @@ namespace dataEditor
             TimeSpan dayStart = new TimeSpan(0, 0, 0);
             TimeSpan dayEnd = new TimeSpan(0, 0, 0);
 
+            string currentGTP = mgSettings.mgCodeName.propGTPname;
+            string currentFolder = currentProjectFolder + "\\data\\common\\TimesZones\\";
+            string fileName = "doubleZone_" + currentGTP;
             switch (Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["type"].Value))
             {
                 case "运":
@@ -3373,8 +3688,25 @@ namespace dataEditor
                     {
                         dayStart = new TimeSpan(_main2dayZone_00[0,4], 0, 0);
                         dayEnd = new TimeSpan(_main2dayZone_00[0,5], 0, 0);
-                        Console.WriteLine("initial: " + _main2dayZone_00[0, 4]);
-                        Console.WriteLine("final : " + _main2dayZone_00[0, 5]);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            if (File.Exists(currentFolder + fileName + "_00.xml"))
+                            {
+                                XmlDocument xmlDoc = new XmlDocument();
+                                xmlDoc.Load(currentFolder + fileName + "_00.xml");
+                                parsingXMl(xmlDoc, "00", "double");
+                            }
+
+                            dayStart = new TimeSpan(_main2dayZone_00[0, 4], 0, 0);
+                            dayEnd = new TimeSpan(_main2dayZone_00[0, 5], 0, 0);
+                        }
+                        catch
+                        {
+
+                        }
                     }
                     break;
 
@@ -3383,8 +3715,25 @@ namespace dataEditor
                     {
                         dayStart = new TimeSpan(_main2dayZone_01[0,4], 0, 0);
                         dayEnd = new TimeSpan(_main2dayZone_01[0,5], 0, 0);
-                        Console.WriteLine("initial: " + _main2dayZone_01[0, 4]);
-                        Console.WriteLine("final : " + _main2dayZone_01[0, 5]);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            if (File.Exists(currentFolder + fileName + "_01.xml"))
+                            {
+                                XmlDocument xmlDoc = new XmlDocument();
+                                xmlDoc.Load(currentFolder + fileName + "_01.xml");
+                                parsingXMl(xmlDoc, "01", "double");
+                            }
+
+                            dayStart = new TimeSpan(_main2dayZone_01[0, 4], 0, 0);
+                            dayEnd = new TimeSpan(_main2dayZone_01[0, 5], 0, 0);
+                        }
+                        catch
+                        {
+
+                        }
                     }
                     break;
             }
@@ -3808,6 +4157,54 @@ namespace dataEditor
             TimeSpan semiPeakStart2 = new TimeSpan(mgSettings.mgHoursTripleTariffZone.semiPeak.initial2, 0, 0);
             TimeSpan semiPeakEnd2 = new TimeSpan(mgSettings.mgHoursTripleTariffZone.semiPeak.final2, 0, 0);
 
+            string currentGTP = mgSettings.mgCodeName.propGTPname;
+            string currentFolder = currentProjectFolder + "\\data\\common\\TimesZones\\";
+            string fileName = "trippleZone_" + currentGTP;
+            switch (Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["type"].Value))
+            {
+                case "运":
+                    if (_main3peakZone_00.GetLength(0) == 0)
+                    { 
+                        try
+                        {
+                            if (File.Exists(currentFolder + fileName + "_00.xml"))
+                            {
+                                XmlDocument xmlDoc = new XmlDocument();
+                                xmlDoc.Load(currentFolder + fileName + "_00.xml");
+                                parsingXMl(xmlDoc, "00", "tripple");
+                            }
+
+                        }
+                        catch
+                        {
+
+                        }
+                    }
+                    break;
+
+                case "匏":
+                    if (_main3peakZone_01.GetLength(0) == 0)
+                    {
+                        try
+                        {
+                            if (File.Exists(currentFolder + fileName + "_01.xml"))
+                            {
+                                XmlDocument xmlDoc = new XmlDocument();
+                                xmlDoc.Load(currentFolder + fileName + "_01.xml");
+                                parsingXMl(xmlDoc, "01", "tripple");
+                            }
+
+                        }
+                        catch
+                        {
+
+                        }
+                    }
+
+                    break;
+            }
+
+
             if (hrsTable != null && Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["hrsStatusError"].Value) != CheckState.Checked.ToString())
             {
                 formType3.dataHoursViewer.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.DataHoursViewer_RowPrePaint);
@@ -3818,80 +4215,186 @@ namespace dataEditor
                     if (hrs <= 24)
                     {
                         string duration = (hrs - 1).ToString() + ":00-" + hrs.ToString() + ":00";
-                        if (TimeIsBetween(hrs, peakStart1, peakEnd1))
+                        switch (Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["type"].Value))
                         {
-                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
-                            ConSummPeak += Convert.ToDecimal(rows[2].ToString());
-                            GenSummPeak += Convert.ToDecimal(rows[3].ToString());
-                            continue;
-                        }
-                        if (TimeIsBetween(hrs, peakStart2, peakEnd2))
-                        {
-                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
-                            ConSummPeak += Convert.ToDecimal(rows[2].ToString());
-                            GenSummPeak += Convert.ToDecimal(rows[3].ToString());
-                            continue;
-                        }
-                        if (TimeIsBetween(hrs, semiPeakStart1, semiPeakEnd1))
-                        {
-                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
-                            ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
-                            GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
-                            continue;
-                        }
-                        if (TimeIsBetween(hrs, semiPeakStart2, semiPeakEnd2))
-                        {
-                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
-                            ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
-                            GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
-                            continue;
-                        }
-                        if (TimeIsBetween(hrs, nightStart, nightEnd))
-                        {
-                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, null, rows[2], null, null, rows[3]);
-                            ConSummNight += Convert.ToDecimal(rows[2].ToString());
-                            GenSummNight += Convert.ToDecimal(rows[3].ToString());
-                            continue;
+                            case "运":
+                                if (_main3peakZone_00.GetLength(0) != 0)
+                                {
+                                    for (int i = 0; i < _main3peakZone_00.GetLength(0); i++)
+                                    {
+                                        if (TimeIsBetween(hrs, new TimeSpan(_main3peakZone_00[i, 4], 0, 0), new TimeSpan(_main3peakZone_00[i, 5], 0, 0)))
+                                        {
+                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
+                                            ConSummPeak += Convert.ToDecimal(rows[2].ToString());
+                                            GenSummPeak += Convert.ToDecimal(rows[3].ToString());
+                                        }
+                                    }
+                                    continue;
+                                }
+                                if (_main3semiPeakZone_00.GetLength(0) != 0)
+                                {
+                                    for (int i = 0; i < _main3semiPeakZone_00.GetLength(0); i++)
+                                    {
+                                        if (TimeIsBetween(hrs, new TimeSpan(_main3semiPeakZone_00[i, 4], 0, 0), new TimeSpan(_main3semiPeakZone_00[i, 5], 0, 0)))
+                                        {
+                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
+                                            ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
+                                            GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
+                                        }
+                                    }
+                                    continue;
+                                }
+                                if (_main3nightZone_00.GetLength(0) != 0)
+                                {
+                                    for (int i = 0; i < _main3nightZone_00.GetLength(0); i++)
+                                    {
+                                        if (TimeIsBetween(hrs, new TimeSpan(_main3nightZone_00[i, 4], 0, 0), new TimeSpan(_main3nightZone_00[i, 5], 0, 0)))
+                                        {
+                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, null, rows[2], null, null, rows[3]);
+                                            ConSummNight += Convert.ToDecimal(rows[2].ToString());
+                                            GenSummNight += Convert.ToDecimal(rows[3].ToString());
+                                        }
+                                    }
+                                    continue;
+                                }
+
+                                break;
+
+                            case "匏":
+                                if (_main3peakZone_01.GetLength(0) != 0)
+                                {
+                                    for (int i = 0; i < _main3peakZone_01.GetLength(0); i++)
+                                    {
+                                        if (TimeIsBetween(hrs, new TimeSpan(_main3peakZone_01[i, 4], 0, 0), new TimeSpan(_main3peakZone_01[i, 5], 0, 0)))
+                                        {
+                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
+                                            ConSummPeak += Convert.ToDecimal(rows[2].ToString());
+                                            GenSummPeak += Convert.ToDecimal(rows[3].ToString());
+                                        }
+                                    }
+                                    continue;
+                                }
+                                if (_main3semiPeakZone_01.GetLength(0) != 0)
+                                {
+                                    for (int i = 0; i < _main3semiPeakZone_01.GetLength(0); i++)
+                                    {
+                                        if (TimeIsBetween(hrs, new TimeSpan(_main3semiPeakZone_01[i, 4], 0, 0), new TimeSpan(_main3semiPeakZone_01[i, 5], 0, 0)))
+                                        {
+                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
+                                            ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
+                                            GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
+                                        }
+                                    }
+                                    continue;
+                                }
+                                if (_main3nightZone_01.GetLength(0) != 0)
+                                {
+                                    for (int i = 0; i < _main3nightZone_01.GetLength(0); i++)
+                                    {
+                                        if (TimeIsBetween(hrs, new TimeSpan(_main3nightZone_01[i, 4], 0, 0), new TimeSpan(_main3nightZone_01[i, 5], 0, 0)))
+                                        {
+                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, null, rows[2], null, null, rows[3]);
+                                            ConSummNight += Convert.ToDecimal(rows[2].ToString());
+                                            GenSummNight += Convert.ToDecimal(rows[3].ToString());
+                                        }
+                                    }
+                                    continue;
+                                }
+
+                                break;
                         }
                     }
                     else
                     {
                         hrs = 1;
                         string duration = (hrs - 1).ToString() + ":00-" + hrs.ToString() + ":00";
-                        if (TimeIsBetween(hrs, peakStart1, peakEnd1))
+                        switch (Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["type"].Value))
                         {
-                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
-                            ConSummPeak += Convert.ToDecimal(rows[2].ToString());
-                            GenSummPeak += Convert.ToDecimal(rows[3].ToString());
-                            continue;
-                        }
-                        if (TimeIsBetween(hrs, peakStart2, peakEnd2))
-                        {
-                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
-                            ConSummPeak += Convert.ToDecimal(rows[2].ToString());
-                            GenSummPeak += Convert.ToDecimal(rows[3].ToString());
-                            continue;
-                        }
-                        if (TimeIsBetween(hrs, semiPeakStart1, semiPeakEnd1))
-                        {
-                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
-                            ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
-                            GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
-                            continue;
-                        }
-                        if (TimeIsBetween(hrs, semiPeakStart2, semiPeakEnd2))
-                        {
-                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
-                            ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
-                            GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
-                            continue;
-                        }
-                        if (TimeIsBetween(hrs, nightStart, nightEnd))
-                        {
-                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, null, rows[2], null, null, rows[3]);
-                            ConSummNight += Convert.ToDecimal(rows[2].ToString());
-                            GenSummNight += Convert.ToDecimal(rows[3].ToString());
-                            continue;
+                            case "运":
+                                if (_main3peakZone_00.GetLength(0) != 0)
+                                {
+                                    for (int i = 0; i < _main3peakZone_00.GetLength(0); i++)
+                                    {
+                                        if (TimeIsBetween(hrs, new TimeSpan(_main3peakZone_00[i, 4], 0, 0), new TimeSpan(_main3peakZone_00[i, 5], 0, 0)))
+                                        {
+                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
+                                            ConSummPeak += Convert.ToDecimal(rows[2].ToString());
+                                            GenSummPeak += Convert.ToDecimal(rows[3].ToString());
+                                        }
+                                    }
+                                    continue;
+                                }
+                                if (_main3semiPeakZone_00.GetLength(0) != 0)
+                                {
+                                    for (int i = 0; i < _main3semiPeakZone_00.GetLength(0); i++)
+                                    {
+                                        if (TimeIsBetween(hrs, new TimeSpan(_main3semiPeakZone_00[i, 4], 0, 0), new TimeSpan(_main3semiPeakZone_00[i, 5], 0, 0)))
+                                        {
+                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
+                                            ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
+                                            GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
+                                        }
+                                    }
+                                    continue;
+                                }
+                                if (_main3nightZone_00.GetLength(0) != 0)
+                                {
+                                    for (int i = 0; i < _main3nightZone_00.GetLength(0); i++)
+                                    {
+                                        if (TimeIsBetween(hrs, new TimeSpan(_main3nightZone_00[i, 4], 0, 0), new TimeSpan(_main3nightZone_00[i, 5], 0, 0)))
+                                        {
+                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, null, rows[2], null, null, rows[3]);
+                                            ConSummNight += Convert.ToDecimal(rows[2].ToString());
+                                            GenSummNight += Convert.ToDecimal(rows[3].ToString());
+                                        }
+                                    }
+                                    continue;
+                                }
+
+                                break;
+
+                            case "匏":
+                                if (_main3peakZone_01.GetLength(0) != 0)
+                                {
+                                    for (int i = 0; i < _main3peakZone_01.GetLength(0); i++)
+                                    {
+                                        if (TimeIsBetween(hrs, new TimeSpan(_main3peakZone_01[i, 4], 0, 0), new TimeSpan(_main3peakZone_01[i, 5], 0, 0)))
+                                        {
+                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
+                                            ConSummPeak += Convert.ToDecimal(rows[2].ToString());
+                                            GenSummPeak += Convert.ToDecimal(rows[3].ToString());
+                                        }
+                                    }
+                                    continue;
+                                }
+                                if (_main3semiPeakZone_01.GetLength(0) != 0)
+                                {
+                                    for (int i = 0; i < _main3semiPeakZone_01.GetLength(0); i++)
+                                    {
+                                        if (TimeIsBetween(hrs, new TimeSpan(_main3semiPeakZone_01[i, 4], 0, 0), new TimeSpan(_main3semiPeakZone_01[i, 5], 0, 0)))
+                                        {
+                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
+                                            ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
+                                            GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
+                                        }
+                                    }
+                                    continue;
+                                }
+                                if (_main3nightZone_01.GetLength(0) != 0)
+                                {
+                                    for (int i = 0; i < _main3nightZone_01.GetLength(0); i++)
+                                    {
+                                        if (TimeIsBetween(hrs, new TimeSpan(_main3nightZone_01[i, 4], 0, 0), new TimeSpan(_main3nightZone_01[i, 5], 0, 0)))
+                                        {
+                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, null, rows[2], null, null, rows[3]);
+                                            ConSummNight += Convert.ToDecimal(rows[2].ToString());
+                                            GenSummNight += Convert.ToDecimal(rows[3].ToString());
+                                        }
+                                    }
+                                    continue;
+                                }
+
+                                break;
                         }
                     }
                 }

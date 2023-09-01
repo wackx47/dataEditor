@@ -222,7 +222,7 @@ namespace dataEditor
             string currentGTP = main.currentGTP;
             string currentFolder = null;
 
-            if (main.currentProjectFolder == null)
+            if (string.IsNullOrEmpty(main.currentProjectFolder))
             {
                 using (var fbd = new FolderBrowserDialog())
                 {
@@ -334,8 +334,7 @@ namespace dataEditor
                     if (xNode.NodeType is XmlNodeType.Element)
                     {
                         newNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-                    }    
-                        
+                    }     
                     else
                         newNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
                     AddNode(newNode.Nodes, xNode);
