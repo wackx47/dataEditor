@@ -43,15 +43,21 @@ namespace dataEditor
         public int[,] _3semiPeakZone_01 = new int[0, 6];
         public int[,] _3nightZone_01 = new int[0, 6];
 
+        public int[,] _saved2dayZone_00 = new int[0, 6];
+        public int[,] _saved2nightZone_00 = new int[0, 6];
+        public int[,] _saved3peakZone_00 = new int[0, 6];
+        public int[,] _saved3semiPeakZone_00 = new int[0, 6];
+        public int[,] _saved3nightZone_00 = new int[0, 6];
+
+        public int[,] _saved2dayZone_01 = new int[0, 6];
+        public int[,] _saved2nightZone_01 = new int[0, 6];
+        public int[,] _saved3peakZone_01 = new int[0, 6];
+        public int[,] _saved3semiPeakZone_01 = new int[0, 6];
+        public int[,] _saved3nightZone_01 = new int[0, 6];
+
         private void hoursZoneEditor_Load(object sender, EventArgs e)
         {
             fillTable();
-            cmbxSelectGlobalZone.SelectedIndex = 0;
-            cmbxSelectTypeZone.Items.AddRange(new[] { "день", "ночь" });
-            cmbxSelectTypeZone.SelectedIndex = 0;
-            doubleZoneTreeView.ExpandAll();
-
-            typeList.Text = typeList.Items[0].ToString();
 
             Settings settings = (Settings)Application.OpenForms["Settings"];
             settings = MainForm.SettingsForm;
@@ -85,6 +91,7 @@ namespace dataEditor
             _3semiPeakZone_01 = settings._settings3semiPeakZone_01;
             _3nightZone_01 = settings._settings3nightZone_01;
 
+            loadXMLfiles(2);
             refresTreesNodes();
         }
 
@@ -115,16 +122,33 @@ namespace dataEditor
                     TreeNode parentNode = doubleZoneTreeView.Nodes[1];
                     parentNode.Nodes.Clear();
 
-                    TreeNode initialChildNode = parentNode.Nodes.Add("с");
-                    initialChildNode.Name = "initial";
-                    initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-                    TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg2nightZone[0, 4].ToString());
-                    initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-                    TreeNode finalChildNode = parentNode.Nodes.Add("до");
-                    finalChildNode.Name = "final";
-                    finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-                    TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg2nightZone[1, 5]).ToString());
-                    finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    if (_chg2nightZone.GetLength(0) == 2)
+                    {
+                        TreeNode initialChildNode = parentNode.Nodes.Add("с");
+                        initialChildNode.Name = "initial";
+                        initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                        TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg2nightZone[0, 4].ToString());
+                        initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                        TreeNode finalChildNode = parentNode.Nodes.Add("до");
+                        finalChildNode.Name = "final";
+                        finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                        TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg2nightZone[1, 5]).ToString());
+                        finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    }
+                    else if (_chg2nightZone.GetLength(0) == 1)
+                    {
+                        TreeNode initialChildNode = parentNode.Nodes.Add("с");
+                        initialChildNode.Name = "initial";
+                        initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                        TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg2nightZone[0, 4].ToString());
+                        initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                        TreeNode finalChildNode = parentNode.Nodes.Add("до");
+                        finalChildNode.Name = "final";
+                        finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                        TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg2nightZone[0, 5]).ToString());
+                        finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+                    }
+
                 }
                 catch (Exception ex)
                 {
@@ -191,12 +215,12 @@ namespace dataEditor
                     TreeNode initialChildNode = parentNode.Nodes.Add("с");
                     initialChildNode.Name = "initial";
                     initialChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-                    TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg3nightZone[1, 4].ToString());
+                    TreeNode initialValueNode = initialChildNode.Nodes.Add(_chg3nightZone[0, 4].ToString());
                     initialValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
                     TreeNode finalChildNode = parentNode.Nodes.Add("до");
                     finalChildNode.Name = "final";
                     finalChildNode.NodeFont = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-                    TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg3nightZone[0, 5] + 1).ToString());
+                    TreeNode finalValueNode = finalChildNode.Nodes.Add((_chg3nightZone[1, 5] + 1).ToString());
                     finalValueNode.NodeFont = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
                 }
                 else if (_chg3nightZone.GetLength(0) == 1)
@@ -216,7 +240,7 @@ namespace dataEditor
             trippleZoneTreeView.ExpandAll();
         }
 
-        private void loadXMLfiles()
+        private void loadXMLfiles(int personType)
         {
             main = StartScreen.universalReaderForm;
             string currentGTP = main.currentGTP;
@@ -236,14 +260,14 @@ namespace dataEditor
             }
             else
             {
-                currentFolder = main.currentProjectFolder + "\\data\\common\\TimesZones\\";
+                currentFolder = main.currentProjectFolder + "\\data\\TimesZones\\";
             }
 
             string doubleName = "doubleZone_" + currentGTP;
             string trippleName = "trippleZone_" + currentGTP;
 
 
-            switch (typeList.SelectedIndex)
+            switch (personType)
             {
                 case 0:
                     if (File.Exists(currentFolder + doubleName + "_00.xml"))
@@ -252,6 +276,8 @@ namespace dataEditor
                         xmlDoc.Load(currentFolder + doubleName + "_00.xml");
                         parsingXMl(doubleZoneTreeView, xmlDoc);
                         parsingTreeViewDoubleZoneForPaint(ref _2dayZone_00, ref _2nightZone_00);
+                        _saved2dayZone_00 = _2dayZone_00;
+                        _saved2nightZone_00= _2nightZone_00;
                     }
 
                     if (File.Exists(currentFolder + trippleName + "_00.xml"))
@@ -260,6 +286,9 @@ namespace dataEditor
                         xmlDoc.Load(currentFolder + trippleName + "_00.xml");
                         parsingXMl(trippleZoneTreeView, xmlDoc);
                         parsingTreeViewTrippleZoneForPaint(ref _3peakZone_00, ref _3semiPeakZone_00, ref _3nightZone_00);
+                        _saved3peakZone_00= _3peakZone_00;
+                        _saved3semiPeakZone_00= _3semiPeakZone_00;
+                        _saved3nightZone_00= _3nightZone_00;
                     }
                     break;
 
@@ -270,6 +299,8 @@ namespace dataEditor
                         xmlDoc.Load(currentFolder + doubleName + "_01.xml");
                         parsingXMl(doubleZoneTreeView, xmlDoc);
                         parsingTreeViewDoubleZoneForPaint(ref _2dayZone_01, ref _2nightZone_01);
+                        _saved2dayZone_01 = _2dayZone_01;
+                        _saved2nightZone_01 = _2nightZone_01;
                     }
 
                     if (File.Exists(currentFolder + trippleName + "_01.xml"))
@@ -278,6 +309,53 @@ namespace dataEditor
                         xmlDoc.Load(currentFolder + trippleName + "_01.xml");
                         parsingXMl(trippleZoneTreeView, xmlDoc);
                         parsingTreeViewTrippleZoneForPaint(ref _3peakZone_01, ref _3semiPeakZone_01, ref _3nightZone_01);
+                        _saved3peakZone_01 = _3peakZone_01;
+                        _saved3semiPeakZone_01 = _3semiPeakZone_01;
+                        _saved3nightZone_01 = _3nightZone_01;
+                    }
+                    break;
+
+                case 2:
+                    if (File.Exists(currentFolder + doubleName + "_00.xml"))
+                    {
+                        XmlDocument xmlDoc = new XmlDocument();
+                        xmlDoc.Load(currentFolder + doubleName + "_00.xml");
+                        parsingXMl(doubleZoneTreeView, xmlDoc);
+                        parsingTreeViewDoubleZoneForPaint(ref _2dayZone_00, ref _2nightZone_00);
+                        _saved2dayZone_00 = _2dayZone_00;
+                        _saved2nightZone_00 = _2nightZone_00;
+                    }
+
+                    if (File.Exists(currentFolder + trippleName + "_00.xml"))
+                    {
+                        XmlDocument xmlDoc = new XmlDocument();
+                        xmlDoc.Load(currentFolder + trippleName + "_00.xml");
+                        parsingXMl(trippleZoneTreeView, xmlDoc);
+                        parsingTreeViewTrippleZoneForPaint(ref _3peakZone_00, ref _3semiPeakZone_00, ref _3nightZone_00);
+                        _saved3peakZone_00 = _3peakZone_00;
+                        _saved3semiPeakZone_00 = _3semiPeakZone_00;
+                        _saved3nightZone_00 = _3nightZone_00;
+                    }
+
+                    if (File.Exists(currentFolder + doubleName + "_01.xml"))
+                    {
+                        XmlDocument xmlDoc = new XmlDocument();
+                        xmlDoc.Load(currentFolder + doubleName + "_01.xml");
+                        parsingXMl(doubleZoneTreeView, xmlDoc);
+                        parsingTreeViewDoubleZoneForPaint(ref _2dayZone_01, ref _2nightZone_01);
+                        _saved2dayZone_01 = _2dayZone_01;
+                        _saved2nightZone_01 = _2nightZone_01;
+                    }
+
+                    if (File.Exists(currentFolder + trippleName + "_01.xml"))
+                    {
+                        XmlDocument xmlDoc = new XmlDocument();
+                        xmlDoc.Load(currentFolder + trippleName + "_01.xml");
+                        parsingXMl(trippleZoneTreeView, xmlDoc);
+                        parsingTreeViewTrippleZoneForPaint(ref _3peakZone_01, ref _3semiPeakZone_01, ref _3nightZone_01);
+                        _saved3peakZone_01 = _3peakZone_01;
+                        _saved3semiPeakZone_01 = _3semiPeakZone_01;
+                        _saved3nightZone_01 = _3nightZone_01;
                     }
                     break;
             }
@@ -301,7 +379,7 @@ namespace dataEditor
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -605,14 +683,14 @@ namespace dataEditor
             trippleZoneTreeView.ExpandAll();
         }
 
-        private void saveData(int typePerson, int typeZone)
+        private bool saveData(int typePerson, int typeZone)
         {
             main = StartScreen.universalReaderForm;
             string currentGTP = main.currentGTP;
-            string currentFolder = main.currentProjectFolder+"\\data\\common\\TimesZones\\";
+            string currentFolder = main.currentProjectFolder+"\\data\\TimesZones\\";
 
-            string doubleName = "doubleZone_" + currentGTP + "_0" + typePerson;
-            string trippleName = "trippleZone_" + currentGTP + "_0" + typePerson;
+            string doubleName = "doubleZone_" + currentGTP + "_0" + typePerson.ToString();
+            string trippleName = "trippleZone_" + currentGTP + "_0" + typePerson.ToString();
 
             try
             {
@@ -628,11 +706,39 @@ namespace dataEditor
                     case 0:
                         document = new XDocument(new XElement(doubleName, CreateXmlElement(doubleZoneTreeView.Nodes)));
                         document.Save(currentFolder + doubleName + ".xml");
+
+                        switch(typeList.SelectedIndex)
+                        {
+                            case 0:
+                                _saved2dayZone_00 = _2dayZone_00;
+                                _saved2nightZone_00 = _2nightZone_00;
+                                break;
+
+                            case 1:
+                                _saved2dayZone_01 = _2dayZone_01;
+                                _saved2nightZone_01 = _2nightZone_01;
+                                break;
+                        }
                         break;
 
                     case 1:
                         document = new XDocument(new XElement(trippleName, CreateXmlElement(trippleZoneTreeView.Nodes)));
                         document.Save(currentFolder + trippleName + ".xml");
+
+                        switch (typeList.SelectedIndex)
+                        {
+                            case 0:
+                                _saved3peakZone_00 = _3peakZone_00;
+                                _saved3semiPeakZone_00 = _3semiPeakZone_00;
+                                _saved3nightZone_00 = _3nightZone_00;
+                                break;
+
+                            case 1:
+                                _saved3peakZone_01 = _3peakZone_01;
+                                _saved3semiPeakZone_01 = _3semiPeakZone_01;
+                                _saved3nightZone_01 = _3nightZone_01;
+                                break;
+                        }
                         break;
 
                     case 2:
@@ -641,7 +747,29 @@ namespace dataEditor
 
                         document = new XDocument(new XElement(trippleName, CreateXmlElement(trippleZoneTreeView.Nodes)));
                         document.Save(currentFolder + trippleName + ".xml");
+
+                        switch (typeList.SelectedIndex)
+                        {
+                            case 0:
+                                _saved2dayZone_00 = _2dayZone_00;
+                                _saved2nightZone_00 = _2nightZone_00;
+
+                                _saved3peakZone_00 = _3peakZone_00;
+                                _saved3semiPeakZone_00 = _3semiPeakZone_00;
+                                _saved3nightZone_00 = _3nightZone_00;
+                                break;
+
+                            case 1:
+                                _saved2dayZone_01 = _2dayZone_01;
+                                _saved2nightZone_01 = _2nightZone_01;
+
+                                _saved3peakZone_01 = _3peakZone_01;
+                                _saved3semiPeakZone_01 = _3semiPeakZone_01;
+                                _saved3nightZone_01 = _3nightZone_01;
+                                break;
+                        }
                         break;
+
 
                     default:
                         document = new XDocument(new XElement(doubleName, CreateXmlElement(doubleZoneTreeView.Nodes)));
@@ -652,10 +780,12 @@ namespace dataEditor
                         break; 
                 }
 
+                return true;
+
             }
             catch
             {
-
+                return false;
             }
         }
 
@@ -832,6 +962,18 @@ namespace dataEditor
                     doubleZoneBackColor();
                     hoursDataGrid.Refresh();
                     hoursDataGrid.ClearSelection();
+
+                    if (_chg2dayZone.GetLength(0) != 0 && _chg2nightZone.GetLength(0) != 0)
+                    {
+                        btnConfirm.Enabled = true;
+                        btnSave.Enabled = true;
+                    }
+                    else
+                    {
+                        btnConfirm.Enabled = false;
+                        btnSave.Enabled = false;
+                    }
+
                     break;
                 case "3 зоны":
                     if (cmbxSelectTypeZone.Text == "пик")
@@ -978,9 +1120,20 @@ namespace dataEditor
                     trippleZoneBackColor();
                     hoursDataGrid.Refresh();
                     hoursDataGrid.ClearSelection();
+
+                    if (_chg3peakZone.GetLength(0) != 0 && _chg3semiPeakZone.GetLength(0) != 0 && _chg3nightZone.GetLength(0) != 0)
+                    {
+                        btnConfirm.Enabled = true;
+                        btnSave.Enabled = true;
+                    }
+                    else
+                    {
+                        btnConfirm.Enabled = false;
+                        btnSave.Enabled = false;
+                    }
+
                     break;
             }
-
 
             switch (typeList.SelectedIndex)
             {
@@ -1002,6 +1155,171 @@ namespace dataEditor
                     _3nightZone_01 = _chg3nightZone;
                     break;
             }
+
+            bool dTreeChange = false;
+            bool tTreeChange = false;
+
+            switch (typeList.SelectedIndex)
+            {
+                case 0:
+                    dTreeChange = doubleTreeNodeValuesChanged(ref _2dayZone_00, ref _2nightZone_00, ref _saved2dayZone_00, ref _saved2nightZone_00);
+                    tTreeChange = trippleTreeNodeValuesChanged(ref _3peakZone_00, ref _3semiPeakZone_00, ref _3nightZone_00, ref _saved3peakZone_00, ref _saved3semiPeakZone_00, ref _saved3nightZone_00);
+
+                    switch (cmbxSelectGlobalZone.SelectedIndex)
+                    {
+                        case 0:
+                            if (dTreeChange)
+                                btnSave.Enabled = true;
+                            else
+                                btnSave.Enabled = false;
+                            break;
+
+                        case 1:
+                            if (tTreeChange)
+                                btnSave.Enabled = true;
+                            else
+                                btnSave.Enabled = false;
+                            break;
+                    }
+
+                    if (dTreeChange && tTreeChange)
+                        btnSaveAll.Enabled = true;
+                    else
+                        btnSaveAll.Enabled = false;
+                    break;
+
+                case 1:
+                    dTreeChange = doubleTreeNodeValuesChanged(ref _2dayZone_01, ref _2nightZone_01, ref _saved2dayZone_01, ref _saved2nightZone_01);
+                    tTreeChange = trippleTreeNodeValuesChanged(ref _3peakZone_01, ref _3semiPeakZone_01, ref _3nightZone_01, ref _saved3peakZone_01, ref _saved3semiPeakZone_01, ref _saved3nightZone_01);
+
+                    switch (cmbxSelectGlobalZone.SelectedIndex)
+                    {
+                        case 0:
+                            if (dTreeChange)
+                                btnSave.Enabled = true;
+                            else
+                                btnSave.Enabled = false;
+                            break;
+
+                        case 1:
+                            if (tTreeChange)
+                                btnSave.Enabled = true;
+                            else
+                                btnSave.Enabled = false;
+                            break;
+                    }
+
+                    if (dTreeChange && tTreeChange)
+                        btnSaveAll.Enabled = true;
+                    else
+                        btnSaveAll.Enabled = false;
+                    break;
+            }
+        }
+
+        private int[,] _massiveChange;
+        private int[,] massiveChange
+        {
+            get => _massiveChange;
+            set
+            {
+                if (value != _massiveChange)
+                {
+                    _massiveChange = value;
+                    btnSave.Enabled= true;
+                }
+                else
+                {
+                    btnSave.Enabled = false;
+                }
+            }
+        }
+
+        private bool doubleTreeNodeValuesChanged(ref int[,] _2dayZone, ref int[,] _2nightZone, ref int[,] _saved2dayZone, ref int[,] _saved2nightZone)
+        {
+            for (int i = 0; i < _2dayZone.GetLength(0); i++)
+            {
+                try
+                {
+                    if (_2dayZone[i, 4] != _saved2dayZone[i, 4] | _2dayZone[i, 5] != _saved2dayZone[i, 5])
+                    {
+                        return true;
+                        break;
+                    }
+                }
+                catch
+                {
+                    return false;
+                }
+
+            }
+            for (int i = 0; i < _2nightZone.GetLength(0); i++)
+            {
+                try
+                {
+                    if (_2nightZone[i, 4] != _saved2nightZone[i, 4] | _2nightZone[i, 5] != _saved2nightZone[i, 5])
+                    {
+                        return true;
+                        break;
+                    }
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        private bool trippleTreeNodeValuesChanged(ref int[,] _3peakZone, ref int[,] _3semiPeakZone, ref int[,] _3nightZone, ref int[,] _saved3peakZone, ref int[,] _saved3semiPeakZone, ref int[,] _saved3nightZone)
+        {
+            for (int i = 0; i < _3peakZone.GetLength(0); i++)
+            {
+                try
+                {
+                    if (_3peakZone[i, 4] != _saved3peakZone[i, 4] | _3peakZone[i, 5] != _saved3peakZone[i, 5])
+                    {
+                        return true;
+                        break;
+                    }
+                }
+                catch
+                {
+                    return false;
+                }
+
+            }
+            for (int i = 0; i < _3semiPeakZone.GetLength(0); i++)
+            {
+                try
+                {
+                    if (_3semiPeakZone[i, 4] != _saved3semiPeakZone[i, 4] | _3semiPeakZone[i, 5] != _saved3semiPeakZone[i, 5])
+                    {
+                        return true;
+                        break;
+                    }
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            for (int i = 0; i < _3nightZone.GetLength(0); i++)
+            {
+                try
+                {
+                    if (_3nightZone[i, 4] != _saved3nightZone[i, 4] | _3nightZone[i, 5] != _saved3nightZone[i, 5])
+                    {
+                        return true;
+                        break;
+                    }
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return false;
         }
 
         private void doubleZoneBackColor()
@@ -1379,6 +1697,24 @@ namespace dataEditor
                     doubleZoneBackColor();
                     hoursDataGrid.Refresh();
                     hoursDataGrid.ClearSelection();
+
+                    switch (typeList.SelectedIndex)
+                    {
+                        case 0:
+                            if (doubleTreeNodeValuesChanged(ref _2dayZone_00, ref _2nightZone_00, ref _saved2dayZone_00, ref _saved2nightZone_00))
+                                btnSave.Enabled = true;
+                            else
+                                btnSave.Enabled = false;
+                            break;
+
+                        case 1:
+                            if (doubleTreeNodeValuesChanged(ref _2dayZone_01, ref _2nightZone_01, ref _saved2dayZone_01, ref _saved2nightZone_01))
+                                btnSave.Enabled = true;
+                            else
+                                btnSave.Enabled = false;
+                            break;
+                    }
+
                     break;
 
                 case "3 зоны":
@@ -1394,8 +1730,28 @@ namespace dataEditor
                     trippleZoneBackColor();
                     hoursDataGrid.Refresh();
                     hoursDataGrid.ClearSelection();
+
+                    switch (typeList.SelectedIndex)
+                    {
+                        case 0:
+                            if (trippleTreeNodeValuesChanged(ref _3peakZone_00, ref _3semiPeakZone_00, ref _3nightZone_00, ref _saved3peakZone_00, ref _saved3semiPeakZone_00, ref _saved3nightZone_00))
+                                btnSave.Enabled = true;
+                            else
+                                btnSave.Enabled = false;
+                            break;
+
+                        case 1:
+
+                            if (trippleTreeNodeValuesChanged(ref _3peakZone_01, ref _3semiPeakZone_01, ref _3nightZone_01, ref _saved3peakZone_01, ref _saved3semiPeakZone_01, ref _saved3nightZone_01))
+                                btnSave.Enabled = true;
+                            else
+                                btnSave.Enabled = false;
+                            break;
+                    }
+
                     break;
             }
+
         }
 
 
@@ -1426,6 +1782,23 @@ namespace dataEditor
                 }
             }
 
+            switch (typeList.SelectedIndex)
+            {
+                case 0:
+                    if (doubleTreeNodeValuesChanged(ref _2dayZone_00, ref _2nightZone_00, ref _saved2dayZone_00, ref _saved2nightZone_00))
+                        btnSave.Enabled = true;
+                    else
+                        btnSave.Enabled = false;
+                    break;
+
+                case 1:
+                    if (doubleTreeNodeValuesChanged(ref _2dayZone_01, ref _2nightZone_01, ref _saved2dayZone_01, ref _saved2nightZone_01))
+                        btnSave.Enabled = true;
+                    else
+                        btnSave.Enabled = false;
+                    break;
+            }
+
             groupDoubleZone.ForeColor = Color.Blue;
             groupTrippleZone.ForeColor = Color.Gray;
         }
@@ -1438,12 +1811,12 @@ namespace dataEditor
                 trippleZoneTreeView.SelectedNode = autoSelectNode;
                 cmbxSelectTypeZone.SelectedIndex = 0;
                 btnAddNew3z.Enabled = true;
-                btnAddNew3z.Visible = true;
+                btnAddNew3z.Visible = false;
             }
             else
             {
                 btnAddNew3z.Enabled = true;
-                btnAddNew3z.Visible = true;
+                btnAddNew3z.Visible = false;
                 switch (trippleZoneTreeView.SelectedNode.FullPath.Split('\\').First())
                 {
                     case "пик":
@@ -1458,6 +1831,24 @@ namespace dataEditor
                         cmbxSelectTypeZone.SelectedIndex = 2;
                         break;
                 }
+            }
+
+            switch (typeList.SelectedIndex)
+            {
+                case 0:
+                    if (trippleTreeNodeValuesChanged(ref _3peakZone_00, ref _3semiPeakZone_00, ref _3nightZone_00, ref _saved3peakZone_00, ref _saved3semiPeakZone_00, ref _saved3nightZone_00))
+                        btnSave.Enabled = true;
+                    else
+                        btnSave.Enabled = false;
+                    break;
+
+                case 1:
+
+                    if (trippleTreeNodeValuesChanged(ref _3peakZone_01, ref _3semiPeakZone_01, ref _3nightZone_01, ref _saved3peakZone_01, ref _saved3semiPeakZone_01, ref _saved3nightZone_01))
+                        btnSave.Enabled = true;
+                    else
+                        btnSave.Enabled = false;
+                    break;
             }
 
             groupDoubleZone.ForeColor = Color.Gray;
@@ -1491,6 +1882,13 @@ namespace dataEditor
             switch(typeList.SelectedIndex)
             {
                 case 0:
+                    doubleZoneTreeView.Nodes[0].Nodes.Clear();
+                    doubleZoneTreeView.Nodes[1].Nodes.Clear();
+
+                    trippleZoneTreeView.Nodes[0].Nodes.Clear();
+                    trippleZoneTreeView.Nodes[1].Nodes.Clear();
+                    trippleZoneTreeView.Nodes[2].Nodes.Clear();
+
                     _chg2dayZone = _2dayZone_00;
                     _chg2nightZone = _2nightZone_00;
 
@@ -1518,6 +1916,13 @@ namespace dataEditor
                     break;
 
                 case 1:
+                    doubleZoneTreeView.Nodes[0].Nodes.Clear();
+                    doubleZoneTreeView.Nodes[1].Nodes.Clear();
+
+                    trippleZoneTreeView.Nodes[0].Nodes.Clear();
+                    trippleZoneTreeView.Nodes[1].Nodes.Clear();
+                    trippleZoneTreeView.Nodes[2].Nodes.Clear();
+
                     _chg2dayZone = _2dayZone_01;
                     _chg2nightZone = _2nightZone_01;
 
@@ -1545,6 +1950,13 @@ namespace dataEditor
                     break;
 
                 default:
+                    doubleZoneTreeView.Nodes[0].Nodes.Clear();
+                    doubleZoneTreeView.Nodes[1].Nodes.Clear();
+
+                    trippleZoneTreeView.Nodes[0].Nodes.Clear();
+                    trippleZoneTreeView.Nodes[1].Nodes.Clear();
+                    trippleZoneTreeView.Nodes[2].Nodes.Clear();
+
                     foreach (DataGridViewRow rows in hoursDataGrid.Rows)
                     {
                         rows.DefaultCellStyle.BackColor = Color.Empty;
@@ -1565,23 +1977,85 @@ namespace dataEditor
                     break;
             }
 
-            refresTreesNodes();
 
+            bool dTreeChange = false;
+            bool tTreeChange = false;
+
+            switch (typeList.SelectedIndex)
+            {
+                case 0:
+                    dTreeChange = doubleTreeNodeValuesChanged(ref _2dayZone_00, ref _2nightZone_00, ref _saved2dayZone_00, ref _saved2nightZone_00);
+                    tTreeChange = trippleTreeNodeValuesChanged(ref _3peakZone_00, ref _3semiPeakZone_00, ref _3nightZone_00, ref _saved3peakZone_00, ref _saved3semiPeakZone_00, ref _saved3nightZone_00);
+
+                    switch (cmbxSelectGlobalZone.SelectedIndex)
+                    {
+                        case 0:
+                            if (dTreeChange)
+                                btnSave.Enabled = true;
+                            else
+                                btnSave.Enabled = false;
+                            break;
+
+                        case 1:
+                            if (tTreeChange)
+                                btnSave.Enabled = true;
+                            else
+                                btnSave.Enabled = false;
+                            break;
+                    }
+
+                    if (dTreeChange && tTreeChange)
+                        btnSaveAll.Enabled = true;
+                    else
+                        btnSaveAll.Enabled = false;
+                    break;
+
+                case 1:
+                    dTreeChange = doubleTreeNodeValuesChanged(ref _2dayZone_01, ref _2nightZone_01, ref _saved2dayZone_01, ref _saved2nightZone_01);
+                    tTreeChange = trippleTreeNodeValuesChanged(ref _3peakZone_01, ref _3semiPeakZone_01, ref _3nightZone_01, ref _saved3peakZone_01, ref _saved3semiPeakZone_01, ref _saved3nightZone_01);
+
+                    switch (cmbxSelectGlobalZone.SelectedIndex)
+                    {
+                        case 0:
+                            if (dTreeChange)
+                                btnSave.Enabled = true;
+                            else
+                                btnSave.Enabled = false;
+                            break;
+
+                        case 1:
+                            if (tTreeChange)
+                                btnSave.Enabled = true;
+                            else
+                                btnSave.Enabled = false;
+                            break;
+                    }
+
+                    if (dTreeChange && tTreeChange)
+                        btnSaveAll.Enabled = true;
+                    else
+                        btnSaveAll.Enabled = false;
+                    break;
+            }
+
+            refresTreesNodes();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            saveData(typeList.SelectedIndex,cmbxSelectGlobalZone.SelectedIndex);
+            if(saveData(typeList.SelectedIndex,cmbxSelectGlobalZone.SelectedIndex));
+                btnSave.Enabled = false;
         }
 
         private void btnSaveAll_Click(object sender, EventArgs e)
         {
-            saveData(typeList.SelectedIndex,2);
+            if(saveData(typeList.SelectedIndex,2));
+                btnSaveAll.Enabled = false;
         }
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
-            loadXMLfiles();
+            loadXMLfiles(typeList.SelectedIndex);
 
             foreach (DataGridViewRow rows in hoursDataGrid.Rows)
             {

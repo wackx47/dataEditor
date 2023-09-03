@@ -30,9 +30,9 @@ namespace dataEditor
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Common");
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("ExcelReader");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Microgeneration");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Common");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("ExcelReader");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Microgeneration");
             this.optionsGrid = new System.Windows.Forms.PropertyGrid();
             this.SettingsLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.SettingsTreeView = new System.Windows.Forms.TreeView();
@@ -82,16 +82,16 @@ namespace dataEditor
             this.SettingsTreeView.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.SettingsTreeView.Location = new System.Drawing.Point(3, 3);
             this.SettingsTreeView.Name = "SettingsTreeView";
-            treeNode4.Name = "setCommon";
-            treeNode4.Text = "Common";
-            treeNode5.Name = "setExcelReader";
-            treeNode5.Text = "ExcelReader";
-            treeNode6.Name = "setMicrogeneration";
-            treeNode6.Text = "Microgeneration";
+            treeNode1.Name = "setCommon";
+            treeNode1.Text = "Common";
+            treeNode2.Name = "setExcelReader";
+            treeNode2.Text = "ExcelReader";
+            treeNode3.Name = "setMicrogeneration";
+            treeNode3.Text = "Microgeneration";
             this.SettingsTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode4,
-            treeNode5,
-            treeNode6});
+            treeNode1,
+            treeNode2,
+            treeNode3});
             this.SettingsTreeView.Size = new System.Drawing.Size(164, 395);
             this.SettingsTreeView.TabIndex = 66;
             this.SettingsTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.SettingsTreeView_AfterSelect);

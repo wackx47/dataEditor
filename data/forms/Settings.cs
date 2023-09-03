@@ -36,6 +36,7 @@ namespace dataEditor
 
         private void Settings_FormClosing(object sender, FormClosingEventArgs e)
         {
+            main.Focus();
             e.Cancel = true;
             Application.OpenForms["Settings"].Hide();
         }
@@ -74,12 +75,16 @@ namespace dataEditor
             main._main3semiPeakZone_01 = _settings3semiPeakZone_01;
             main._main3nightZone_01 = _settings3nightZone_01;
 
+            main.Focus();
+
             this.Close();
 
         }
 
         private void setBtnCancel_Click(object sender, EventArgs e)
         {
+            main.Focus();
+
             this.Close();
         }
     }

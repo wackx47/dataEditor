@@ -56,6 +56,8 @@ using IDataObject_Com = System.Runtime.InteropServices.ComTypes.IDataObject;
 using dataEditor.data;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 using static OfficeOpenXml.ExcelErrorValue;
+using System.Windows.Forms.Design;
+using MathNet.Numerics.LinearAlgebra.Factorization;
 
 namespace dataEditor
 {
@@ -2957,7 +2959,7 @@ namespace dataEditor
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -3077,7 +3079,7 @@ namespace dataEditor
                                             break;
 
                                         case "final":
-                                            _main2dayZone_00[currentZone, 5] = value;
+                                            _main2dayZone_00[currentZone, 5] = value-1;
                                             break;
                                     }
                                     break;
@@ -3090,7 +3092,7 @@ namespace dataEditor
                                             break;
 
                                         case "final":
-                                            _main2nightZone_00[currentZone, 5] = value;
+                                            _main2nightZone_00[currentZone, 5] = value-1;
                                             break;
                                     }
                                     break;
@@ -3108,7 +3110,7 @@ namespace dataEditor
                                             break;
 
                                         case "final":
-                                            _main2dayZone_01[currentZone, 5] = value;
+                                            _main2dayZone_01[currentZone, 5] = value-1;
                                             break;
                                     }
                                     break;
@@ -3121,7 +3123,7 @@ namespace dataEditor
                                             break;
 
                                         case "final":
-                                            _main2nightZone_01[currentZone, 5] = value;
+                                            _main2nightZone_01[currentZone, 5] = value-1;
                                             break;
                                     }
                                     break;
@@ -3144,7 +3146,7 @@ namespace dataEditor
                                             break;
 
                                         case "final":
-                                            _main3peakZone_00[currentZone, 5] = value;
+                                            _main3peakZone_00[currentZone, 5] = value-1;
                                             break;
                                     }
                                     break;
@@ -3157,7 +3159,7 @@ namespace dataEditor
                                             break;
 
                                         case "final":
-                                            _main3semiPeakZone_00[currentZone, 5] = value;
+                                            _main3semiPeakZone_00[currentZone, 5] = value-1;
                                             break;
                                     }
                                     break;
@@ -3170,7 +3172,7 @@ namespace dataEditor
                                             break;
 
                                         case "final":
-                                            _main3nightZone_00[currentZone, 5] = value;
+                                            _main3nightZone_00[currentZone, 5] = value-1;
                                             break;
                                     }
                                     break;
@@ -3188,7 +3190,7 @@ namespace dataEditor
                                             break;
 
                                         case "final":
-                                            _main3peakZone_01[currentZone, 5] = value;
+                                            _main3peakZone_01[currentZone, 5] = value-1;
                                             break;
                                     }
                                     break;
@@ -3201,7 +3203,7 @@ namespace dataEditor
                                             break;
 
                                         case "final":
-                                            _main3semiPeakZone_01[currentZone, 5] = value;
+                                            _main3semiPeakZone_01[currentZone, 5] = value-1;
                                             break;
                                     }
                                     break;
@@ -3214,7 +3216,7 @@ namespace dataEditor
                                             break;
 
                                         case "final":
-                                            _main3nightZone_01[currentZone, 5] = value;
+                                            _main3nightZone_01[currentZone, 5] = value-1;
                                             break;
                                     }
                                     break;
@@ -3679,7 +3681,7 @@ namespace dataEditor
             TimeSpan dayEnd = new TimeSpan(0, 0, 0);
 
             string currentGTP = mgSettings.mgCodeName.propGTPname;
-            string currentFolder = currentProjectFolder + "\\data\\common\\TimesZones\\";
+            string currentFolder = currentProjectFolder + "\\data\\TimesZones\\";
             string fileName = "doubleZone_" + currentGTP;
             switch (Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["type"].Value))
             {
@@ -3687,7 +3689,7 @@ namespace dataEditor
                     if(_main2dayZone_00.GetLength(0) != 0)
                     {
                         dayStart = new TimeSpan(_main2dayZone_00[0,4], 0, 0);
-                        dayEnd = new TimeSpan(_main2dayZone_00[0,5], 0, 0);
+                        dayEnd = new TimeSpan(_main2dayZone_00[0,5]+1, 0, 0);
                     }
                     else
                     {
@@ -3701,11 +3703,46 @@ namespace dataEditor
                             }
 
                             dayStart = new TimeSpan(_main2dayZone_00[0, 4], 0, 0);
-                            dayEnd = new TimeSpan(_main2dayZone_00[0, 5], 0, 0);
+                            dayEnd = new TimeSpan(_main2dayZone_00[0, 5]+1, 0, 0);
                         }
-                        catch
+                        catch(Exception ex)
                         {
+                            DialogResult dialogResult = MessageBox.Show("Отсутствуют интервалы тарифных зон суток, внести данные?", "Ожидание пользователя", MessageBoxButtons.YesNo);
+                            if (dialogResult == DialogResult.Yes)
+                            {
+                                using (hoursZoneEditor form = new hoursZoneEditor())
+                                {
+                                    form.typeList.SelectedIndex = 0;
+                                    form.typeList.Enabled = false;
+                                    form.cmbxSelectGlobalZone.SelectedIndex = 0;
+                                    form.cmbxSelectGlobalZone.Enabled = false;
+                                    form.splitContainer.Panel2Collapsed = true;
 
+                                    form.cmbxSelectTypeZone.Items.AddRange(new[] { "день", "ночь" });
+                                    form.cmbxSelectTypeZone.SelectedIndex = 0;
+
+                                    form.btnSave.Visible = false;
+                                    form.btnSaveAll.Visible = false;
+                                    form.btnLoad.Visible = false;
+
+                                    if (form.ShowDialog() == DialogResult.OK)
+                                    {
+                                        _main2dayZone_00 = form._2dayZone_00;
+                                        _main2nightZone_00 = form._2nightZone_00;
+
+                                        dayStart = new TimeSpan(_main2dayZone_00[0, 4], 0, 0);
+                                        dayEnd = new TimeSpan(_main2dayZone_00[0, 5]+1, 0, 0);
+                                    }
+                                    else
+                                    {
+                                        return;
+                                    }
+                                }
+                            }
+                            else if (dialogResult == DialogResult.No)
+                            {
+                                return;
+                            }
                         }
                     }
                     break;
@@ -3714,7 +3751,7 @@ namespace dataEditor
                     if (_main2dayZone_01.GetLength(0) != 0)
                     {
                         dayStart = new TimeSpan(_main2dayZone_01[0,4], 0, 0);
-                        dayEnd = new TimeSpan(_main2dayZone_01[0,5], 0, 0);
+                        dayEnd = new TimeSpan(_main2dayZone_01[0,5]+1, 0, 0);
                     }
                     else
                     {
@@ -3728,11 +3765,46 @@ namespace dataEditor
                             }
 
                             dayStart = new TimeSpan(_main2dayZone_01[0, 4], 0, 0);
-                            dayEnd = new TimeSpan(_main2dayZone_01[0, 5], 0, 0);
+                            dayEnd = new TimeSpan(_main2dayZone_01[0, 5]+1, 0, 0);
                         }
-                        catch
+                        catch(Exception ex)
                         {
+                            DialogResult dialogResult = MessageBox.Show("Отсутствуют интервалы тарифных зон суток, внести данные?", "Ожидание пользователя", MessageBoxButtons.YesNo);
+                            if (dialogResult == DialogResult.Yes)
+                            {
+                                using (hoursZoneEditor form = new hoursZoneEditor())
+                                {
+                                    form.typeList.SelectedIndex = 1;
+                                    form.typeList.Enabled = false;
+                                    form.cmbxSelectGlobalZone.SelectedIndex = 0;
+                                    form.cmbxSelectGlobalZone.Enabled = false;
+                                    form.splitContainer.Panel2Collapsed = true;
 
+                                    form.cmbxSelectTypeZone.Items.AddRange(new[] { "день", "ночь" });
+                                    form.cmbxSelectTypeZone.SelectedIndex = 0;
+
+                                    form.btnSave.Visible = false;
+                                    form.btnSaveAll.Visible = false;
+                                    form.btnLoad.Visible = false;
+
+                                    if (form.ShowDialog() == DialogResult.OK)
+                                    {
+                                        _main2dayZone_01 = form._2dayZone_01;
+                                        _main2nightZone_01 = form._2nightZone_01;
+
+                                        dayStart = new TimeSpan(_main2dayZone_01[0, 4], 0, 0);
+                                        dayEnd = new TimeSpan(_main2dayZone_01[0, 5]+1, 0, 0);
+                                    }
+                                    else
+                                    {
+                                        return;
+                                    }
+                                }
+                            }
+                            else if (dialogResult == DialogResult.No)
+                            {
+                                return;
+                            }
                         }
                     }
                     break;
@@ -3741,7 +3813,6 @@ namespace dataEditor
             if (hrsTable != null && Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["hrsStatusError"].Value) != CheckState.Checked.ToString())
             {
                 formType2.dataHoursViewer.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.DataHoursViewer_RowPrePaint);
-
                 foreach (DataRow rows in HoursDataSet.Tables[hrsTable].Rows)
                 {
                     if (hrs <= 24)
@@ -3954,6 +4025,70 @@ namespace dataEditor
             tablesDataGridView.RowPrePaint -= new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.DataHoursViewer_RowPrePaint);
         }
 
+        private bool entireIntervalsHoursData(int personType, ref int[,] _temp3peakZone , ref int[,] _temp3semiPeakZone, ref int[,] _temp3nightZone)
+        {
+            DialogResult dialogResult = MessageBox.Show("Отсутствуют интервалы тарифных зон суток, внести данные?", "Ожидание пользователя", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                using (hoursZoneEditor form = new hoursZoneEditor())
+                {
+                    form.typeList.SelectedIndex = personType;
+                    form.typeList.Enabled = false;
+                    form.cmbxSelectGlobalZone.SelectedIndex = 1;
+                    form.cmbxSelectGlobalZone.Enabled = false;
+                    form.doubleZoneTreeView.Enabled = false;
+                    form.splitContainer.Panel1Collapsed = true;
+                    form.trippleZoneTreeView.Focus();
+
+                    form.cmbxSelectTypeZone.Items.AddRange(new[] { "пик", "полупик", "ночь" });
+                    form.cmbxSelectTypeZone.SelectedIndex = 0;
+
+                    form.btnSave.Visible = false;
+                    form.btnSaveAll.Visible = false;
+                    form.btnLoad.Visible = false;
+
+                    if (form.ShowDialog() == DialogResult.OK)
+                    {
+                        switch (personType)
+                        {
+                            case 0:
+                                _temp3peakZone = form._3peakZone_00;
+                                _temp3semiPeakZone = form._3semiPeakZone_00;
+                                _temp3nightZone = form._3nightZone_00;
+
+                                _main3peakZone_00 = _temp3peakZone;
+                                _main3semiPeakZone_00 = _temp3semiPeakZone;
+                                _main3nightZone_00 = _temp3nightZone;
+                                break;
+
+                            case 1:
+                                _temp3peakZone = form._3peakZone_01;
+                                _temp3semiPeakZone = form._3semiPeakZone_01;
+                                _temp3nightZone = form._3nightZone_01;
+
+                                _main3peakZone_01 = _temp3peakZone;
+                                _main3semiPeakZone_01 = _temp3semiPeakZone;
+                                _main3nightZone_01 = _temp3nightZone;
+                                break;
+                        }
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void openFormType3(int eRowIndex)
         {
             FormType3 formType3 = new FormType3();
@@ -4144,22 +4279,15 @@ namespace dataEditor
             decimal GenSummSemiPeak = 0;
             decimal GenSummNight = 0;
 
-            TimeSpan nightStart = new TimeSpan(mgSettings.mgHoursTripleTariffZone.night.initial,0,0);
-            TimeSpan nightEnd = new TimeSpan(mgSettings.mgHoursTripleTariffZone.night.final, 0, 0);
-
-            TimeSpan peakStart1 = new TimeSpan(mgSettings.mgHoursTripleTariffZone.peak.initial1, 0, 0);
-            TimeSpan peakEnd1 = new TimeSpan(mgSettings.mgHoursTripleTariffZone.peak.final1, 0, 0);
-            TimeSpan peakStart2 = new TimeSpan(mgSettings.mgHoursTripleTariffZone.peak.initial2, 0, 0);
-            TimeSpan peakEnd2 = new TimeSpan(mgSettings.mgHoursTripleTariffZone.peak.final2, 0, 0);
-
-            TimeSpan semiPeakStart1 = new TimeSpan(mgSettings.mgHoursTripleTariffZone.semiPeak.initial1, 0, 0);
-            TimeSpan semiPeakEnd1 = new TimeSpan(mgSettings.mgHoursTripleTariffZone.semiPeak.final1, 0, 0);
-            TimeSpan semiPeakStart2 = new TimeSpan(mgSettings.mgHoursTripleTariffZone.semiPeak.initial2, 0, 0);
-            TimeSpan semiPeakEnd2 = new TimeSpan(mgSettings.mgHoursTripleTariffZone.semiPeak.final2, 0, 0);
-
             string currentGTP = mgSettings.mgCodeName.propGTPname;
-            string currentFolder = currentProjectFolder + "\\data\\common\\TimesZones\\";
+            string currentFolder = currentProjectFolder + "\\data\\TimesZones\\";
             string fileName = "trippleZone_" + currentGTP;
+
+
+            int[,] _temp3peakZone = new int[0, 6];
+            int[,] _temp3semiPeakZone = new int[0, 6];
+            int[,] _temp3nightZone = new int[0, 6];
+
             switch (Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["type"].Value))
             {
                 case "ФЛ":
@@ -4172,13 +4300,36 @@ namespace dataEditor
                                 XmlDocument xmlDoc = new XmlDocument();
                                 xmlDoc.Load(currentFolder + fileName + "_00.xml");
                                 parsingXMl(xmlDoc, "00", "tripple");
+
+                                if(_main3nightZone_00.GetLength(0) != 0 || _main3semiPeakZone_00.GetLength(0) != 0 || _main3nightZone_00.GetLength(0) != 0)
+                                {
+                                    _temp3peakZone = _main3peakZone_00;
+                                    _temp3semiPeakZone = _main3semiPeakZone_00;
+                                    _temp3nightZone = _main3nightZone_00;
+                                }
+                                else
+                                {
+                                    if (!entireIntervalsHoursData(0, ref _temp3peakZone, ref _temp3semiPeakZone, ref _temp3nightZone))
+                                        return;
+                                }
+
                             }
-
+                            else
+                            {
+                                if (!entireIntervalsHoursData(0, ref _temp3peakZone, ref _temp3semiPeakZone, ref _temp3nightZone))
+                                    return;
+                            }
                         }
-                        catch
+                        catch(Exception ex)
                         {
-
+                            Console.WriteLine(ex);
                         }
+                    }
+                    else
+                    {
+                        _temp3peakZone = _main3peakZone_00;
+                        _temp3semiPeakZone = _main3semiPeakZone_00;
+                        _temp3nightZone = _main3nightZone_00;
                     }
                     break;
 
@@ -4192,15 +4343,36 @@ namespace dataEditor
                                 XmlDocument xmlDoc = new XmlDocument();
                                 xmlDoc.Load(currentFolder + fileName + "_01.xml");
                                 parsingXMl(xmlDoc, "01", "tripple");
+
+                                if (_main3nightZone_01.GetLength(0) != 0 || _main3semiPeakZone_01.GetLength(0) != 0 || _main3nightZone_01.GetLength(0) != 0)
+                                {
+                                    _temp3peakZone = _main3peakZone_01;
+                                    _temp3semiPeakZone = _main3semiPeakZone_01;
+                                    _temp3nightZone = _main3nightZone_01;
+                                }
+                                else
+                                {
+                                    if (!entireIntervalsHoursData(1, ref _temp3peakZone, ref _temp3semiPeakZone, ref _temp3nightZone))
+                                        return;
+                                }
                             }
-
+                            else
+                            {
+                                if (!entireIntervalsHoursData(1, ref _temp3peakZone, ref _temp3semiPeakZone, ref _temp3nightZone))
+                                    return;
+                            }
                         }
-                        catch
+                        catch(Exception ex)
                         {
-
+                            Console.WriteLine(ex);
                         }
                     }
-
+                    else
+                    {
+                        _temp3peakZone = _main3peakZone_01;
+                        _temp3semiPeakZone = _main3semiPeakZone_01;
+                        _temp3nightZone = _main3nightZone_01;
+                    }
                     break;
             }
 
@@ -4215,186 +4387,82 @@ namespace dataEditor
                     if (hrs <= 24)
                     {
                         string duration = (hrs - 1).ToString() + ":00-" + hrs.ToString() + ":00";
-                        switch (Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["type"].Value))
+                        if (_temp3peakZone.GetLength(0) != 0)
                         {
-                            case "ФЛ":
-                                if (_main3peakZone_00.GetLength(0) != 0)
+                            for (int i = 0; i < _temp3peakZone.GetLength(0); i++)
+                            {
+                                if (TimeIsBetween(hrs, new TimeSpan(_temp3peakZone[i, 4], 0, 0), new TimeSpan(_temp3peakZone[i, 5]+1, 0, 0)))
                                 {
-                                    for (int i = 0; i < _main3peakZone_00.GetLength(0); i++)
-                                    {
-                                        if (TimeIsBetween(hrs, new TimeSpan(_main3peakZone_00[i, 4], 0, 0), new TimeSpan(_main3peakZone_00[i, 5], 0, 0)))
-                                        {
-                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
-                                            ConSummPeak += Convert.ToDecimal(rows[2].ToString());
-                                            GenSummPeak += Convert.ToDecimal(rows[3].ToString());
-                                        }
-                                    }
-                                    continue;
+                                    formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
+                                    ConSummPeak += Convert.ToDecimal(rows[2].ToString());
+                                    GenSummPeak += Convert.ToDecimal(rows[3].ToString());
                                 }
-                                if (_main3semiPeakZone_00.GetLength(0) != 0)
+                            }
+                        }
+                        if (_temp3semiPeakZone.GetLength(0) != 0)
+                        {
+                            for (int i = 0; i < _temp3semiPeakZone.GetLength(0); i++)
+                            {
+                                if (TimeIsBetween(hrs, new TimeSpan(_temp3semiPeakZone[i, 4], 0, 0), new TimeSpan(_temp3semiPeakZone[i, 5]+1, 0, 0)))
                                 {
-                                    for (int i = 0; i < _main3semiPeakZone_00.GetLength(0); i++)
-                                    {
-                                        if (TimeIsBetween(hrs, new TimeSpan(_main3semiPeakZone_00[i, 4], 0, 0), new TimeSpan(_main3semiPeakZone_00[i, 5], 0, 0)))
-                                        {
-                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
-                                            ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
-                                            GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
-                                        }
-                                    }
-                                    continue;
+                                    formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
+                                    ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
+                                    GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
                                 }
-                                if (_main3nightZone_00.GetLength(0) != 0)
+                            }
+                        }
+                        if (_temp3nightZone.GetLength(0) != 0)
+                        {
+                            for (int i = 0; i < _temp3nightZone.GetLength(0); i++)
+                            {
+                                if (TimeIsBetween(hrs, new TimeSpan(_temp3nightZone[i, 4], 0, 0), new TimeSpan(_temp3nightZone[i, 5]+1, 0, 0)))
                                 {
-                                    for (int i = 0; i < _main3nightZone_00.GetLength(0); i++)
-                                    {
-                                        if (TimeIsBetween(hrs, new TimeSpan(_main3nightZone_00[i, 4], 0, 0), new TimeSpan(_main3nightZone_00[i, 5], 0, 0)))
-                                        {
-                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, null, rows[2], null, null, rows[3]);
-                                            ConSummNight += Convert.ToDecimal(rows[2].ToString());
-                                            GenSummNight += Convert.ToDecimal(rows[3].ToString());
-                                        }
-                                    }
-                                    continue;
+                                    formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, null, rows[2], null, null, rows[3]);
+                                    ConSummNight += Convert.ToDecimal(rows[2].ToString());
+                                    GenSummNight += Convert.ToDecimal(rows[3].ToString());
                                 }
-
-                                break;
-
-                            case "ЮЛ":
-                                if (_main3peakZone_01.GetLength(0) != 0)
-                                {
-                                    for (int i = 0; i < _main3peakZone_01.GetLength(0); i++)
-                                    {
-                                        if (TimeIsBetween(hrs, new TimeSpan(_main3peakZone_01[i, 4], 0, 0), new TimeSpan(_main3peakZone_01[i, 5], 0, 0)))
-                                        {
-                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
-                                            ConSummPeak += Convert.ToDecimal(rows[2].ToString());
-                                            GenSummPeak += Convert.ToDecimal(rows[3].ToString());
-                                        }
-                                    }
-                                    continue;
-                                }
-                                if (_main3semiPeakZone_01.GetLength(0) != 0)
-                                {
-                                    for (int i = 0; i < _main3semiPeakZone_01.GetLength(0); i++)
-                                    {
-                                        if (TimeIsBetween(hrs, new TimeSpan(_main3semiPeakZone_01[i, 4], 0, 0), new TimeSpan(_main3semiPeakZone_01[i, 5], 0, 0)))
-                                        {
-                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
-                                            ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
-                                            GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
-                                        }
-                                    }
-                                    continue;
-                                }
-                                if (_main3nightZone_01.GetLength(0) != 0)
-                                {
-                                    for (int i = 0; i < _main3nightZone_01.GetLength(0); i++)
-                                    {
-                                        if (TimeIsBetween(hrs, new TimeSpan(_main3nightZone_01[i, 4], 0, 0), new TimeSpan(_main3nightZone_01[i, 5], 0, 0)))
-                                        {
-                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, null, rows[2], null, null, rows[3]);
-                                            ConSummNight += Convert.ToDecimal(rows[2].ToString());
-                                            GenSummNight += Convert.ToDecimal(rows[3].ToString());
-                                        }
-                                    }
-                                    continue;
-                                }
-
-                                break;
+                            }
                         }
                     }
                     else
                     {
                         hrs = 1;
                         string duration = (hrs - 1).ToString() + ":00-" + hrs.ToString() + ":00";
-                        switch (Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["type"].Value))
+                        if (_temp3peakZone.GetLength(0) != 0)
                         {
-                            case "ФЛ":
-                                if (_main3peakZone_00.GetLength(0) != 0)
+                            for (int i = 0; i < _temp3peakZone.GetLength(0); i++)
+                            {
+                                if (TimeIsBetween(hrs, new TimeSpan(_temp3peakZone[i, 4], 0, 0), new TimeSpan(_temp3peakZone[i, 5]+1, 0, 0)))
                                 {
-                                    for (int i = 0; i < _main3peakZone_00.GetLength(0); i++)
-                                    {
-                                        if (TimeIsBetween(hrs, new TimeSpan(_main3peakZone_00[i, 4], 0, 0), new TimeSpan(_main3peakZone_00[i, 5], 0, 0)))
-                                        {
-                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
-                                            ConSummPeak += Convert.ToDecimal(rows[2].ToString());
-                                            GenSummPeak += Convert.ToDecimal(rows[3].ToString());
-                                        }
-                                    }
-                                    continue;
+                                    formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
+                                    ConSummPeak += Convert.ToDecimal(rows[2].ToString());
+                                    GenSummPeak += Convert.ToDecimal(rows[3].ToString());
                                 }
-                                if (_main3semiPeakZone_00.GetLength(0) != 0)
+                            }
+                        }
+                        if (_temp3semiPeakZone.GetLength(0) != 0)
+                        {
+                            for (int i = 0; i < _temp3semiPeakZone.GetLength(0); i++)
+                            {
+                                if (TimeIsBetween(hrs, new TimeSpan(_temp3semiPeakZone[i, 4], 0, 0), new TimeSpan(_temp3semiPeakZone[i, 5]+1, 0, 0)))
                                 {
-                                    for (int i = 0; i < _main3semiPeakZone_00.GetLength(0); i++)
-                                    {
-                                        if (TimeIsBetween(hrs, new TimeSpan(_main3semiPeakZone_00[i, 4], 0, 0), new TimeSpan(_main3semiPeakZone_00[i, 5], 0, 0)))
-                                        {
-                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
-                                            ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
-                                            GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
-                                        }
-                                    }
-                                    continue;
+                                    formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
+                                    ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
+                                    GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
                                 }
-                                if (_main3nightZone_00.GetLength(0) != 0)
+                            }
+                        }
+                        if (_temp3nightZone.GetLength(0) != 0)
+                        {
+                            for (int i = 0; i < _temp3nightZone.GetLength(0); i++)
+                            {
+                                if (TimeIsBetween(hrs, new TimeSpan(_temp3nightZone[i, 4], 0, 0), new TimeSpan(_temp3nightZone[i, 5]+1, 0, 0)))
                                 {
-                                    for (int i = 0; i < _main3nightZone_00.GetLength(0); i++)
-                                    {
-                                        if (TimeIsBetween(hrs, new TimeSpan(_main3nightZone_00[i, 4], 0, 0), new TimeSpan(_main3nightZone_00[i, 5], 0, 0)))
-                                        {
-                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, null, rows[2], null, null, rows[3]);
-                                            ConSummNight += Convert.ToDecimal(rows[2].ToString());
-                                            GenSummNight += Convert.ToDecimal(rows[3].ToString());
-                                        }
-                                    }
-                                    continue;
+                                    formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, null, rows[2], null, null, rows[3]);
+                                    ConSummNight += Convert.ToDecimal(rows[2].ToString());
+                                    GenSummNight += Convert.ToDecimal(rows[3].ToString());
                                 }
-
-                                break;
-
-                            case "ЮЛ":
-                                if (_main3peakZone_01.GetLength(0) != 0)
-                                {
-                                    for (int i = 0; i < _main3peakZone_01.GetLength(0); i++)
-                                    {
-                                        if (TimeIsBetween(hrs, new TimeSpan(_main3peakZone_01[i, 4], 0, 0), new TimeSpan(_main3peakZone_01[i, 5], 0, 0)))
-                                        {
-                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, rows[2], null, null, rows[3], null, null);
-                                            ConSummPeak += Convert.ToDecimal(rows[2].ToString());
-                                            GenSummPeak += Convert.ToDecimal(rows[3].ToString());
-                                        }
-                                    }
-                                    continue;
-                                }
-                                if (_main3semiPeakZone_01.GetLength(0) != 0)
-                                {
-                                    for (int i = 0; i < _main3semiPeakZone_01.GetLength(0); i++)
-                                    {
-                                        if (TimeIsBetween(hrs, new TimeSpan(_main3semiPeakZone_01[i, 4], 0, 0), new TimeSpan(_main3semiPeakZone_01[i, 5], 0, 0)))
-                                        {
-                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, rows[2], null, null, rows[3], null);
-                                            ConSummSemiPeak += Convert.ToDecimal(rows[2].ToString());
-                                            GenSummSemiPeak += Convert.ToDecimal(rows[3].ToString());
-                                        }
-                                    }
-                                    continue;
-                                }
-                                if (_main3nightZone_01.GetLength(0) != 0)
-                                {
-                                    for (int i = 0; i < _main3nightZone_01.GetLength(0); i++)
-                                    {
-                                        if (TimeIsBetween(hrs, new TimeSpan(_main3nightZone_01[i, 4], 0, 0), new TimeSpan(_main3nightZone_01[i, 5], 0, 0)))
-                                        {
-                                            formType3.dataHoursViewer.Rows.Add(rows[0], duration, null, null, rows[2], null, null, rows[3]);
-                                            ConSummNight += Convert.ToDecimal(rows[2].ToString());
-                                            GenSummNight += Convert.ToDecimal(rows[3].ToString());
-                                        }
-                                    }
-                                    continue;
-                                }
-
-                                break;
+                            }
                         }
                     }
                 }

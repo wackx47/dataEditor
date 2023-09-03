@@ -60,6 +60,7 @@
             this.btnApplyHours = new System.Windows.Forms.Button();
             this.cmbxSelectGlobalZone = new System.Windows.Forms.ComboBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.ToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hoursDataGrid)).BeginInit();
             this.groupDoubleZone.SuspendLayout();
@@ -69,6 +70,10 @@
             this.zoneToolStrip.SuspendLayout();
             this.groupHours.SuspendLayout();
             this.HoursTableLayoutPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // ToolStrip
@@ -92,6 +97,7 @@
             // btnConfirm
             // 
             this.btnConfirm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnConfirm.Enabled = false;
             this.btnConfirm.Image = ((System.Drawing.Image)(resources.GetObject("btnConfirm.Image")));
             this.btnConfirm.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnConfirm.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);
@@ -103,6 +109,7 @@
             // btnSave
             // 
             this.btnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnSave.Enabled = false;
             this.btnSave.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnSave.Image = ((System.Drawing.Image)(resources.GetObject("btnSave.Image")));
             this.btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -114,6 +121,7 @@
             // btnSaveAll
             // 
             this.btnSaveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnSaveAll.Enabled = false;
             this.btnSaveAll.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnSaveAll.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveAll.Image")));
             this.btnSaveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -208,10 +216,11 @@
             // groupDoubleZone
             // 
             this.groupDoubleZone.Controls.Add(this.DoubleZTableLayout);
+            this.groupDoubleZone.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupDoubleZone.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupDoubleZone.Location = new System.Drawing.Point(137, 34);
+            this.groupDoubleZone.Location = new System.Drawing.Point(0, 0);
             this.groupDoubleZone.Name = "groupDoubleZone";
-            this.groupDoubleZone.Size = new System.Drawing.Size(180, 475);
+            this.groupDoubleZone.Size = new System.Drawing.Size(188, 475);
             this.groupDoubleZone.TabIndex = 83;
             this.groupDoubleZone.TabStop = false;
             this.groupDoubleZone.Text = "2 зоны";
@@ -227,7 +236,7 @@
             this.DoubleZTableLayout.RowCount = 2;
             this.DoubleZTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.DoubleZTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.DoubleZTableLayout.Size = new System.Drawing.Size(174, 454);
+            this.DoubleZTableLayout.Size = new System.Drawing.Size(182, 454);
             this.DoubleZTableLayout.TabIndex = 87;
             // 
             // doubleZoneTreeView
@@ -245,7 +254,7 @@
             this.doubleZoneTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2});
-            this.doubleZoneTreeView.Size = new System.Drawing.Size(168, 448);
+            this.doubleZoneTreeView.Size = new System.Drawing.Size(176, 448);
             this.doubleZoneTreeView.TabIndex = 0;
             this.doubleZoneTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.doubleZoneTreeView_AfterSelect);
             this.doubleZoneTreeView.Enter += new System.EventHandler(this.doubleZoneTreeView_Enter);
@@ -253,11 +262,12 @@
             // groupTrippleZone
             // 
             this.groupTrippleZone.Controls.Add(this.TrippleZTableLayout);
+            this.groupTrippleZone.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupTrippleZone.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.groupTrippleZone.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.groupTrippleZone.Location = new System.Drawing.Point(323, 34);
+            this.groupTrippleZone.Location = new System.Drawing.Point(0, 0);
             this.groupTrippleZone.Name = "groupTrippleZone";
-            this.groupTrippleZone.Size = new System.Drawing.Size(200, 475);
+            this.groupTrippleZone.Size = new System.Drawing.Size(198, 475);
             this.groupTrippleZone.TabIndex = 84;
             this.groupTrippleZone.TabStop = false;
             this.groupTrippleZone.Text = "3 зоны";
@@ -273,7 +283,7 @@
             this.TrippleZTableLayout.RowCount = 2;
             this.TrippleZTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TrippleZTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.TrippleZTableLayout.Size = new System.Drawing.Size(194, 454);
+            this.TrippleZTableLayout.Size = new System.Drawing.Size(192, 454);
             this.TrippleZTableLayout.TabIndex = 86;
             // 
             // trippleZoneTreeView
@@ -295,7 +305,7 @@
             treeNode3,
             treeNode4,
             treeNode5});
-            this.trippleZoneTreeView.Size = new System.Drawing.Size(188, 448);
+            this.trippleZoneTreeView.Size = new System.Drawing.Size(186, 448);
             this.trippleZoneTreeView.TabIndex = 1;
             this.trippleZoneTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TrippleZoneTreeView_AfterSelect);
             this.trippleZoneTreeView.Enter += new System.EventHandler(this.TrippleZoneTreeView_Enter);
@@ -326,6 +336,7 @@
             this.btnAddNew3z.Name = "btnAddNew3z";
             this.btnAddNew3z.Size = new System.Drawing.Size(23, 21);
             this.btnAddNew3z.Text = "Add";
+            this.btnAddNew3z.Visible = false;
             this.btnAddNew3z.Click += new System.EventHandler(this.btnAddNew3z_Click);
             // 
             // cmbxSelectTypeZone
@@ -336,7 +347,7 @@
             this.cmbxSelectTypeZone.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.cmbxSelectTypeZone.Margin = new System.Windows.Forms.Padding(1);
             this.cmbxSelectTypeZone.Name = "cmbxSelectTypeZone";
-            this.cmbxSelectTypeZone.Size = new System.Drawing.Size(80, 22);
+            this.cmbxSelectTypeZone.Size = new System.Drawing.Size(103, 22);
             this.cmbxSelectTypeZone.DropDownClosed += new System.EventHandler(this.cmbxSelectTypeZone_DropDownClosed);
             // 
             // groupHours
@@ -399,14 +410,29 @@
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
+            // splitContainer
+            // 
+            this.splitContainer.Location = new System.Drawing.Point(133, 34);
+            this.splitContainer.Name = "splitContainer";
+            // 
+            // splitContainer.Panel1
+            // 
+            this.splitContainer.Panel1.Controls.Add(this.groupDoubleZone);
+            // 
+            // splitContainer.Panel2
+            // 
+            this.splitContainer.Panel2.Controls.Add(this.groupTrippleZone);
+            this.splitContainer.Size = new System.Drawing.Size(390, 475);
+            this.splitContainer.SplitterDistance = 188;
+            this.splitContainer.TabIndex = 86;
+            // 
             // hoursZoneEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(534, 518);
-            this.Controls.Add(this.groupTrippleZone);
+            this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.groupHours);
-            this.Controls.Add(this.groupDoubleZone);
             this.Controls.Add(this.ToolStrip);
             this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -427,6 +453,10 @@
             this.groupHours.ResumeLayout(false);
             this.HoursTableLayoutPanel.ResumeLayout(false);
             this.HoursTableLayoutPanel.PerformLayout();
+            this.splitContainer.Panel1.ResumeLayout(false);
+            this.splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
+            this.splitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -438,9 +468,7 @@
         private dataEditor.MainForm.DoubleBufferedDataGridView hoursDataGrid;
         private DataGridViewTextBoxColumn Hours;
         private GroupBox groupDoubleZone;
-        private TreeView doubleZoneTreeView;
         private GroupBox groupTrippleZone;
-        private TreeView trippleZoneTreeView;
         private GroupBox groupHours;
         private TableLayoutPanel DoubleZTableLayout;
         private TableLayoutPanel TrippleZTableLayout;
@@ -448,13 +476,16 @@
         private ToolStripButton btnAddNew3z;
         private TableLayoutPanel HoursTableLayoutPanel;
         private Button btnApplyHours;
-        private ComboBox cmbxSelectGlobalZone;
         private ContextMenuStrip contextMenuStrip1;
-        private ToolStripComboBox cmbxSelectTypeZone;
-        private ToolStripComboBox typeList;
-        private ToolStripButton btnSave;
-        private ToolStripButton btnSaveAll;
-        private ToolStripButton btnConfirm;
-        private ToolStripButton btnLoad;
+        public ToolStripComboBox typeList;
+        public ComboBox cmbxSelectGlobalZone;
+        public TreeView doubleZoneTreeView;
+        public TreeView trippleZoneTreeView;
+        public ToolStripButton btnSave;
+        public ToolStripButton btnSaveAll;
+        public ToolStripButton btnLoad;
+        public SplitContainer splitContainer;
+        public ToolStripComboBox cmbxSelectTypeZone;
+        public ToolStripButton btnConfirm;
     }
 }
