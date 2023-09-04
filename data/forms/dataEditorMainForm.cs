@@ -3338,6 +3338,7 @@ namespace dataEditor
 
             if (intgTable != null && Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["intgStatusError"].Value) != CheckState.Checked.ToString())
             {
+                string memType = null;
                 foreach (DataRow rows in IntegralsDataSet.Tables[intgTable].Rows)
                 {
                     if (rows[1].ToString() != "Ñóììà")
@@ -3347,11 +3348,31 @@ namespace dataEditor
                             case "A+, êÂò*÷":
                                 SumConFirst += decimal.Parse(rows[2].ToString());
                                 SumConLast += decimal.Parse(rows[3].ToString());
+                                memType = "con";
                                 break;
 
                             case "A-, êÂò*÷":
                                 SumGenFirst += decimal.Parse(rows[2].ToString());
                                 SumGenLast += decimal.Parse(rows[3].ToString());
+                                memType = "gen";
+                                break;
+
+                            default:
+                                if(!string.IsNullOrEmpty(memType))
+                                {
+                                    switch (memType)
+                                    {
+                                        case "con":
+                                            SumConFirst += decimal.Parse(rows[2].ToString());
+                                            SumConLast += decimal.Parse(rows[3].ToString());
+                                            break;
+
+                                        case "gen":
+                                            SumGenFirst += decimal.Parse(rows[2].ToString());
+                                            SumGenLast += decimal.Parse(rows[3].ToString());
+                                            break;
+                                    }
+                                }
                                 break;
                         }
                     }
@@ -3730,6 +3751,9 @@ namespace dataEditor
                                         _main2dayZone_00 = form._2dayZone_00;
                                         _main2nightZone_00 = form._2nightZone_00;
 
+                                        SettingsForm._settings2dayZone_00 = _main2dayZone_00;
+                                        SettingsForm._settings2nightZone_00 = _main2nightZone_00;
+
                                         dayStart = new TimeSpan(_main2dayZone_00[0, 4], 0, 0);
                                         dayEnd = new TimeSpan(_main2dayZone_00[0, 5]+1, 0, 0);
                                     }
@@ -3791,6 +3815,9 @@ namespace dataEditor
                                     {
                                         _main2dayZone_01 = form._2dayZone_01;
                                         _main2nightZone_01 = form._2nightZone_01;
+
+                                        SettingsForm._settings2dayZone_01 = _main2dayZone_01;
+                                        SettingsForm._settings2nightZone_01 = _main2nightZone_01;
 
                                         dayStart = new TimeSpan(_main2dayZone_01[0, 4], 0, 0);
                                         dayEnd = new TimeSpan(_main2dayZone_01[0, 5]+1, 0, 0);
@@ -4059,6 +4086,10 @@ namespace dataEditor
                                 _main3peakZone_00 = _temp3peakZone;
                                 _main3semiPeakZone_00 = _temp3semiPeakZone;
                                 _main3nightZone_00 = _temp3nightZone;
+
+                                SettingsForm._settings3peakZone_00 = _main3peakZone_00;
+                                SettingsForm._settings3semiPeakZone_00 = _main3semiPeakZone_00;
+                                SettingsForm._settings3nightZone_00 = _main3nightZone_00;
                                 break;
 
                             case 1:
@@ -4069,6 +4100,10 @@ namespace dataEditor
                                 _main3peakZone_01 = _temp3peakZone;
                                 _main3semiPeakZone_01 = _temp3semiPeakZone;
                                 _main3nightZone_01 = _temp3nightZone;
+
+                                SettingsForm._settings3peakZone_01 = _main3peakZone_01;
+                                SettingsForm._settings3semiPeakZone_01 = _main3semiPeakZone_01;
+                                SettingsForm._settings3nightZone_01 = _main3nightZone_01;
                                 break;
                         }
                         return true;

@@ -2009,6 +2009,7 @@
             this.Padding = new System.Windows.Forms.Padding(5);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Расчет по 2 зонам";
+            this.Load += new System.EventHandler(this.FormType2_Load);
             this.mainPanel.ResumeLayout(false);
             this.groupBoxHours.ResumeLayout(false);
             this.HoursTableLayout.ResumeLayout(false);
