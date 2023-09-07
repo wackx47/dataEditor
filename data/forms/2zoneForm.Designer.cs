@@ -1105,7 +1105,7 @@
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(332, 22);
             this.label42.TabIndex = 4;
-            this.label42.Text = "Стоимость по ДКП";
+            this.label42.Text = "Стоимость по ДКП, руб.";
             this.label42.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtResultPriceNight

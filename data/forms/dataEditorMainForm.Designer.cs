@@ -1289,7 +1289,7 @@ namespace dataEditor
             this.mgMainToolStrip.Location = new System.Drawing.Point(5, 26);
             this.mgMainToolStrip.Margin = new System.Windows.Forms.Padding(5, 1, 1, 1);
             this.mgMainToolStrip.Name = "mgMainToolStrip";
-            this.mgMainToolStrip.Size = new System.Drawing.Size(214, 25);
+            this.mgMainToolStrip.Size = new System.Drawing.Size(314, 25);
             this.mgMainToolStrip.TabIndex = 4;
             this.mgMainToolStrip.Text = "mgTools";
             // 

@@ -97,7 +97,6 @@
             // btnConfirm
             // 
             this.btnConfirm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnConfirm.Enabled = false;
             this.btnConfirm.Image = ((System.Drawing.Image)(resources.GetObject("btnConfirm.Image")));
             this.btnConfirm.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnConfirm.Margin = new System.Windows.Forms.Padding(0, 1, 1, 1);

@@ -26,6 +26,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="data\text\ExcelStaticLables.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="data\text\ExcelStaticLables.txt" />
     <EmbeddedResource Include="data\text\NodesName.txt" />
     <EmbeddedResource Include="data\text\RELEASE-NOTES.txt" />
   </ItemGroup>

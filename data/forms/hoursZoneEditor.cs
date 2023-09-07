@@ -965,12 +965,12 @@ namespace dataEditor
 
                     if (_chg2dayZone.GetLength(0) != 0 && _chg2nightZone.GetLength(0) != 0)
                     {
-                        btnConfirm.Enabled = true;
+                        //btnConfirm.Enabled = true;
                         btnSave.Enabled = true;
                     }
                     else
                     {
-                        btnConfirm.Enabled = false;
+                        //btnConfirm.Enabled = false;
                         btnSave.Enabled = false;
                     }
 
@@ -1835,11 +1835,11 @@ namespace dataEditor
 
             if (_chg2dayZone.GetLength(0) != 0 && _chg2nightZone.GetLength(0) != 0)
             {
-                btnConfirm.Enabled = true;
+                //btnConfirm.Enabled = true;
             }
             else
             {
-                btnConfirm.Enabled = false;
+                //btnConfirm.Enabled = false;
                 btnSave.Enabled = false;
             }
 
@@ -1897,11 +1897,11 @@ namespace dataEditor
 
             if (_chg3peakZone.GetLength(0) != 0 && _chg3semiPeakZone.GetLength(0) != 0 && _chg3nightZone.GetLength(0) != 0)
             {
-                btnConfirm.Enabled = true;
+                //btnConfirm.Enabled = true;
             }
             else
             {
-                btnConfirm.Enabled = false;
+                //btnConfirm.Enabled = false;
                 btnSave.Enabled = false;
             }
 

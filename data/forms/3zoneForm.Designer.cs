@@ -311,7 +311,7 @@
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(380, 21);
             this.label42.TabIndex = 4;
-            this.label42.Text = "Стоимость по ДКП";
+            this.label42.Text = "Стоимость по ДКП, руб.";
             this.label42.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label78
@@ -1975,7 +1975,7 @@
             this.groupBox.Size = new System.Drawing.Size(573, 431);
             this.groupBox.TabIndex = 7;
             this.groupBox.TabStop = false;
-            this.groupBox.Text = "почасовые объемы электроэнергии";
+            this.groupBox.Text = "Почасовые объемы электроэнергии";
             // 
             // HoursTableLayout
             // 
@@ -2387,6 +2387,7 @@
             this.Padding = new System.Windows.Forms.Padding(5);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Расчёт по 3 зонам";
+            this.Load += new System.EventHandler(this.FormType3_Load);
             this.mainPanel.ResumeLayout(false);
             this.mainPanel.PerformLayout();
             this.groupBoxResult.ResumeLayout(false);

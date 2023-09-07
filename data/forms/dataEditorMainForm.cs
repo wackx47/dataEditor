@@ -3238,6 +3238,9 @@ namespace dataEditor
             FormType1 formType1 = new FormType1();
             List<RadioButton> radioButtons = new List<RadioButton> { formType1.useIntervals, formType1.useHours };
 
+            formType1.gName = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["Agreement"].Value);
+            formType1.gCurrentFolder = currentProjectFolder;
+
             DateTime date = DateTime.Now;
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
@@ -4705,6 +4708,8 @@ namespace dataEditor
                 }
             }
         }
+
+
 
         private void toolBtnStartProccess_Click(object sender, EventArgs e)
         {

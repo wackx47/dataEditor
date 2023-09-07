@@ -198,21 +198,24 @@ namespace dataEditor
         private void useIntervals_CheckedChanged(object sender, EventArgs e)
         {
             if (useIntervals.Checked == true)
+            {
                 useHours.Checked = false;
+                reCalculation(runtime);
+            }
+
             else
                 useHours.Checked = true;
-
-            reCalculation(runtime);
         }
 
         private void useHours_CheckedChanged(object sender, EventArgs e)
         {
             if (useHours.Checked == true)
+            {
                 useIntervals.Checked = false;
+                reCalculation(runtime);
+            }
             else
                 useIntervals.Checked = true;
-
-            reCalculation(runtime);
         }
     }
 }

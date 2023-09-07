@@ -36,6 +36,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormType1));
             this.mainPanel = new System.Windows.Forms.Panel();
             this.groupBoxHours = new System.Windows.Forms.GroupBox();
             this.HoursTableLayout = new System.Windows.Forms.TableLayoutPanel();
@@ -118,6 +119,8 @@
             this.lblAbonentDateYear = new System.Windows.Forms.Label();
             this.lblAbonentName = new System.Windows.Forms.Label();
             this.lblAbonentINN = new System.Windows.Forms.Label();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.btnExport = new System.Windows.Forms.ToolStripButton();
             this.mainPanel.SuspendLayout();
             this.groupBoxHours.SuspendLayout();
             this.HoursTableLayout.SuspendLayout();
@@ -134,6 +137,7 @@
             this.DataTableLayout.SuspendLayout();
             this.groupBoxMainInfo.SuspendLayout();
             this.InfoTableLayout.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainPanel
@@ -146,9 +150,9 @@
             this.mainPanel.Controls.Add(this.groupBoxEntryDat);
             this.mainPanel.Controls.Add(this.groupBoxIntervals);
             this.mainPanel.Controls.Add(this.groupBoxMainInfo);
-            this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.mainPanel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.mainPanel.Location = new System.Drawing.Point(5, 5);
+            this.mainPanel.Location = new System.Drawing.Point(5, 32);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Padding = new System.Windows.Forms.Padding(5);
             this.mainPanel.Size = new System.Drawing.Size(1097, 577);
@@ -453,7 +457,7 @@
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(371, 22);
             this.label42.TabIndex = 4;
-            this.label42.Text = "Стоимость по ДКП";
+            this.label42.Text = "Стоимость по ДКП, руб.";
             this.label42.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label41
@@ -1378,11 +1382,34 @@
             this.lblAbonentINN.Text = "lblAbonentINN";
             this.lblAbonentINN.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // toolStrip
+            // 
+            this.toolStrip.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnExport});
+            this.toolStrip.Location = new System.Drawing.Point(5, 5);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 1, 0);
+            this.toolStrip.Size = new System.Drawing.Size(1097, 25);
+            this.toolStrip.TabIndex = 1;
+            // 
+            // btnExport
+            // 
+            this.btnExport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnExport.Image = ((System.Drawing.Image)(resources.GetObject("btnExport.Image")));
+            this.btnExport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(23, 22);
+            this.btnExport.Text = "Convert to Excel";
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
             // FormType1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1107, 587);
+            this.ClientSize = new System.Drawing.Size(1107, 614);
+            this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.mainPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -1417,7 +1444,10 @@
             this.groupBoxMainInfo.PerformLayout();
             this.InfoTableLayout.ResumeLayout(false);
             this.InfoTableLayout.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -1505,5 +1535,7 @@
         private TableLayoutPanel tableLayout;
         public RadioButton useHours;
         public RadioButton useIntervals;
+        private ToolStrip toolStrip;
+        private ToolStripButton btnExport;
     }
 }
