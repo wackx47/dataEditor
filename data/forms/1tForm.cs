@@ -484,12 +484,13 @@ namespace dataEditor
                         {
                             package.SaveAs(new FileInfo(@fullPathFileName));
                             package.Dispose();
+                            System.Diagnostics.Process.Start("explorer.exe", CurrentFolder);
                         }
                         catch
                         {
                             MessageBox.Show("Не удалось сохранить файл Excel");
                         }
-
+                        
                         break;
 
                     case "useHours":
@@ -648,14 +649,10 @@ namespace dataEditor
                             }
                         }
 
-
+                        System.Diagnostics.Process.Start("explorer.exe", CurrentFolder);
                         break;
                 }
             }
-
-
-
-            System.Diagnostics.Process.Start("explorer.exe", CurrentFolder);
 
         }
     }

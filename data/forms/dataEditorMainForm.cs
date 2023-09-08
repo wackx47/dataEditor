@@ -3526,6 +3526,8 @@ namespace dataEditor
             FormType2 formType2 = new FormType2();
             List<RadioButton> radioButtons = new List<RadioButton> { formType2.useIntervals, formType2.useHours };
 
+            formType2.gName = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["Agreement"].Value);
+            formType2.gCurrentFolder = currentProjectFolder;
 
             DateTime date = DateTime.Now;
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);

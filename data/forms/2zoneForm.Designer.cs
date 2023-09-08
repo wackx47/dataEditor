@@ -160,6 +160,8 @@
             this.txtKFnight = new System.Windows.Forms.TextBox();
             this.txtKFday = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.btnExport = new System.Windows.Forms.ToolStripButton();
             this.mainPanel.SuspendLayout();
             this.groupBoxHours.SuspendLayout();
             this.HoursTableLayout.SuspendLayout();
@@ -176,6 +178,7 @@
             this.InfoTableLayout.SuspendLayout();
             this.groupBoxEntryDat.SuspendLayout();
             this.EntryDataTableLayout.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainPanel
@@ -188,12 +191,11 @@
             this.mainPanel.Controls.Add(this.groupBoxAmounts);
             this.mainPanel.Controls.Add(this.groupBoxMainInfo);
             this.mainPanel.Controls.Add(this.groupBoxEntryDat);
-            this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.mainPanel.Location = new System.Drawing.Point(5, 5);
+            this.mainPanel.Location = new System.Drawing.Point(5, 33);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Padding = new System.Windows.Forms.Padding(5);
-            this.mainPanel.Size = new System.Drawing.Size(1074, 696);
+            this.mainPanel.Size = new System.Drawing.Size(1074, 700);
             this.mainPanel.TabIndex = 1;
             // 
             // groupBoxHours
@@ -1993,17 +1995,40 @@
             this.label2.Text = "Точка учёта";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // toolStrip
+            // 
+            this.toolStrip.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnExport});
+            this.toolStrip.Location = new System.Drawing.Point(5, 5);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 1, 0);
+            this.toolStrip.Size = new System.Drawing.Size(1074, 25);
+            this.toolStrip.TabIndex = 2;
+            // 
+            // btnExport
+            // 
+            this.btnExport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnExport.Image = ((System.Drawing.Image)(resources.GetObject("btnExport.Image")));
+            this.btnExport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(23, 22);
+            this.btnExport.Text = "Convert to Excel";
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
             // FormType2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoScrollMinSize = new System.Drawing.Size(1070, 695);
-            this.ClientSize = new System.Drawing.Size(1084, 706);
+            this.ClientSize = new System.Drawing.Size(1084, 741);
+            this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.mainPanel);
             this.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(1100, 745);
+            this.MaximumSize = new System.Drawing.Size(1100, 780);
             this.MinimumSize = new System.Drawing.Size(575, 307);
             this.Name = "FormType2";
             this.Padding = new System.Windows.Forms.Padding(5);
@@ -2034,7 +2059,10 @@
             this.groupBoxEntryDat.ResumeLayout(false);
             this.EntryDataTableLayout.ResumeLayout(false);
             this.EntryDataTableLayout.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -2161,5 +2189,7 @@
         private DataGridViewTextBoxColumn GenDay;
         private DataGridViewTextBoxColumn GenNight;
         private TableLayoutPanel tableLayout;
+        private ToolStrip toolStrip;
+        private ToolStripButton btnExport;
     }
 }
