@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml;
+﻿using dataEditor.data.forms;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,6 +10,7 @@ using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -255,12 +257,46 @@ namespace dataEditor
             string monthString = new DateTime(year, month, 1).ToString("MM");
             string CurrentFolder = gCurrentFolder + "\\data\\common\\files\\" + year.ToString() + "\\" + monthString + "\\";
 
+            List<RadioButton> radioButtons = new List<RadioButton> { this.useIntervals, this.useHours };
+            var checkedButton = radioButtons.FirstOrDefault(r => r.Checked);
+
+            bool resComplete = false;
             int offsetRow = 5;
 
             ReadResource("dataEditor.data.text.ExcelStaticLables.txt");
 
             string fullPathFileName = null;
 
+            switch (checkedButton.Name)
+            {
+                case "useIntervals":
+                    fullPathFileName = CurrentFolder + monthString + year.ToString() + "_" + gName + "_intg.xlsx";
+                    break;
+
+                case "useHours":
+                    fullPathFileName = CurrentFolder + monthString + year.ToString() + "_" + gName + "_hrs.xlsx";
+                    break;
+            }
+
+            if (File.Exists(fullPathFileName))
+            {
+                DialogResult dialogResult = MessageBox.Show("Файл Excel уже существует, пересоздать файл заново?", "Выберите действие", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    goto CreateExcel;
+                }
+                else if (dialogResult == DialogResult.No)
+                {
+                    resComplete = true;
+                    goto completeVoid;
+                }
+            }
+            else
+            {
+                goto CreateExcel;
+            }
+
+        CreateExcel:
             using (var package = new ExcelPackage())
             {
                 ExcelWorksheet sheet = package.Workbook.Worksheets.Add(monthString + "_" + gName);
@@ -368,7 +404,16 @@ namespace dataEditor
                 sheet.Cells["K15"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                 sheet.Cells["K15"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                 sheet.Cells["K15"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+
+                sheet.Cells["K11"].Value = this.txtDiffEEoremNight.Text;
+                sheet.Cells["K12"].Value = this.txtDiffEEoremDay.Text;
+                sheet.Cells["K13"].Value = this.txtSvncPorem.Text;
+                sheet.Cells["K14"].Value = this.txtKFnight.Text;
+                sheet.Cells["K15"].Value = this.txtKFday.Text;
+                sheet.Cells["K11:K15"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+
                 sheet.Column(10).AutoFit();
+                sheet.Column(11).AutoFit();
                 //End Table_2
 
                 //----------------------------------------------------------------------------------------------
@@ -438,6 +483,18 @@ namespace dataEditor
                 sheet.Cells["E22:G22"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                 sheet.Cells["E22"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
                 sheet.Cells["E22"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                sheet.Cells["B22"].Formula = "B21+C21";
+                sheet.Cells["E22"].Formula = "E21+F21";
+
+                sheet.Cells["B21"].Value = decimal.Parse(this.txtSELLday.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                sheet.Cells["C21"].Value = decimal.Parse(this.txtSELLnight.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                sheet.Cells["E21"].Value = decimal.Parse(this.txtBUYday.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                sheet.Cells["F21"].Value = decimal.Parse(this.txtBUYnight.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+
+                sheet.Cells["B21:G22"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                sheet.Cells["B21:G22"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                sheet.Cells["B21:G22"].Style.Font.Bold = true;
                 //End Table_3
 
                 //----------------------------------------------------------------------------------------------
@@ -483,11 +540,13 @@ namespace dataEditor
                 sheet.Cells["F28:G28"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                 sheet.Cells["F28"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
                 sheet.Cells["F28"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                sheet.Cells["F26"].Formula = "(K11+K13*K14)/1000";
+                sheet.Cells["F27"].Formula = "(K12+K13*K15)/1000";
+
+                sheet.Cells["F28"].Formula = "ROUND(F26*F21,2)+ROUND(F27*E21,2)";
                 //End Table_4
 
-
-                List<RadioButton> radioButtons = new List<RadioButton> { this.useIntervals, this.useHours };
-                var checkedButton = radioButtons.FirstOrDefault(r => r.Checked);
                 switch (checkedButton.Name)
                 {
                     case "useIntervals":
@@ -501,23 +560,39 @@ namespace dataEditor
                         sheet.Cells["P2"].Value = staticExcelLabels[25];
                         sheet.Cells["Q2"].Value = staticExcelLabels[26];
                         sheet.Cells["R2"].Value = staticExcelLabels[27];
-                        sheet.Cells["N5"].Value = staticExcelLabels[28];
-                        sheet.Cells["N6"].Value = staticExcelLabels[29];
-                        sheet.Cells["O5:O6"].Value = staticExcelLabels[30];
+
+                        sheet.Cells["O5"].Value = staticExcelLabels[31];
+                        sheet.Cells["O8"].Value = staticExcelLabels[31];
+                        sheet.Cells["O6"].Value = staticExcelLabels[32];
+                        sheet.Cells["O9"].Value = staticExcelLabels[32];
+                        sheet.Cells["O7"].Value = staticExcelLabels[30];
+                        sheet.Cells["O10"].Value = staticExcelLabels[30];
+
                         sheet.Cells["P4"].Value = this.txtDateFirst.Text;
                         sheet.Cells["Q4"].Value = this.txtDateLast.Text;
-                        //sheet.Cells["P5"].Value = decimal.Parse(this.txtConFirst.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
-                        sheet.Cells["P5"].Style.Numberformat.Format = "0.000";
-                        //sheet.Cells["Q5"].Value = decimal.Parse(this.txtConLast.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
-                        sheet.Cells["Q5"].Style.Numberformat.Format = "0.000";
-                        //sheet.Cells["P6"].Value = decimal.Parse(this.txtGenFirst.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
-                        sheet.Cells["P6"].Style.Numberformat.Format = "0.000";
-                        //sheet.Cells["Q6"].Value = decimal.Parse(this.txtGenLast.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
-                        sheet.Cells["Q6"].Style.Numberformat.Format = "0.000";
+
+                        sheet.Cells["P5"].Value = decimal.Parse(this.txtConDayFirst.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                        sheet.Cells["Q5"].Value = decimal.Parse(this.txtConDayLast.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                        sheet.Cells["P6"].Value = decimal.Parse(this.txtConNightFirst.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                        sheet.Cells["Q6"].Value = decimal.Parse(this.txtConNightLast.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+
+                        sheet.Cells["P7"].Value = decimal.Parse(this.txtConSummFirst.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                        sheet.Cells["Q7"].Value = decimal.Parse(this.txtConSummLast.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                        sheet.Cells["P8"].Value = decimal.Parse(this.txtGenDayFirst.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                        sheet.Cells["Q8"].Value = decimal.Parse(this.txtGenDayLast.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+
+                        sheet.Cells["P9"].Value = decimal.Parse(this.txtGenNightFirst.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                        sheet.Cells["Q9"].Value = decimal.Parse(this.txtGenNightLast.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                        sheet.Cells["P10"].Value = decimal.Parse(this.txtGenSummFirst.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                        sheet.Cells["Q10"].Value = decimal.Parse(this.txtGenSummLast.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+
                         sheet.Cells["R5"].Formula = "Q5 - P5";
-                        sheet.Cells["R5"].Style.Numberformat.Format = "0.000";
                         sheet.Cells["R6"].Formula = "Q6 - P6";
-                        sheet.Cells["R6"].Style.Numberformat.Format = "0.000";
+                        sheet.Cells["R7"].Formula = "Q7 - P7";
+                        sheet.Cells["R8"].Formula = "Q8 - P8";
+                        sheet.Cells["R9"].Formula = "Q9 - P9";
+                        sheet.Cells["R10"].Formula = "Q10 - P10";
+                        sheet.Cells["P5:R10"].Style.Numberformat.Format = "0.000";
 
                         sheet.Cells["N2:N4"].Merge = true;
                         sheet.Cells["N2:N4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
@@ -534,23 +609,46 @@ namespace dataEditor
                         sheet.Cells["R2:R4"].Merge = true;
                         sheet.Cells["R2:R4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
 
-                        sheet.Cells["N5"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                        sheet.Cells["N6"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["N5"].Value = staticExcelLabels[28];
+                        sheet.Cells["N8"].Value = staticExcelLabels[29];
+                        sheet.Cells["N5:N7"].Merge = true;
+                        sheet.Cells["N5:N7"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["N8:N10"].Merge = true;
+                        sheet.Cells["N8:N10"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
                         sheet.Cells["O5"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                         sheet.Cells["O6"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                        sheet.Cells["P6"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["O7"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["O8"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["O9"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["O10"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
                         sheet.Cells["P4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                         sheet.Cells["P5"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                         sheet.Cells["P6"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["P7"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["P8"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["P9"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["P10"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
                         sheet.Cells["Q4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                         sheet.Cells["Q5"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                         sheet.Cells["Q6"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["Q7"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["Q8"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["Q9"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["Q10"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
                         sheet.Cells["R5"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                         sheet.Cells["R6"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["R7"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["R8"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["R9"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["R10"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
 
-                        sheet.Cells["N2:R6"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                        sheet.Cells["N2:R6"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                        sheet.Cells["N2:R6"].Style.WrapText = true;
+                        sheet.Cells["N2:R10"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                        sheet.Cells["N2:R10"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        sheet.Cells["N2:R10"].Style.WrapText = true;
 
                         sheet.Column(14).Width = 20;
                         sheet.Column(15).Width = 10;
@@ -559,18 +657,17 @@ namespace dataEditor
                         sheet.Column(18).Width = 14;
                         //End Table_Intervals
 
-                        fullPathFileName = CurrentFolder + monthString + year.ToString() + "_" + gName + "_intg.xlsx";
                         try
                         {
                             package.SaveAs(new FileInfo(@fullPathFileName));
                             package.Dispose();
-                            System.Diagnostics.Process.Start("explorer.exe", CurrentFolder);
+                            resComplete = true;
                         }
                         catch
                         {
                             MessageBox.Show("Не удалось сохранить файл Excel");
+                            resComplete = false;
                         }
-
                         break;
 
                     case "useHours":
@@ -580,13 +677,23 @@ namespace dataEditor
                         sheet.Cells["N1"].Style.Font.Size = 16;
                         //Start Table_Hours
                         sheet.Cells["P2"].Value = staticExcelLabels[28];
-                        sheet.Cells["Q2"].Value = staticExcelLabels[29];
-                        sheet.Cells["P2"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                        sheet.Cells["Q2"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["R2"].Value = staticExcelLabels[29];
+                        sheet.Cells["P2:Q2"].Merge = true;
+                        sheet.Cells["R2:S2"].Merge = true;
+
+
+                        sheet.Cells["P2:Q2"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["R2:S2"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                         sheet.Cells["P3"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                         sheet.Cells["Q3"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["R3"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["S3"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                         sheet.Column(14).Width = 11;
                         sheet.Column(15).Width = 11;
+                        sheet.Column(16).Width = 11;
+                        sheet.Column(17).Width = 11;
+                        sheet.Column(18).Width = 11;
+                        sheet.Column(19).Width = 11;
 
                         sheet.Cells["O3"].Value = staticExcelLabels[18];
                         sheet.Cells["O3"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
@@ -594,17 +701,23 @@ namespace dataEditor
                         sheet.Cells["N4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                         sheet.Cells["O4"].Value = "Час";
                         sheet.Cells["O4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                        sheet.Cells["P4"].Value = staticExcelLabels[30];
+                        sheet.Cells["P4"].Value = staticExcelLabels[31];
                         sheet.Cells["P4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                        sheet.Cells["Q4"].Value = staticExcelLabels[30];
+                        sheet.Cells["Q4"].Value = staticExcelLabels[32];
                         sheet.Cells["Q4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                        sheet.Cells["R5:R28"].Merge = true;
-                        sheet.Cells["R5:R28"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                        sheet.Column(18).Width = 4;
+                        sheet.Cells["R4"].Value = staticExcelLabels[31];
+                        sheet.Cells["R4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["S4"].Value = staticExcelLabels[32];
+                        sheet.Cells["S4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["T5:T28"].Merge = true;
+                        sheet.Cells["T5:T28"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Column(20).Width = 4;
                         sheet.Column(14).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                         sheet.Column(15).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                         sheet.Column(16).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                         sheet.Column(17).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        sheet.Column(18).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        sheet.Column(19).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                         sheet.Cells["N1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                         //End Table_Hours
 
@@ -618,11 +731,23 @@ namespace dataEditor
                         sheet2.Cells["A1"].Style.Font.Size = 16;
                         //Start Table_dataHours
                         sheet2.Cells["C2"].Value = staticExcelLabels[28];
-                        sheet2.Cells["D2"].Value = staticExcelLabels[29];
-                        sheet2.Cells["C2"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet2.Cells["E2"].Value = staticExcelLabels[29];
+                        sheet2.Cells["C2:D2"].Merge = true;
+                        sheet2.Cells["E2:F2"].Merge = true;
+
+
+                        sheet2.Cells["C2:D2"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet2.Cells["E2:F2"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                         sheet2.Cells["C3"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                        sheet2.Cells["D2"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                         sheet2.Cells["D3"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet2.Cells["E3"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet2.Cells["F3"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet2.Column(1).Width = 11;
+                        sheet2.Column(2).Width = 11;
+                        sheet2.Column(3).Width = 11;
+                        sheet2.Column(4).Width = 11;
+                        sheet2.Column(5).Width = 11;
+                        sheet2.Column(6).Width = 11;
 
                         sheet2.Cells["B3"].Value = staticExcelLabels[18];
                         sheet2.Cells["B3"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
@@ -630,29 +755,72 @@ namespace dataEditor
                         sheet2.Cells["A4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                         sheet2.Cells["B4"].Value = "Час";
                         sheet2.Cells["B4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                        sheet2.Cells["C4"].Value = staticExcelLabels[30];
+                        sheet2.Cells["C4"].Value = staticExcelLabels[31];
                         sheet2.Cells["C4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                        sheet2.Cells["D4"].Value = staticExcelLabels[30];
+                        sheet2.Cells["D4"].Value = staticExcelLabels[32];
                         sheet2.Cells["D4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                        sheet2.Column(1).Width = 11;
-                        sheet2.Column(2).Width = 11;
-                        sheet2.Column(3).AutoFit();
-                        sheet2.Column(4).AutoFit();
+                        sheet2.Cells["E4"].Value = staticExcelLabels[31];
+                        sheet2.Cells["E4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet2.Cells["F4"].Value = staticExcelLabels[32];
+                        sheet2.Cells["F4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
 
+                        sheet2.Column(1).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        sheet2.Column(2).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        sheet2.Column(3).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        sheet2.Column(4).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        sheet2.Column(5).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        sheet2.Column(6).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        sheet2.Cells["A1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
 
                         foreach (DataGridViewRow row in this.dataHoursViewer.Rows)
                         {
                             sheet2.Cells[offsetRow, 1].Value = row.Cells[0].Value.ToString();
                             sheet2.Cells[offsetRow, 2].Value = row.Cells[1].Value.ToString();
-                            sheet2.Cells[offsetRow, 3].Value = decimal.Parse(Convert.ToString(row.Cells[2].Value.ToString()), NumberStyles.Float, CultureInfo.CurrentCulture);
+                            try
+                            {
+                                sheet2.Cells[offsetRow, 3].Value = decimal.Parse(Convert.ToString(row.Cells[2].Value.ToString()), NumberStyles.Float, CultureInfo.CurrentCulture);
+                            }
+                            catch
+                            {
+                                sheet2.Cells[offsetRow, 3].Value = "—";
+                            }
+                            try
+                            {
+                                sheet2.Cells[offsetRow, 4].Value = decimal.Parse(Convert.ToString(row.Cells[3].Value.ToString()), NumberStyles.Float, CultureInfo.CurrentCulture);
+                            }
+                            catch
+                            {
+                                sheet2.Cells[offsetRow, 4].Value = "—";
+                            }
+                            try
+                            {
+                                sheet2.Cells[offsetRow, 5].Value = decimal.Parse(Convert.ToString(row.Cells[4].Value.ToString()), NumberStyles.Float, CultureInfo.CurrentCulture);
+                            }
+                            catch
+                            {
+                                sheet2.Cells[offsetRow, 5].Value = "—";
+                            }
+                            try
+                            {
+                                sheet2.Cells[offsetRow, 6].Value = decimal.Parse(Convert.ToString(row.Cells[5].Value.ToString()), NumberStyles.Float, CultureInfo.CurrentCulture);
+                            }
+                            catch
+                            {
+                                sheet2.Cells[offsetRow, 6].Value = "—";
+                            }
+
                             sheet2.Cells[offsetRow, 3].Style.Numberformat.Format = "0.000";
-                            sheet2.Cells[offsetRow, 4].Value = decimal.Parse(Convert.ToString(row.Cells[3].Value.ToString()), NumberStyles.Float, CultureInfo.CurrentCulture);
                             sheet2.Cells[offsetRow, 4].Style.Numberformat.Format = "0.000";
+                            sheet2.Cells[offsetRow, 5].Style.Numberformat.Format = "0.000";
+                            sheet2.Cells[offsetRow, 6].Style.Numberformat.Format = "0.000";
                             offsetRow++;
                         }
 
                         sheet2.Cells["C3"].Formula = "SUM(C5:C" + (offsetRow - 1) + ")";
                         sheet2.Cells["D3"].Formula = "SUM(D5:D" + (offsetRow - 1) + ")";
+
+                        sheet2.Cells["E3"].Formula = "SUM(E5:E" + (offsetRow - 1) + ")";
+                        sheet2.Cells["F3"].Formula = "SUM(F5:F" + (offsetRow - 1) + ")";
 
                         for (int i = 0; i < 24; i++)
                         {
@@ -666,19 +834,24 @@ namespace dataEditor
                             sheet.Cells[5 + i, 17].Formula = "=(OFFSET('" + sheet2.Name + "'!" + "D" + (5 + i).ToString() + ",'" + sheet2.Name + "'!J2" + ",0,1,1))";
                             sheet.Cells[5 + i, 17].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                             sheet.Cells[5 + i, 17].Style.Numberformat.Format = "0.000";
+                            sheet.Cells[5 + i, 18].Formula = "=(OFFSET('" + sheet2.Name + "'!" + "E" + (5 + i).ToString() + ",'" + sheet2.Name + "'!J2" + ",0,1,1))";
+                            sheet.Cells[5 + i, 18].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                            sheet.Cells[5 + i, 18].Style.Numberformat.Format = "0.000";
+                            sheet.Cells[5 + i, 19].Formula = "=(OFFSET('" + sheet2.Name + "'!" + "F" + (5 + i).ToString() + ",'" + sheet2.Name + "'!J2" + ",0,1,1))";
+                            sheet.Cells[5 + i, 19].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                            sheet.Cells[5 + i, 19].Style.Numberformat.Format = "0.000";
                         }
 
                         sheet.Cells["P3"].Formula = "'" + sheet2.Name + "'!C3";
                         sheet.Cells["Q3"].Formula = "'" + sheet2.Name + "'!D3";
+                        sheet.Cells["R3"].Formula = "'" + sheet2.Name + "'!E3";
+                        sheet.Cells["S3"].Formula = "'" + sheet2.Name + "'!F3";
 
-                        sheet2.Column(14).AutoFit();
-                        sheet2.Column(15).AutoFit();
-                        sheet2.Column(16).AutoFit();
-                        sheet2.Column(17).AutoFit();
-
-                        sheet.Column(16).AutoFit();
-                        sheet.Column(17).AutoFit();
-
+                        sheet2.Column(2).AutoFit();
+                        sheet2.Column(3).AutoFit();
+                        sheet2.Column(4).AutoFit();
+                        sheet2.Column(5).AutoFit();
+                        sheet2.Column(6).AutoFit();
                         //End Table_Hours
 
                         if (!Directory.Exists(CurrentFolder))
@@ -686,7 +859,6 @@ namespace dataEditor
                             Directory.CreateDirectory(CurrentFolder);
                         }
 
-                        fullPathFileName = CurrentFolder + monthString + year.ToString() + "_" + gName + "_hrs.xlsx";
                         try
                         {
                             package.SaveAs(new FileInfo(@fullPathFileName));
@@ -695,18 +867,20 @@ namespace dataEditor
                         catch
                         {
                             MessageBox.Show("Не удалось сохранить файл Excel");
+                            resComplete = false;
                         }
 
 
                         Excel.Application xlApp = new Excel.Application();
-                        Excel.Workbook xlWB;
 
-
-                        xlWB = xlApp.Workbooks.Open(CurrentFolder + monthString + year.ToString() + "_" + gName + "_hrs.xlsx");
+                        Excel.Workbook xlWB = xlApp.Workbooks.Open(CurrentFolder + monthString + year.ToString() + "_" + gName + "_hrs.xlsx");
                         Excel.Worksheet xlSht = xlWB.Worksheets[1];
                         Excel.Worksheet xlSht2 = xlWB.Worksheets[2];
 
-                        Excel.ControlFormat Scrollbar = xlSht.Shapes.AddFormControl(Excel.XlFormControl.xlScrollBar, 1042, 67, 18, 377).ControlFormat;
+                        Excel.Range UpperLeftCell = (Excel.Range)xlSht.get_Range("T5").Cells[1, 1];
+
+                        Excel.ControlFormat Scrollbar = xlSht.Shapes.AddFormControl(Excel.XlFormControl.xlScrollBar, UpperLeftCell.Left+2, 67, 18, 377).ControlFormat;
+
 
                         Scrollbar.Value = 0;
                         Scrollbar.Min = 0;
@@ -729,10 +903,40 @@ namespace dataEditor
                             }
                         }
 
-                        System.Diagnostics.Process.Start("explorer.exe", CurrentFolder);
+                        resComplete = true;
                         break;
                 }
             }
+
+        completeVoid:
+            if (resComplete)
+            {
+                using (dialogResultExcelCreator dlgForm = new dialogResultExcelCreator())
+                {
+
+                    if (dlgForm.ShowDialog() == DialogResult.OK)
+                    {
+                        switch (dlgForm.key)
+                        {
+                            case 1:
+                                Excel.Application xlApp = new Excel.Application();
+                                xlApp.Application.Visible = true;
+                                Excel.Workbook xlWB = xlApp.Workbooks.Open(CurrentFolder + monthString + year.ToString() + "_" + gName + "_hrs.xlsx");
+
+                                break;
+
+                            case 2:
+                                Process.Start("explorer.exe", CurrentFolder);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+            }
+
         }
     }
 }

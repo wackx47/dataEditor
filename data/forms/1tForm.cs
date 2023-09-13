@@ -1,4 +1,5 @@
-﻿using Microsoft.Office.Interop.Excel;
+﻿using dataEditor.data.forms;
+using Microsoft.Office.Interop.Excel;
 using NPOI.OpenXmlFormats.Wordprocessing;
 using OfficeOpenXml;
 using System;
@@ -9,8 +10,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -28,6 +31,27 @@ namespace dataEditor
         bool runtime = false;
         public string gName = null;
         public string gCurrentFolder = null;
+
+        [DllImport("user32.dll")]
+        public static extern int FindWindow(string lpClassName, string lpWindowName);
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(int hWnd, uint Msg, int wParam, int lParam);
+
+        public const int WM_SYSCOMMAND = 0x0112;
+        public const int SC_CLOSE = 0xF060;
+
+        private void closeWindow(string caption)
+        {
+            // retrieve the handler of the window  
+            int iHandle = FindWindow("CabinetWClass", caption);
+            if (iHandle > 0)
+            {
+                // close the window using API        
+                SendMessage(iHandle, WM_SYSCOMMAND, SC_CLOSE, 0);
+            }
+            else MessageBox.Show("The Window is not Found");
+        }
+
         private void FormType1_Load(object sender, EventArgs e)
         {
             runtime = true;
@@ -236,12 +260,46 @@ namespace dataEditor
             string monthString = new DateTime(year, month, 1).ToString("MM");
             string CurrentFolder = gCurrentFolder + "\\data\\common\\files\\" + year.ToString() + "\\" + monthString + "\\";
 
+            bool resComplete = false;
             int offsetRow = 5;
+
+            List<RadioButton> radioButtons = new List<RadioButton> { this.useIntervals, this.useHours };
+            var checkedButton = radioButtons.FirstOrDefault(r => r.Checked);
 
             ReadResource("dataEditor.data.text.ExcelStaticLables.txt");
 
             string fullPathFileName = null;
 
+            switch (checkedButton.Name)
+            {
+                case "useIntervals":
+                    fullPathFileName = CurrentFolder + monthString + year.ToString() + "_" + gName + "_intg.xlsx";
+                    break;
+
+                case "useHours":
+                    fullPathFileName = CurrentFolder + monthString + year.ToString() + "_" + gName + "_hrs.xlsx";
+                    break;
+            }
+
+            if (File.Exists(fullPathFileName))
+            {
+                DialogResult dialogResult = MessageBox.Show("Файл Excel уже существует, пересоздать файл заново?", "Выберите действие", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    goto CreateExcel;
+                }
+                else if (dialogResult == DialogResult.No)
+                {
+                    resComplete = true;
+                    goto completeVoid;
+                }
+            }
+            else
+            {
+                goto CreateExcel;
+            }
+
+            CreateExcel:
             using (var package = new ExcelPackage())
             {
                 ExcelWorksheet sheet = package.Workbook.Worksheets.Add(monthString + "_" + gName);
@@ -405,9 +463,6 @@ namespace dataEditor
                 sheet.Cells["E28"].Value = this.txtResultCost.Text;
                 //End Table_4
 
-
-                List<RadioButton> radioButtons = new List<RadioButton> { this.useIntervals, this.useHours };
-                var checkedButton = radioButtons.FirstOrDefault(r => r.Checked);
                 switch (checkedButton.Name)
                 {
                     case "useIntervals":
@@ -479,16 +534,18 @@ namespace dataEditor
                         sheet.Column(18).Width = 14;
                         //End Table_Intervals
 
-                        fullPathFileName = CurrentFolder + monthString + year.ToString() + "_" + gName + "_intg.xlsx";
+                        
                         try
                         {
                             package.SaveAs(new FileInfo(@fullPathFileName));
                             package.Dispose();
-                            System.Diagnostics.Process.Start("explorer.exe", CurrentFolder);
+                            resComplete = true;
                         }
                         catch
                         {
                             MessageBox.Show("Не удалось сохранить файл Excel");
+                            resComplete = false;
+                            return;
                         }
                         
                         break;
@@ -606,7 +663,6 @@ namespace dataEditor
                             Directory.CreateDirectory(CurrentFolder);
                         }
 
-                        fullPathFileName = CurrentFolder + monthString + year.ToString() + "_" + gName + "_hrs.xlsx";
                         try
                         {
                             package.SaveAs(new FileInfo(@fullPathFileName));
@@ -615,18 +671,20 @@ namespace dataEditor
                         catch
                         {
                             MessageBox.Show("Не удалось сохранить файл Excel");
+                            resComplete = false;
+                            return;
                         }
 
 
                         Excel.Application xlApp = new Excel.Application();
-                        Excel.Workbook xlWB;
 
-
-                        xlWB = xlApp.Workbooks.Open(CurrentFolder + monthString + year.ToString() + "_" + gName + "_hrs.xlsx");
+                        Excel.Workbook xlWB = xlApp.Workbooks.Open(CurrentFolder + monthString + year.ToString() + "_" + gName + "_hrs.xlsx");
                         Excel.Worksheet xlSht = xlWB.Worksheets[1];
                         Excel.Worksheet xlSht2 = xlWB.Worksheets[2];
 
-                        Excel.ControlFormat Scrollbar = xlSht.Shapes.AddFormControl(Excel.XlFormControl.xlScrollBar, 1042, 67, 18, 377).ControlFormat;
+                        Excel.Range UpperLeftCell = (Excel.Range)xlSht.get_Range("R5").Cells[1, 1];
+
+                        Excel.ControlFormat Scrollbar = xlSht.Shapes.AddFormControl(Excel.XlFormControl.xlScrollBar, UpperLeftCell.Left+2, 67, 18, 377).ControlFormat;
 
                         Scrollbar.Value = 0;
                         Scrollbar.Min = 0;
@@ -635,11 +693,14 @@ namespace dataEditor
                         Scrollbar.LargeChange = 10;
                         Scrollbar.LinkedCell = "Данные!$J$2";
 
+
                         xlWB.Close(true);
                         xlApp.Quit();
                         xlApp = null;
                         xlWB = null;
                         xlSht = null;
+
+                        
 
                         foreach (Process clsProcess in Process.GetProcesses())
                         {
@@ -648,9 +709,38 @@ namespace dataEditor
                                 clsProcess.Kill();
                             }
                         }
-
-                        System.Diagnostics.Process.Start("explorer.exe", CurrentFolder);
+                        resComplete = true;
                         break;
+                }
+            }
+
+
+        completeVoid:
+            if (resComplete)
+            {
+                using (dialogResultExcelCreator dlgForm = new dialogResultExcelCreator())
+                {
+
+                    if (dlgForm.ShowDialog() == DialogResult.OK)
+                    {
+                        switch (dlgForm.key)
+                        {
+                            case 1:
+                                Excel.Application xlApp = new Excel.Application();
+                                xlApp.Application.Visible = true;
+                                Excel.Workbook xlWB = xlApp.Workbooks.Open(CurrentFolder + monthString + year.ToString() + "_" + gName + "_hrs.xlsx");
+
+                                break;
+
+                            case 2:
+                                Process.Start("explorer.exe", CurrentFolder);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
             }
 
