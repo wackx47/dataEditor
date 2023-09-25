@@ -41,7 +41,7 @@
             this.btnOpenFile.Name = "btnOpenFile";
             this.btnOpenFile.Size = new System.Drawing.Size(156, 34);
             this.btnOpenFile.TabIndex = 0;
-            this.btnOpenFile.Text = "Открыть файл Excel";
+            this.btnOpenFile.Text = "Открыть файл";
             this.btnOpenFile.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnOpenFile.UseVisualStyleBackColor = true;
             this.btnOpenFile.Click += new System.EventHandler(this.btnOpenFile_Click);

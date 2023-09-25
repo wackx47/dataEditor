@@ -37,7 +37,10 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormType1));
-            this.mainPanel = new System.Windows.Forms.Panel();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.mainPanelPage1 = new System.Windows.Forms.Panel();
             this.groupBoxHours = new System.Windows.Forms.GroupBox();
             this.HoursTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.HeaderDataTableLayout = new System.Windows.Forms.TableLayoutPanel();
@@ -121,7 +124,63 @@
             this.lblAbonentINN = new System.Windows.Forms.Label();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.btnExport = new System.Windows.Forms.ToolStripButton();
-            this.mainPanel.SuspendLayout();
+            this.MainControlWithTabs = new System.Windows.Forms.TabControl();
+            this.Page1 = new System.Windows.Forms.TabPage();
+            this.mainTableLayoutPage1 = new System.Windows.Forms.TableLayoutPanel();
+            this.Page2 = new System.Windows.Forms.TabPage();
+            this.mainTableLayoutPage2 = new System.Windows.Forms.TableLayoutPanel();
+            this.mainPanelPage2 = new System.Windows.Forms.Panel();
+            this.tlp4 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblINNbuyer = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.tlp3 = new System.Windows.Forms.TableLayoutPanel();
+            this.label21 = new System.Windows.Forms.Label();
+            this.lblBuyer = new System.Windows.Forms.Label();
+            this.tlp2 = new System.Windows.Forms.TableLayoutPanel();
+            this.label19 = new System.Windows.Forms.Label();
+            this.lblINNseller = new System.Windows.Forms.Label();
+            this.tlp1 = new System.Windows.Forms.TableLayoutPanel();
+            this.label17 = new System.Windows.Forms.Label();
+            this.lblSeller = new System.Windows.Forms.Label();
+            this.tlp7 = new System.Windows.Forms.TableLayoutPanel();
+            this.label53 = new System.Windows.Forms.Label();
+            this.lblSellerSign = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.lblSellerShortSign = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.lblBuyerSign = new System.Windows.Forms.Label();
+            this.label54 = new System.Windows.Forms.Label();
+            this.tlp5 = new System.Windows.Forms.TableLayoutPanel();
+            this.label46 = new System.Windows.Forms.Label();
+            this.label47 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
+            this.label49 = new System.Windows.Forms.Label();
+            this.lblAgreementName = new System.Windows.Forms.TextBox();
+            this.lblAgreementNumber = new System.Windows.Forms.TextBox();
+            this.lblAgreementDate = new System.Windows.Forms.TextBox();
+            this.lblDescription = new System.Windows.Forms.Label();
+            this.tlp6main = new System.Windows.Forms.TableLayoutPanel();
+            this.label34 = new System.Windows.Forms.Label();
+            this.tableInfoDoc = new System.Windows.Forms.TableLayoutPanel();
+            this.lblDocNumber = new System.Windows.Forms.TextBox();
+            this.lblDocDate = new System.Windows.Forms.TextBox();
+            this.lblNumDoc = new System.Windows.Forms.Label();
+            this.lblDateDoc = new System.Windows.Forms.Label();
+            this.docPDFdataGridView = new System.Windows.Forms.DataGridView();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.productName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Measuring = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Count = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CostWithoutNDS = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NDS = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CostWithNDS = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.btnGetFile = new System.Windows.Forms.ToolStripSplitButton();
+            this.GetPDFfile = new System.Windows.Forms.ToolStripMenuItem();
+            this.GetExcelFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.mainPanelPage1.SuspendLayout();
             this.groupBoxHours.SuspendLayout();
             this.HoursTableLayout.SuspendLayout();
             this.HeaderDataTableLayout.SuspendLayout();
@@ -138,26 +197,42 @@
             this.groupBoxMainInfo.SuspendLayout();
             this.InfoTableLayout.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            this.MainControlWithTabs.SuspendLayout();
+            this.Page1.SuspendLayout();
+            this.mainTableLayoutPage1.SuspendLayout();
+            this.Page2.SuspendLayout();
+            this.mainTableLayoutPage2.SuspendLayout();
+            this.mainPanelPage2.SuspendLayout();
+            this.tlp4.SuspendLayout();
+            this.tlp3.SuspendLayout();
+            this.tlp2.SuspendLayout();
+            this.tlp1.SuspendLayout();
+            this.tlp7.SuspendLayout();
+            this.tlp5.SuspendLayout();
+            this.tlp6main.SuspendLayout();
+            this.tableInfoDoc.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.docPDFdataGridView)).BeginInit();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // mainPanel
+            // mainPanelPage1
             // 
-            this.mainPanel.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.mainPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.mainPanel.Controls.Add(this.groupBoxHours);
-            this.mainPanel.Controls.Add(this.groupBoxResult);
-            this.mainPanel.Controls.Add(this.groupBoxAmounts);
-            this.mainPanel.Controls.Add(this.groupBoxEntryDat);
-            this.mainPanel.Controls.Add(this.groupBoxIntervals);
-            this.mainPanel.Controls.Add(this.groupBoxMainInfo);
-            this.mainPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.mainPanel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.mainPanel.Location = new System.Drawing.Point(5, 32);
-            this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Padding = new System.Windows.Forms.Padding(5);
-            this.mainPanel.Size = new System.Drawing.Size(1097, 577);
-            this.mainPanel.TabIndex = 0;
-            this.mainPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.mainPanel_Paint);
+            this.mainPanelPage1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.mainPanelPage1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mainPanelPage1.Controls.Add(this.groupBoxHours);
+            this.mainPanelPage1.Controls.Add(this.groupBoxResult);
+            this.mainPanelPage1.Controls.Add(this.groupBoxAmounts);
+            this.mainPanelPage1.Controls.Add(this.groupBoxEntryDat);
+            this.mainPanelPage1.Controls.Add(this.groupBoxIntervals);
+            this.mainPanelPage1.Controls.Add(this.groupBoxMainInfo);
+            this.mainPanelPage1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainPanelPage1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.mainPanelPage1.Location = new System.Drawing.Point(3, 30);
+            this.mainPanelPage1.Name = "mainPanelPage1";
+            this.mainPanelPage1.Padding = new System.Windows.Forms.Padding(5);
+            this.mainPanelPage1.Size = new System.Drawing.Size(1102, 617);
+            this.mainPanelPage1.TabIndex = 0;
+            this.mainPanelPage1.Paint += new System.Windows.Forms.PaintEventHandler(this.mainPanel_Paint);
             // 
             // groupBoxHours
             // 
@@ -1384,14 +1459,16 @@
             // 
             // toolStrip
             // 
+            this.toolStrip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStrip.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnExport});
-            this.toolStrip.Location = new System.Drawing.Point(5, 5);
+            this.toolStrip.Location = new System.Drawing.Point(1, 1);
+            this.toolStrip.Margin = new System.Windows.Forms.Padding(1);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(2, 0, 1, 0);
-            this.toolStrip.Size = new System.Drawing.Size(1097, 25);
+            this.toolStrip.Size = new System.Drawing.Size(1106, 25);
             this.toolStrip.TabIndex = 1;
             // 
             // btnExport
@@ -1404,13 +1481,760 @@
             this.btnExport.Text = "Convert to Excel";
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
+            // MainControlWithTabs
+            // 
+            this.MainControlWithTabs.Controls.Add(this.Page1);
+            this.MainControlWithTabs.Controls.Add(this.Page2);
+            this.MainControlWithTabs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainControlWithTabs.Location = new System.Drawing.Point(5, 5);
+            this.MainControlWithTabs.Name = "MainControlWithTabs";
+            this.MainControlWithTabs.SelectedIndex = 0;
+            this.MainControlWithTabs.Size = new System.Drawing.Size(1120, 682);
+            this.MainControlWithTabs.TabIndex = 2;
+            // 
+            // Page1
+            // 
+            this.Page1.Controls.Add(this.mainTableLayoutPage1);
+            this.Page1.Location = new System.Drawing.Point(4, 24);
+            this.Page1.Name = "Page1";
+            this.Page1.Padding = new System.Windows.Forms.Padding(2);
+            this.Page1.Size = new System.Drawing.Size(1112, 654);
+            this.Page1.TabIndex = 0;
+            this.Page1.Text = "Расчёт";
+            this.Page1.UseVisualStyleBackColor = true;
+            // 
+            // mainTableLayoutPage1
+            // 
+            this.mainTableLayoutPage1.ColumnCount = 1;
+            this.mainTableLayoutPage1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.mainTableLayoutPage1.Controls.Add(this.toolStrip, 0, 0);
+            this.mainTableLayoutPage1.Controls.Add(this.mainPanelPage1, 0, 1);
+            this.mainTableLayoutPage1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainTableLayoutPage1.Location = new System.Drawing.Point(2, 2);
+            this.mainTableLayoutPage1.Name = "mainTableLayoutPage1";
+            this.mainTableLayoutPage1.RowCount = 2;
+            this.mainTableLayoutPage1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.mainTableLayoutPage1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.mainTableLayoutPage1.Size = new System.Drawing.Size(1108, 650);
+            this.mainTableLayoutPage1.TabIndex = 2;
+            // 
+            // Page2
+            // 
+            this.Page2.Controls.Add(this.mainTableLayoutPage2);
+            this.Page2.Location = new System.Drawing.Point(4, 24);
+            this.Page2.Name = "Page2";
+            this.Page2.Padding = new System.Windows.Forms.Padding(2);
+            this.Page2.Size = new System.Drawing.Size(1112, 654);
+            this.Page2.TabIndex = 1;
+            this.Page2.Text = "АПП";
+            this.Page2.UseVisualStyleBackColor = true;
+            // 
+            // mainTableLayoutPage2
+            // 
+            this.mainTableLayoutPage2.ColumnCount = 1;
+            this.mainTableLayoutPage2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.mainTableLayoutPage2.Controls.Add(this.mainPanelPage2, 0, 1);
+            this.mainTableLayoutPage2.Controls.Add(this.toolStrip1, 0, 0);
+            this.mainTableLayoutPage2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainTableLayoutPage2.Location = new System.Drawing.Point(2, 2);
+            this.mainTableLayoutPage2.Name = "mainTableLayoutPage2";
+            this.mainTableLayoutPage2.RowCount = 2;
+            this.mainTableLayoutPage2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.mainTableLayoutPage2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.mainTableLayoutPage2.Size = new System.Drawing.Size(1108, 650);
+            this.mainTableLayoutPage2.TabIndex = 7;
+            // 
+            // mainPanelPage2
+            // 
+            this.mainPanelPage2.BackColor = System.Drawing.Color.Gainsboro;
+            this.mainPanelPage2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mainPanelPage2.Controls.Add(this.tlp4);
+            this.mainPanelPage2.Controls.Add(this.tlp3);
+            this.mainPanelPage2.Controls.Add(this.tlp2);
+            this.mainPanelPage2.Controls.Add(this.tlp1);
+            this.mainPanelPage2.Controls.Add(this.tlp7);
+            this.mainPanelPage2.Controls.Add(this.tlp5);
+            this.mainPanelPage2.Controls.Add(this.lblDescription);
+            this.mainPanelPage2.Controls.Add(this.tlp6main);
+            this.mainPanelPage2.Controls.Add(this.docPDFdataGridView);
+            this.mainPanelPage2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainPanelPage2.Location = new System.Drawing.Point(3, 30);
+            this.mainPanelPage2.Name = "mainPanelPage2";
+            this.mainPanelPage2.Padding = new System.Windows.Forms.Padding(5);
+            this.mainPanelPage2.Size = new System.Drawing.Size(1102, 619);
+            this.mainPanelPage2.TabIndex = 5;
+            // 
+            // tlp4
+            // 
+            this.tlp4.ColumnCount = 2;
+            this.tlp4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlp4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlp4.Controls.Add(this.lblINNbuyer, 1, 0);
+            this.tlp4.Controls.Add(this.label32, 0, 0);
+            this.tlp4.Location = new System.Drawing.Point(8, 96);
+            this.tlp4.Name = "tlp4";
+            this.tlp4.RowCount = 1;
+            this.tlp4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlp4.Size = new System.Drawing.Size(1084, 22);
+            this.tlp4.TabIndex = 27;
+            // 
+            // lblINNbuyer
+            // 
+            this.lblINNbuyer.AutoSize = true;
+            this.lblINNbuyer.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblINNbuyer.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblINNbuyer.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblINNbuyer.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblINNbuyer.Location = new System.Drawing.Point(45, 1);
+            this.lblINNbuyer.Margin = new System.Windows.Forms.Padding(1);
+            this.lblINNbuyer.Name = "lblINNbuyer";
+            this.lblINNbuyer.Size = new System.Drawing.Size(84, 20);
+            this.lblINNbuyer.TabIndex = 1;
+            this.lblINNbuyer.Text = "lblINNbuyer";
+            this.lblINNbuyer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label32.Location = new System.Drawing.Point(3, 3);
+            this.label32.Margin = new System.Windows.Forms.Padding(3);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(38, 16);
+            this.label32.TabIndex = 0;
+            this.label32.Text = "ИНН:";
+            this.label32.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tlp3
+            // 
+            this.tlp3.ColumnCount = 2;
+            this.tlp3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlp3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlp3.Controls.Add(this.label21, 0, 0);
+            this.tlp3.Controls.Add(this.lblBuyer, 1, 0);
+            this.tlp3.Location = new System.Drawing.Point(8, 75);
+            this.tlp3.Name = "tlp3";
+            this.tlp3.RowCount = 1;
+            this.tlp3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlp3.Size = new System.Drawing.Size(1084, 22);
+            this.tlp3.TabIndex = 26;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label21.Location = new System.Drawing.Point(3, 3);
+            this.label21.Margin = new System.Windows.Forms.Padding(3);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(93, 16);
+            this.label21.TabIndex = 10;
+            this.label21.Text = "Покупатель:";
+            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblBuyer
+            // 
+            this.lblBuyer.AutoSize = true;
+            this.lblBuyer.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblBuyer.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblBuyer.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblBuyer.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblBuyer.Location = new System.Drawing.Point(100, 1);
+            this.lblBuyer.Margin = new System.Windows.Forms.Padding(1);
+            this.lblBuyer.Name = "lblBuyer";
+            this.lblBuyer.Size = new System.Drawing.Size(63, 20);
+            this.lblBuyer.TabIndex = 11;
+            this.lblBuyer.Text = "lblBuyer";
+            this.lblBuyer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tlp2
+            // 
+            this.tlp2.ColumnCount = 2;
+            this.tlp2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlp2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlp2.Controls.Add(this.label19, 0, 0);
+            this.tlp2.Controls.Add(this.lblINNseller, 1, 0);
+            this.tlp2.Location = new System.Drawing.Point(8, 29);
+            this.tlp2.Name = "tlp2";
+            this.tlp2.RowCount = 1;
+            this.tlp2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlp2.Size = new System.Drawing.Size(1084, 22);
+            this.tlp2.TabIndex = 25;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label19.Location = new System.Drawing.Point(3, 3);
+            this.label19.Margin = new System.Windows.Forms.Padding(3);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(38, 16);
+            this.label19.TabIndex = 0;
+            this.label19.Text = "ИНН:";
+            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblINNseller
+            // 
+            this.lblINNseller.AutoSize = true;
+            this.lblINNseller.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblINNseller.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblINNseller.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblINNseller.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblINNseller.Location = new System.Drawing.Point(45, 1);
+            this.lblINNseller.Margin = new System.Windows.Forms.Padding(1);
+            this.lblINNseller.Name = "lblINNseller";
+            this.lblINNseller.Size = new System.Drawing.Size(91, 20);
+            this.lblINNseller.TabIndex = 1;
+            this.lblINNseller.Text = "lblINNseller";
+            this.lblINNseller.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tlp1
+            // 
+            this.tlp1.ColumnCount = 2;
+            this.tlp1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlp1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlp1.Controls.Add(this.label17, 0, 0);
+            this.tlp1.Controls.Add(this.lblSeller, 1, 0);
+            this.tlp1.Location = new System.Drawing.Point(8, 8);
+            this.tlp1.Name = "tlp1";
+            this.tlp1.RowCount = 1;
+            this.tlp1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlp1.Size = new System.Drawing.Size(1084, 22);
+            this.tlp1.TabIndex = 24;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label17.Location = new System.Drawing.Point(3, 3);
+            this.label17.Margin = new System.Windows.Forms.Padding(3);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(80, 16);
+            this.label17.TabIndex = 0;
+            this.label17.Text = "Продавец:";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblSeller
+            // 
+            this.lblSeller.AutoSize = true;
+            this.lblSeller.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblSeller.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblSeller.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblSeller.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblSeller.Location = new System.Drawing.Point(87, 1);
+            this.lblSeller.Margin = new System.Windows.Forms.Padding(1);
+            this.lblSeller.Name = "lblSeller";
+            this.lblSeller.Size = new System.Drawing.Size(70, 20);
+            this.lblSeller.TabIndex = 1;
+            this.lblSeller.Text = "lblSeller";
+            this.lblSeller.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tlp7
+            // 
+            this.tlp7.ColumnCount = 3;
+            this.tlp7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlp7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.60517F));
+            this.tlp7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+            this.tlp7.Controls.Add(this.label53, 0, 0);
+            this.tlp7.Controls.Add(this.lblSellerSign, 0, 1);
+            this.tlp7.Controls.Add(this.label13, 2, 4);
+            this.tlp7.Controls.Add(this.lblSellerShortSign, 0, 3);
+            this.tlp7.Controls.Add(this.label15, 2, 3);
+            this.tlp7.Controls.Add(this.label16, 2, 2);
+            this.tlp7.Controls.Add(this.lblBuyerSign, 2, 1);
+            this.tlp7.Controls.Add(this.label54, 2, 0);
+            this.tlp7.Location = new System.Drawing.Point(8, 451);
+            this.tlp7.Name = "tlp7";
+            this.tlp7.RowCount = 5;
+            this.tlp7.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlp7.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlp7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tlp7.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlp7.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlp7.Size = new System.Drawing.Size(1084, 158);
+            this.tlp7.TabIndex = 23;
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label53.Location = new System.Drawing.Point(3, 3);
+            this.label53.Margin = new System.Windows.Forms.Padding(3);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(85, 18);
+            this.label53.TabIndex = 1;
+            this.label53.Text = "Продавец";
+            this.label53.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblSellerSign
+            // 
+            this.lblSellerSign.AutoSize = true;
+            this.lblSellerSign.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblSellerSign.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblSellerSign.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblSellerSign.Location = new System.Drawing.Point(3, 27);
+            this.lblSellerSign.Margin = new System.Windows.Forms.Padding(3);
+            this.lblSellerSign.Name = "lblSellerSign";
+            this.lblSellerSign.Size = new System.Drawing.Size(111, 16);
+            this.lblSellerSign.TabIndex = 2;
+            this.lblSellerSign.Text = "lblSellerSign";
+            this.lblSellerSign.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label13.Location = new System.Drawing.Point(725, 116);
+            this.label13.Margin = new System.Windows.Forms.Padding(3);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(287, 14);
+            this.label13.TabIndex = 21;
+            this.label13.Text = "по доверенности №278/11 от 12.11.2019 г.";
+            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblSellerShortSign
+            // 
+            this.lblSellerShortSign.AutoSize = true;
+            this.lblSellerShortSign.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblSellerShortSign.Location = new System.Drawing.Point(3, 94);
+            this.lblSellerShortSign.Margin = new System.Windows.Forms.Padding(3);
+            this.lblSellerShortSign.Name = "lblSellerShortSign";
+            this.lblSellerShortSign.Size = new System.Drawing.Size(159, 16);
+            this.lblSellerShortSign.TabIndex = 1;
+            this.lblSellerShortSign.Text = "___________________";
+            this.lblSellerShortSign.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label15.Location = new System.Drawing.Point(725, 94);
+            this.label15.Margin = new System.Windows.Forms.Padding(3);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(260, 16);
+            this.label15.TabIndex = 2;
+            this.label15.Text = "___________________ А.Ю.Скобелев";
+            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label16.Location = new System.Drawing.Point(725, 49);
+            this.label16.Margin = new System.Windows.Forms.Padding(3);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(350, 30);
+            this.label16.TabIndex = 11;
+            this.label16.Text = "Директор Дирекции по закупкам электроэнергии ПАО ГК \"ТНС энерго\"";
+            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblBuyerSign
+            // 
+            this.lblBuyerSign.AutoSize = true;
+            this.lblBuyerSign.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblBuyerSign.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblBuyerSign.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblBuyerSign.Location = new System.Drawing.Point(725, 27);
+            this.lblBuyerSign.Margin = new System.Windows.Forms.Padding(3);
+            this.lblBuyerSign.Name = "lblBuyerSign";
+            this.lblBuyerSign.Size = new System.Drawing.Size(103, 16);
+            this.lblBuyerSign.TabIndex = 3;
+            this.lblBuyerSign.Text = "lblBuyerSign";
+            this.lblBuyerSign.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label54.Location = new System.Drawing.Point(725, 3);
+            this.label54.Margin = new System.Windows.Forms.Padding(3);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(101, 18);
+            this.label54.TabIndex = 11;
+            this.label54.Text = "Покупатель";
+            this.label54.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tlp5
+            // 
+            this.tlp5.ColumnCount = 4;
+            this.tlp5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.3417F));
+            this.tlp5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 77.6583F));
+            this.tlp5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlp5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 182F));
+            this.tlp5.Controls.Add(this.label46, 0, 0);
+            this.tlp5.Controls.Add(this.label47, 1, 1);
+            this.tlp5.Controls.Add(this.label48, 2, 0);
+            this.tlp5.Controls.Add(this.label49, 2, 1);
+            this.tlp5.Controls.Add(this.lblAgreementName, 1, 0);
+            this.tlp5.Controls.Add(this.lblAgreementNumber, 3, 0);
+            this.tlp5.Controls.Add(this.lblAgreementDate, 3, 1);
+            this.tlp5.Location = new System.Drawing.Point(8, 143);
+            this.tlp5.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.tlp5.Name = "tlp5";
+            this.tlp5.RowCount = 2;
+            this.tlp5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlp5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlp5.Size = new System.Drawing.Size(1084, 56);
+            this.tlp5.TabIndex = 16;
+            this.tlp5.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.DocumentInfoBorderColor);
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Dock = System.Windows.Forms.DockStyle.Left;
+            this.label46.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label46.Location = new System.Drawing.Point(3, 3);
+            this.label46.Margin = new System.Windows.Forms.Padding(3);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(178, 22);
+            this.label46.TabIndex = 0;
+            this.label46.Text = "Основание для составления акта";
+            this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label47.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label47.Location = new System.Drawing.Point(193, 31);
+            this.label47.Margin = new System.Windows.Forms.Padding(3);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(655, 22);
+            this.label47.TabIndex = 1;
+            this.label47.Text = "(наименование документа)";
+            this.label47.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label48.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label48.Location = new System.Drawing.Point(854, 3);
+            this.label48.Margin = new System.Windows.Forms.Padding(3);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(44, 22);
+            this.label48.TabIndex = 2;
+            this.label48.Text = "номер";
+            this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label49.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label49.Location = new System.Drawing.Point(854, 31);
+            this.label49.Margin = new System.Windows.Forms.Padding(3);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(44, 22);
+            this.label49.TabIndex = 3;
+            this.label49.Text = "дата";
+            this.label49.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblAgreementName
+            // 
+            this.lblAgreementName.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lblAgreementName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblAgreementName.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblAgreementName.Location = new System.Drawing.Point(200, 5);
+            this.lblAgreementName.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.lblAgreementName.Multiline = true;
+            this.lblAgreementName.Name = "lblAgreementName";
+            this.lblAgreementName.Size = new System.Drawing.Size(641, 18);
+            this.lblAgreementName.TabIndex = 15;
+            this.lblAgreementName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.lblAgreementName.WordWrap = false;
+            // 
+            // lblAgreementNumber
+            // 
+            this.lblAgreementNumber.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lblAgreementNumber.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblAgreementNumber.Location = new System.Drawing.Point(911, 5);
+            this.lblAgreementNumber.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.lblAgreementNumber.Multiline = true;
+            this.lblAgreementNumber.Name = "lblAgreementNumber";
+            this.lblAgreementNumber.Size = new System.Drawing.Size(163, 18);
+            this.lblAgreementNumber.TabIndex = 16;
+            this.lblAgreementNumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.lblAgreementNumber.WordWrap = false;
+            // 
+            // lblAgreementDate
+            // 
+            this.lblAgreementDate.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lblAgreementDate.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblAgreementDate.Location = new System.Drawing.Point(911, 33);
+            this.lblAgreementDate.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.lblAgreementDate.Multiline = true;
+            this.lblAgreementDate.Name = "lblAgreementDate";
+            this.lblAgreementDate.Size = new System.Drawing.Size(163, 18);
+            this.lblAgreementDate.TabIndex = 17;
+            this.lblAgreementDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.lblAgreementDate.WordWrap = false;
+            // 
+            // lblDescription
+            // 
+            this.lblDescription.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblDescription.Location = new System.Drawing.Point(8, 285);
+            this.lblDescription.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDescription.Name = "lblDescription";
+            this.lblDescription.Size = new System.Drawing.Size(1084, 37);
+            this.lblDescription.TabIndex = 13;
+            this.lblDescription.Text = "description";
+            this.lblDescription.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tlp6main
+            // 
+            this.tlp6main.ColumnCount = 2;
+            this.tlp6main.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 58.2618F));
+            this.tlp6main.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 41.7382F));
+            this.tlp6main.Controls.Add(this.label34, 0, 0);
+            this.tlp6main.Controls.Add(this.tableInfoDoc, 1, 0);
+            this.tlp6main.Location = new System.Drawing.Point(8, 205);
+            this.tlp6main.Name = "tlp6main";
+            this.tlp6main.RowCount = 1;
+            this.tlp6main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlp6main.Size = new System.Drawing.Size(1084, 74);
+            this.tlp6main.TabIndex = 9;
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Dock = System.Windows.Forms.DockStyle.Right;
+            this.label34.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label34.Location = new System.Drawing.Point(157, 5);
+            this.label34.Margin = new System.Windows.Forms.Padding(5);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(469, 64);
+            this.label34.TabIndex = 12;
+            this.label34.Text = "Акт \n приема-передачи электрической энергии (мощности)";
+            this.label34.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            // 
+            // tableInfoDoc
+            // 
+            this.tableInfoDoc.ColumnCount = 2;
+            this.tableInfoDoc.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableInfoDoc.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableInfoDoc.Controls.Add(this.lblDocNumber, 0, 1);
+            this.tableInfoDoc.Controls.Add(this.lblDocDate, 0, 1);
+            this.tableInfoDoc.Controls.Add(this.lblNumDoc, 0, 0);
+            this.tableInfoDoc.Controls.Add(this.lblDateDoc, 1, 0);
+            this.tableInfoDoc.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableInfoDoc.Location = new System.Drawing.Point(651, 10);
+            this.tableInfoDoc.Margin = new System.Windows.Forms.Padding(20, 10, 100, 5);
+            this.tableInfoDoc.Name = "tableInfoDoc";
+            this.tableInfoDoc.RowCount = 2;
+            this.tableInfoDoc.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableInfoDoc.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableInfoDoc.Size = new System.Drawing.Size(333, 59);
+            this.tableInfoDoc.TabIndex = 13;
+            this.tableInfoDoc.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.TableBorderColor);
+            // 
+            // lblDocNumber
+            // 
+            this.lblDocNumber.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lblDocNumber.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblDocNumber.Location = new System.Drawing.Point(10, 34);
+            this.lblDocNumber.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.lblDocNumber.Multiline = true;
+            this.lblDocNumber.Name = "lblDocNumber";
+            this.lblDocNumber.Size = new System.Drawing.Size(146, 18);
+            this.lblDocNumber.TabIndex = 18;
+            this.lblDocNumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.lblDocNumber.WordWrap = false;
+            // 
+            // lblDocDate
+            // 
+            this.lblDocDate.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lblDocDate.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblDocDate.Location = new System.Drawing.Point(176, 34);
+            this.lblDocDate.Margin = new System.Windows.Forms.Padding(10, 5, 10, 5);
+            this.lblDocDate.Multiline = true;
+            this.lblDocDate.Name = "lblDocDate";
+            this.lblDocDate.Size = new System.Drawing.Size(147, 18);
+            this.lblDocDate.TabIndex = 17;
+            this.lblDocDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.lblDocDate.WordWrap = false;
+            // 
+            // lblNumDoc
+            // 
+            this.lblNumDoc.AutoSize = true;
+            this.lblNumDoc.BackColor = System.Drawing.Color.Gainsboro;
+            this.lblNumDoc.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblNumDoc.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblNumDoc.Location = new System.Drawing.Point(3, 3);
+            this.lblNumDoc.Margin = new System.Windows.Forms.Padding(3);
+            this.lblNumDoc.Name = "lblNumDoc";
+            this.lblNumDoc.Size = new System.Drawing.Size(160, 23);
+            this.lblNumDoc.TabIndex = 0;
+            this.lblNumDoc.Text = "Номер документа";
+            this.lblNumDoc.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblDateDoc
+            // 
+            this.lblDateDoc.AutoSize = true;
+            this.lblDateDoc.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDateDoc.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblDateDoc.Location = new System.Drawing.Point(169, 3);
+            this.lblDateDoc.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDateDoc.Name = "lblDateDoc";
+            this.lblDateDoc.Size = new System.Drawing.Size(161, 23);
+            this.lblDateDoc.TabIndex = 1;
+            this.lblDateDoc.Text = "Дата составления";
+            this.lblDateDoc.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // docPDFdataGridView
+            // 
+            this.docPDFdataGridView.AllowUserToAddRows = false;
+            this.docPDFdataGridView.AllowUserToDeleteRows = false;
+            this.docPDFdataGridView.AllowUserToResizeRows = false;
+            this.docPDFdataGridView.BackgroundColor = System.Drawing.Color.Gainsboro;
+            this.docPDFdataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.docPDFdataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.docPDFdataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            this.docPDFdataGridView.ColumnHeadersHeight = 55;
+            this.docPDFdataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.docPDFdataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ID,
+            this.productName,
+            this.Measuring,
+            this.Count,
+            this.Price,
+            this.CostWithoutNDS,
+            this.NDS,
+            this.CostWithNDS});
+            this.docPDFdataGridView.EnableHeadersVisualStyles = false;
+            this.docPDFdataGridView.GridColor = System.Drawing.Color.Black;
+            this.docPDFdataGridView.Location = new System.Drawing.Point(8, 328);
+            this.docPDFdataGridView.Name = "docPDFdataGridView";
+            this.docPDFdataGridView.RowHeadersVisible = false;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.docPDFdataGridView.RowsDefaultCellStyle = dataGridViewCellStyle11;
+            this.docPDFdataGridView.RowTemplate.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.docPDFdataGridView.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.docPDFdataGridView.RowTemplate.Height = 40;
+            this.docPDFdataGridView.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.docPDFdataGridView.Size = new System.Drawing.Size(1084, 117);
+            this.docPDFdataGridView.TabIndex = 5;
+            // 
+            // ID
+            // 
+            this.ID.HeaderText = "№";
+            this.ID.Name = "ID";
+            this.ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ID.Width = 40;
+            // 
+            // productName
+            // 
+            this.productName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.productName.DefaultCellStyle = dataGridViewCellStyle10;
+            this.productName.FillWeight = 60F;
+            this.productName.HeaderText = "Наименование товара (работы, услуги)";
+            this.productName.MinimumWidth = 300;
+            this.productName.Name = "productName";
+            this.productName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.productName.Width = 300;
+            // 
+            // Measuring
+            // 
+            this.Measuring.HeaderText = "Единица измерения";
+            this.Measuring.Name = "Measuring";
+            this.Measuring.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Measuring.Width = 70;
+            // 
+            // Count
+            // 
+            this.Count.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Count.FillWeight = 8F;
+            this.Count.HeaderText = "Количество, кВт*ч";
+            this.Count.Name = "Count";
+            this.Count.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Price
+            // 
+            this.Price.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Price.FillWeight = 8F;
+            this.Price.HeaderText = "Цена, руб./кВт*ч";
+            this.Price.Name = "Price";
+            this.Price.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // CostWithoutNDS
+            // 
+            this.CostWithoutNDS.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.CostWithoutNDS.FillWeight = 12F;
+            this.CostWithoutNDS.HeaderText = "Стоимость товара (работ, услуг) без НДС, руб.";
+            this.CostWithoutNDS.Name = "CostWithoutNDS";
+            this.CostWithoutNDS.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // NDS
+            // 
+            this.NDS.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.NDS.FillWeight = 10F;
+            this.NDS.HeaderText = "Сумма НДС (20%), руб.";
+            this.NDS.Name = "NDS";
+            this.NDS.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // CostWithNDS
+            // 
+            this.CostWithNDS.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.CostWithNDS.FillWeight = 12F;
+            this.CostWithNDS.HeaderText = "Стоимость товара (работ, услуг) всего с НДС, руб.";
+            this.CostWithNDS.Name = "CostWithNDS";
+            this.CostWithNDS.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolStrip1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnGetFile});
+            this.toolStrip1.Location = new System.Drawing.Point(1, 1);
+            this.toolStrip1.Margin = new System.Windows.Forms.Padding(1);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 1, 0);
+            this.toolStrip1.Size = new System.Drawing.Size(1106, 25);
+            this.toolStrip1.TabIndex = 6;
+            // 
+            // btnGetFile
+            // 
+            this.btnGetFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnGetFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.GetPDFfile,
+            this.GetExcelFile});
+            this.btnGetFile.Image = ((System.Drawing.Image)(resources.GetObject("btnGetFile.Image")));
+            this.btnGetFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnGetFile.Name = "btnGetFile";
+            this.btnGetFile.Size = new System.Drawing.Size(32, 22);
+            this.btnGetFile.Text = "Get file";
+            // 
+            // GetPDFfile
+            // 
+            this.GetPDFfile.Image = global::dataEditor.Properties.Resources.DocumentViewerPDF;
+            this.GetPDFfile.Name = "GetPDFfile";
+            this.GetPDFfile.Size = new System.Drawing.Size(180, 22);
+            this.GetPDFfile.Text = "PDF";
+            // 
+            // GetExcelFile
+            // 
+            this.GetExcelFile.Image = global::dataEditor.Properties.Resources.DocumentViewerExcel;
+            this.GetExcelFile.Name = "GetExcelFile";
+            this.GetExcelFile.Size = new System.Drawing.Size(180, 22);
+            this.GetExcelFile.Text = "Excel";
+            this.GetExcelFile.Click += new System.EventHandler(this.GetExcelFile_Click);
+            // 
             // FormType1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1107, 614);
-            this.Controls.Add(this.toolStrip);
-            this.Controls.Add(this.mainPanel);
+            this.ClientSize = new System.Drawing.Size(1130, 692);
+            this.Controls.Add(this.MainControlWithTabs);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(550, 0);
@@ -1419,8 +2243,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Расчет по 1ЦК";
             this.Load += new System.EventHandler(this.FormType1_Load);
-            this.mainPanel.ResumeLayout(false);
-            this.mainPanel.PerformLayout();
+            this.mainPanelPage1.ResumeLayout(false);
+            this.mainPanelPage1.PerformLayout();
             this.groupBoxHours.ResumeLayout(false);
             this.HoursTableLayout.ResumeLayout(false);
             this.HeaderDataTableLayout.ResumeLayout(false);
@@ -1446,14 +2270,40 @@
             this.InfoTableLayout.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.MainControlWithTabs.ResumeLayout(false);
+            this.Page1.ResumeLayout(false);
+            this.mainTableLayoutPage1.ResumeLayout(false);
+            this.mainTableLayoutPage1.PerformLayout();
+            this.Page2.ResumeLayout(false);
+            this.mainTableLayoutPage2.ResumeLayout(false);
+            this.mainTableLayoutPage2.PerformLayout();
+            this.mainPanelPage2.ResumeLayout(false);
+            this.tlp4.ResumeLayout(false);
+            this.tlp4.PerformLayout();
+            this.tlp3.ResumeLayout(false);
+            this.tlp3.PerformLayout();
+            this.tlp2.ResumeLayout(false);
+            this.tlp2.PerformLayout();
+            this.tlp1.ResumeLayout(false);
+            this.tlp1.PerformLayout();
+            this.tlp7.ResumeLayout(false);
+            this.tlp7.PerformLayout();
+            this.tlp5.ResumeLayout(false);
+            this.tlp5.PerformLayout();
+            this.tlp6main.ResumeLayout(false);
+            this.tlp6main.PerformLayout();
+            this.tableInfoDoc.ResumeLayout(false);
+            this.tableInfoDoc.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.docPDFdataGridView)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private Panel mainPanel;
+        private Panel mainPanelPage1;
         private Label label1;
         private Label label2;
         private Label label3;
@@ -1537,5 +2387,61 @@
         public RadioButton useIntervals;
         private ToolStrip toolStrip;
         private ToolStripButton btnExport;
+        private TabControl MainControlWithTabs;
+        private TabPage Page1;
+        private TabPage Page2;
+        private Label label13;
+        private Label label15;
+        private Label label16;
+        private Label label17;
+        private Label label19;
+        private Label label21;
+        private Label label32;
+        private TableLayoutPanel tlp6main;
+        private Label label34;
+        private TableLayoutPanel tableInfoDoc;
+        private Label lblNumDoc;
+        private Label lblDateDoc;
+        private TableLayoutPanel tlp5;
+        private Label label46;
+        private Label label47;
+        private Label label48;
+        private Label label49;
+        private Label label53;
+        private Label label54;
+        private Panel mainPanelPage2;
+        private ToolStrip toolStrip1;
+        private TableLayoutPanel mainTableLayoutPage1;
+        private TableLayoutPanel mainTableLayoutPage2;
+        private ToolStripSplitButton btnGetFile;
+        private ToolStripMenuItem GetPDFfile;
+        private ToolStripMenuItem GetExcelFile;
+        private TableLayoutPanel tlp7;
+        private TableLayoutPanel tlp4;
+        private TableLayoutPanel tlp3;
+        private TableLayoutPanel tlp2;
+        private TableLayoutPanel tlp1;
+        public Label lblSeller;
+        public Label lblINNseller;
+        public Label lblBuyer;
+        public Label lblINNbuyer;
+        public DataGridView docPDFdataGridView;
+        public Label lblSellerSign;
+        public Label lblBuyerSign;
+        public Label lblSellerShortSign;
+        public TextBox lblAgreementName;
+        public TextBox lblAgreementNumber;
+        public TextBox lblAgreementDate;
+        public TextBox lblDocNumber;
+        public TextBox lblDocDate;
+        private DataGridViewTextBoxColumn ID;
+        private DataGridViewTextBoxColumn productName;
+        private DataGridViewTextBoxColumn Measuring;
+        private DataGridViewTextBoxColumn Count;
+        private DataGridViewTextBoxColumn Price;
+        private DataGridViewTextBoxColumn CostWithoutNDS;
+        private DataGridViewTextBoxColumn NDS;
+        private DataGridViewTextBoxColumn CostWithNDS;
+        public Label lblDescription;
     }
 }

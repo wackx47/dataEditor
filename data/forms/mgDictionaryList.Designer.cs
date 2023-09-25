@@ -81,9 +81,9 @@ namespace dataEditor
             this.bankBIK = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bankINN = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bankCorrAcc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Extra1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Extra2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Extra3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FirstName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LastName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MidName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Extra4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mgRightClickMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridDictionaryList)).BeginInit();
@@ -154,9 +154,9 @@ namespace dataEditor
             this.bankBIK,
             this.bankINN,
             this.bankCorrAcc,
-            this.Extra1,
-            this.Extra2,
-            this.Extra3,
+            this.FirstName,
+            this.LastName,
+            this.MidName,
             this.Extra4});
             dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.ControlLight;
@@ -544,26 +544,26 @@ namespace dataEditor
             this.bankCorrAcc.Name = "bankCorrAcc";
             this.bankCorrAcc.Visible = false;
             // 
-            // Extra1
+            // FirstName
             // 
-            this.Extra1.HeaderText = "#1";
-            this.Extra1.Name = "Extra1";
-            this.Extra1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Extra1.Visible = false;
+            this.FirstName.HeaderText = "FirstName";
+            this.FirstName.Name = "FirstName";
+            this.FirstName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.FirstName.Visible = false;
             // 
-            // Extra2
+            // LastName
             // 
-            this.Extra2.HeaderText = "#2";
-            this.Extra2.Name = "Extra2";
-            this.Extra2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Extra2.Visible = false;
+            this.LastName.HeaderText = "LastName";
+            this.LastName.Name = "LastName";
+            this.LastName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.LastName.Visible = false;
             // 
-            // Extra3
+            // MidName
             // 
-            this.Extra3.HeaderText = "#3";
-            this.Extra3.Name = "Extra3";
-            this.Extra3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Extra3.Visible = false;
+            this.MidName.HeaderText = "MidName";
+            this.MidName.Name = "MidName";
+            this.MidName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.MidName.Visible = false;
             // 
             // Extra4
             // 
@@ -639,9 +639,9 @@ namespace dataEditor
         private DataGridViewTextBoxColumn bankBIK;
         private DataGridViewTextBoxColumn bankINN;
         private DataGridViewTextBoxColumn bankCorrAcc;
-        private DataGridViewTextBoxColumn Extra1;
-        private DataGridViewTextBoxColumn Extra2;
-        private DataGridViewTextBoxColumn Extra3;
+        private DataGridViewTextBoxColumn FirstName;
+        private DataGridViewTextBoxColumn LastName;
+        private DataGridViewTextBoxColumn MidName;
         private DataGridViewTextBoxColumn Extra4;
     }
 }

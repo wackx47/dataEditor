@@ -1,5 +1,6 @@
 ﻿using dataEditor.data.forms;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -309,16 +310,16 @@ namespace dataEditor
                 sheet.Cells["C1"].Value = this.lblAbonentName.Text;
                 sheet.Cells["B2"].Value = staticExcelLabels[2];
                 sheet.Cells["A2:B2"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                sheet.Cells["C2"].Value = this.lblAbonentINN.Text;
 
                 sheet.Cells["A3"].Value = staticExcelLabels[3];
                 sheet.Cells["C3:J3"].Merge = true;
                 sheet.Cells["A3:B3"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                 sheet.Cells["C3"].Value = this.lblAbonentAddress.Text;
+                sheet.Cells["C3"].Style.WrapText = true;
                 sheet.Cells[3, 1, 3, 2].Merge = true;
                 sheet.Cells["A4"].Value = staticExcelLabels[4];
                 sheet.Cells["A4:B4"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                sheet.Cells["C4"].Value = this.lblAbonentNumberCC.Text;
+
                 sheet.Cells[4, 1, 4, 2].Merge = true;
                 sheet.Cells["A5"].Value = staticExcelLabels[5];
                 sheet.Cells["A5:B5"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
@@ -326,12 +327,28 @@ namespace dataEditor
                 sheet.Cells[5, 1, 5, 2].Merge = true;
                 sheet.Cells["A6"].Value = staticExcelLabels[6];
                 sheet.Cells["A6:B6"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                sheet.Cells["C6"].Value = this.lblAbonentKF.Text;
+
                 sheet.Cells[6, 1, 6, 2].Merge = true;
                 sheet.Cells["A7"].Value = staticExcelLabels[7];
                 sheet.Cells["A7:B7"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                 sheet.Cells["C7"].Value = this.lblAbonentTarif.Text;
                 sheet.Cells[7, 1, 7, 2].Merge = true;
+
+                try
+                {
+                    sheet.Cells["C2"].Value = decimal.Parse(this.lblAbonentINN.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                    sheet.Cells["C4"].Value = decimal.Parse(this.lblAbonentNumberCC.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                    sheet.Cells["C6"].Value = decimal.Parse(this.lblAbonentKF.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                    sheet.Cells["C2"].Style.Numberformat.Format = "0";
+                    sheet.Cells["C4"].Style.Numberformat.Format = "0";
+                    sheet.Cells["C6"].Style.Numberformat.Format = "0";
+                }
+                catch
+                {
+                    sheet.Cells["C2"].Value = this.lblAbonentINN.Text;
+                    sheet.Cells["C4"].Value = this.lblAbonentNumberCC.Text;
+                    sheet.Cells["C6"].Value = this.lblAbonentKF.Text;
+                }
 
                 sheet.Cells["B8"].Value = staticExcelLabels[8];
                 sheet.Cells["B8"].Style.Font.Bold = true;
@@ -349,6 +366,16 @@ namespace dataEditor
                 sheet.Column(3).Style.Font.Bold = true;
 
                 sheet.Cells["A1:A2"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
+                sheet.Cells["C1:J7"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                sheet.Cells["C1:J7"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                sheet.Cells["C1:J1"].Merge = true;
+                sheet.Cells["C2:J2"].Merge = true;
+                sheet.Cells["C3:J3"].Merge = true;
+                sheet.Cells["C4:J4"].Merge = true;
+                sheet.Cells["C5:J5"].Merge = true;
+                sheet.Cells["C6:J6"].Merge = true;
+                sheet.Cells["C7:J7"].Merge = true;
                 //End Table_1
 
                 //----------------------------------------------------------------------------------------------
@@ -370,13 +397,13 @@ namespace dataEditor
                 sheet.Cells["K11"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                 sheet.Cells["J11"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                 sheet.Cells["J11"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                sheet.Cells["K11"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                sheet.Cells["K11"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                 sheet.Cells["K11"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
                 sheet.Cells["J12"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                 sheet.Cells["K12"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                 sheet.Cells["J12"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                 sheet.Cells["J12"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                sheet.Cells["K12"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                sheet.Cells["K12"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                 sheet.Cells["K12"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
                 sheet.Cells["B13:J13"].Merge = true;
                 sheet.Cells["B13:J13"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
@@ -399,17 +426,29 @@ namespace dataEditor
                 sheet.Cells["J15"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                 sheet.Cells["J15"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
                 sheet.Cells["K14"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                sheet.Cells["K14"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                sheet.Cells["K14"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                 sheet.Cells["K14"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
                 sheet.Cells["K15"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                sheet.Cells["K15"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                sheet.Cells["K15"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                 sheet.Cells["K15"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
 
-                sheet.Cells["K11"].Value = this.txtDiffEEoremNight.Text;
-                sheet.Cells["K12"].Value = this.txtDiffEEoremDay.Text;
-                sheet.Cells["K13"].Value = this.txtSvncPorem.Text;
-                sheet.Cells["K14"].Value = this.txtKFnight.Text;
-                sheet.Cells["K15"].Value = this.txtKFday.Text;
+                try
+                {
+                    sheet.Cells["K11"].Value = decimal.Parse(this.txtDiffEEoremNight.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                    sheet.Cells["K12"].Value = decimal.Parse(this.txtDiffEEoremDay.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                    sheet.Cells["K13"].Value = decimal.Parse(this.txtSvncPorem.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                    sheet.Cells["K14"].Value = decimal.Parse(this.txtKFnight.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                    sheet.Cells["K15"].Value = decimal.Parse(this.txtKFday.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                }
+                catch
+                {
+                    sheet.Cells["K11"].Value = this.txtDiffEEoremNight.Text;
+                    sheet.Cells["K12"].Value = this.txtDiffEEoremDay.Text;
+                    sheet.Cells["K13"].Value = this.txtSvncPorem.Text;
+                    sheet.Cells["K14"].Value = this.txtKFnight.Text;
+                    sheet.Cells["K15"].Value = this.txtKFday.Text;
+                }
+
                 sheet.Cells["K11:K15"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
 
                 sheet.Column(10).AutoFit();
@@ -484,17 +523,18 @@ namespace dataEditor
                 sheet.Cells["E22"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
                 sheet.Cells["E22"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
 
+                //sheet.Cells["B21"].Value = decimal.Parse(this.txtSELLday.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                //sheet.Cells["C21"].Value = decimal.Parse(this.txtSELLnight.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                //sheet.Cells["E21"].Value = decimal.Parse(this.txtBUYday.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+                //sheet.Cells["F21"].Value = decimal.Parse(this.txtBUYnight.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
+
                 sheet.Cells["B22"].Formula = "B21+C21";
                 sheet.Cells["E22"].Formula = "E21+F21";
 
-                sheet.Cells["B21"].Value = decimal.Parse(this.txtSELLday.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
-                sheet.Cells["C21"].Value = decimal.Parse(this.txtSELLnight.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
-                sheet.Cells["E21"].Value = decimal.Parse(this.txtBUYday.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
-                sheet.Cells["F21"].Value = decimal.Parse(this.txtBUYnight.Text, NumberStyles.Float, CultureInfo.CurrentCulture);
-
-                sheet.Cells["B21:G22"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                sheet.Cells["B21:G22"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                sheet.Cells["B20:G22"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                sheet.Cells["B20:G22"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                 sheet.Cells["B21:G22"].Style.Font.Bold = true;
+                sheet.Cells["B19:G20"].Style.Font.Bold = false;
                 //End Table_3
 
                 //----------------------------------------------------------------------------------------------
@@ -542,10 +582,42 @@ namespace dataEditor
                 sheet.Cells["F28"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
 
                 sheet.Cells["F26"].Formula = "(K11+K13*K14)/1000";
+                sheet.Cells["F26"].Style.Numberformat.Format = "# ##0.00 ₽;-# ##0.00 ₽";
                 sheet.Cells["F27"].Formula = "(K12+K13*K15)/1000";
+                sheet.Cells["F27"].Style.Numberformat.Format = "# ##0.00 ₽;-# ##0.00 ₽";
 
                 sheet.Cells["F28"].Formula = "ROUND(F26*F21,2)+ROUND(F27*E21,2)";
+                sheet.Cells["F28"].Style.Numberformat.Format = "# ##0.00 ₽;-# ##0.00 ₽";
                 //End Table_4
+
+                //Exclusive style
+                sheet.Cells["A1:B7"].Style.Font.Name = "Tahoma";
+                sheet.Cells["A1:B7"].Style.Font.Size = 10;
+
+                sheet.Cells["C1:J7"].Style.Font.Name = "Courier New";
+                sheet.Cells["C1:J8"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                sheet.Cells["C1:J8"].Style.Fill.BackgroundColor.SetColor(Color.FromKnownColor(KnownColor.WhiteSmoke));
+                sheet.Cells["B8"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                sheet.Cells["B8"].Style.Fill.BackgroundColor.SetColor(Color.FromKnownColor(KnownColor.WhiteSmoke));
+                sheet.Cells["C1:J8"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
+                sheet.Cells["B8:C8"].Style.Font.Name = "Tahoma";
+                sheet.Cells["B8:C8"].Style.Font.Size = 11;
+                sheet.Cells["B8:C8"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                sheet.Cells["C8:J8"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
+                sheet.Cells["B11:J15"].Style.Font.Name = "Tahoma";
+                sheet.Cells["B11:J15"].Style.Font.Size = 10;
+                sheet.Cells["K11:K15"].Style.Font.Name = "Courier New";
+
+                sheet.Cells["A19:G20"].Style.Font.Name = "Tahoma";
+                sheet.Cells["A19:G20"].Style.Font.Size = 10;
+                sheet.Cells["B21:G22"].Style.Font.Name = "Courier New";
+
+                sheet.Cells["B26:E28"].Style.Font.Name = "Tahoma";
+                sheet.Cells["B26:E28"].Style.Font.Size = 10;
+                sheet.Cells["F26:G28"].Style.Font.Name = "Courier New";
+                //
 
                 switch (checkedButton.Name)
                 {
@@ -657,15 +729,24 @@ namespace dataEditor
                         sheet.Column(18).Width = 14;
                         //End Table_Intervals
 
+                        sheet.Cells["B21"].Formula = "ROUND(IF(R5>R8,R5-R8,0),0)";
+                        sheet.Cells["C21"].Formula = "ROUND(IF(R6>R9,R6-R9,0),0)";
+                        sheet.Cells["E21"].Formula = "ROUND(IF(R8>R5,R8-R5,0),0)";
+                        sheet.Cells["F21"].Formula = "ROUND(IF(R9>R6,R9-R6,0),0)";
+
+                        if (!Directory.Exists(CurrentFolder))
+                        {
+                            Directory.CreateDirectory(CurrentFolder);
+                        }
                         try
                         {
                             package.SaveAs(new FileInfo(@fullPathFileName));
                             package.Dispose();
                             resComplete = true;
                         }
-                        catch
+                        catch(Exception ex)
                         {
-                            MessageBox.Show("Не удалось сохранить файл Excel");
+                            MessageBox.Show("Не удалось сохранить файл Excel" + "\\n" + ex);
                             resComplete = false;
                         }
                         break;
@@ -847,12 +928,33 @@ namespace dataEditor
                         sheet.Cells["R3"].Formula = "'" + sheet2.Name + "'!E3";
                         sheet.Cells["S3"].Formula = "'" + sheet2.Name + "'!F3";
 
+                        sheet.Cells["B21"].Formula = "ROUND(IF(P3>R3,P3-R3,0),0)";
+                        sheet.Cells["C21"].Formula = "ROUND(IF(Q3>S3,Q3-S3,0),0)";
+                        sheet.Cells["E21"].Formula = "ROUND(IF(R3>P3,R3-P3,0),0)";
+                        sheet.Cells["F21"].Formula = "ROUND(IF(S3>Q3,S3-Q3,0),0)";
+
                         sheet2.Column(2).AutoFit();
                         sheet2.Column(3).AutoFit();
                         sheet2.Column(4).AutoFit();
                         sheet2.Column(5).AutoFit();
                         sheet2.Column(6).AutoFit();
                         //End Table_Hours
+
+                        //Exclusive style
+                        sheet.Cells["N2:S4"].Style.Font.Name = "Tahoma";
+                        sheet.Cells["N2:S4"].Style.Font.Size = 10;
+                        sheet.Cells["N2:O28"].Style.Font.Name = "Tahoma";
+                        sheet.Cells["N2:O28"].Style.Font.Size = 10;
+
+                        sheet.Cells["P5:S28"].Style.Font.Name = "Courier New";
+                        sheet.Cells["P3:S3"].Style.Font.Name = "Courier New";
+                        sheet.Cells["P3:S3"].Style.Font.Size = 11;
+
+                        sheet.Cells["O3:S3"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        sheet.Cells["O3:S3"].Style.Fill.BackgroundColor.SetColor(Color.FromKnownColor(KnownColor.LightGoldenrodYellow));
+                        sheet.Cells["O3:S3"].Style.Font.Bold = true;
+                        //
+
 
                         if (!Directory.Exists(CurrentFolder))
                         {
@@ -879,7 +981,7 @@ namespace dataEditor
 
                         Excel.Range UpperLeftCell = (Excel.Range)xlSht.get_Range("T5").Cells[1, 1];
 
-                        Excel.ControlFormat Scrollbar = xlSht.Shapes.AddFormControl(Excel.XlFormControl.xlScrollBar, UpperLeftCell.Left+2, 67, 18, 377).ControlFormat;
+                        Excel.ControlFormat Scrollbar = xlSht.Shapes.AddFormControl(Excel.XlFormControl.xlScrollBar, UpperLeftCell.Left+2, UpperLeftCell.Top+2, 18, 377).ControlFormat;
 
 
                         Scrollbar.Value = 0;
@@ -894,6 +996,8 @@ namespace dataEditor
                         xlApp = null;
                         xlWB = null;
                         xlSht = null;
+
+
 
                         foreach (Process clsProcess in Process.GetProcesses())
                         {
@@ -921,7 +1025,7 @@ namespace dataEditor
                             case 1:
                                 Excel.Application xlApp = new Excel.Application();
                                 xlApp.Application.Visible = true;
-                                Excel.Workbook xlWB = xlApp.Workbooks.Open(CurrentFolder + monthString + year.ToString() + "_" + gName + "_hrs.xlsx");
+                                Excel.Workbook xlWB = xlApp.Workbooks.Open(fullPathFileName);
 
                                 break;
 

@@ -1249,6 +1249,8 @@ namespace dataEditor
             HoursFile_processing(dataExtraction);
             IntegralsFile_processing(dataExtraction);
             workWithButtonsIntoFlowPanel();
+
+            updateMethodsAfterImportFile();
         }
 
         private static int withoutZeroNumCC(string searchValue)
@@ -1613,14 +1615,52 @@ namespace dataEditor
             }
         }
 
+        DateTime expectedDateType1;
+        DateTime expectedDateType2;
+
         private void IntegralsFile_processing(DataTable dataExtraction)
         {
             int number;
 
             DictionaryForm.loadDictionary(mgDatsList.isLoaded);
             int unkn = 0;
+            bool findRowDate = false;
+
+            int year = DateTime.ParseExact(txtProjectYear.Text, "yyyy", CultureInfo.CurrentCulture).Year;
+            int month = DateTime.ParseExact(txtProjectMonth.Text, "MMMM", CultureInfo.CurrentCulture).Month;
+
+            DateTime date = new DateTime(year, month, 1);
+            DateTime DateTimeInitial = date;
+            DateTime DateTimeFinal = DateTimeInitial.AddMonths(1);
+
             foreach (DataRow extractRows in dataExtraction.Rows)
             {
+                if(!findRowDate)
+                {
+                    try
+                    {
+                        DateTimeInitial = DateTime.ParseExact(extractRows[9].ToString(), "dd.MM.yyyy", CultureInfo.CurrentCulture);
+                        DateTimeFinal = DateTime.ParseExact(extractRows[10].ToString(), "dd.MM.yyyy", CultureInfo.CurrentCulture);
+                        findRowDate = true;
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            var val1 = decimal.Parse(Convert.ToString(extractRows[9].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                            DateTimeInitial = DateTime.FromOADate((double)val1);
+                            var val2 = decimal.Parse(Convert.ToString(extractRows[10].ToString()), NumberStyles.Float, CultureInfo.GetCultureInfo(cmnSettings.GlobalInfoStandart));
+                            DateTimeFinal = DateTime.FromOADate((double)val2);
+                            findRowDate = true;
+                        }
+                        catch
+                        {
+
+                        }
+                    }
+                }
+
+
                 bool result = Int32.TryParse(extractRows[0].ToString(), out number);
                 if (extractRows[0] != DBNull.Value && result)
                 {
@@ -1697,6 +1737,9 @@ namespace dataEditor
                                 i++;
                             }
 
+                            newTable.Columns[2].ColumnName += " " + DateTimeInitial.ToString("dd.MM.yyyy");
+                            newTable.Columns[3].ColumnName += " " + DateTimeFinal.ToString("dd.MM.yyyy");
+
                             Button newButton = new Button();
                             createNewButtonOnTable(newButton, newTable.TableName);
                             mgFlowPanelResult.Controls.Add(newButton);
@@ -1761,6 +1804,9 @@ namespace dataEditor
                                 i++;
                             }
 
+                            newTable.Columns[2].ColumnName += " " + DateTimeInitial.ToString("dd.MM.yyyy");
+                            newTable.Columns[3].ColumnName += " " + DateTimeFinal.ToString("dd.MM.yyyy");
+
                             Button newButton = new Button();
                             createNewButtonOnTable(newButton, newTable.TableName);
                             mgFlowPanelResult.Controls.Add(newButton);
@@ -1785,6 +1831,7 @@ namespace dataEditor
 
                                 int kTC = Convert.ToInt32(extractRows[4].ToString());
                                 int kTV = Convert.ToInt32(extractRows[5].ToString());
+
 
                                 headerTable.Rows[0]["Values"] = DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["Agreement"].Value.ToString();
                                 if (DictionaryForm.dataGridDictionaryList.Rows[foundRow].Cells["FullName"].Value.ToString() == extractRows[2].ToString().Split(",").First())
@@ -1817,6 +1864,9 @@ namespace dataEditor
                                     i++;
                                 }
 
+                                newTable.Columns[2].ColumnName += " " + DateTimeInitial.ToString("dd.MM.yyyy");
+                                newTable.Columns[3].ColumnName += " " + DateTimeFinal.ToString("dd.MM.yyyy");
+
                                 Button newButton = new Button();
                                 createNewButtonOnTable(newButton, newTable.TableName);
                                 mgFlowPanelResult.Controls.Add(newButton);
@@ -1835,6 +1885,7 @@ namespace dataEditor
 
                                 int kTC = Convert.ToInt32(extractRows[4].ToString());
                                 int kTV = Convert.ToInt32(extractRows[5].ToString());
+
 
                                 headerTable.Rows[1]["Values"] = extractRows[2].ToString().Split(",").First();
                                 headerTable.Rows[2]["Values"] = extractRows[1].ToString();
@@ -1864,6 +1915,9 @@ namespace dataEditor
                                     }
                                     i++;
                                 }
+
+                                newTable.Columns[2].ColumnName += " " + DateTimeInitial.ToString("dd.MM.yyyy");
+                                newTable.Columns[3].ColumnName += " " + DateTimeFinal.ToString("dd.MM.yyyy");
 
                                 Button newButton = new Button();
                                 createNewButtonOnTable(newButton, newTable.TableName);
@@ -2162,6 +2216,7 @@ namespace dataEditor
                     }
                 }
             }
+            mgDataViewer.Refresh();
         }
 
         private static void prepareNewIntegralTables(DataTable headerTable, DataTable newTable)
@@ -2767,6 +2822,7 @@ namespace dataEditor
             {
                 case "intg":
                     tablesDataGridView.DataSource = IntegralsDataSet;
+                    tablesDataGridView.ColumnHeadersHeight = 50;
                     headerDataGridView.DataSource = IntegralsDataSet;
                     hSize = 147 + ((IntegralsDataSet.Tables[text].Rows.Count * tablesDataGridView.RowTemplate.Height) + tablesDataGridView.ColumnHeadersHeight);
                     TableView.MinimumSize = new Size(TableView.Width, hSize);
@@ -3233,6 +3289,24 @@ namespace dataEditor
             return attr == null ? null : attr.Value;
         }
 
+
+        private static string outInitials(string s)
+        {
+            var match = Regex.Match(s, @"(?<F>[а-яА-Я]+)(?:(?:[^а-яА-Я]+)(?<I>[а-яА-Я]+)(?:(?:[^а-яА-Я]+)(?<O>[а-яА-Я]+))?)?");
+            if (!match.Success)
+                return string.Empty;
+            var inits = match.Groups;
+            if (inits["F"].Success)
+                if (inits["F"].Value == "ИП" | inits["F"].Value == "ООО")
+                    return s;
+           if (inits["O"].Success)
+                return string.Format("{0}.{1}.{2}", inits["I"].Value[0], inits["O"].Value[0], inits["F"]);
+            if (inits["I"].Success)
+                return string.Format("{0} {1}. ", inits["I"].Value[0], inits["F"]);
+                
+            return inits["F"].Value;
+        }
+
         private void openFormType1(int eRowIndex)
         {
             FormType1 formType1 = new FormType1();
@@ -3241,9 +3315,15 @@ namespace dataEditor
             formType1.gName = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["Agreement"].Value);
             formType1.gCurrentFolder = currentProjectFolder;
 
-            DateTime date = DateTime.Now;
-            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
+
+            int year = DateTime.ParseExact(txtProjectYear.Text, "yyyy", CultureInfo.CurrentCulture).Year;
+            int month = DateTime.ParseExact(txtProjectMonth.Text, "MMMM", CultureInfo.CurrentCulture).Month;
+
+
+            DateTime date = new DateTime(year, month, 1);
+            var firstDayOfMonth = date;
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1);
+            DateTime initialDateFromFiles = date;
 
             string hrsTable = null;
             string intgTable = null;
@@ -3284,9 +3364,10 @@ namespace dataEditor
                 }
             }
 
+
+
             int kTC = 1;
             int kTV = 1;
-
 
             switch (cmbxMethod.Text)
             {
@@ -3329,8 +3410,28 @@ namespace dataEditor
 
             formType1.InfoTableLayout.RowStyles[2].Height = TextRenderer.MeasureText(formType1.lblAbonentAddress.Text, formType1.lblAbonentAddress.Font, formType1.lblAbonentAddress.ClientSize, TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height + 10;
 
-            formType1.txtDateFirst.Text = firstDayOfMonth.ToString("d");
-            formType1.txtDateLast.Text = lastDayOfMonth.ToString("d");
+            if(Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["type"].Value) == "ФЛ")
+            {
+                switch(Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["TariffZone"].Value))
+                {
+                    case "1ЦК":
+                        formType1.txtDateFirst.Text = firstDayOfMonth.ToString("d");
+                        formType1.txtDateLast.Text = lastDayOfMonth.ToString("d");
+                        break;
+
+                    default:
+                        firstDayOfMonth = firstDayOfMonth.AddMonths(-1).AddDays(24);
+                        lastDayOfMonth = firstDayOfMonth.AddMonths(1);
+                        formType1.txtDateFirst.Text = firstDayOfMonth.ToString("d");
+                        formType1.txtDateLast.Text = lastDayOfMonth.ToString("d");
+                        break;
+                }
+            }
+            else
+            {
+                formType1.txtDateFirst.Text = firstDayOfMonth.ToString("d");
+                formType1.txtDateLast.Text = lastDayOfMonth.ToString("d");
+            }
 
             decimal SumConFirst = 0;
             decimal SumConLast = 0;
@@ -3406,6 +3507,17 @@ namespace dataEditor
 
                 formType1.txtConSumm.Text = SumConDiff.ToString();
                 formType1.txtGenSumm.Text = SumGenDiff.ToString();
+
+                try
+                {
+                    initialDateFromFiles = DateTime.ParseExact(IntegralsDataSet.Tables[intgTable].Columns[2].ColumnName.ToString().Split(" ").Last().ToString(), "dd.MM.yyyy", CultureInfo.CurrentCulture);
+                    if (initialDateFromFiles != firstDayOfMonth)
+                        MessageBox.Show("Внимение! Период привязанных данных не совпадает с текущим периодом проекта. Убедитесь, что привязаны корректные данные для текущего периода.", "Сообщение");
+                }
+                catch
+                {
+
+                }
             }
 
             int hrs = 1;
@@ -3516,7 +3628,60 @@ namespace dataEditor
             ResultCost = Price * decimal.Parse(formType1.txtBUY.Text);
 
             formType1.txtResultPrice.Text = Price.ToString();
-            formType1.txtResultCost.Text = Math.Round(ResultCost, 2).ToString();
+            ResultCost = Math.Round(ResultCost, 2);
+            formType1.txtResultCost.Text = ResultCost.ToString();
+
+
+            //Page2
+            formType1.lblSeller.Text = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["FullName"].Value);
+            formType1.lblSellerSign.Text = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["FullName"].Value);
+            formType1.lblINNseller.Text = Convert.ToString(DictionaryForm.dataGridDictionaryList.Rows[RowInDict].Cells["INN"].Value);
+            try
+            {
+                formType1.lblSellerShortSign.Text += Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["LastName"].Value)[0] + "." + Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["MidName"].Value)[0] + "." + Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["FirstName"].Value);
+            }
+            catch
+            {
+                formType1.lblSellerShortSign.Text += outInitials(Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["FullName"].Value));
+            }
+            
+
+            formType1.lblBuyer.Text = textBoxNameGP.Text;
+            formType1.lblBuyerSign.Text = textBoxNameGP.Text;
+            formType1.lblINNbuyer.Text = "";
+
+            formType1.lblAgreementName.Text = "Договор купли-продажи электрической энергии (мощности) с владельцем объекта микрогенерации";
+            formType1.lblAgreementDate.Text = Convert.ToString(DictionaryForm.dataGridDictionaryList.Rows[RowInDict].Cells["Agreement"].Value).Split(" от ").Last();
+            formType1.lblAgreementNumber.Text = Convert.ToString(DictionaryForm.dataGridDictionaryList.Rows[RowInDict].Cells["Agreement"].Value).Split(" от ").First();
+
+            formType1.lblDocNumber.Text = date.ToString("MM") + year.ToString();
+            formType1.lblDocDate.Text = date.AddMonths(1).AddSeconds(-1).ToString("dd.MM.yyyy");
+
+            formType1.docPDFdataGridView.Rows.Add();
+            formType1.docPDFdataGridView[0, 0].Value = "1";
+            formType1.docPDFdataGridView[1, 0].Value = staticExcelLabels[52];
+            formType1.docPDFdataGridView[2, 0].Value = staticExcelLabels[53];
+            formType1.docPDFdataGridView[3, 0].Value = formType1.txtBUY.Text;
+            formType1.docPDFdataGridView[4, 0].Value = Price;
+            formType1.docPDFdataGridView[5, 0].Value = ResultCost;
+
+            switch (Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["type"].Value))
+            {
+                case "ФЛ":
+                    formType1.docPDFdataGridView.Columns[6].Visible = false;
+                    formType1.docPDFdataGridView.Columns[7].Visible = false;
+                    formType1.lblDescription.Text = staticExcelLabels[47] + " " + Convert.ToString(DictionaryForm.dataGridDictionaryList.Rows[RowInDict].Cells["Agreement"].Value) + " " + staticExcelLabels[48] + staticExcelLabels[51];
+                    break;
+
+                case "ЮЛ":
+                    formType1.docPDFdataGridView.Columns[6].Visible = true;
+                    formType1.docPDFdataGridView.Columns[7].Visible = true;
+                    formType1.lblDescription.Text = staticExcelLabels[47] + " " + Convert.ToString(DictionaryForm.dataGridDictionaryList.Rows[RowInDict].Cells["Agreement"].Value) + " " + staticExcelLabels[48] + " " + staticExcelLabels[49] + " " + formType1.txtDateFirst.Text + " " + staticExcelLabels[50] + " " + formType1.txtDateLast.Text + " " + staticExcelLabels[51];
+                    formType1.docPDFdataGridView[6, 0].Value = (ResultCost*2)/10;
+                    formType1.docPDFdataGridView[7, 0].Value = (ResultCost*12)/10;
+                    break;
+            }
+            ///////
 
             formType1.Show();
         }
@@ -3529,9 +3694,14 @@ namespace dataEditor
             formType2.gName = Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["Agreement"].Value);
             formType2.gCurrentFolder = currentProjectFolder;
 
-            DateTime date = DateTime.Now;
-            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
+            int year = DateTime.ParseExact(txtProjectYear.Text, "yyyy", CultureInfo.CurrentCulture).Year;
+            int month = DateTime.ParseExact(txtProjectMonth.Text, "MMMM", CultureInfo.CurrentCulture).Month;
+
+
+            DateTime date = new DateTime(year, month, 1);
+            var firstDayOfMonth = date;
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1);
+            DateTime initialDateFromFiles = date;
 
             string hrsTable = null;
             string intgTable = null;
@@ -3617,8 +3787,19 @@ namespace dataEditor
 
             formType2.InfoTableLayout.RowStyles[2].Height = TextRenderer.MeasureText(formType2.lblAbonentAddress.Text, formType2.lblAbonentAddress.Font, formType2.lblAbonentAddress.ClientSize, TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height + 10;
 
-            formType2.txtDateFirst.Text = firstDayOfMonth.ToString("d");
-            formType2.txtDateLast.Text = lastDayOfMonth.ToString("d");
+            if (Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["type"].Value) == "ФЛ")
+            {
+                firstDayOfMonth = firstDayOfMonth.AddMonths(-1).AddDays(24);
+                lastDayOfMonth = firstDayOfMonth.AddMonths(1);
+                formType2.txtDateFirst.Text = firstDayOfMonth.ToString("d");
+                formType2.txtDateLast.Text = lastDayOfMonth.ToString("d");
+            }
+            else
+            {
+                formType2.txtDateFirst.Text = firstDayOfMonth.ToString("d");
+                formType2.txtDateLast.Text = lastDayOfMonth.ToString("d");
+            }
+
 
             decimal SumConFirst = 0;
             decimal SumConLast = 0;
@@ -3692,8 +3873,18 @@ namespace dataEditor
                 formType2.txtGenSummFirst.Text = Math.Round((SumGenFirst * kT), 3).ToString();
                 formType2.txtGenSummLast.Text = Math.Round((SumGenLast * kT), 3).ToString();
                 formType2.txtGenSummDiff.Text = Math.Round(((SumGenLast - SumGenFirst) * kT), 3).ToString();
-            }
 
+                try
+                {
+                    initialDateFromFiles = DateTime.ParseExact(IntegralsDataSet.Tables[intgTable].Columns[2].ColumnName.ToString().Split(" ").Last().ToString(), "dd.MM.yyyy", CultureInfo.CurrentCulture);
+                    if (initialDateFromFiles != firstDayOfMonth)
+                        MessageBox.Show("Внимение! Период привязанных данных не совпадает с текущим периодом проекта. Убедитесь, что привязаны корректные данные для текущего периода.", "Сообщение");
+                }
+                catch
+                {
+
+                }
+            }
 
 
             int hrs = 1;
@@ -3709,141 +3900,145 @@ namespace dataEditor
             string currentGTP = mgSettings.mgCodeName.propGTPname;
             string currentFolder = currentProjectFolder + "\\data\\TimesZones\\";
             string fileName = "doubleZone_" + currentGTP;
-            switch (Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["type"].Value))
-            {
-                case "ФЛ":
-                    if(_main2dayZone_00.GetLength(0) != 0)
-                    {
-                        dayStart = new TimeSpan(_main2dayZone_00[0,4], 0, 0);
-                        dayEnd = new TimeSpan(_main2dayZone_00[0,5]+1, 0, 0);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            if (File.Exists(currentFolder + fileName + "_00.xml"))
-                            {
-                                XmlDocument xmlDoc = new XmlDocument();
-                                xmlDoc.Load(currentFolder + fileName + "_00.xml");
-                                parsingXMl(xmlDoc, "00", "double");
-                            }
 
-                            dayStart = new TimeSpan(_main2dayZone_00[0, 4], 0, 0);
-                            dayEnd = new TimeSpan(_main2dayZone_00[0, 5]+1, 0, 0);
-                        }
-                        catch(Exception ex)
-                        {
-                            DialogResult dialogResult = MessageBox.Show("Отсутствуют интервалы тарифных зон суток, внести данные?", "Ожидание пользователя", MessageBoxButtons.YesNo);
-                            if (dialogResult == DialogResult.Yes)
-                            {
-                                using (hoursZoneEditor form = new hoursZoneEditor())
-                                {
-                                    form.typeList.SelectedIndex = 0;
-                                    form.typeList.Enabled = false;
-                                    form.cmbxSelectGlobalZone.SelectedIndex = 0;
-                                    form.cmbxSelectGlobalZone.Enabled = false;
-                                    form.splitContainer.Panel2Collapsed = true;
-
-                                    form.cmbxSelectTypeZone.Items.AddRange(new[] { "день", "ночь" });
-                                    form.cmbxSelectTypeZone.SelectedIndex = 0;
-
-                                    form.btnSave.Visible = false;
-                                    form.btnSaveAll.Visible = false;
-                                    form.btnLoad.Visible = false;
-
-                                    if (form.ShowDialog() == DialogResult.OK)
-                                    {
-                                        _main2dayZone_00 = form._2dayZone_00;
-                                        _main2nightZone_00 = form._2nightZone_00;
-
-                                        SettingsForm._settings2dayZone_00 = _main2dayZone_00;
-                                        SettingsForm._settings2nightZone_00 = _main2nightZone_00;
-
-                                        dayStart = new TimeSpan(_main2dayZone_00[0, 4], 0, 0);
-                                        dayEnd = new TimeSpan(_main2dayZone_00[0, 5]+1, 0, 0);
-                                    }
-                                    else
-                                    {
-                                        return;
-                                    }
-                                }
-                            }
-                            else if (dialogResult == DialogResult.No)
-                            {
-                                return;
-                            }
-                        }
-                    }
-                    break;
-
-                case "ЮЛ":
-                    if (_main2dayZone_01.GetLength(0) != 0)
-                    {
-                        dayStart = new TimeSpan(_main2dayZone_01[0,4], 0, 0);
-                        dayEnd = new TimeSpan(_main2dayZone_01[0,5]+1, 0, 0);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            if (File.Exists(currentFolder + fileName + "_01.xml"))
-                            {
-                                XmlDocument xmlDoc = new XmlDocument();
-                                xmlDoc.Load(currentFolder + fileName + "_01.xml");
-                                parsingXMl(xmlDoc, "01", "double");
-                            }
-
-                            dayStart = new TimeSpan(_main2dayZone_01[0, 4], 0, 0);
-                            dayEnd = new TimeSpan(_main2dayZone_01[0, 5]+1, 0, 0);
-                        }
-                        catch(Exception ex)
-                        {
-                            DialogResult dialogResult = MessageBox.Show("Отсутствуют интервалы тарифных зон суток, внести данные?", "Ожидание пользователя", MessageBoxButtons.YesNo);
-                            if (dialogResult == DialogResult.Yes)
-                            {
-                                using (hoursZoneEditor form = new hoursZoneEditor())
-                                {
-                                    form.typeList.SelectedIndex = 1;
-                                    form.typeList.Enabled = false;
-                                    form.cmbxSelectGlobalZone.SelectedIndex = 0;
-                                    form.cmbxSelectGlobalZone.Enabled = false;
-                                    form.splitContainer.Panel2Collapsed = true;
-
-                                    form.cmbxSelectTypeZone.Items.AddRange(new[] { "день", "ночь" });
-                                    form.cmbxSelectTypeZone.SelectedIndex = 0;
-
-                                    form.btnSave.Visible = false;
-                                    form.btnSaveAll.Visible = false;
-                                    form.btnLoad.Visible = false;
-
-                                    if (form.ShowDialog() == DialogResult.OK)
-                                    {
-                                        _main2dayZone_01 = form._2dayZone_01;
-                                        _main2nightZone_01 = form._2nightZone_01;
-
-                                        SettingsForm._settings2dayZone_01 = _main2dayZone_01;
-                                        SettingsForm._settings2nightZone_01 = _main2nightZone_01;
-
-                                        dayStart = new TimeSpan(_main2dayZone_01[0, 4], 0, 0);
-                                        dayEnd = new TimeSpan(_main2dayZone_01[0, 5]+1, 0, 0);
-                                    }
-                                    else
-                                    {
-                                        return;
-                                    }
-                                }
-                            }
-                            else if (dialogResult == DialogResult.No)
-                            {
-                                return;
-                            }
-                        }
-                    }
-                    break;
-            }
 
             if (hrsTable != null && Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["hrsStatusError"].Value) != CheckState.Checked.ToString())
             {
+                switch (Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["type"].Value))
+                {
+                    case "ФЛ":
+                        if (_main2dayZone_00.GetLength(0) != 0)
+                        {
+                            dayStart = new TimeSpan(_main2dayZone_00[0, 4], 0, 0);
+                            dayEnd = new TimeSpan(_main2dayZone_00[0, 5] + 1, 0, 0);
+                        }
+                        else
+                        {
+                            try
+                            {
+                                if (File.Exists(currentFolder + fileName + "_00.xml"))
+                                {
+                                    XmlDocument xmlDoc = new XmlDocument();
+                                    xmlDoc.Load(currentFolder + fileName + "_00.xml");
+                                    parsingXMl(xmlDoc, "00", "double");
+                                }
+
+                                dayStart = new TimeSpan(_main2dayZone_00[0, 4], 0, 0);
+                                dayEnd = new TimeSpan(_main2dayZone_00[0, 5] + 1, 0, 0);
+                            }
+                            catch (Exception ex)
+                            {
+                                DialogResult dialogResult = MessageBox.Show("Отсутствуют интервалы тарифных зон суток, внести данные?", "Ожидание пользователя", MessageBoxButtons.YesNo);
+                                if (dialogResult == DialogResult.Yes)
+                                {
+                                    using (hoursZoneEditor form = new hoursZoneEditor())
+                                    {
+                                        form.typeList.SelectedIndex = 0;
+                                        form.typeList.Enabled = false;
+                                        form.cmbxSelectGlobalZone.SelectedIndex = 0;
+                                        form.cmbxSelectGlobalZone.Enabled = false;
+                                        form.splitContainer.Panel2Collapsed = true;
+
+                                        form.cmbxSelectTypeZone.Items.AddRange(new[] { "день", "ночь" });
+                                        form.cmbxSelectTypeZone.SelectedIndex = 0;
+
+                                        form.btnSave.Visible = false;
+                                        form.btnSaveAll.Visible = false;
+                                        form.btnLoad.Visible = false;
+
+                                        if (form.ShowDialog() == DialogResult.OK)
+                                        {
+                                            _main2dayZone_00 = form._2dayZone_00;
+                                            _main2nightZone_00 = form._2nightZone_00;
+
+                                            SettingsForm._settings2dayZone_00 = _main2dayZone_00;
+                                            SettingsForm._settings2nightZone_00 = _main2nightZone_00;
+
+                                            dayStart = new TimeSpan(_main2dayZone_00[0, 4], 0, 0);
+                                            dayEnd = new TimeSpan(_main2dayZone_00[0, 5] + 1, 0, 0);
+                                        }
+                                        else
+                                        {
+                                            return;
+                                        }
+                                    }
+                                }
+                                else if (dialogResult == DialogResult.No)
+                                {
+                                    return;
+                                }
+                            }
+                        }
+                        break;
+
+                    case "ЮЛ":
+                        if (_main2dayZone_01.GetLength(0) != 0)
+                        {
+                            dayStart = new TimeSpan(_main2dayZone_01[0, 4], 0, 0);
+                            dayEnd = new TimeSpan(_main2dayZone_01[0, 5] + 1, 0, 0);
+                        }
+                        else
+                        {
+                            try
+                            {
+                                if (File.Exists(currentFolder + fileName + "_01.xml"))
+                                {
+                                    XmlDocument xmlDoc = new XmlDocument();
+                                    xmlDoc.Load(currentFolder + fileName + "_01.xml");
+                                    parsingXMl(xmlDoc, "01", "double");
+                                }
+
+                                dayStart = new TimeSpan(_main2dayZone_01[0, 4], 0, 0);
+                                dayEnd = new TimeSpan(_main2dayZone_01[0, 5] + 1, 0, 0);
+                            }
+                            catch (Exception ex)
+                            {
+                                DialogResult dialogResult = MessageBox.Show("Отсутствуют интервалы тарифных зон суток, внести данные?", "Ожидание пользователя", MessageBoxButtons.YesNo);
+                                if (dialogResult == DialogResult.Yes)
+                                {
+                                    using (hoursZoneEditor form = new hoursZoneEditor())
+                                    {
+                                        form.typeList.SelectedIndex = 1;
+                                        form.typeList.Enabled = false;
+                                        form.cmbxSelectGlobalZone.SelectedIndex = 0;
+                                        form.cmbxSelectGlobalZone.Enabled = false;
+                                        form.splitContainer.Panel2Collapsed = true;
+
+                                        form.cmbxSelectTypeZone.Items.AddRange(new[] { "день", "ночь" });
+                                        form.cmbxSelectTypeZone.SelectedIndex = 0;
+
+                                        form.btnSave.Visible = false;
+                                        form.btnSaveAll.Visible = false;
+                                        form.btnLoad.Visible = false;
+
+                                        if (form.ShowDialog() == DialogResult.OK)
+                                        {
+                                            _main2dayZone_01 = form._2dayZone_01;
+                                            _main2nightZone_01 = form._2nightZone_01;
+
+                                            SettingsForm._settings2dayZone_01 = _main2dayZone_01;
+                                            SettingsForm._settings2nightZone_01 = _main2nightZone_01;
+
+                                            dayStart = new TimeSpan(_main2dayZone_01[0, 4], 0, 0);
+                                            dayEnd = new TimeSpan(_main2dayZone_01[0, 5] + 1, 0, 0);
+                                        }
+                                        else
+                                        {
+                                            return;
+                                        }
+                                    }
+                                }
+                                else if (dialogResult == DialogResult.No)
+                                {
+                                    return;
+                                }
+                            }
+                        }
+                        break;
+                }
+
+
+
                 formType2.dataHoursViewer.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.DataHoursViewer_RowPrePaint);
                 foreach (DataRow rows in HoursDataSet.Tables[hrsTable].Rows)
                 {
@@ -4135,9 +4330,14 @@ namespace dataEditor
 
             List<RadioButton> radioButtons = new List<RadioButton> { formType3.useIntervals, formType3.useHours };
 
-            DateTime date = DateTime.Now;
-            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
+            int year = DateTime.ParseExact(txtProjectYear.Text, "yyyy", CultureInfo.CurrentCulture).Year;
+            int month = DateTime.ParseExact(txtProjectMonth.Text, "MMMM", CultureInfo.CurrentCulture).Month;
+
+
+            DateTime date = new DateTime(year, month, 1);
+            var firstDayOfMonth = date;
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1);
+            DateTime initialDateFromFiles = date;
 
             string hrsTable = null;
             string intgTable = null;
@@ -4223,9 +4423,20 @@ namespace dataEditor
 
             formType3.InfoTableLayout.RowStyles[2].Height = TextRenderer.MeasureText(formType3.lblAbonentAddress.Text, formType3.lblAbonentAddress.Font, formType3.lblAbonentAddress.ClientSize, TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl).Height + 10;
 
-            formType3.txtDateFirst.Text = firstDayOfMonth.ToString("d");
-            formType3.txtDateLast.Text = lastDayOfMonth.ToString("d");
+            if (Convert.ToString(mgDataViewer.Rows[eRowIndex].Cells["type"].Value) == "ФЛ")
+            {
+                firstDayOfMonth = firstDayOfMonth.AddMonths(-1).AddDays(24);
+                lastDayOfMonth = firstDayOfMonth.AddMonths(1);
+                formType3.txtDateFirst.Text = firstDayOfMonth.ToString("d");
+                formType3.txtDateLast.Text = lastDayOfMonth.ToString("d");
+            }
+            else
+            {
+                formType3.txtDateFirst.Text = firstDayOfMonth.ToString("d");
+                formType3.txtDateLast.Text = lastDayOfMonth.ToString("d");
+            }
 
+            
             decimal SumConFirst = 0;
             decimal SumConLast = 0;
             decimal SumGenFirst = 0;
@@ -4309,6 +4520,17 @@ namespace dataEditor
                 formType3.txtGenSummFirst.Text = Math.Round((SumGenFirst * kT), 3).ToString();
                 formType3.txtGenSummLast.Text = Math.Round((SumGenLast * kT), 3).ToString();
                 formType3.txtGenSummDiff.Text = Math.Round(((SumGenLast - SumGenFirst) * kT), 3).ToString();
+
+                try
+                {
+                    initialDateFromFiles = DateTime.ParseExact(IntegralsDataSet.Tables[intgTable].Columns[2].ColumnName.ToString().Split(" ").Last().ToString(), "dd.MM.yyyy", CultureInfo.CurrentCulture);
+                    if (initialDateFromFiles != firstDayOfMonth)
+                        MessageBox.Show("Внимение! Период привязанных данных не совпадает с текущим периодом проекта. Убедитесь, что привязаны корректные данные для текущего периода.", "Сообщение");
+                }
+                catch
+                {
+
+                }
             }
 
             int hrs = 0;
@@ -4758,6 +4980,7 @@ namespace dataEditor
             tablesDataGridView.Dock = DockStyle.Fill;
             tablesDataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             tablesDataGridView.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            tablesDataGridView.ColumnHeadersDefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             tablesDataGridView.Location = new Point(5, 40);
             tablesDataGridView.ColumnHeadersVisible = true;
             tablesDataGridView.RowHeadersVisible = false;
@@ -4774,6 +4997,7 @@ namespace dataEditor
             tablesDataGridView.ReadOnly = true;
             tablesDataGridView.EnableHeadersVisualStyles = false;
             tablesDataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
+
 
             tablesDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             tablesDataGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
@@ -6863,6 +7087,30 @@ namespace dataEditor
             System.Diagnostics.Process.Start("explorer.exe", argument);
         }
 
+        List<String> staticExcelLabels = new List<string>() { };
+        private void ReadResource(string name)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            string resourcePath = name;
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
+                try
+                {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        string? line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            staticExcelLabels.Add(line);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+        }
+
         private void mgBtnNewProject_Click(object sender, EventArgs e)
         {
             bool rFileKF;
@@ -6983,6 +7231,8 @@ namespace dataEditor
                     idRow++;
                 }
             }
+
+            ReadResource("dataEditor.data.text.ExcelStaticLables.txt");
         }
 
         private void checkFolders()
@@ -7439,6 +7689,34 @@ namespace dataEditor
                 cmbxMethod.Text = cmbxMethod.Items[indx].ToString();
             }
 
+        }
+
+        private void updateMethodsAfterImportFile()
+        {
+            var cellMethod = (DataGridViewComboBoxCell)mgDataViewer.Rows[mgDataViewer.CurrentCell.RowIndex].Cells["Method"];
+            cmbxMethod.Items.Clear();
+            if (cellMethod.Items.Count != 0)
+            {
+                foreach (var item in cellMethod.Items)
+                {
+                    switch (item.ToString())
+                    {
+                        case "intg":
+                            cmbxMethod.Items.Add("Интервалы");
+                            break;
+
+                        case "hrs":
+                            cmbxMethod.Items.Add("Часы");
+                            break;
+                    }
+                }
+            }
+
+            int indx = cellMethod.Items.IndexOf(Convert.ToString(mgDataViewer.Rows[mgDataViewer.CurrentCell.RowIndex].Cells["Method"].Value));
+            if (indx != -1)
+            {
+                cmbxMethod.Text = cmbxMethod.Items[indx].ToString();
+            }
         }
 
         private void cmbxMethod_DropDownClosed(object sender, EventArgs e)

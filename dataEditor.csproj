@@ -27,6 +27,8 @@
 
   <ItemGroup>
     <None Remove="data\text\ExcelStaticLables.txt" />
+    <None Remove="Resources\DocumentViewerExcel.png" />    <None Remove="Resources\pdf.png" />
+
   </ItemGroup>
 
   <ItemGroup>

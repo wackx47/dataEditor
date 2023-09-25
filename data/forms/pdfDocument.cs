@@ -122,13 +122,7 @@ namespace dataEditor
 
         private void CreateExcel_Click(object sender, EventArgs e)
         {
-            var package = new ExcelPackage();
-            var ws = package.Workbook.Worksheets.Add("01");
 
-            ws.Cells["A1:C1"].Merge = true;
-            ws.PrinterSettings.PrintArea = ws.Cells["A1:G3"];
-
-            package.SaveAs("C:\\Users\\ChernyshovKS\\Desktop\\test.xlsx");
             
         }
 

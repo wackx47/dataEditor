@@ -901,7 +901,15 @@ namespace dataEditor
                 switch (input[0].ToString())
                 {
                     case "1":
-                        return "1ЦК";
+                        if(input[1].ToString() == "Ц")
+                        {
+                            return "1ЦК";
+                        }
+                        else
+                        {
+                            return "1 зона";
+                        }
+
                     case "2":
                         return "2 зоны";
                     case "3":
