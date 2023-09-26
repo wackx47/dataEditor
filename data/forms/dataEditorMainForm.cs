@@ -3670,7 +3670,7 @@ namespace dataEditor
                 case "тк":
                     formType1.docPDFdataGridView.Columns[6].Visible = false;
                     formType1.docPDFdataGridView.Columns[7].Visible = false;
-                    formType1.lblDescription.Text = staticExcelLabels[47] + " " + Convert.ToString(DictionaryForm.dataGridDictionaryList.Rows[RowInDict].Cells["Agreement"].Value) + " " + staticExcelLabels[48] + staticExcelLabels[51];
+                    formType1.lblDescription.Text = staticExcelLabels[47] + " " + Convert.ToString(DictionaryForm.dataGridDictionaryList.Rows[RowInDict].Cells["Agreement"].Value) + " " + staticExcelLabels[48] + " " + staticExcelLabels[51];
                     break;
 
                 case "чк":

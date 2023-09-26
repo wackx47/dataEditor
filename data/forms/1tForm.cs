@@ -1,6 +1,10 @@
 ﻿using dataEditor.data.forms;
+using MathNet.Numerics;
 using Microsoft.Office.Interop.Excel;
+using NPOI;
+using NPOI.HPSF;
 using NPOI.OpenXmlFormats.Wordprocessing;
+using NPOI.SS.Formula.Functions;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
@@ -10,15 +14,21 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Printing;
 using System.Globalization;
 using System.IO;
+using System.IO.Packaging;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
+using static System.Net.WebRequestMethods;
 using Excel = Microsoft.Office.Interop.Excel;
+using File = System.IO.File;
 
 namespace dataEditor
 {
@@ -259,7 +269,7 @@ namespace dataEditor
             int year = DateTime.ParseExact(lblAbonentDateYear.Text, "yyyy", CultureInfo.CurrentCulture).Year;
             int month = DateTime.ParseExact(lblAbonentDateMonth.Text, "MMMM", CultureInfo.CurrentCulture).Month;
             string monthString = new DateTime(year, month, 1).ToString("MM");
-            string CurrentFolder = gCurrentFolder + "\\data\\common\\files\\" + year.ToString() + "\\" + monthString + "\\";
+            string CurrentFolder = gCurrentFolder + "\\data\\common\\files\\" + year.ToString() + "\\" + monthString + "\\" + gName + "\\";
 
             bool resComplete = false;
             int offsetRow = 5;
@@ -678,7 +688,7 @@ namespace dataEditor
                         //End Table_Hours
 
                         ExcelWorksheet sheet2 = package.Workbook.Worksheets.Add("Данные");
-                        sheet2.Cells["I2"].Value = "#scrollPos";
+                        sheet2.Cells["I2"].Value = "";
                         sheet2.Column(9).AutoFit();
 
                         //Header Table_dataHours
@@ -788,7 +798,6 @@ namespace dataEditor
 
 
                         Excel.Application xlApp = new Excel.Application();
-
                         Excel.Workbook xlWB = xlApp.Workbooks.Open(CurrentFolder + monthString + year.ToString() + "_" + gName + "_hrs.xlsx");
                         Excel.Worksheet xlSht = xlWB.Worksheets[1];
                         Excel.Worksheet xlSht2 = xlWB.Worksheets[2];
@@ -933,7 +942,18 @@ namespace dataEditor
             }
         }
 
+        private void GetPDFfile_Click(object sender, EventArgs e)
+        {
+            GenerateFileDocument("PDF");
+        }
+
         private void GetExcelFile_Click(object sender, EventArgs e)
+        {
+            GenerateFileDocument("Excel");
+        }
+
+
+        private void GenerateFileDocument(string type)
         {
             int year = DateTime.ParseExact(lblAbonentDateYear.Text, "yyyy", CultureInfo.CurrentCulture).Year;
             int month = DateTime.ParseExact(lblAbonentDateMonth.Text, "MMMM", CultureInfo.CurrentCulture).Month;
@@ -947,7 +967,53 @@ namespace dataEditor
 
             ReadResource("dataEditor.data.text.ExcelStaticLables.txt");
 
-            string fullPathFileName = CurrentFolder + monthString + year.ToString() + "_АПП_" + lblAgreementDate.Text + ".xlsx";
+            string fullPathFileName = CurrentFolder + monthString + year.ToString() + "_АПП_" + lblAgreementNumber.Text + ".xlsx";
+
+
+            switch (type)
+            {
+                case "PDF":
+                    if (File.Exists(CurrentFolder + monthString + year.ToString() + "_АПП_" + lblAgreementNumber.Text + ".pdf"))
+                    {
+                        DialogResult dialogResult = MessageBox.Show("Файл уже существует, пересоздать файл заново?", "Выберите действие", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            goto CreateFile;
+                        }
+                        else if (dialogResult == DialogResult.No)
+                        {
+                            resComplete = true;
+                            goto completeVoid;
+                        }
+                    }
+                    else
+                    {
+                        goto CreateFile;
+                    }
+                    break;
+
+                case "Excel":
+                    if (File.Exists(fullPathFileName))
+                    {
+                        DialogResult dialogResult = MessageBox.Show("Файл уже существует, пересоздать файл заново?", "Выберите действие", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            goto CreateFile;
+                        }
+                        else if (dialogResult == DialogResult.No)
+                        {
+                            resComplete = true;
+                            goto completeVoid;
+                        }
+                    }
+                    else
+                    {
+                        goto CreateFile;
+                    }
+                    break;
+            }
+
+        CreateFile:
 
             using (var package = new ExcelPackage())
             {
@@ -957,13 +1023,13 @@ namespace dataEditor
                 sheet.Cells["C1"].Value = this.lblSeller.Text;
 
                 sheet.Cells["A2"].Value = staticExcelLabels[56] + ":";
-                sheet.Cells["C2"].Value = this.lblINNseller.Text;
+                sheet.Cells["B2"].Value = this.lblINNseller.Text;
 
                 sheet.Cells["A4"].Value = staticExcelLabels[55] + ":";
                 sheet.Cells["C4"].Value = this.lblBuyer.Text;
 
                 sheet.Cells["A5"].Value = staticExcelLabels[56] + ":";
-                sheet.Cells["C5"].Value = this.lblINNbuyer.Text;
+                sheet.Cells["B5"].Value = this.lblINNbuyer.Text;
 
                 sheet.Cells["A8"].Value = staticExcelLabels[57];
 
@@ -978,6 +1044,7 @@ namespace dataEditor
                 sheet.Cells["L13:M13"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                 sheet.Cells["N13:O13"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
 
+                sheet.Cells["A15:P16"].Merge = true;
                 sheet.Cells["D8:M8"].Merge = true;
                 sheet.Cells["D9:M9"].Merge = true;
                 sheet.Cells["O8:P8"].Merge = true;
@@ -988,16 +1055,296 @@ namespace dataEditor
                 sheet.Cells["N12:O12"].Merge = true;
                 sheet.Cells["N13:O13"].Merge = true;
 
-                sheet.Cells["A1:B1"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-                sheet.Cells["C1"].Value = this.lblAbonentName.Text;
-                sheet.Cells["B2"].Value = staticExcelLabels[2];
-                sheet.Cells["A2:B2"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                sheet.Cells["D8"].Value = this.lblAgreementName.Text;
+                sheet.Cells["D9"].Value = staticExcelLabels[59];
+                sheet.Cells["N8"].Value = staticExcelLabels[60];
+                sheet.Cells["N9"].Value = staticExcelLabels[9];
+
+                sheet.Cells["O8"].Value = this.lblAgreementNumber.Text;
+                sheet.Cells["O9"].Value = this.lblAgreementDate.Text;
+
+                sheet.Cells["B12"].Value = staticExcelLabels[63] + Environment.NewLine + staticExcelLabels[64];
+                sheet.Cells["L12"].Value = staticExcelLabels[61];
+                sheet.Cells["N12"].Value = staticExcelLabels[62];
+
+                sheet.Cells["L13"].Value = this.lblDocNumber.Text;
+                sheet.Cells["N13"].Value = this.lblDocDate.Text;
+
+                sheet.Cells["A15"].Value = this.lblDescription.Text;
+
+                sheet.Cells["A17"].Value = this.docPDFdataGridView.Columns[0].HeaderCell.Value;
+                sheet.Cells["A18"].Value = this.docPDFdataGridView[0, 0].Value;
+                sheet.Cells["A17"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                sheet.Cells["A18"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                sheet.Cells["B17:D17"].Merge = true;
+                sheet.Cells["B18:D18"].Merge = true;
+                sheet.Cells["B17:D17"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                sheet.Cells["B18:D18"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                sheet.Cells["B17"].Value = this.docPDFdataGridView.Columns[1].HeaderCell.Value;
+                sheet.Cells["B18"].Value = this.docPDFdataGridView[1, 0].Value;
+
+                switch (lblAbonentType.Text)
+                {
+                    case "ФЛ":
+                        sheet.Cells["E17:G17"].Merge = true;
+                        sheet.Cells["H17:J17"].Merge = true;
+                        sheet.Cells["K17:M17"].Merge = true;
+                        sheet.Cells["N17:P17"].Merge = true;
+                        sheet.Cells["E17:G17"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["H17:J17"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["K17:M17"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["N17:P17"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["E17"].Value = this.docPDFdataGridView.Columns[2].HeaderCell.Value;
+                        sheet.Cells["H17"].Value = this.docPDFdataGridView.Columns[3].HeaderCell.Value;
+                        sheet.Cells["K17"].Value = this.docPDFdataGridView.Columns[4].HeaderCell.Value;
+                        sheet.Cells["N17"].Value = this.docPDFdataGridView.Columns[5].HeaderCell.Value;
 
 
+                        sheet.Cells["E18:G18"].Merge = true;
+                        sheet.Cells["H18:J18"].Merge = true;
+                        sheet.Cells["K18:M18"].Merge = true;
+                        sheet.Cells["N18:P18"].Merge = true;
+                        sheet.Cells["E18:G18"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["H18:J18"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["K18:M18"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["N18:P18"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["E18"].Value = this.docPDFdataGridView[2, 0].Value;
+                        sheet.Cells["H18"].Value = this.docPDFdataGridView[3, 0].Value;
+                        sheet.Cells["H18"].Style.Numberformat.Format = "0";
+                        sheet.Cells["K18"].Value = this.docPDFdataGridView[4, 0].Value;
+                        sheet.Cells["K18"].Style.Numberformat.Format = "0.00000";
+                        sheet.Cells["N18"].Value = this.docPDFdataGridView[5, 0].Value;
+                        sheet.Cells["N18"].Style.Numberformat.Format = "0.00";
+                        break;
 
+                    case "ЮЛ":
+                        sheet.Cells["E17:F17"].Merge = true;
+                        sheet.Cells["G17:H17"].Merge = true;
+                        sheet.Cells["I17:J17"].Merge = true;
+                        sheet.Cells["K17:L17"].Merge = true;
+                        sheet.Cells["M17:N17"].Merge = true;
+                        sheet.Cells["O17:P17"].Merge = true;
+                        sheet.Cells["E17:F17"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["G17:H17"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["I17:J17"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["K17:L17"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["M17:N17"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["O17:P17"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["E17"].Value = this.docPDFdataGridView.Columns[2].HeaderCell.Value;
+                        sheet.Cells["G17"].Value = this.docPDFdataGridView.Columns[3].HeaderCell.Value;
+                        sheet.Cells["I17"].Value = this.docPDFdataGridView.Columns[4].HeaderCell.Value;
+                        sheet.Cells["K17"].Value = this.docPDFdataGridView.Columns[5].HeaderCell.Value;
+                        sheet.Cells["M17"].Value = this.docPDFdataGridView.Columns[6].HeaderCell.Value;
+                        sheet.Cells["O17"].Value = this.docPDFdataGridView.Columns[7].HeaderCell.Value;
+
+
+                        sheet.Cells["E18:F18"].Merge = true;
+                        sheet.Cells["G18:H18"].Merge = true;
+                        sheet.Cells["I18:J18"].Merge = true;
+                        sheet.Cells["K18:L18"].Merge = true;
+                        sheet.Cells["M18:N18"].Merge = true;
+                        sheet.Cells["O18:P18"].Merge = true;
+                        sheet.Cells["E18:F18"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["G18:H18"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["I18:J18"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["K18:L18"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["M18:N18"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["O18:P18"].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        sheet.Cells["E18"].Value = this.docPDFdataGridView[2, 0].Value;
+                        sheet.Cells["G18"].Value = this.docPDFdataGridView[3, 0].Value;
+                        sheet.Cells["G18"].Style.Numberformat.Format = "0";
+                        sheet.Cells["I18"].Value = this.docPDFdataGridView[4, 0].Value;
+                        sheet.Cells["I18"].Style.Numberformat.Format = "0.00000";
+                        sheet.Cells["K18"].Value = this.docPDFdataGridView[5, 0].Value;
+                        sheet.Cells["K18"].Style.Numberformat.Format = "0.00";
+                        sheet.Cells["M18"].Value = this.docPDFdataGridView[6, 0].Value;
+                        sheet.Cells["M18"].Style.Numberformat.Format = "0.00";
+                        sheet.Cells["O18"].Value = this.docPDFdataGridView[7, 0].Value;
+                        sheet.Cells["O18"].Style.Numberformat.Format = "0.00";
+
+
+                        sheet.Column(5).Width = 6;
+                        sheet.Column(6).Width = 6;
+                        sheet.Column(7).Width = 6;
+                        sheet.Column(8).Width = 6;
+
+                        sheet.Column(11).Width = 13;
+                        sheet.Column(16).Width = 13;
+                        break;
+                }
+
+                sheet.Cells["A20"].Value = staticExcelLabels[54];
+                sheet.Cells["M20"].Value = staticExcelLabels[55];
+
+                sheet.Cells["A21"].Value = this.lblSellerSign.Text;
+                sheet.Cells["M21"].Value = this.lblBuyerSign.Text;
+
+                sheet.Cells["M23:P24"].Merge = true;
+                sheet.Cells["M23"].Value = this.lblBuyerPosition.Text;
+                sheet.Cells["P25"].Value = this.lblBuyerAgent.Text;
+                sheet.Cells["A25"].Value = this.lblSellerShortSign.Text;
+                sheet.Cells["P26"].Value = this.lblBuyerAttorney.Text;
+
+                sheet.Cells["A1:P26"].Style.Font.Name = "Tahoma";
+                sheet.Cells["A1:P26"].Style.Font.Size = 11;
+                sheet.Cells["D8:M8"].Style.Font.Size = 10;
+                sheet.Cells["D9:M9"].Style.Font.Size = 8;
+                sheet.Cells["N8:N9"].Style.Font.Size = 10;
+
+                sheet.Cells["A1:A5"].Style.Font.Bold = true;
+                sheet.Cells["B12:O12"].Style.Font.Bold = true;
+                sheet.Cells["B12:K13"].Style.Font.Size = 12;
+                sheet.Cells["L12:O12"].Style.Font.Size = 10;
+                sheet.Cells["O8:P9"].Style.Font.Name = "Courier New";
+                sheet.Cells["L13:O13"].Style.Font.Name = "Courier New";
+
+
+                sheet.Cells["A15:P17"].Style.Font.Size = 10;
+                sheet.Cells["A18:P18"].Style.Font.Name = "Courier New";
+                sheet.Cells["A20"].Style.Font.Bold = true;
+                sheet.Cells["M20"].Style.Font.Bold = true;
+                sheet.Cells["A25:P25"].Style.Font.Size = 12;
+                sheet.Cells["A26:P26"].Style.Font.Size = 8;
+
+                sheet.Column(3).Width = 16;
+                sheet.Column(15).Width = 10;
+                sheet.Column(16).Width = 10;
+                sheet.Row(17).Height = 30;
+                sheet.Row(18).Height = 30;
+                sheet.Row(25).Height = 60;
+
+                sheet.Cells["D8:P9"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                sheet.Cells["D8:P9"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                sheet.Cells["A12:P18"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                sheet.Cells["A12:P18"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                sheet.Cells["A12:P18"].Style.WrapText = true;
+                sheet.Cells["M23:M24"].Style.WrapText = true;
+                sheet.Cells["M23:M24"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                sheet.Cells["M23:M24"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                sheet.Cells["A15:P16"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                sheet.Cells["P25:P26"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+
+
+                sheet.PrinterSettings.PrintArea = sheet.Cells["A1:P26"];
+                sheet.PrinterSettings.PaperSize = ePaperSize.A4;
+                sheet.PrinterSettings.Orientation = eOrientation.Landscape;
+                sheet.Row(26).PageBreak = true;
+                sheet.Column(16).PageBreak = true;
+                sheet.PrinterSettings.FitToPage = true;
+                sheet.View.PageBreakView = true;
+
+                try
+                {
+                    if (!Directory.Exists(CurrentFolder))
+                        Directory.CreateDirectory(CurrentFolder);
+
+                    switch (type)
+                    {
+                        case "Excel":
+                            package.SaveAs(new FileInfo(@fullPathFileName));
+                            package.Dispose();
+                            resComplete = true;
+                            break;
+
+                        case "PDF":
+                            try
+                            {
+                                package.SaveAs(new FileInfo(CurrentFolder + monthString + year.ToString() + "_АПП_" + lblAgreementNumber.Text + "_temp_.xlsx"));
+                                package.Dispose();
+
+                                Excel.Application xlApp = new Excel.Application();
+                                Excel.Workbook xlWB = xlApp.Workbooks.Open(CurrentFolder + monthString + year.ToString() + "_АПП_" + lblAgreementNumber.Text + "_temp_.xlsx");
+                                Excel.Worksheet xlSht = xlWB.Worksheets[1];
+                                xlSht.PrintOut(1, 1, 1, false, "Microsoft Print to PDF", true, false, CurrentFolder + monthString + year.ToString() + "_АПП_" + lblAgreementNumber.Text + ".pdf");
+
+                                xlWB.Close(true);
+                                xlApp.Quit();
+                                xlApp = null;
+                                xlWB = null;
+                                xlSht = null;
+                                File.Delete(CurrentFolder + monthString + year.ToString() + "_АПП_" + lblAgreementNumber.Text + "_temp_.xlsx");
+                            }
+                            catch
+                            {
+                                package.SaveAs(new FileInfo(CurrentFolder + monthString + year.ToString() + "_АПП_" + lblAgreementNumber.Text + "_temp_.xlsx"));
+                                package.Dispose();
+
+                                Excel.Application xlApp = new Excel.Application();
+                                Excel.Workbook xlWB = xlApp.Workbooks.Open(CurrentFolder + monthString + year.ToString() + "_АПП_" + lblAgreementNumber.Text + "_temp_.xlsx");
+                                xlWB.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, CurrentFolder + monthString + year.ToString() + "_АПП_" + lblAgreementNumber.Text);
+
+                                xlWB.Close(true);
+                                xlApp.Quit();
+                                xlApp = null;
+                                xlWB = null;
+                                File.Delete(CurrentFolder + monthString + year.ToString() + "_АПП_" + lblAgreementNumber.Text + "_temp_.xlsx");
+                            }
+                            finally
+                            {
+                                resComplete = true;
+                            }
+                            break;
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Не удалось сохранить файл");
+                    resComplete = false;
+                    return;
+                }
             }
 
+        completeVoid:
+            if (resComplete)
+            {
+                using (dialogResultExcelCreator dlgForm = new dialogResultExcelCreator())
+                {
+
+                    if (dlgForm.ShowDialog() == DialogResult.OK)
+                    {
+                        switch (dlgForm.key)
+                        {
+                            case 1:
+                                switch (type)
+                                {
+                                    case "Excel":
+                                        Excel.Application xlApp = new Excel.Application();
+                                        xlApp.Application.Visible = true;
+                                        Excel.Workbook xlWB = xlApp.Workbooks.Open(fullPathFileName);
+                                        break;
+
+                                    case "PDF":
+                                        OpenWithDefaultProgram(CurrentFolder + monthString + year.ToString() + "_АПП_" + lblAgreementNumber.Text + ".pdf");
+                                        break;
+                                }
+
+
+                                break;
+
+                            case 2:
+                                Process.Start("explorer.exe", CurrentFolder);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+            }
         }
+
+        public static void OpenWithDefaultProgram(string path)
+        {
+            using Process fileopener = new Process();
+            fileopener.StartInfo.FileName = "explorer";
+            fileopener.StartInfo.Arguments = "\"" + path + "\"";
+            fileopener.Start();
+        }
+
+
     }
 
 }

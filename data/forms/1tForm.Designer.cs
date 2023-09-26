@@ -38,8 +38,14 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormType1));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             this.mainPanelPage1 = new System.Windows.Forms.Panel();
             this.groupBoxHours = new System.Windows.Forms.GroupBox();
             this.HoursTableLayout = new System.Windows.Forms.TableLayoutPanel();
@@ -145,10 +151,10 @@
             this.tlp7 = new System.Windows.Forms.TableLayoutPanel();
             this.label53 = new System.Windows.Forms.Label();
             this.lblSellerSign = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
+            this.lblBuyerAttorney = new System.Windows.Forms.Label();
             this.lblSellerShortSign = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
+            this.lblBuyerAgent = new System.Windows.Forms.Label();
+            this.lblBuyerPosition = new System.Windows.Forms.Label();
             this.lblBuyerSign = new System.Windows.Forms.Label();
             this.label54 = new System.Windows.Forms.Label();
             this.tlp5 = new System.Windows.Forms.TableLayoutPanel();
@@ -1546,7 +1552,7 @@
             // 
             // mainPanelPage2
             // 
-            this.mainPanelPage2.BackColor = System.Drawing.Color.Gainsboro;
+            this.mainPanelPage2.BackColor = System.Drawing.Color.WhiteSmoke;
             this.mainPanelPage2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.mainPanelPage2.Controls.Add(this.tlp4);
             this.mainPanelPage2.Controls.Add(this.tlp3);
@@ -1584,7 +1590,7 @@
             this.lblINNbuyer.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.lblINNbuyer.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblINNbuyer.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblINNbuyer.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblINNbuyer.ForeColor = System.Drawing.Color.Black;
             this.lblINNbuyer.Location = new System.Drawing.Point(45, 1);
             this.lblINNbuyer.Margin = new System.Windows.Forms.Padding(1);
             this.lblINNbuyer.Name = "lblINNbuyer";
@@ -1637,7 +1643,7 @@
             this.lblBuyer.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.lblBuyer.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblBuyer.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblBuyer.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblBuyer.ForeColor = System.Drawing.Color.Black;
             this.lblBuyer.Location = new System.Drawing.Point(100, 1);
             this.lblBuyer.Margin = new System.Windows.Forms.Padding(1);
             this.lblBuyer.Name = "lblBuyer";
@@ -1678,7 +1684,7 @@
             this.lblINNseller.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.lblINNseller.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblINNseller.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblINNseller.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblINNseller.ForeColor = System.Drawing.Color.Black;
             this.lblINNseller.Location = new System.Drawing.Point(45, 1);
             this.lblINNseller.Margin = new System.Windows.Forms.Padding(1);
             this.lblINNseller.Name = "lblINNseller";
@@ -1719,7 +1725,7 @@
             this.lblSeller.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.lblSeller.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblSeller.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblSeller.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblSeller.ForeColor = System.Drawing.Color.Black;
             this.lblSeller.Location = new System.Drawing.Point(87, 1);
             this.lblSeller.Margin = new System.Windows.Forms.Padding(1);
             this.lblSeller.Name = "lblSeller";
@@ -1732,14 +1738,14 @@
             // 
             this.tlp7.ColumnCount = 3;
             this.tlp7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlp7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.60517F));
-            this.tlp7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+            this.tlp7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.14022F));
+            this.tlp7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.85978F));
             this.tlp7.Controls.Add(this.label53, 0, 0);
             this.tlp7.Controls.Add(this.lblSellerSign, 0, 1);
-            this.tlp7.Controls.Add(this.label13, 2, 4);
+            this.tlp7.Controls.Add(this.lblBuyerAttorney, 2, 4);
             this.tlp7.Controls.Add(this.lblSellerShortSign, 0, 3);
-            this.tlp7.Controls.Add(this.label15, 2, 3);
-            this.tlp7.Controls.Add(this.label16, 2, 2);
+            this.tlp7.Controls.Add(this.lblBuyerAgent, 2, 3);
+            this.tlp7.Controls.Add(this.lblBuyerPosition, 2, 2);
             this.tlp7.Controls.Add(this.lblBuyerSign, 2, 1);
             this.tlp7.Controls.Add(this.label54, 2, 0);
             this.tlp7.Location = new System.Drawing.Point(8, 451);
@@ -1770,7 +1776,7 @@
             this.lblSellerSign.AutoSize = true;
             this.lblSellerSign.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.lblSellerSign.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblSellerSign.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblSellerSign.ForeColor = System.Drawing.Color.Black;
             this.lblSellerSign.Location = new System.Drawing.Point(3, 27);
             this.lblSellerSign.Margin = new System.Windows.Forms.Padding(3);
             this.lblSellerSign.Name = "lblSellerSign";
@@ -1779,17 +1785,18 @@
             this.lblSellerSign.Text = "lblSellerSign";
             this.lblSellerSign.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label13
+            // lblBuyerAttorney
             // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label13.Location = new System.Drawing.Point(725, 116);
-            this.label13.Margin = new System.Windows.Forms.Padding(3);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(287, 14);
-            this.label13.TabIndex = 21;
-            this.label13.Text = "по доверенности №278/11 от 12.11.2019 г.";
-            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblBuyerAttorney.AutoSize = true;
+            this.lblBuyerAttorney.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lblBuyerAttorney.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblBuyerAttorney.Location = new System.Drawing.Point(794, 116);
+            this.lblBuyerAttorney.Margin = new System.Windows.Forms.Padding(3);
+            this.lblBuyerAttorney.Name = "lblBuyerAttorney";
+            this.lblBuyerAttorney.Size = new System.Drawing.Size(287, 39);
+            this.lblBuyerAttorney.TabIndex = 21;
+            this.lblBuyerAttorney.Text = "по доверенности №278/11 от 12.11.2019 г.";
+            this.lblBuyerAttorney.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // lblSellerShortSign
             // 
@@ -1803,37 +1810,38 @@
             this.lblSellerShortSign.Text = "___________________";
             this.lblSellerShortSign.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label15
+            // lblBuyerAgent
             // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label15.Location = new System.Drawing.Point(725, 94);
-            this.label15.Margin = new System.Windows.Forms.Padding(3);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(260, 16);
-            this.label15.TabIndex = 2;
-            this.label15.Text = "___________________ А.Ю.Скобелев";
-            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblBuyerAgent.AutoSize = true;
+            this.lblBuyerAgent.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lblBuyerAgent.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblBuyerAgent.Location = new System.Drawing.Point(821, 94);
+            this.lblBuyerAgent.Margin = new System.Windows.Forms.Padding(3);
+            this.lblBuyerAgent.Name = "lblBuyerAgent";
+            this.lblBuyerAgent.Size = new System.Drawing.Size(260, 16);
+            this.lblBuyerAgent.TabIndex = 2;
+            this.lblBuyerAgent.Text = "___________________ А.Ю.Скобелев";
+            this.lblBuyerAgent.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label16
+            // lblBuyerPosition
             // 
-            this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label16.Location = new System.Drawing.Point(725, 49);
-            this.label16.Margin = new System.Windows.Forms.Padding(3);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(350, 30);
-            this.label16.TabIndex = 11;
-            this.label16.Text = "Директор Дирекции по закупкам электроэнергии ПАО ГК \"ТНС энерго\"";
-            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblBuyerPosition.AutoSize = true;
+            this.lblBuyerPosition.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblBuyerPosition.Location = new System.Drawing.Point(785, 49);
+            this.lblBuyerPosition.Margin = new System.Windows.Forms.Padding(3);
+            this.lblBuyerPosition.Name = "lblBuyerPosition";
+            this.lblBuyerPosition.Size = new System.Drawing.Size(245, 30);
+            this.lblBuyerPosition.TabIndex = 11;
+            this.lblBuyerPosition.Text = "Директор Дирекции по закупкам электроэнергии ПАО ГК \"ТНС энерго\"";
+            this.lblBuyerPosition.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblBuyerSign
             // 
             this.lblBuyerSign.AutoSize = true;
             this.lblBuyerSign.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.lblBuyerSign.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblBuyerSign.ForeColor = System.Drawing.Color.Firebrick;
-            this.lblBuyerSign.Location = new System.Drawing.Point(725, 27);
+            this.lblBuyerSign.ForeColor = System.Drawing.Color.Black;
+            this.lblBuyerSign.Location = new System.Drawing.Point(785, 27);
             this.lblBuyerSign.Margin = new System.Windows.Forms.Padding(3);
             this.lblBuyerSign.Name = "lblBuyerSign";
             this.lblBuyerSign.Size = new System.Drawing.Size(103, 16);
@@ -1845,7 +1853,7 @@
             // 
             this.label54.AutoSize = true;
             this.label54.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label54.Location = new System.Drawing.Point(725, 3);
+            this.label54.Location = new System.Drawing.Point(785, 3);
             this.label54.Margin = new System.Windows.Forms.Padding(3);
             this.label54.Name = "label54";
             this.label54.Size = new System.Drawing.Size(101, 18);
@@ -2056,7 +2064,6 @@
             // lblNumDoc
             // 
             this.lblNumDoc.AutoSize = true;
-            this.lblNumDoc.BackColor = System.Drawing.Color.Gainsboro;
             this.lblNumDoc.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblNumDoc.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblNumDoc.Location = new System.Drawing.Point(3, 3);
@@ -2085,14 +2092,14 @@
             this.docPDFdataGridView.AllowUserToAddRows = false;
             this.docPDFdataGridView.AllowUserToDeleteRows = false;
             this.docPDFdataGridView.AllowUserToResizeRows = false;
-            this.docPDFdataGridView.BackgroundColor = System.Drawing.Color.Gainsboro;
+            this.docPDFdataGridView.BackgroundColor = System.Drawing.Color.WhiteSmoke;
             this.docPDFdataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.docPDFdataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.docPDFdataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
@@ -2107,18 +2114,31 @@
             this.CostWithoutNDS,
             this.NDS,
             this.CostWithNDS});
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle16.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.docPDFdataGridView.DefaultCellStyle = dataGridViewCellStyle16;
             this.docPDFdataGridView.EnableHeadersVisualStyles = false;
             this.docPDFdataGridView.GridColor = System.Drawing.Color.Black;
             this.docPDFdataGridView.Location = new System.Drawing.Point(8, 328);
+            this.docPDFdataGridView.MultiSelect = false;
             this.docPDFdataGridView.Name = "docPDFdataGridView";
             this.docPDFdataGridView.RowHeadersVisible = false;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.docPDFdataGridView.RowsDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            dataGridViewCellStyle17.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.ControlLightLight;
+            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.WindowText;
+            this.docPDFdataGridView.RowsDefaultCellStyle = dataGridViewCellStyle17;
             this.docPDFdataGridView.RowTemplate.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.docPDFdataGridView.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.docPDFdataGridView.RowTemplate.Height = 40;
             this.docPDFdataGridView.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.docPDFdataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.docPDFdataGridView.Size = new System.Drawing.Size(1084, 117);
             this.docPDFdataGridView.TabIndex = 5;
             // 
@@ -2126,6 +2146,8 @@
             // 
             this.ID.HeaderText = "№";
             this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            this.ID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.ID.Width = 40;
             // 
@@ -2138,6 +2160,8 @@
             this.productName.HeaderText = "Наименование товара (работы, услуги)";
             this.productName.MinimumWidth = 300;
             this.productName.Name = "productName";
+            this.productName.ReadOnly = true;
+            this.productName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.productName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.productName.Width = 300;
             // 
@@ -2145,12 +2169,17 @@
             // 
             this.Measuring.HeaderText = "Единица измерения";
             this.Measuring.Name = "Measuring";
+            this.Measuring.ReadOnly = true;
+            this.Measuring.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Measuring.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Measuring.Width = 70;
             // 
             // Count
             // 
             this.Count.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle11.Format = "N0";
+            dataGridViewCellStyle11.NullValue = null;
+            this.Count.DefaultCellStyle = dataGridViewCellStyle11;
             this.Count.FillWeight = 8F;
             this.Count.HeaderText = "Количество, кВт*ч";
             this.Count.Name = "Count";
@@ -2159,6 +2188,10 @@
             // Price
             // 
             this.Price.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle12.Format = "N5";
+            dataGridViewCellStyle12.NullValue = null;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.Price.DefaultCellStyle = dataGridViewCellStyle12;
             this.Price.FillWeight = 8F;
             this.Price.HeaderText = "Цена, руб./кВт*ч";
             this.Price.Name = "Price";
@@ -2167,6 +2200,10 @@
             // CostWithoutNDS
             // 
             this.CostWithoutNDS.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle13.Format = "C2";
+            dataGridViewCellStyle13.NullValue = null;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.CostWithoutNDS.DefaultCellStyle = dataGridViewCellStyle13;
             this.CostWithoutNDS.FillWeight = 12F;
             this.CostWithoutNDS.HeaderText = "Стоимость товара (работ, услуг) без НДС, руб.";
             this.CostWithoutNDS.Name = "CostWithoutNDS";
@@ -2175,6 +2212,10 @@
             // NDS
             // 
             this.NDS.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle14.Format = "C2";
+            dataGridViewCellStyle14.NullValue = null;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.NDS.DefaultCellStyle = dataGridViewCellStyle14;
             this.NDS.FillWeight = 10F;
             this.NDS.HeaderText = "Сумма НДС (20%), руб.";
             this.NDS.Name = "NDS";
@@ -2183,6 +2224,10 @@
             // CostWithNDS
             // 
             this.CostWithNDS.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle15.Format = "C2";
+            dataGridViewCellStyle15.NullValue = null;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.CostWithNDS.DefaultCellStyle = dataGridViewCellStyle15;
             this.CostWithNDS.FillWeight = 12F;
             this.CostWithNDS.HeaderText = "Стоимость товара (работ, услуг) всего с НДС, руб.";
             this.CostWithNDS.Name = "CostWithNDS";
@@ -2218,14 +2263,15 @@
             // 
             this.GetPDFfile.Image = global::dataEditor.Properties.Resources.DocumentViewerPDF;
             this.GetPDFfile.Name = "GetPDFfile";
-            this.GetPDFfile.Size = new System.Drawing.Size(180, 22);
+            this.GetPDFfile.Size = new System.Drawing.Size(102, 22);
             this.GetPDFfile.Text = "PDF";
+            this.GetPDFfile.Click += new System.EventHandler(this.GetPDFfile_Click);
             // 
             // GetExcelFile
             // 
             this.GetExcelFile.Image = global::dataEditor.Properties.Resources.DocumentViewerExcel;
             this.GetExcelFile.Name = "GetExcelFile";
-            this.GetExcelFile.Size = new System.Drawing.Size(180, 22);
+            this.GetExcelFile.Size = new System.Drawing.Size(102, 22);
             this.GetExcelFile.Text = "Excel";
             this.GetExcelFile.Click += new System.EventHandler(this.GetExcelFile_Click);
             // 
@@ -2390,9 +2436,9 @@
         private TabControl MainControlWithTabs;
         private TabPage Page1;
         private TabPage Page2;
-        private Label label13;
-        private Label label15;
-        private Label label16;
+        private Label lblBuyerAttorney;
+        private Label lblBuyerAgent;
+        private Label lblBuyerPosition;
         private Label label17;
         private Label label19;
         private Label label21;
@@ -2434,6 +2480,7 @@
         public TextBox lblAgreementDate;
         public TextBox lblDocNumber;
         public TextBox lblDocDate;
+        public Label lblDescription;
         private DataGridViewTextBoxColumn ID;
         private DataGridViewTextBoxColumn productName;
         private DataGridViewTextBoxColumn Measuring;
@@ -2442,6 +2489,5 @@
         private DataGridViewTextBoxColumn CostWithoutNDS;
         private DataGridViewTextBoxColumn NDS;
         private DataGridViewTextBoxColumn CostWithNDS;
-        public Label lblDescription;
     }
 }
