@@ -27,6 +27,7 @@ using System.Runtime.Serialization;
 using System.Xml;
 using static System.ComponentModel.TypeConverter;
 using static NPOI.SS.Formula.PTG.ArrayPtg;
+using dataEditor.data.forms;
 
 namespace dataEditor.data
 {
@@ -320,6 +321,35 @@ namespace dataEditor.data
         {
             get { return m_mgHoursZone; }
             set { m_mgHoursZone = value; }
+        }
+
+
+        companyDataEditor m_mgCompany = new companyDataEditor();
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("")]
+        [DisplayName("CompanyData")]
+        [Category("CompanySettings")]
+        [Editor(typeof(CompanyEditor), typeof(UITypeEditor))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public companyDataEditor mgCompany
+        {
+            get { return m_mgCompany; }
+            set { m_mgCompany = value; }
+        }
+
+        signedDataEditor m_mgSigned = new signedDataEditor();
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("")]
+        [DisplayName("Signed")]
+        [Category("SignSettings")]
+        [Editor(typeof(SignedEditor), typeof(UITypeEditor))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public signedDataEditor mgSigned
+        {
+            get { return m_mgSigned; }
+            set { m_mgSigned = value; }
         }
 
     }
@@ -638,6 +668,65 @@ namespace dataEditor.data
         }
     }
 
+    class CompanyEditor : UITypeEditor
+    {
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        {
+            return UITypeEditorEditStyle.Modal;
+        }
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            IWindowsFormsEditorService svc = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
+            companyDataEditor company = value as companyDataEditor;
+            if (svc != null && company != null)
+            {
+                using (companyForm form = new companyForm())
+                {
+                    if (svc.ShowDialog(form) == DialogResult.OK)
+                    {
+
+                    }
+                }
+            }
+            return value;
+        }
+    }
+
+    class SignedEditor : UITypeEditor
+    {
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        {
+            return UITypeEditorEditStyle.Modal;
+        }
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            IWindowsFormsEditorService svc = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
+            signedDataEditor sign = value as signedDataEditor;
+            if (svc != null && sign != null)
+            {
+                using (SignedForm form = new SignedForm())
+                {
+                    if (svc.ShowDialog(form) == DialogResult.OK)
+                    {
+                        Settings settings = (Settings)Application.OpenForms["Settings"];
+                        settings = MainForm.SettingsForm;
+
+                        settings.settingsSignaturesDataSet = form.tempSignaturesDataSet;
+
+                        foreach (DataTable tbl in settings.settingsSignaturesDataSet.Tables)
+                        {
+                            if (tbl.Rows.Count > 0)
+                            {
+                                Console.WriteLine("settingsTable:" + tbl.TableName);
+                            }
+                        }
+                    }
+                }
+            }
+            return value;
+        }
+    }
+
     class hoursTariffZone
     {
         public hoursTariffZone()
@@ -670,6 +759,230 @@ namespace dataEditor.data
         public override string ToString()
         {
             return "Редактор тарифных зон суток...";
+        }
+    }
+
+    class signedDataEditor
+    {
+        public signedDataEditor()
+        {
+
+        }
+
+        private string _signFirstName;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("Фамилия")]
+        [Description("")]
+        public string signFirstName
+        {
+            get { return _signFirstName; }
+            set { _signFirstName = value; }
+        }
+
+        private string _signLastName;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("Имя")]
+        [Description("")]
+        public string signLastName
+        {
+            get { return _signLastName; }
+            set { _signLastName = value; }
+        }
+
+        private string _signMidName;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("Отчество")]
+        [Description("")]
+        public string signMidName
+        {
+            get { return _signMidName; }
+            set { _signMidName = value; }
+        }
+
+        private string _signPosition;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("Должность")]
+        [Description("")]
+        public string signPosition
+        {
+            get { return _signPosition; }
+            set { _signPosition = value; }
+        }
+
+        private string _signAttorney;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("Доверенность")]
+        [Description("")]
+        public string signAttorney
+        {
+            get { return _signAttorney; }
+            set { _signAttorney = value; }
+        }
+
+        private int _signNumber;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("Табельный номер")]
+        [Description("")]
+        public int signNumber
+        {
+            get { return _signNumber; }
+            set { _signNumber = value; }
+        }
+
+        public override string ToString()
+        {
+            return "Редактор...";
+        }
+    }
+
+    class companyDataEditor
+    {
+        public companyDataEditor()
+        {
+
+        }
+
+        private string _RegionName;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("Регион")]
+        [Description("")]
+        public string RegionName
+        {
+            get { return _RegionName; }
+            set { _RegionName = value; }
+        }
+
+        private string _companyName;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("Наименование участника")]
+        [Description("")]
+        public string CompanyName
+        {
+            get { return _companyName; }
+            set { _companyName = value; }
+        }
+
+        private string _GTPcode;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("Код ГТП")]
+        [Description("")]
+        public string GTPcode
+        {
+            get { return _GTPcode; }
+            set { _GTPcode = value; }
+        }
+
+        private string _GTPname;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("Наименование ГТП")]
+        [Description("")]
+        public string GTPname
+        {
+            get { return _GTPname; }
+            set { _GTPname = value; }
+        }
+
+        private int _INNcompany;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("ИНН")]
+        [Description("")]
+        public int INNcompany
+        {
+            get { return _INNcompany; }
+            set { _INNcompany = value; }
+        }
+
+        private int _KPPcompany;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("КПП")]
+        [Description("")]
+        public int KPPcompany
+        {
+            get { return _KPPcompany; }
+            set { _KPPcompany = value; }
+        }
+
+        private string _BankName;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("Наименование банка")]
+        [Description("")]
+        public string BankName
+        {
+            get { return _BankName; }
+            set { _BankName = value; }
+        }
+
+        private int _BIKbank;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("БИК банка")]
+        [Description("")]
+        public int BIKbank
+        {
+            get { return _BIKbank; }
+            set { _BIKbank = value; }
+        }
+
+        private int _Racc;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("Расчетный счет")]
+        [Description("")]
+        public int BankRacc
+        {
+            get { return _Racc; }
+            set { _Racc = value; }
+        }
+
+        private int _Cacc;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("Кор.счет")]
+        [Description("")]
+        public int BankCacc
+        {
+            get { return _Cacc; }
+            set { _Cacc = value; }
+        }
+
+        private string _legalAddress;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("Юридический адрес")]
+        [Description("")]
+        public string LegalAddress
+        {
+            get { return _legalAddress; }
+            set { _legalAddress = value; }
+        }
+
+        private string _postAddress;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [DisplayName("Почтовый адрес")]
+        [Description("")]
+        public string PostAddress
+        {
+            get { return _postAddress; }
+            set { _postAddress = value; }
+        }
+
+        public override string ToString()
+        {
+            return "Редактор...";
         }
     }
 

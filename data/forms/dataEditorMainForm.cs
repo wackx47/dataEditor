@@ -72,6 +72,10 @@ namespace dataEditor
         DataSet UniversalDataSet = new DataSet("UniversalFileReader");
         DataSet HoursDataSet = new DataSet("HoursStore");
         DataSet IntegralsDataSet = new DataSet("IntegralsStore");
+
+        public DataSet mainCompaniesDataSet = new DataSet("Companies");
+        public DataSet mainSignaturesDataSet = new DataSet("Signatures");
+
         Button ConfirmCols = new Button();
 
         DataGridViewButtonCell tableRemove;
@@ -5024,6 +5028,15 @@ namespace dataEditor
                 if (tbl.Rows.Count > 0)
                 {
                     Console.WriteLine(tbl.TableName);
+                }
+            }
+
+
+            foreach (DataTable tbl in mainSignaturesDataSet.Tables)
+            {
+                if (tbl.Rows.Count > 0)
+                {
+                    Console.WriteLine("settingsTable:" + tbl.TableName);
                 }
             }
         }

@@ -28,6 +28,8 @@ namespace dataEditor
         public int[,] _settings3semiPeakZone_01 = new int[0, 6];
         public int[,] _settings3nightZone_01 = new int[0, 6];
 
+        public DataSet settingsSignaturesDataSet = new DataSet("Signatures");
+
         public Settings()
         {
             InitializeComponent();
@@ -74,6 +76,8 @@ namespace dataEditor
             main._main3peakZone_01 = _settings3peakZone_01;
             main._main3semiPeakZone_01 = _settings3semiPeakZone_01;
             main._main3nightZone_01 = _settings3nightZone_01;
+
+            main.mainSignaturesDataSet = settingsSignaturesDataSet;
 
             main.Focus();
 
